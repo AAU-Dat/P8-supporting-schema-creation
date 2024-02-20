@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE instance-profile
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/product-profile.dtd">
+
+<instance-profile id="spn"
+                 name="Semester Project Notes"
+                 start-page="starter-topic.md">
+
+    <toc-element topic="starter-topic.md"/>
+    <toc-element topic="Minutes-of-Meetings.md">
+        <toc-element topic="Supervisor-Meeting-1.md"/>
+        <toc-element topic="Supervisor-Meeting-2.md"/>
+    </toc-element>
+</instance-profile>
