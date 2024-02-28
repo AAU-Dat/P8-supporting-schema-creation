@@ -7,6 +7,7 @@ on:
 
 jobs:
   qodana:
+    if: github.actor!= 'dependabot-preview[bot]'   # ignore the pull request if it's from Dependabot
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
