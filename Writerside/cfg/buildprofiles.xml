@@ -4,7 +4,7 @@
         <algolia-id>K5H26NS4O0</algolia-id>
         <algolia-index>github_P8</algolia-index>
         <algolia-api-key>237ff5f46075520d92a23ee56925e3c7</algolia-api-key>
-        <web-root>https://some.domain</web-root>
+        <web-root>https://aau-dat.github.io/P8-supporting-schema-creation</web-root>
     </variables>
     <build-profile instance="spn"/>
 </buildprofiles>
