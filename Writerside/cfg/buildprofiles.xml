@@ -1,0 +1,10 @@
+<buildprofiles xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/build-profiles.xsd"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <variables>
+        <algolia-id>K5H26NS4O0</algolia-id>
+        <algolia-index>github_P8</algolia-index>
+        <algolia-api-key>237ff5f46075520d92a23ee56925e3c7</algolia-api-key>
+        <web-root>https://some.domain</web-root>
+    </variables>
+    <build-profile instance="spn"/>
+</buildprofiles>
