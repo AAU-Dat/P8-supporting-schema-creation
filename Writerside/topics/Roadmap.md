@@ -1,8 +1,5 @@
 # Project Roadmap
 ```mermaid
----
-displayMode: compact
----
 gantt
     title Project Timeline
     dateFormat  YYYY-MM-DD
