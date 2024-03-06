@@ -28,7 +28,4 @@ jobs:
       
       # Runs latex script
       - name: Compile LaTeX
-        run: |
-          cd report/src
-          latexmk main.tex -pdf
-        working-directory: $GITHUB_WORKSPACE
+        run: latexmk report/srcmain.tex -pdf
