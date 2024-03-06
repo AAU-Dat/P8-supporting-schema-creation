@@ -28,4 +28,4 @@ jobs:
       
       # Runs latex script
       - name: Compile LaTeX
-        run: latexmk report/srcmain.tex -pdf
+        run: latexmk report/src/main.tex -pdf
