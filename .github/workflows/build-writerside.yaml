@@ -119,6 +119,9 @@ jobs:
         with:
           name: docs
 
+      - name: Display structure of downloaded files
+        run: ls -R
+
       - name: Unzip artifact
         run: unzip -O UTF-8 -qq ${{ env.ARTIFACT }} -d dir
 
