@@ -63,7 +63,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: docs
-          path: artifacts/main.pdf
+          path: ./report/src/main.pdf
           retention-days: 7
   
   build:
