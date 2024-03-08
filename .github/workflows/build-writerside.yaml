@@ -63,7 +63,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: docs
-          path: main.pdf
+          path: artifacts/main.pdf
           retention-days: 7
   
   build:
@@ -97,6 +97,11 @@ jobs:
         with:
           name: docs
           path: artifacts
+
+      - name: Download pdf artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: docs
 
       - name: Test documentation
         uses: JetBrains/writerside-checker-action@v1
