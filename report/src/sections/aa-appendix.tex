@@ -4,3 +4,43 @@
 \section{Compiling in draft}\label{sec:compiling-in-draft}
 You can also compile the document in draft mode.
 This shows todos, and increases the space between lines to make space for your supervisors feedback.
+
+\section{Lattice proofs}
+
+Let $REG$ be the set of all regular expressions.
+
+For a subset of regular expressions $R, R_1, R_2, \dots, R_n \in REG$ let 
+\begin{equation*}
+    \mathcal{L}(R_1) \subseteq \mathcal{L}(R_2) \iff R_1 \sqsubseteq R_2,
+\end{equation*}
+\begin{equation*}
+    \mathcal{L}(R_1) = \mathcal{L}(R_2) \iff R_1 = R_2,
+\end{equation*}
+\begin{equation*}
+    \bigcup \{\mathcal{L}(R_1), \mathcal{L}(R_1), \dots, \mathcal{L}(R_n)\} = \mathcal{L}(R) \iff \bigsqcup \{ R_1, R_2, \dots R_n \} = R
+\end{equation*}
+\begin{equation*}
+    \bigcap \{\mathcal{L}(R_1), \mathcal{L}(R_1), \dots, \mathcal{L}(R_n)\} = \mathcal{L}(R) \iff \bigsqcap \{ R_1, R_2, \dots R_n \} = R
+\end{equation*}
+
+\begin{theorem}
+    $(REG, \sqsubseteq)$ is a complete lattice.
+\end{theorem}
+
+\prove{$(REG, \sqsubseteq)$ is a partial order, and for all $\mathcal{R} \in 2^{REG}$ $\bigsqcup \mathcal{R}$ and $\bigsqcap \mathcal{R}$ exists.}
+\begin{proof}
+    \step{reflexivity}{$\forall R \in REG : R \sqsubseteq R$.}
+    \step{transitivity}{$\forall R_1, R_2, R_3 \in REG : R_1 \sqsubseteq R_2 \land R_2 \sqsubseteq R_3 \implies R_1 \sqsubseteq R_3$.}
+    \step{anti-symmetry}{$\forall R_1, R_2 \in REG : R_1 \sqsubseteq R_2 \land R_2 \sqsubseteq R_1 \implies R_1 = R_2$.}
+    \step{poset}{$(REG, \sqsubseteq)$ is a partial order.}
+    \begin{proof}
+        \pf\ By \stepref{reflexivity}, \stepref{transitivity} and \stepref{anti-symmetry}.
+    \end{proof}
+    \step{bigsqcup}{$\forall \mathcal{R} \in 2^{REG} : \mathcal{R} \sqsubseteq \bigsqcup \mathcal{R} \land \forall R \in REG : \mathcal{R} \sqsubseteq R \implies \bigsqcup \mathcal{R} \sqsubseteq R$.}
+    \step{bigsqcap}{$\forall \mathcal{R} \in 2^{REG} : \bigsqcap \mathcal{R} \sqsubseteq \mathcal{R} \land \forall R \in REG : R \sqsubseteq \mathcal{R} \implies R \sqsubseteq \bigsqcap \mathcal{R}$.}
+    \qedstep{}
+    \begin{proof}
+        \pf\ By \stepref{poset}, \stepref{bigsqcup} and \stepref{bigsqcap}.
+    \end{proof}
+\end{proof}
+
