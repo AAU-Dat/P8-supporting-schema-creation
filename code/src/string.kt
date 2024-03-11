@@ -1,3 +1,6 @@
 class MyStringClass {
-    var a:String = "Penis"
+    private var a = "Penis"
+    init {
+        println(a)
+    }
 }
