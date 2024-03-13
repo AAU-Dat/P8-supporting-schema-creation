@@ -1,6 +1,71 @@
 
 \section{preliminaries}\label{sec:preliminaries}
 
-\subsection{Regular languages and finite automata}
+\subsection{Lattices}\label{sec:lattices}
+
+\begin{definition}
+    A \textit{partial order} is set $S$ equipped with a binary relation $\sqsubseteq$ that is reflexive, transitive and anti-symmetric.
+\end{definition}
+
+\begin{definition}
+    A \textit{complete lattice} is a partial order $(S, \sqsubseteq)$ in which for all $X \subseteq S:$ $\bigsqcup X$ and $\bigsqcap X$ are defined,
+        \begin{equation*}
+            X \sqsubseteq \bigsqcup X \land \forall y \in S : X \sqsubseteq y \implies \bigsqcup X \sqsubseteq y,
+        \end{equation*}
+        and
+        \begin{equation*}
+            \bigsqcap X \sqsubseteq X \land \forall y \in S : y \sqsubseteq X \implies y \sqsubseteq \bigsqcap X.
+        \end{equation*}
+\end{definition}
+
+As a shorthand we take $x \sqcup y = \bigsqcup \{x, y\}$ and $x \sqcap y = \bigsqcap \{x, y\}$.
+
+\begin{definition}
+    A \textit{lattice} is a partial order $(S, \sqsubseteq)$ in which for all $x,y \in S:$ $x \sqcup y$ and $x \sqcap y$ are defined,
+        \begin{equation*}
+            \{x, y\} \sqsubseteq x \sqcup y \land \forall z \in S : \{x, y\} \sqsubseteq z \implies x \sqcup y \sqsubseteq z,
+        \end{equation*}
+        and
+        \begin{equation*}
+            x \sqcap y \sqsubseteq \{x, y\} \land \forall z \in S : z \sqsubseteq \{x, y\} \implies z \sqsubseteq x \sqcap y.
+        \end{equation*}
+\end{definition}
+
+\begin{theorem}
+    In a complete lattice $L$ with finite height, every monotone function $f : L \rightarrow L$ has a unique fixed point
+    \begin{equation*}
+        lfp(f) = \bigsqcup\{f^n(\perp) \mid n \in \mathbb{N}\}
+    \end{equation*}.
+\end{theorem}
+
+\begin{theorem}
+    In a complete lattice $L$, every Scott-continuous function $f : L \rightarrow L$ has a unique fixed point $lfp(f)$.
+\end{theorem}
+
+\todo[inline]{Casper says: 
+    The two theorems above should have a source.}
+
+\subsection{Abstract Interpretation}
+
+\subsection{Regular languages}
+
+Let $REG$ denote the set of regular languages and 
+\begin{equation*}
+    REG^{\leq n} = \{R \in REG \mid \forall w \in R : |w| \leq n\}.
+\end{equation*}
+
+\begin{theorem}
+    $(REG, \subseteq)$ with $\sqcup = \cup$ and $\sqcap = \cap$ is a lattice.
+\end{theorem}
+
+Observe that $\{ \epsilon, ab, aabb, aaabbb, \dots \} \subseteq REG$, yet $\bigcup\{ \epsilon, ab, aabb, aaabbb, \dots \} = \{a^nb^n \mid n \in \mathbb{N}\} \notin REG$, thus $(REG, \subseteq)$ is not a complete lattice.
+
+\begin{theorem}
+    $(REG^{\leq n}, \subseteq)$ with $\bigsqcup = \bigcup$ and $\bigsqcap = \bigcap$ is a complete lattice.
+\end{theorem}
+
+\begin{theorem}
+    A finite partition lattice on $(REG, \subseteq)$ with $\bigsqcup = \bigcup$ and $\bigsqcap = \bigcap$ is a complete lattice.
+\end{theorem}
 
 
