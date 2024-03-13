@@ -2,25 +2,34 @@
 %! Date = 29-12-2023
 
 \section{Introduction}\label{sec:introduction}
+%background and motivation
+Abstract interpretation, first proposed by Cousot and Cousot in 1977~\cite{cousot1977abstract}, has emerged as a fundamental method for static program analysis.
+Over the years, it has evolved into a versatile tool, finding applications across various programming paradigms and system architectures.
+Its utility extends beyond traditional imperative programming to encompass object-oriented designs and concurrent systems~\cite{gustafsson_analyzing_2013, mine_static_2023}.
+Abstract interpretation has played a pivotal role in analyzing a spectrum of program properties, from basic safety and liveness concerns to intricate security considerations~\cite{mastroeni_abstract_2011}.
 
 
-\paragraph{Objective}
+Building upon this historical foundation, subsequent researchers, such as Halder and Cortesi, have expanded the application of abstract interpretation to domains like query languages \cite{halder_abstract_2012}.
+This paper continues in the footsteps of these pioneers, aiming to further explore and extend the capabilities of abstract interpretation within the context of query languages.
 
-The objective of this work is to develop a general software tool, utilizing abstract interpretation for analyzing the reachable state space of a entity relation database given its schema, accompanying reactive procedures and a model of the behavior of the environment in which the database will reside.
+%Objective
+\todo[inline]{I think we should be more specific about the objective. This is not done}
+The objective of this work is to develop a general software tool, in the sense of value analysis, only be considering abstract values, not meta information like information flow or taint analysis.
+Within this limitation we will restrict try to pick the most abstract/powerfull primitives possible, that do not encounter computation problems.
+Utilizing abstract interpretation for analyzing the reachable state space of an entity relation database given its schema, accompanying reactive procedures and a model of the behavior of the environment in which the database will reside.
+
 
 \todo[inline]{Maybe we can use workflow nets for the environment behavior model.}
 
+This research endeavor is motivated by the observation that, despite the widespread use of abstract interpretation in program analysis, there is a notable absence of a comprehensive, general-purpose tool tailored specifically for value analysis in query languages.
+The lack of such a tool represents a significant gap in the field, hindering researchers and practitioners from effectively analyzing and verifying complex systems.
+By addressing this gap, our work seeks to provide a valuable contribution to the field of program analysis, enabling more efficient and accurate evaluation of software systems.
 \paragraph{Justification}
 
 It seems that no general tool has been developed.
 
-\paragraph{Background}
 
-\begin{itemize}
-    \item Cousot 'invented' abstract interpretation.
-    \item Halder and Cortesi extended abstract interpretation to query languages.
-\end{itemize}
-
+\section{Notes}
 \paragraph{Guidance to the reader}
 
 \begin{itemize}
