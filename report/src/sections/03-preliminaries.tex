@@ -31,41 +31,23 @@ As a shorthand we take $x \sqcup y = \bigsqcup \{x, y\}$ and $x \sqcap y = \bigs
         \end{equation*}
 \end{definition}
 
-\begin{theorem}
+\begin{theorem}\label{thm:kleene_finite}
     In a complete lattice $L$ with finite height, every monotone function $f : L \rightarrow L$ has a unique fixed point
     \begin{equation*}
         lfp(f) = \bigsqcup\{f^n(\perp) \mid n \in \mathbb{N}\}
     \end{equation*}.
 \end{theorem}
 
-\begin{theorem}
+\begin{theorem}\label{thm:kleene_scott}
     In a complete lattice $L$, every Scott-continuous function $f : L \rightarrow L$ has a unique fixed point $lfp(f)$.
 \end{theorem}
 
-\todo[inline]{Casper says: 
+\todo[inline]{Casper says:
     The two theorems above should have a source.}
 
 \subsection{Abstract Interpretation}
 
 \subsection{Regular languages}
 
-Let $REG$ denote the set of regular languages and 
-\begin{equation*}
-    REG^{\leq n} = \{R \in REG \mid \forall w \in R : |w| \leq n\}.
-\end{equation*}
-
-\begin{theorem}
-    $(REG, \subseteq)$ with $\sqcup = \cup$ and $\sqcap = \cap$ is a lattice.
-\end{theorem}
-
-Observe that $\{ \epsilon, ab, aabb, aaabbb, \dots \} \subseteq REG$, yet $\bigcup\{ \epsilon, ab, aabb, aaabbb, \dots \} = \{a^nb^n \mid n \in \mathbb{N}\} \notin REG$, thus $(REG, \subseteq)$ is not a complete lattice.
-
-\begin{theorem}
-    $(REG^{\leq n}, \subseteq)$ with $\bigsqcup = \bigcup$ and $\bigsqcap = \bigcap$ is a complete lattice.
-\end{theorem}
-
-\begin{theorem}
-    A finite partition lattice on $(REG, \subseteq)$ with $\bigsqcup = \bigcup$ and $\bigsqcap = \bigcap$ is a complete lattice.
-\end{theorem}
 
 
