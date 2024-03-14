@@ -8,4 +8,5 @@ import dk.brics.automaton.*
 class SqaalApplication
 
 fun main(args: Array<String>) {
+    runApplication<SqaalApplication>(*args)
 }
