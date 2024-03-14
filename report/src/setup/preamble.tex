@@ -4,7 +4,7 @@
 % Packages
 \RequirePackage{clrscode4e}
 \usepackage{amsmath}
-\usepackage{amsthm}
+% \usepackage{amsthm} \\ the proof environment clashes with the one in pf2.
 \usepackage{amssymb}
 \usepackage{amsbsy}
 \usepackage{mathrsfs}
@@ -12,6 +12,7 @@
 \usepackage{bbold}
 \usepackage{booktabs}
 \usepackage{tikz}
+\usepackage{pf2}
 
 % Packages with options set
 \usepackage[hidelinks]{hyperref}
@@ -37,5 +38,16 @@
 \newfloat{algorithm}{htb!}{lop}
 \floatname{algorithm}{Algorithm}
 \newcommand{\algorithmautorefname}{Algorithm}
+
+\makeatletter
+\providecommand{\bigsqcap}{%
+  \mathop{%
+    \mathpalette\@updown\bigsqcup
+  }%
+}
+\newcommand*{\@updown}[2]{%
+  \rotatebox[origin=c]{180}{$\m@th#1#2$}%
+}
+\makeatother
 
 \makeglossaries

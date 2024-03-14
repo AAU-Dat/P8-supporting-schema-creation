@@ -4,3 +4,41 @@
 \section{Compiling in draft}\label{sec:compiling-in-draft}
 You can also compile the document in draft mode.
 This shows todos, and increases the space between lines to make space for your supervisors feedback.
+
+\section{Lattice proofs}
+
+Let $REG$ be the set of all regular expressions.
+
+\begin{theorem}
+    $(REG, \subseteq)$ is a complete lattice.
+\end{theorem}
+
+\prove{$(REG, \subseteq)$ is a partial order, and for all $\mathcal{R} \in 2^{REG}$ $\bigcup \mathcal{R}$ and $\bigcap \mathcal{R}$ are the lup and glb respectively.}
+\begin{proof}
+    \step{reflexivity}{$\forall R \in REG : R \subseteq R$.}
+    \begin{proof}
+        \pf\ Obvious.
+    \end{proof}
+    \step{transitivity}{$\forall R_1, R_2, R_3 \in REG : R_1 \subseteq R_2 \land R_2 \subseteq R_3 \implies R_1 \subseteq R_3$.}
+    \begin{proof}
+        \pf\ Obvious.
+    \end{proof}
+    \step{anti-symmetry}{$\forall R_1, R_2 \in REG : R_1 \subseteq R_2 \land R_2 \subseteq R_1 \implies R_1 = R_2$.}
+    \begin{proof}
+        \pf\ Obvious.
+    \end{proof}
+    \step{poset}{$(REG, \subseteq)$ is a partial order.}
+    \begin{proof}
+        \pf\ By \stepref{reflexivity}, \stepref{transitivity} and \stepref{anti-symmetry}.
+    \end{proof}
+    \step{bigsqcup}{$\forall \mathcal{R} \in 2^{REG} : \mathcal{R} \subseteq \bigcup \mathcal{R} \land \forall R \in REG : \mathcal{R} \subseteq R \implies \bigcup \mathcal{R} \subseteq R$.}
+    \begin{proof}
+        \
+    \end{proof}
+    \step{bigsqcap}{$\forall \mathcal{R} \in 2^{REG} : \bigcap \mathcal{R} \subseteq \mathcal{R} \land \forall R \in REG : R \subseteq \mathcal{R} \implies R \subseteq \bigcap \mathcal{R}$.}
+    \qedstep{}
+    \begin{proof}
+        \pf\ By \stepref{poset}, \stepref{bigsqcup} and \stepref{bigsqcap}.
+    \end{proof}
+\end{proof}
+
