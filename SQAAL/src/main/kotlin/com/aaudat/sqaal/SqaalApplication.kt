@@ -6,6 +6,7 @@ import com.google.ortools.linearsolver.MPSolver.ResultStatus
 import dk.brics.automaton.*
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
+import dk.brics.automaton.*
 
 @SpringBootApplication
 class SqaalApplication
