@@ -4,11 +4,17 @@
 \subsection{Lattices}\label{sec:lattices}
 
 \begin{definition}
-    A \textit{partial order} is set $S$ equipped with a binary relation $\sqsubseteq$ that is reflexive, transitive and anti-symmetric.
+    A \textit{partial order} $(S, \sqsubseteq)$ is set $S$ equipped with a binary relation $\sqsubseteq$ that is reflexive, transitive and anti-symmetric.
 \end{definition}
 
+For $X \sqsubseteq S$ and $y \in S$ we take
+\begin{equation*}
+    X \sqsubseteq y \iff \forall x \in X : x \sqsubseteq y,
+\end{equation*}
+and analogous for $y \sqsubseteq X$.
+
 \begin{definition}
-    A \textit{complete lattice} is a partial order $(S, \sqsubseteq)$ in which for all $X \subseteq S:$ $\bigsqcup X$ and $\bigsqcap X$ are defined,
+    A \textit{complete lattice} $(S, \sqsubseteq, \sqcup, \sqcap)$ is a partial order $(S, \sqsubseteq)$ in which for all $X \subseteq S:$ $\bigsqcup X$ and $\bigsqcap X$ are defined,
         \begin{equation*}
             X \sqsubseteq \bigsqcup X \land \forall y \in S : X \sqsubseteq y \implies \bigsqcup X \sqsubseteq y,
         \end{equation*}
@@ -21,7 +27,7 @@
 As a shorthand we take $x \sqcup y = \bigsqcup \{x, y\}$ and $x \sqcap y = \bigsqcap \{x, y\}$.
 
 \begin{definition}
-    A \textit{lattice} is a partial order $(S, \sqsubseteq)$ in which for all $x,y \in S:$ $x \sqcup y$ and $x \sqcap y$ are defined,
+    A \textit{lattice} $(S, \sqsubseteq, \sqcup, \sqcap)$ is a partial order $(S, \sqsubseteq)$ in which for all $x,y \in S:$ $x \sqcup y$ and $x \sqcap y$ are defined,
         \begin{equation*}
             \{x, y\} \sqsubseteq x \sqcup y \land \forall z \in S : \{x, y\} \sqsubseteq z \implies x \sqcup y \sqsubseteq z,
         \end{equation*}

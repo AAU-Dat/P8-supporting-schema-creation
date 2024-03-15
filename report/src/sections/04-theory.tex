@@ -18,7 +18,7 @@ In the following we do not distinguish between regular expressions and their lan
 In regards to abstract interpretation regulars expressions are not without their own quirks, as expressed in the following theorem.
 
 \begin{theorem}\label{thm:reg-lattice}
-    $(REG, \subseteq)$ with $\sqcup = \cup$ and $\sqcap = \cap$ is a lattice, but not a complete one.
+    $(REG, \subseteq, \cup, \cap)$ is a lattice, but not a complete one.
     \footnote{
         Observe that $\{ \epsilon, ab, aabb, aaabbb, \dots \} \subseteq REG$, yet $\bigcup\{ \epsilon, ab, aabb, aaabbb, \dots \} = \{a^nb^n \mid n \in \mathbb{N}\} \notin REG$, thus $(REG, \subseteq)$ is not a complete lattice.}
 \end{theorem}
@@ -46,9 +46,9 @@ To formalize the latter idea we introduce regular language partitions.
 \end{definition}
 
 \begin{theorem}\label{thm:finite-reg-lattice}
-    $(REG^{\leq n}, \subseteq)$ with $\bigsqcup = \bigcup$ and $\bigsqcap = \bigcap$ is a complete lattice.
+    $(REG^{\leq n}, \subseteq, \cup, \cap)$ is a complete lattice.
 \end{theorem}
 
 \begin{theorem}\label{thm:reg-partition-lattice}
-    $(p(REG^\subset), \subseteq)$, with $\bigsqcup = \bigcup$ and $\bigsqcap = \bigcap$ is a complete lattice.
+    $(p(REG^\subset), \subseteq, \cup, \cap)$ is a complete lattice.
 \end{theorem}
