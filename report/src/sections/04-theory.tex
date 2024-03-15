@@ -1,0 +1,54 @@
+\section{theory}\label{theory}
+
+\subsection{Abstract Domains}\label{subsec:abstract_domains}
+
+In the following sections we will describe the abstract domains of our value analysis.
+
+\subsubsection{Abstract domain of strings as regular expressions}\label{subsubsec:abstract_domains_strings}
+
+To represent the abstract domain of the family SQL strings data types we have chosen regular expressions/languages.
+We have considered more powerful representations, such as context-free grammars/languages, but their use was disregard because of the undecidable nature of inclusion and equality of such languages.
+
+Let $REG$ denote the set of regular languages and
+\begin{equation*}
+    REG^{\leq n} = \{R \in REG \mid \forall w \in R : |w| \leq n\}.
+\end{equation*}
+In the following we do not distinguish between regular expressions and their languages.
+
+In regards to abstract interpretation regulars expressions are not without their own quirks, as expressed in the following theorem.
+
+\begin{theorem}\label{thm:reg-lattice}
+    $(REG, \subseteq, \cup, \cap)$ is a lattice, but not a complete one.
+    \footnote{
+        Observe that $\{ \epsilon, ab, aabb, aaabbb, \dots \} \subseteq REG$, yet $\bigcup\{ \epsilon, ab, aabb, aaabbb, \dots \} = \{a^nb^n \mid n \in \mathbb{N}\} \notin REG$, thus $(REG, \subseteq)$ is not a complete lattice.}
+\end{theorem}
+
+Thus we can not employ the Kleene fixed-point theorem to guarantee a fixed point and termination of our analysis.
+We propose two solutions to overcome this limitation:
+\begin{itemize}
+    \item Limiting the size of the regulars expressions under consideration, this is sound in the case where the string data type which is abstracted over is fixed size;
+    \item And to let the user define an abstract domain over the regular expressions that only contain finite elements.
+\end{itemize}
+
+To formalize the latter idea we introduce regular language partitions.
+
+\begin{definition}
+    Given a finite subset $REG^\subset \subset REG$ where $\bigcup REG^\subset = \Sigma^\star$.
+    % todo Casper says: I am not sure if this restriction is useful.
+    % and $\forall R_1, R_2 \in REG^\subset : R_1 \not\subset R_2 \land R_2 \not\subset R_1$.
+    A regular language partition $p(REG^\subset)$ is a set where:
+    \begin{itemize}
+        \item $\emptyset \in p(REG^\subset)$,
+        \item $\forall R \in REG^\subset : R \in p(REG^\subset)$,
+        \item $\forall R_1, R_2 \in p(REG^\subset) : R_1 \cup R_2 \in p(REG^\subset)$,
+        \item $\forall R_1, R_2 \in p(REG^\subset) : R_1 \cap R_2 \in p(REG^\subset)$.
+    \end{itemize}
+\end{definition}
+
+\begin{theorem}\label{thm:finite-reg-lattice}
+    $(REG^{\leq n}, \subseteq, \cup, \cap)$ is a complete lattice.
+\end{theorem}
+
+\begin{theorem}\label{thm:reg-partition-lattice}
+    $(p(REG^\subset), \subseteq, \cup, \cap)$ is a complete lattice.
+\end{theorem}

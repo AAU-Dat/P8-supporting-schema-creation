@@ -1,19 +1,12 @@
 %! Author = Runge
 %! Date = 29-12-2023
 
-\section{Compiling in draft}\label{sec:compiling-in-draft}
-You can also compile the document in draft mode.
-This shows todos, and increases the space between lines to make space for your supervisors feedback.
+\section{Proof of theorems \ref{thm:reg-lattice}, \ref{thm:reg-partition-lattice} and \ref{thm:reg-partition-lattice}}
 
-\section{Lattice proofs}
-
-Let $REG$ be the set of all regular expressions.
-
-\begin{theorem}
-    $(REG, \subseteq)$ is a complete lattice.
-\end{theorem}
-
-\prove{$(REG, \subseteq)$ is a partial order, and for all $\mathcal{R} \in 2^{REG}$ $\bigcup \mathcal{R}$ and $\bigcap \mathcal{R}$ are the lup and glb respectively.}
+\prove{
+    $(REG, \subseteq)$ is a partial order, and $\cup$ and $\cap$ are the join and meet respectively.
+    $\bigcup$ or $\bigcap$ is not the lup and glb respectively.
+}
 \begin{proof}
     \step{reflexivity}{$\forall R \in REG : R \subseteq R$.}
     \begin{proof}
@@ -31,14 +24,23 @@ Let $REG$ be the set of all regular expressions.
     \begin{proof}
         \pf\ By \stepref{reflexivity}, \stepref{transitivity} and \stepref{anti-symmetry}.
     \end{proof}
-    \step{bigsqcup}{$\forall \mathcal{R} \in 2^{REG} : \mathcal{R} \subseteq \bigcup \mathcal{R} \land \forall R \in REG : \mathcal{R} \subseteq R \implies \bigcup \mathcal{R} \subseteq R$.}
+    \step{cup}{$\forall R_1, R_2 \in REG : R_1 \cup R_2 \in REG \land \{R_1, R_2\} \subseteq R_1 \cup R_2 \land \forall R \in REG : \{R_1, R_2\} \subseteq R \implies R_1 \cup R_2 \subseteq R$.}
     \begin{proof}
-        \
+        \pf\ Obvious, $REG$ is closed under finite union.
     \end{proof}
-    \step{bigsqcap}{$\forall \mathcal{R} \in 2^{REG} : \bigcap \mathcal{R} \subseteq \mathcal{R} \land \forall R \in REG : R \subseteq \mathcal{R} \implies R \subseteq \bigcap \mathcal{R}$.}
+    \step{cap}{$\forall R_1, R_2 \in REG : R_1 \cap R_2 \subseteq \{R_1, R_2\} \land \forall R \in REG : R \subseteq \{R_1, R_2\} \implies R \subseteq R_1 \cap R_2$.}
+    \begin{proof}
+        \pf\ Obvious, $REG$ is closed under finite intersection.
+    \end{proof}
+    \step{notbigcup}{$\neg\forall \mathcal{R} \subseteq REG : \bigcup \mathcal{R} \in REG \land \dots$}
+    \begin{proof}
+        \pf\ $REG$ is not closed under infinite union.
+    \end{proof}
     \qedstep{}
     \begin{proof}
-        \pf\ By \stepref{poset}, \stepref{bigsqcup} and \stepref{bigsqcap}.
+        \pf\ By \stepref{poset}, \stepref{cup}, \stepref{cap} and \stepref{notbigcup}.
     \end{proof}
 \end{proof}
+
+Proofs of Theorem \ref{thm:finite-reg-lattice} and \ref{thm:reg-partition-lattice} are similar to the one above, but $\bigcup \mathcal{R}$ can be shown to be defined for all $\mathcal{R} \subseteq \mathcal{REG}$ where $\mathcal{REG} \in \{p(REG^\subset), REG^{\leq n}\}$, as these particular sets are finite and regular languages are closed under finite union and intersection.
 
