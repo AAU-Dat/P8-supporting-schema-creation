@@ -30,10 +30,19 @@ We propose two solutions to overcome this limitation:
     \item And to let the user define an abstract domain over the regular expressions that only contain finite elements.
 \end{itemize}
 
-To formalize the latter idea we introduce regular language partition.
+To formalize the latter idea we introduce regular language partitions.
 
 \begin{definition}
-    A regular language partition is a function $p : REG \rightarrow REG^\subset$ such that $REG^\subset$ is finite subset of $REG$ and $\bigcup REG^\subset = \Sigma^\star$.
+    Given a finite subset $REG^\subset \subset REG$ where $\bigcup REG^\subset = \Sigma^\star$.
+    % todo Casper says: I am not sure if this restriction is useful.
+    % and $\forall R_1, R_2 \in REG^\subset : R_1 \not\subset R_2 \land R_2 \not\subset R_1$.
+    A regular language partition $p(REG^\subset)$ is a set where:
+    \begin{itemize}
+        \item $\emptyset \in p(REG^\subset)$,
+        \item $\forall R \in REG^\subset : R \in p(REG^\subset)$,
+        \item $\forall R_1, R_2 \in p(REG^\subset) : R_1 \cup R_2 \in p(REG^\subset)$,
+        \item $\forall R_1, R_2 \in p(REG^\subset) : R_1 \cap R_2 \in p(REG^\subset)$.
+    \end{itemize}
 \end{definition}
 
 \begin{theorem}\label{thm:finite-reg-lattice}
@@ -41,5 +50,5 @@ To formalize the latter idea we introduce regular language partition.
 \end{theorem}
 
 \begin{theorem}\label{thm:reg-partition-lattice}
-    $(p(REG), \subseteq)$, with $\bigsqcup = \bigcup$ and $\bigsqcap = \bigcap$ is a complete lattice.
+    $(p(REG^\subset), \subseteq)$, with $\bigsqcup = \bigcup$ and $\bigsqcap = \bigcap$ is a complete lattice.
 \end{theorem}
