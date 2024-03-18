@@ -62,6 +62,8 @@ To formalize the latter idea we introduce regular language partitions.
     \label{fig:tikz-reg-partition}
 \end{figure}
 
+\autoref{fig:tikz-reg-partition} illustrates a simple regular language partition. The regular language $R$ is represented by the gray circle and its complement $\overline{R}$ is represented by the white circle. The two circles together represent the entire regular language $\Sigma^*$ and their intersection is the empty set $\emptyset$.
+
 \begin{figure}[!htb]
     \resizebox{6.5cm}{!}{
         \begin{tikzpicture}[scale = 0.5]
@@ -79,6 +81,7 @@ To formalize the latter idea we introduce regular language partitions.
     \caption{Regular language partition as a lattice}
     \label{fig:tikz-reg-partition-lattice}
 \end{figure}
+\autoref{fig:tikz-reg-partition-lattice} illustrates the regular language partition as a lattice. The top element $\top$ is the entire regular language $\Sigma^*$ and the bottom element $\bot$ is the empty set $\emptyset$. The regular language $R$ and its complement $\overline{R}$ are the two elements in the partition. 
 
 \begin{theorem}\label{thm:finite-reg-lattice}
     $(REG^{\leq n}, \subseteq, \cup, \cap)$ is a complete lattice.
