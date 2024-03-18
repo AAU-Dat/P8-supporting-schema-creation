@@ -6,7 +6,7 @@ In the following sections we will describe the abstract domains of our value ana
 
 \subsubsection{Abstract domain of strings as regular expressions}\label{subsubsec:abstract_domains_strings}
 
-To represent the abstract domain of the family SQL strings data types we have chosen regular expressions/languages.
+To represent the abstract domain of the family of SQL strings data types we have chosen regular expressions/languages.
 Regular expressions/languages are chosen, as opposed to more powerful representations, for the decidable nature of inclusion and equality between them.
 
 Let $REG$ denote the set of regular languages and
@@ -38,6 +38,7 @@ To formalize the latter idea we introduce regular language partitions.
     % and $\forall R_1, R_2 \in REG^\subset : R_1 \not\subset R_2 \land R_2 \not\subset R_1$.
     A regular language partition $p(REG^\subset)$ is a set where:
     \begin{itemize}
+        % Casper says: I don't think the empty set in necessary.
         % \item $\emptyset \in p(REG^\subset)$,
         \item $\forall R \in REG^\subset : R \in p(REG^\subset)$,
         \item $\forall R_1, R_2 \in p(REG^\subset) : R_1 \cup R_2 \in p(REG^\subset)$,
@@ -58,5 +59,87 @@ To formalize the latter idea we introduce regular language partitions.
 
 
 \subsubsection{Abstract domain of numbers as linear inequalities}\label{subsubsec:abstract_domains_numbers}
+
+To represent the abstract domain of the family of SQL number data types when have chosen compound linear inequalities, more specifically compound linear inequalities which are algorithmically solvable by \gls{lp}.
+\gls{lp} solvable compound linear inequalities where chosen for the prevalence of \gls{lp} solvers.
+%todo
+\todo{
+    Casper says: We probably need a better reasons.
+    Maybe look into NLP, MINLP, CP, SDP and convex optimization.
+}
+
+Let $LP^n$ be the set of solutions to \gls{lp} solvable compound linear inequalities where $\mathbf{x} \in X \in LP \implies \mathbf{x} \in \mathbb{R}^n$.\todo{
+    Casper says: I feel like the description is more awkward than it needs to be.
+}
+And Let $ILP^n$ be the set integer solutions with the same constraint as above.
+\autoref{thm:lp-lattice} demonstrates a similar problem as the one we encounter with the lattice $(REG, \subseteq, \cup, \cap)$.
+
+\begin{theorem}\label{thm:lp-lattice}
+    For $\mathcal{LP}^n \in \{ILP^n, LP^n\}$ : $(\mathcal{LP}^n, \subseteq, \cup, \cap)$ is a lattice, but not a complete one.
+\end{theorem}
+
+Again we employ a similar solution:
+
+\begin{definition}
+    Given a finite subset $LP_\subset^n \subset LP^n$ where $\bigcup LP_\subset^n = \mathbb{R}^n$.
+    A \gls{lp} partition $p(LP_\subset^n)$ is a set where:
+    \begin{itemize}
+        \item $\forall X \in LP_\subset^n : X \in p(LP_\subset^n)$,
+        \item $\forall X, Y \in p(LP_\subset^n) : X \cup Y \in p(LP_\subset^n)$,
+        \item $\forall X, Y \in p(LP_\subset^n) : X \cap Y \in p(LP_\subset^n)$,
+    \end{itemize}
+\end{definition}
+
+\begin{definition}
+    Given a finite subset $ILP_\subset^n \subset LP^n$ where $\bigcup LP_\subset^n = \mathbb{Z}^n$.
+    A I\gls{lp} partition $p(ILP_\subset^n)$ is a set where:
+    \begin{itemize}
+        \item $\forall X \in ILP_\subset^n : X \in p(ILP_\subset^n)$,
+        \item $\forall X, Y \in p(ILP_\subset^n) : X \cup Y \in p(ILP_\subset^n)$,
+        \item $\forall X, Y \in p(ILP_\subset^n) : X \cap Y \in p(ILP_\subset^n)$,
+    \end{itemize}
+\end{definition}
+
+\begin{theorem}\label{thm:lp-partition-lattice}
+    For $\mathcal{LP} \in \{ILP, LP\}$ : $(p(\mathcal{LP}_\subset^n), \subseteq, \cup, \cap)$ is a complete lattice.
+\end{theorem}
+
+\todo[inline]{
+    Casper says: At this point it seems that the concept of a partition can be generalized.
+}
+
+% Let $A$ denote $m \times n$ matrix, $\mathbf{x}$ a $n \times 1$ column vector of variable and $\mathbf{b}$ a $m \times 1$ column vector of constants, then the solutions to the linear inequality $A \mathbf{x} \leq \mathbf{b}$ can be described as:
+% \begin{equation*}
+%     \{\mathbf{x} \in \mathbb{R}^n \mid A \mathbf{x} \leq \mathbf{b} \}
+% \end{equation*}
+% For the set of solutions of linear inequalities $A \mathbf{x} \leq \mathbf{b}$ and $A' \mathbf{x}' \leq \mathbf{b}'$ where $\mathbf{x}$ and $\mathbf{x}'$ are of the same size, their union and intersection are given by:
+% \begin{align*}
+%     \{\mathbf{x} \in \mathbb{R}^n \mid A \mathbf{x} \leq \mathbf{b} \}
+%     &\cup
+%     \{\mathbf{x} \in \mathbb{R}^n \mid A' \mathbf{x} \leq \mathbf{b'} \} \\
+%     &=
+%     \{
+%         \mathbf{x} \in \mathbb{R}^n \mid A \mathbf{x} \leq \mathbf{b}
+%                                     \lor A' \mathbf{x} \leq \mathbf{b}'
+%     \}
+% \end{align*}
+% and
+% \begin{align*}
+%     \{\mathbf{x} \in \mathbb{R}^n \mid A \mathbf{x} \leq \mathbf{b} \}
+%     &\cap
+%     \{\mathbf{x} \in \mathbb{R}^n \mid A' \mathbf{x} \leq \mathbf{b'} \} \\
+%     &=
+%     \{\mathbf{x} \in \mathbb{R}^n \mid \begin{bmatrix} A \\ A' \end{bmatrix}  \mathbf{x} \leq \begin{bmatrix} \mathbf{b} \\ \mathbf{b}' \end{bmatrix} \}
+% \end{align*}
+
+
+
+
+
+
+
+
+
+
 
 
