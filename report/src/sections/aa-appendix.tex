@@ -3,28 +3,20 @@
 
 \section{Proof of theorems \ref{thm:reg-lattice}, \ref{thm:reg-partition-lattice} and \ref{thm:reg-partition-lattice}}
 
+\reglattice*
 \prove{
     $(REG, \subseteq)$ is a partial order, and $\cup$ and $\cap$ are the join and meet respectively.
     $\bigcup$ or $\bigcap$ is not the lup and glb respectively.
 }
 \begin{proof}
-    \step{reflexivity}{$\forall R \in REG : R \subseteq R$.}
-    \begin{proof}
-        \pf\ Obvious.
-    \end{proof}
-    \step{transitivity}{$\forall R_1, R_2, R_3 \in REG : R_1 \subseteq R_2 \land R_2 \subseteq R_3 \implies R_1 \subseteq R_3$.}
-    \begin{proof}
-        \pf\ Obvious.
-    \end{proof}
-    \step{anti-symmetry}{$\forall R_1, R_2 \in REG : R_1 \subseteq R_2 \land R_2 \subseteq R_1 \implies R_1 = R_2$.}
-    \begin{proof}
-        \pf\ Obvious.
-    \end{proof}
+    \pf\
     \step{poset}{$(REG, \subseteq)$ is a partial order.}
     \begin{proof}
-        \pf\ By \stepref{reflexivity}, \stepref{transitivity} and \stepref{anti-symmetry}.
+        \pf\ Know property.
     \end{proof}
-    \step{cup}{$\forall R_1, R_2 \in REG : R_1 \cup R_2 \in REG \land \{R_1, R_2\} \subseteq R_1 \cup R_2 \land \forall R \in REG : \{R_1, R_2\} \subseteq R \implies R_1 \cup R_2 \subseteq R$.}
+    \step{cup}{
+        $\forall R_1, R_2 \in REG : R_1 \cup R_2 \in REG \land \{R_1, R_2\} \subseteq R_1 \cup R_2 \land \forall R \in REG : \{R_1, R_2\} \subseteq R \implies R_1 \cup R_2 \subseteq R$.
+    }
     \begin{proof}
         \pf\ Obvious, $REG$ is closed under finite union.
     \end{proof}
@@ -34,7 +26,7 @@
     \end{proof}
     \step{notbigcup}{$\neg\forall \mathcal{R} \subseteq REG : \bigcup \mathcal{R} \in REG \land \dots$}
     \begin{proof}
-        \pf\ $REG$ is not closed under infinite union.
+        \pf\ $REG$ is not closed under transfinite union.
     \end{proof}
     \qedstep{}
     \begin{proof}
@@ -42,5 +34,5 @@
     \end{proof}
 \end{proof}
 
-Proofs of Theorem \ref{thm:finite-reg-lattice} and \ref{thm:reg-partition-lattice} are similar to the one above, but $\bigcup \mathcal{R}$ can be shown to be defined for all $\mathcal{R} \subseteq \mathcal{REG}$ where $\mathcal{REG} \in \{p(REG^\subset), REG^{\leq n}\}$, as these particular sets are finite and regular languages are closed under finite union and intersection.
+Proofs of Theorem \ref{thm:finite-reg-lattice} and \ref{thm:reg-partition-lattice} are similar to the one above, but $\bigcup \mathcal{R}$ can be shown to be defined for all $\mathcal{R} \subseteq \mathcal{REG}$ where $\mathcal{REG} \in \{p(REG^\subset), REG^{\leq n}\}$, as these particular sets are finite.
 

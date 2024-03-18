@@ -13,6 +13,7 @@
 \usepackage{booktabs}
 \usepackage{tikz}
 \usepackage{pf2}
+\usepackage{thmtools, thm-restate}
 
 % Packages with options set
 \usepackage[hidelinks]{hyperref}
@@ -33,8 +34,8 @@
 \addbibresource{bib/main.bib}
 
 % Other setup and options
-\newtheorem{theorem}{Theorem}
-\newtheorem{definition}{Definition}
+\declaretheorem{theorem}
+\declaretheorem{definition}
 \newfloat{algorithm}{htb!}{lop}
 \floatname{algorithm}{Algorithm}
 \newcommand{\algorithmautorefname}{Algorithm}
