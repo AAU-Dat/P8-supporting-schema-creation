@@ -45,8 +45,39 @@ To formalize the latter idea we introduce regular language partitions.
     \end{itemize}
 \end{definition}
 
-% todo
-\todo[inline]{Casper says: Example should go here}
+% Tikzfigures
+\begin{figure}
+    \resizebox{7.5cm}{!}{
+        \begin{tikzpicture}
+            \filldraw[fill=white, draw=black] (2,2) circle (5cm);
+            \node [draw] at (5,2) {\Huge$\overline{R}$};
+            \filldraw[fill=gray!60, draw=black] (1,2) circle (2cm);
+            \node [draw] at (1,2) {\Huge R};
+            \node at (9.5, 2.5) {\huge $R \cup \overline{R} = \Sigma^*$};
+            \node at (9.5, 1.5) {\huge $R \cap \overline{R} = \emptyset$};
+        \end{tikzpicture}
+    }
+    \caption{Regular language partition}
+    \label{fig:tikz-reg-partition}
+\end{figure}
+
+\begin{figure}[!htb]
+    \resizebox{6.5cm}{!}{
+        \begin{tikzpicture}[scale = 0.5]
+            \usetikzlibrary{calc}
+            \node (a) [state] {\Huge$R \cup \overline{R} = \top = \Sigma^*$};
+            \node (b1) [state, shift={($(a.south)+(3cm, -2.5cm)$)}] {\Huge $R$};
+            \node (b2) [state, shift={($(a.south)+(-3cm, -2.5cm)$)}]{\Huge $\overline{R}$};
+            \node (c) [state, shift= {($(a.south) + (0cm, -5.5cm)$)}] {\Huge $R \cap \overline{R} = \bot = \emptyset$};
+            \draw (a) to (b1);
+            \draw (a) to (b2);
+            \draw (b1) to (c);
+            \draw (b2) to (c);
+        \end{tikzpicture}
+    }
+    \caption{Regular language partition as a lattice}
+    \label{fig:tikz-reg-partition-lattice}
+\end{figure}
 
 \begin{theorem}\label{thm:finite-reg-lattice}
     $(REG^{\leq n}, \subseteq, \cup, \cap)$ is a complete lattice.
