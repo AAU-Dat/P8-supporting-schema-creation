@@ -81,7 +81,7 @@ To formalize the latter idea we introduce regular language partitions.
     \caption{Regular language partition as a lattice}
     \label{fig:tikz-reg-partition-lattice}
 \end{figure}
-\autoref{fig:tikz-reg-partition-lattice} illustrates the regular language partition as a lattice. The top element $\top$ is the entire regular language $\Sigma^*$ and the bottom element $\bot$ is the empty set $\emptyset$. The regular language $R$ and its complement $\overline{R}$ are the two elements in the partition. 
+\autoref{fig:tikz-reg-partition-lattice} illustrates the regular language partition as a lattice. The top element $\top$ is the entire regular language $\Sigma^*$ and the bottom element $\bot$ is the empty set $\emptyset$. The regular language $R$ and its complement $\overline{R}$ are the two elements in the partition.
 
 \begin{theorem}\label{thm:finite-reg-lattice}
     $(REG^{\leq n}, \subseteq, \cup, \cap)$ is a complete lattice.
@@ -141,6 +141,21 @@ Again we employ a similar solution:
 \todo[inline]{
     Casper says: At this point it seems that the concept of a partition can be generalized.
 }
+
+\begin{definition}
+    Given a finite subset $X \subseteq S$ of a lattice $S$ where $\bigsqcup X = \top$.
+    A $S$-partition $p(X)$ is a set where:
+    \begin{itemize}
+        \item $\forall x \in X: x \in p(X)$,
+        \item $\forall x, y \in p(X) : x \sqcup y \in p(X)$,
+        \item $\forall x, y \in p(X) : x \sqcap y \in p(X)$,
+    \end{itemize}
+\end{definition}
+
+\begin{theorem}
+    For a non-complete lattice $S$ and a finite subset $X \subseteq S$ $(p(S)), \sqsubseteq, \sqcup, \sqcap)$ is a complete lattice.
+\end{theorem}
+
 
 % Let $A$ denote $m \times n$ matrix, $\mathbf{x}$ a $n \times 1$ column vector of variable and $\mathbf{b}$ a $m \times 1$ column vector of constants, then the solutions to the linear inequality $A \mathbf{x} \leq \mathbf{b}$ can be described as:
 % \begin{equation*}
