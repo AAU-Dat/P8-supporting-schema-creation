@@ -6,6 +6,7 @@ import org.springframework.shell.command.annotation.CommandScan
 
 
 @SpringBootApplication
+@CommandScan
 class SqaalApplication
 
 fun main(args: Array<String>) {
