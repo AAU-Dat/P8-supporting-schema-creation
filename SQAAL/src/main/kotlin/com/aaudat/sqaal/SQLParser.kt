@@ -7,7 +7,7 @@ class SQLParser {
     companion object {
         /**
          * Parses the SQL String given as a parameter
-         * @return Parsed SQL String - todo: Decide upon correct return type
+         * @return [net.sf.jsqlparser.statement]
          * @exception net.sf.jsqlparser.parser.ParseException When String given as parameter does not follow correct SQL syntax
          */
         fun sqlParser(inputString: String): Statement {

@@ -36,7 +36,7 @@ class Commands {
         ) filename: String
     ): String {
         return try {
-            val inputStream: InputStream = File("SQAAL/src/main/kotlin/com/aaudat/sqaal/$filename.sql").inputStream()
+            val inputStream: InputStream = File("SQAAL/src/main/resources/sql examples/$filename.sql").inputStream()
             println("File '$filename.sql' succesfully loaded!")
             val inputString = inputStream.bufferedReader().use { it.readText() }
             println("\nContents of file: $filename.sql")
