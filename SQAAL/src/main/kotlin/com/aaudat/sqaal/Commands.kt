@@ -41,7 +41,7 @@ class Commands {
             val inputString = inputStream.bufferedReader().use { it.readText() }
             println("\nContents of file: $filename.sql")
             println("-------------------------------")
-            SQLParser.SQLParserTest(inputString)
+            SQLParser.SQLParser(inputString)
         } catch (e: FileNotFoundException) {
             println("FILE ERROR - Could not find file '$filename.sql'")
             throw e
