@@ -20,15 +20,15 @@ class Commands {
         return "Hello world"
     }
 
-    @Command(command = ["insert"], description = "Main function for parsing SQL", group = "Main Commands")
+    @Command(command = ["parse"], description = "Main function for parsing SQL", group = "Main Commands")
     /**
      * Main function for parsing SQL queries
      * Receives .sql file and uses the JSQLParser to parse the file
      * @exception FileNotFoundException If function cannot find the file given as argument
      * @param filename Name of the .sql file containing the SQL query to be parsed
-     * @return TBD
+     * @return TBD - String for now
      */
-    public fun insert(
+    public fun parse(
         @Option(
             longNames = ["arg"],
             label = "FileName",
@@ -41,7 +41,8 @@ class Commands {
             val inputString = inputStream.bufferedReader().use { it.readText() }
             println("\nContents of file: $filename.sql")
             println("-------------------------------")
-            SQLParser.SQLParser(inputString)
+            val parsedAST = SQLParser.sqlParser(inputString)
+            "$parsedAST"
         } catch (e: FileNotFoundException) {
             println("FILE ERROR - Could not find file '$filename.sql'")
             throw e
