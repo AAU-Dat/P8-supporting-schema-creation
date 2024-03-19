@@ -1,7 +1,7 @@
 package com.aaudat.sqaal
 
 import net.sf.jsqlparser.parser.CCJSqlParserUtil
-import net.sf.jsqlparser.statement.select.PlainSelect
+import net.sf.jsqlparser.statement.Statement
 
 class SQLParser {
     companion object {
@@ -10,11 +10,12 @@ class SQLParser {
          * @return Parsed SQL String - todo: Decide upon correct return type
          * @exception net.sf.jsqlparser.parser.ParseException When String given as parameter does not follow correct SQL syntax
          */
-        fun SQLParser(inputString: String): String {
+        fun sqlParser(inputString: String): Statement {
 
             return try {
-                val select = CCJSqlParserUtil.parse(inputString) as PlainSelect
-                "$select"
+                val parsedAst = CCJSqlParserUtil.parse(inputString)
+
+                parsedAst
             } catch (e: Exception) {
                 throw e
             }
