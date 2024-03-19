@@ -156,6 +156,86 @@ Again we employ a similar solution:
     For a non-complete lattice $(S, \sqsubseteq, \sqcup, \sqcap)$ and a finite subset $X \subseteq S$ $(p(X)), \sqsubseteq, \sqcup, \sqcap)$ is a complete lattice.
 \end{theorem}
 
+\section{Abstract domain of tables}\label{sec:abstract_domain_of_tables}
+
+In the following we consider a table $t$ as function from the domain of possible tuples in the table $\mathbb{T}$ to the codomain of natural (numbers including $0$) $\mathbb{N}$:
+\begin{equation}
+    t : \mathbb{T} \rightarrow \mathbb{N}.
+\end{equation}
+The function $t$ describe the number of a given tuple in a table.
+We can then consider abstraction over the table $t$ by abstracting either the domain or codomain
+This gives rise to a taxonomy of abstract domains of tables shown in \autoref{tab:taxonomy_of_abstract_domain_of_tables}.
+In \autoref{tab:taxonomy_of_abstract_domain_of_tables} $\mathbb{T}^\#$ denotes an abstract domain of the set of possible tuples $\mathbb{T}$, such that it forms some complete lattice $(\mathbb{T}^\#, \sqsubseteq, \sqcap, \sqcup)$.
+
+\begin{table}
+    \caption{Taxonomy of abstract domains of tables}
+    \centering
+    \begin{tabular}{c|l|c}
+    Name & Function & Supported \\
+    \hline
+    \hline
+        Bag of tuples & $t : \mathbb{T} \rightarrow \mathbb{N}$ & \\
+        Abstract bag of tuples & $t : \mathbb{T} \rightarrow \mathbb{N}^\#$ & \\
+        Set of tuples & $t : \mathbb{T} \rightarrow 2$ & \\
+        Bag of abstract tuples & $t : \mathbb{T}^\# \rightarrow \mathbb{N}$ & \\
+        Abstract bag of abstract tuples & $t_\# : \mathbb{T}^\# \rightarrow \mathbb{N}^\#$ & \checkmark \\
+        Set of abstract tuples & $t_2 : \mathbb{T}^\# \rightarrow 2$ & \checkmark \\
+        Abstract tuple & $t_1 : 1 \rightarrow \mathbb{T}^\#$ & \checkmark \\
+    \end{tabular}
+    \label{tab:taxonomy_of_abstract_domain_of_tables}
+\end{table}
+
+\paragraph{Abstract bag of abstract tuples}
+
+\begin{equation*}
+    (t_\# \sqcup t_\#')(e) = t_\#(e) + t_\#'(e)
+\end{equation*}
+\begin{equation*}
+    (t_\# \sqcap t_\#')(e) = \max\{0^\#, t_\#(e) - t_\#'(e), t_\#'(e) - t_\#(e)\}
+\end{equation*}
+\begin{equation*}
+    t_\# \sqsubseteq t_\#' \iff \forall e \in \mathbb{T}^\# : t_\#(e) \leq t_\#'(e)
+\end{equation*}
+
+\paragraph{Set of abstract tuples}
+
+\begin{equation*}
+    t_2 \sqcup t_2' = t_2 \cup t_2'
+\end{equation*}
+\begin{equation*}
+    t_2 \sqcap t_2' = t_2 \cap t_2'
+\end{equation*}
+\begin{equation*}
+    t_2 \sqsubseteq t_2' = t_2 \subseteq t_2'
+\end{equation*}
+
+\paragraph{Abstract tuple}
+
+\begin{equation*}
+    (t_1 \sqcup t_1')(\cdot) = t_1(\cdot) \sqcup t_1'(\cdot)
+\end{equation*}
+\begin{equation*}
+    (t_1 \sqcap t_1')(\cdot) = t_1(\cdot) \sqcap t_1'(\cdot)
+\end{equation*}
+\begin{equation*}
+    t_1 \sqsubseteq t_1' = t_1(\cdot) \sqsubseteq t_1'(\cdot)
+\end{equation*}
+\todo[inline]{Casper says: This is probably not necessary to write out.}
+
+
+% This gives rise to the following abstract domains:
+
+% \paragraph{Abstract bag of tuples}: For a set of possible tuples of a table $T$, the bag mapping $b : T \rightarrow \mathbb{N}$ is replaced by an abstract bag function $b^\#: T \rightarrow \mathbb{N}^\#$ mapping the  of possible tuples $T$ to an abstract domain over the natural numbers $\mathbb{N}^\#$.
+%
+% \paragraph{Bag of abstract tuples}: For a set of possible tuples of a table $T$, the bag mapping $b : T \rightarrow \mathbb{N}$ is replaced by an abstract bag function $b^\#: T^\# \rightarrow \mathbb{N}$ mapping the abstract domain of possible tuples $T^\#$ to the codomain of the natural numbers.
+%
+% \paragraph{Abstract bag of abstract tuples}: For a set of possible tuples of a table $T$, the bag mapping $b : T \rightarrow \mathbb{N}$ is replaced by an abstract bag function $b^\#: T^\# \rightarrow \mathbb{N}^\#$ mapping the abstract domain of possible tuples $T^\#$ to the abstract codomain over the natural numbers $\mathbb{N}^\#$.
+%
+% \paragraph{Set of tuples}: For a set of possible tuples of a table $T$, the bag mapping $b : T \rightarrow \mathbb{N}$ is replaced by an abstract bag function $b^\#: T^\# \rightarrow 1$ mapping the domain of possible tuples $T$ to the abstract codomain of the singleton set $1$.
+%
+% \paragraph{Set of abstract tuples}: For a set of possible tuples of a table $T$, the bag mapping $b : T \rightarrow \mathbb{N}$ is replaced by an abstract bag function $b^\#: T^\# \rightarrow 1$ mapping the abstract domain of possible tuples $T^\#$ to the abstract codomain of the singleton set $1$.
+%
+% \paragraph{Set of abstract tuples}: For a set of possible tuples of a table $T$, the bag mapping $b : t \rightarrow \mathbb{N}$ is replaced by an abstract bag function $b^\#: t \rightarrow 1$ mapping a abstract domain of an abstract singleton tuple $t$ to the abstract codomain of the singleton set $1$.
 
 % Let $A$ denote $m \times n$ matrix, $\mathbf{x}$ a $n \times 1$ column vector of variable and $\mathbf{b}$ a $m \times 1$ column vector of constants, then the solutions to the linear inequality $A \mathbf{x} \leq \mathbf{b}$ can be described as:
 % \begin{equation*}
