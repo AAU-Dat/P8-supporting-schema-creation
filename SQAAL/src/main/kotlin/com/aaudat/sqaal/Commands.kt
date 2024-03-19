@@ -11,7 +11,7 @@ import java.io.InputStream
  * Contains all custom commands used by the spring framework
  */
 class Commands {
-    @Command(command = ["hello"], description = "Hello World command")
+    @Command(command = ["hello"], description = "Hello World command", group = "Testing Commands")
     /**
      * Testing function printing "Hello world"
      * @return The String: "Hello world"
@@ -20,7 +20,7 @@ class Commands {
         return "Hello world"
     }
 
-    @Command(command = ["insert"], description = "Main function for parsing SQL")
+    @Command(command = ["insert"], description = "Main function for parsing SQL", group = "Main Commands")
     /**
      * Main function for parsing SQL queries
      * Receives .sql file and uses the JSQLParser to parse the file
