@@ -4,7 +4,6 @@ import net.sf.jsqlparser.parser.CCJSqlParserUtil
 import net.sf.jsqlparser.statement.Statement
 
 class SQLParser {
-    companion object {
         /**
          * Parses the SQL String given as a parameter
          * @return [net.sf.jsqlparser.statement]
@@ -20,5 +19,4 @@ class SQLParser {
                 throw e
             }
         }
-    }
 }

@@ -11,6 +11,7 @@ import java.io.InputStream
  * Contains all custom commands used by the spring framework
  */
 class Commands {
+    private val sqlParser: SQLParser = SQLParser()
     @Command(command = ["hello"], description = "Hello World command", group = "Testing Commands")
     /**
      * Testing function printing "Hello world"
@@ -41,7 +42,7 @@ class Commands {
             val inputString = inputStream.bufferedReader().use { it.readText() }
             println("\nContents of file: $filename.sql")
             println("-------------------------------")
-            val parsedAST = SQLParser.sqlParser(inputString)
+            val parsedAST = sqlParser.sqlParser(inputString)
             "$parsedAST"
         } catch (e: FileNotFoundException) {
             println("FILE ERROR - Could not find file '$filename.sql'")
