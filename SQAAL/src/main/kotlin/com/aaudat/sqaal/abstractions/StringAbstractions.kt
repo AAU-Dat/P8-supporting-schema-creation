@@ -1,6 +1,6 @@
 package com.aaudat.sqaal.abstractions
-
 import dk.brics.automaton.Automaton
+
 /**
  * Class for handling the abstractions of String values
  *

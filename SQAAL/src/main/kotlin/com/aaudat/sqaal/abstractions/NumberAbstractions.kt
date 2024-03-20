@@ -1,6 +1,6 @@
 package com.aaudat.sqaal.abstractions
-
 import com.google.ortools.*
+
 /**
  * Class for handling the abstractions of number values
  * ### Types of number values
