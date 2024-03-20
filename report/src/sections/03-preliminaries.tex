@@ -48,8 +48,26 @@ As a shorthand we take $x \sqcup y = \bigsqcup \{x, y\}$ and $x \sqcap y = \bigs
     In a complete lattice $L$, every Scott-continuous function $f : L \rightarrow L$ has a unique fixed point $lfp(f)$.
 \end{theorem}
 
-\todo[inline]{Casper says:
-    The two theorems above should have a source.}
+\todo[inline]{
+    Casper says:
+    The two theorems above should have a source.
+}
+
+\begin{theorem}
+    If $L_1, L_2, \dots, L_n$ are complete lattices, the so is the product:
+    \begin{equation*}
+        L_1 \times L_2 \times \dots L_n = \{(x_1, x_2, \dots x_n) \mid x_i \in L_i\}
+    \end{equation*}
+    where the order $\sqsubseteq$ is defined componentwise:
+    \begin{equation*}
+        (x_1, x_2, \dots, x_n) \sqsubseteq (x_1', x_2', \dots, x_n')
+        \iff
+        \forall i = 1, 2, \dots n : x_i \sqsubseteq x_i'.
+    \end{equation*}
+
+\end{theorem}
+
+
 
 \subsection{Abstract Interpretation}
 
