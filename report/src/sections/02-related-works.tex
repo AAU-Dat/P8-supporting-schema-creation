@@ -1,17 +1,15 @@
 \section{Related Works}\label{sec:related-works}
-
-Papers on abstract interpretation, that is close to what we do:
-\begin{itemize}
-    \item Halder and Cortesi~\cite{halder_abstract_2012} have expanded the application of abstract interpretation to domains like query languages.
-    \item \cite{jana_extending_2020}
-    \item \cite{kashyap_integrity_2022}
-\end{itemize}
-
 Several other papers have been published on the topic of abstract interpretation, but they are not directly related to our work.
 Papers such as Halder and Cortesi~\cite{halder_abstract_2012} have expanded the application of abstract interpretation to domains like recursive queries in databases.
+recursive queries are a powerful feature of modern database management systems, and they are used to express complex computations in a compact and elegant way.
+The authors have proposed a new approach to the static analysis of recursive queries using abstract interpretation.
+The approach is based on the use of abstract interpretation to analyze the recursive query and to infer properties of the query results.
+While our work does not directly address recursive queries, the exploration of this topic in Halder and Cortesi's paper is intriguing and suggests avenues for future research.
+
+
 Jana et al.~\cite{jana_extending_2020} have extended the application of abstract interpretation to the domain of web security.
 Dependency information (data- and/or control-dependencies) among program variables and program statements is playing crucial roles in a wide range of software-engineering activities, e.g., program slicing, information flow security analysis, debugging, code optimization, code reuse, code understanding.
-Most existing dependency analyzers focus on mainstream languages and they do not support database applications embedding queries and data-manipulation commands.
+Most existing dependency analyzers focus on mainstream languages, and they do not support database applications embedding queries and data-manipulation commands.
 This paper extends the Abstract Interpretation framework for static dependency analysis of database applications, providing a semantics-based computation tunable with respect to precision.
 
 Kashyap et al.~\cite{kashyap_integrity_2022} have proposed a new approach to integrity checking of database applications using abstract interpretation.
