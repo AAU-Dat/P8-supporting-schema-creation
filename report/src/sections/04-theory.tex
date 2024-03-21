@@ -2,6 +2,13 @@
 
 \subsection{Abstract Domains}\label{subsec:abstract_domains}
 
+\todo[inline]{
+    Casper says:
+        This whole section should be rewritten, as an outline:
+            - Introduce both the abstract domains and the problem at hand.
+            - Introduce the lattice partition and show it solves the problem.
+}
+
 In the following sections we will describe the abstract domains of our value analysis.
 
 \subsubsection{Abstract domain of strings as regular expressions}\label{subsubsec:abstract_domains_strings}
@@ -93,6 +100,11 @@ To formalize the latter idea we introduce regular language partitions.
 
 
 \subsubsection{Abstract domain of numbers as linear inequalities}\label{subsubsec:abstract_domains_numbers}
+
+\todo[inline]{
+    Casper says:
+        This section should be rewritten with MILP solver in mind instead.
+}
 
 To represent the abstract domain of the family of SQL number data types when have chosen compound linear inequalities, more specifically compound linear inequalities which are algorithmically solvable by \gls{lp}.
 \gls{lp} solvable compound linear inequalities where chosen for the prevalence of \gls{lp} solvers.
