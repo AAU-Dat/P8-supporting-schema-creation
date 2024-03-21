@@ -249,8 +249,8 @@ In \autoref{tab:taxonomy_of_abstract_domain_of_tables} $\mathbb{T}^\#$ denotes a
 We extend the semantics described in \cite{halder_abstract_2012}, to encompass our taxonomy of abstract tables.
 
 \begin{align*}
-    S^\# \llbracket C_{insert}^\# \rrbracket (\rho_{t}) &= S^\# \llbracket \langle insert(\mathbf{v}_d, e^\#) \rangle \rrbracket (\rho_{t}) \\
-    &= \rho_{t \sqcup t'} \\
+    S^\# \llbracket C_{insert}^\# \rrbracket (t) &= S^\# \llbracket insert(\mathbf{v}_d, e^\#) \rrbracket (t) \\
+    &= t \sqcup t' \\
     \text{where } E^\# \llbracket e^\# \rrbracket &= t',
 \end{align*}
 
