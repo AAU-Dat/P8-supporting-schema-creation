@@ -2,45 +2,77 @@
 %! Date = 29-12-2023
 
 \section{Introduction}\label{sec:introduction}
+%background and motivation
+Abstract interpretation, first proposed by Cousot and Cousot in 1977~\cite{cousot_abstract_1977}, has emerged as a fundamental method for static program analysis.
+Over the years, it has evolved into a versatile tool, finding applications across various programming paradigms and system architectures.
+Its utility extends beyond traditional imperative programming to encompass object-oriented designs and concurrent systems~\cite{gustafsson_analyzing_2013, mine_static_2023}.
+Abstract interpretation has played a pivotal role in analyzing a spectrum of program properties, from basic safety and liveness concerns to intricate security considerations~\cite{mastroeni_abstract_2011}.
 
+Building upon this historical foundation, subsequent researchers, such as Halder and Cortesi, have expanded the application of abstract interpretation to domains like query languages~\cite{halder_abstract_2012}.
+This paper continues in the footsteps of these pioneers, aiming to further explore and extend the capabilities of abstract interpretation within the context of query languages.
 
-\paragraph{Objective}
+%Objective
+%\todo[inline]{I think we should be more specific about the objective. This is not done}
+%1. Starting with a wider domain:
 
-The objective of this work is to develop a general software tool, utilizing abstract interpretation for analyzing the reachable state space of a entity relation database given its schema, accompanying reactive procedures and a model of the behavior of the environment in which the database will reside.
+Software analysis is a broad field encompassing a wide range of techniques and methodologies, each tailored to address specific aspects of software systems.
+One such technique is value analysis, which focuses on the behavior of a program with respect to its input and output values~\cite{jackson_software_2000}.
+Value analysis can be approached from various angles, including the consideration of meta-information like information flow or taint analysis.
+While these approaches offer valuable insights into the behavior of a program, they often require detailed knowledge of the program's internal workings and are not always applicable to all types of software systems.
+
+%2. Reasoning for narrowing down:
+The objective of this work is to develop a general software tool, in the sense of value analysis, only be considering abstract values, not meta information like information flow or taint analysis.
+This decision stems from the recognition that abstract values offer a more versatile and widely applicable approach across various types of software systems.
+Within this limitation we will restrict try to pick the most abstract/powerfull primitives possible, that do not encounter computation problems, such as undecidability and unfeasibility.
+Utilizing abstract interpretation for analyzing the reachable state space of an entity relation database given its schema, accompanying reactive procedures and a model of the behavior of the environment in which the database will reside.
+
+%3. Justification for chosen direction:
+
+The chosen direction of utilizing abstract interpretation for analyzing the reachable state space of an entity relation database, accompanied by reactive procedures and a model of the environment, is particularly relevant and valuable in specific contexts within software development.
+By developing a specialized software tool focused on value analysis within query languages, we aim to fill the gap,  of comprehensive and adaptable tools specifically designed for value analysis in query languages and provide developers with a dedicated solution tailored to their needs.
+
+For a thorough understanding of the existing landscape and to contextualize our contributions, we discuss the limitations and capabilities of current tools in \autoref{sec:related-works}.
+
+%4. Importance of abstract interpretation:
+%5. Advantages of over-approximation:
+
+The reason for utilizing abstract interpretation is that it provides a systematic approach to approximating the behavior of a system.
+This is achieved by over-approximating the set of reachable states of the system, the advantage of using the over-approximation allows for the detection of potential errors and the verification of properties of the system.
+This way it generates a sound analysis, that is, it will not miss any potential errors, but it may report false positives.
+
 
 \todo[inline]{Maybe we can use workflow nets for the environment behavior model.}
 
-\paragraph{Justification}
+This research initiative stems from the recognition that while abstract interpretation is widely employed in program analysis, there's a noticeable absence of a comprehensive, adaptable tool designed specifically for value analysis in query languages.
+This gap presents a significant challenge, impeding both researchers and practitioners from effectively analyzing and verifying intricate systems.
+By addressing this deficiency, our endeavor aims to make a substantial contribution to the field of program analysis, facilitating more efficient and precise evaluations of software systems.
 
-It seems that no general tool has been developed.
+To illustrate, consider an expert tasked with designing a database to manage personal information.
+The database comprises a table named \texttt{person}, encompassing columns for \texttt{name}, \texttt{age}, \texttt{gender}, and \texttt{Social security number}.
+Crucially, the \texttt{Social security number} must adhere to a constraint: if the individual is male, the last digit must be odd, while for females, it must be even.
+Utilizing our tool, the expert can ensure that the schema aligns seamlessly with the system requirements by scrutinizing the reachable state space of the database, taking into account both the schema itself and the reactive procedures governing it.
 
-\paragraph{Background}
-
-\begin{itemize}
-    \item Cousot 'invented' abstract interpretation.
-    \item Halder and Cortesi extended abstract interpretation to query languages.
-\end{itemize}
-
-\paragraph{Guidance to the reader}
-
-\begin{itemize}
-    \item The reader should have a basic understanding of SQL.
-    \item The reader should understand abstract interpretation and whatever semantics we are using.
-    \item The reader should understand that a main contribution is a open source tool.
-\end{itemize}
-
-\paragraph{Conclusion}
-
-\begin{itemize}
-    \item A software tool of limited scope has been developed.
-    \item The abstractions and concretizations from a Galios connection
-    \item The analysis is show to be sound.
-    \item The usability of the system is discussed but not tested with rigor. 
-\end{itemize}
+For instance, the expert can verify if there exists any state where the \texttt{Social security number} contradicts the gender of the person.
+They can validate this by simulating actions, such as adding a male person named "John" with an age of 30, ensuring that the \texttt{Social security number} generated is indeed odd.
+Subsequently, they can simulate updating the \texttt{Social security number} of the previously added person, now named "Jane," by changing her gender to female.
+In this scenario, the tool should detect and ensure that the new \texttt{Social security number} adheres to the requirement of having an even last digit.
+Through such meticulous scrutiny, the tool aids in upholding the consistency and integrity of the database schema, thus enhancing the robustness of the overall system design.
 
 
-
-
-
-
-
+%\section{Notes}
+%\paragraph{Guidance to the reader}
+%
+%\begin{itemize}
+%    \item The reader should have a basic understanding of SQL.
+%    \item The reader should understand abstract interpretation and whatever semantics we are using.
+%    \item The reader should understand that a main contribution is a open source tool.
+%\end{itemize}
+%
+%\paragraph{Conclusion}
+%
+%\begin{itemize}
+%    \item A software tool of limited scope has been developed.
+%    \item The abstractions and concretizations from a Galios connection
+%    \item The analysis is show to be sound.
+%    \item The usability of the system is discussed but not tested with rigor.
+%\end{itemize}

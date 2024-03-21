@@ -1,5 +1,9 @@
+# Supervisor Meeting 5
+Date: 2024-03-11
+Time: 10:00
 
-2024-03-11 10:00
+## Missing Attendees
+- Daniel
 
 ## Agenda
 
@@ -25,21 +29,14 @@
     - Preparation: None
 - **Other Business** (5 min)
 
+## Action items
+*These action items should be written on the GitHub project board*
 
-## MoSCoW
+##### Group
+- [x] Send invite to next meeting
+- [ ] MoSCoW finalized
+- [ ] Write some code at least
+- [ ] Answer relevant questions in article
 
-| **Must have**                     | **Should have**                 | **Could have**          | **Wont have**         |
-|-----------------------------------|---------------------------------|-------------------------|-----------------------|
-| Abstract CRUD                     | Parsing SQL                     | API                     | Snapshots             |
-| Enviroment driven static analysis | Best Approximation              | CLI                     | Validation Generation |
-| SQL import                        | User driven  'dynamic' analysis | Frontend                | Live DB analysis      |
-| Soundness                         |                                 | REPL                    | UML import            |
-| Termination                       |                                 | Meta/Meso  data/Options |                       |
-| Galios connection                 |                                 | Test generation         |                       |
-|                                   |                                 | Result export           |                       |
-|                                   |                                 | Completeness            |                       |
-
-
-## System model
-
-![[model_overview.png]]
+##### Supervisor
+None
