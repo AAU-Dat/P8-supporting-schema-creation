@@ -1,12 +1,5 @@
 \subsection{Abstract Domains}\label{subsec:abstract-domains}
 
-\todo[inline]{
-    Casper says:
-        This whole section should be rewritten, as an outline:
-            - Introduce both the abstract domains and the problem at hand.
-            - Introduce the lattice partition and show it solves the problem.
-}
-
 In the following sections we will describe the abstract domains of our value analysis.
 
 \subsubsection{Abstract domain of strings as regular expressions}\label{subsubsec:abstract_domains_strings}
@@ -19,37 +12,6 @@ Let $REG$ denote the set of regular languages and
     REG^{\leq n} = \{R \in REG \mid \forall w \in R : |w| \leq n\}.
 \end{equation*}
 In the following we do not distinguish between regular expressions and their languages.
-
-In regards to abstract interpretation regulars expressions are not without their own quirks, as expressed in the following theorem.
-
-The lattice of regular expressions $(REG, \subseteq, \cup, \cap)$ is not suited for abstract interpretation, as expressed by \autoref{thm:reg-lattice}.
-
-\begin{restatable}{theorem}{reglattice}\label{thm:reg-lattice}
-    $(REG, \subseteq, \cup, \cap)$ is a lattice, but not a complete one.
-\end{restatable}
-
-Thus we can not employ the Kleene fixed-point theorem to guarantee a fixed point and termination of our analysis.
-We propose two solutions to overcome this limitation:
-\begin{itemize}
-    \item Limiting the size of the regulars expressions under consideration, this is sound in the case where the string data type which is abstracted over is fixed size;
-    \item And to let the user define an abstract domain over the regular expressions that only contain finite elements.
-\end{itemize}
-
-To formalize the latter idea we introduce regular language partitions.
-
-\begin{definition}
-    Given a finite subset $REG^\subset \subset REG$ where $\bigcup REG^\subset = \Sigma^\star$.
-    % todo Casper says: I am not sure if this restriction is useful.
-    % and $\forall R_1, R_2 \in REG^\subset : R_1 \not\subset R_2 \land R_2 \not\subset R_1$.
-    A regular language partition $p(REG^\subset)$ is a set where:
-    \begin{itemize}
-        % Casper says: I don't think the empty set in necessary.
-        % \item $\emptyset \in p(REG^\subset)$,
-        \item $\forall R \in REG^\subset : R \in p(REG^\subset)$,
-        \item $\forall R_1, R_2 \in p(REG^\subset) : R_1 \cup R_2 \in p(REG^\subset)$,
-        \item $\forall R_1, R_2 \in p(REG^\subset) : R_1 \cap R_2 \in p(REG^\subset)$.
-    \end{itemize}
-\end{definition}
 
 % Tikzfigures
 \begin{figure}
@@ -88,82 +50,25 @@ To formalize the latter idea we introduce regular language partitions.
 \end{figure}
 \autoref{fig:tikz-reg-partition-lattice} illustrates the regular language partition as a lattice. The top element $\top$ is the entire regular language $\Sigma^*$ and the bottom element $\bot$ is the empty set $\emptyset$. The regular language $R$ and its complement $\overline{R}$ are the two elements in the partition.
 
-\begin{theorem}\label{thm:finite-reg-lattice}
-    $(REG^{\leq n}, \subseteq, \cup, \cap)$ is a complete lattice.
-\end{theorem}
-
-\begin{theorem}\label{thm:reg-partition-lattice}
-    $(p(REG^\subset), \subseteq, \cup, \cap)$ is a complete lattice.
-\end{theorem}
-
-
 \subsubsection{Abstract domain of numbers as linear inequalities}\label{subsubsec:abstract_domains_numbers}
 
-\todo[inline]{
-    Casper says:
-        This section should be rewritten with MILP solver in mind instead.
-}
+To represent the abstract domain of the family of SQL number data types when have chosen compound linear inequalities with mixed integer solutions that are algorithmically solvable with MILP solvers.
+solvable compound linear inequalities with mixed integer solutions where chosen for the prevalence and speed of MILP solvers.
 
-To represent the abstract domain of the family of SQL number data types when have chosen compound linear inequalities, more specifically compound linear inequalities which are algorithmically solvable by \gls{lp}.
-\gls{lp} solvable compound linear inequalities where chosen for the prevalence of \gls{lp} solvers.
-%todo
-\todo{
-    Casper says: We probably need a better reasons.
-    Maybe look into NLP, MINLP, CP, SDP and convex optimization.
-}
-
-Let $LP^n$ be the set of solutions to \gls{lp} solvable compound linear inequalities where $\mathbf{x} \in X \in LP \implies \mathbf{x} \in \mathbb{R}^n$.\todo{
-    Casper says: I feel like the description is more awkward than it needs to be.
-}
-And Let $ILP^n$ be the set integer solutions with the same constraint as above.
-\autoref{thm:lp-lattice} demonstrates a similar problem as the one we encounter with the lattice $(REG, \subseteq, \cup, \cap)$.
-
-\begin{theorem}\label{thm:lp-lattice}
-    For $\mathcal{LP}^n \in \{ILP^n, LP^n\}$ : $(\mathcal{LP}^n, \subseteq, \cup, \cap)$ is a lattice, but not a complete one.
-\end{theorem}
-
-Again we employ a similar solution:
+\subsubsection{Lattice partitions}
 
 \begin{definition}
-    Given a finite subset $LP_\subset^n \subset LP^n$ where $\bigcup LP_\subset^n = \mathbb{R}^n$.
-    A \gls{lp} partition $p(LP_\subset^n)$ is a set where:
+    Given a finite subset $X \subseteq S$ of a lattice $(S, \sqsubseteq, \sqcup, \sqcap)$ where $\bigsqcup X = \top$.
+    A lattice partition of $S$ in respect to $X$ $p_{X}(S)$ is a set where:
     \begin{itemize}
-        \item $\forall X \in LP_\subset^n : X \in p(LP_\subset^n)$,
-        \item $\forall X, Y \in p(LP_\subset^n) : X \cup Y \in p(LP_\subset^n)$,
-        \item $\forall X, Y \in p(LP_\subset^n) : X \cap Y \in p(LP_\subset^n)$,
-    \end{itemize}
-\end{definition}
-
-\begin{definition}
-    Given a finite subset $ILP_\subset^n \subset LP^n$ where $\bigcup LP_\subset^n = \mathbb{Z}^n$.
-    A I\gls{lp} partition $p(ILP_\subset^n)$ is a set where:
-    \begin{itemize}
-        \item $\forall X \in ILP_\subset^n : X \in p(ILP_\subset^n)$,
-        \item $\forall X, Y \in p(ILP_\subset^n) : X \cup Y \in p(ILP_\subset^n)$,
-        \item $\forall X, Y \in p(ILP_\subset^n) : X \cap Y \in p(ILP_\subset^n)$,
-    \end{itemize}
-\end{definition}
-
-\begin{theorem}\label{thm:lp-partition-lattice}
-    For $\mathcal{LP} \in \{ILP, LP\}$ : $(p(\mathcal{LP}_\subset^n), \subseteq, \cup, \cap)$ is a complete lattice.
-\end{theorem}
-
-\todo[inline]{
-    Casper says: At this point it seems that the concept of a partition can be generalized.
-}
-
-\begin{definition}
-    Given a finite subset $X \subseteq S$ of a lattice $S$ where $\bigsqcup X = \top$.
-    A $S$-partition $p(X)$ is a set where:
-    \begin{itemize}
-        \item $\forall x \in X: x \in p(X)$,
-        \item $\forall x, y \in p(X) : x \sqcup y \in p(X)$,
-        \item $\forall x, y \in p(X) : x \sqcap y \in p(X)$,
+        \item $\forall x \in X: x \in p_X(S)$,
+        \item $\forall x, y \in p_X(S) : x \sqcup y \in p_X(S)$,
+        \item $\forall x, y \in p_X(S) : x \sqcap y \in p_X(S)$,
     \end{itemize}
 \end{definition}
 
 \begin{restatable}{theorem}{partition}\label{thm:partition}
-    For a non-complete lattice $(S, \sqsubseteq, \sqcup, \sqcap)$ and a finite subset $X \subseteq S$ $(p(X)), \sqsubseteq, \sqcup, \sqcap)$ is a complete lattice.
+    For a non-complete lattice $(S, \sqsubseteq, \sqcup, \sqcap)$ and a finite non-empty subset $X \subseteq S$ $(p_X(S), \sqsubseteq, \sqcup, \sqcap)$ is finite and complete lattice.
 \end{restatable}
 
 \section{Abstract domain of tables}\label{sec:abstract_domain_of_tables}

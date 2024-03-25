@@ -1,15 +1,23 @@
 \subsection{Abstract Semantics}
 
-We extend the semantics described in \cite{halder_abstract_2012}, to encompass our taxonomy of abstract tables.
-
 \begin{align*}
-    S^\# \llbracket C_{insert}^\# \rrbracket (t) &= S^\# \llbracket insert(\mathbf{v}_d, e^\#) \rrbracket (t) \\
-    &= t \sqcup t' \\
-    \text{where } E^\# \llbracket e^\# \rrbracket &= t',
+    S^\# \llbracket C_{insert}^\# \rrbracket (\rho_{t^\#}, \rho_{a^\#})
+    &= S^\# \llbracket \langle insert^\#(\overset{\rightarrow}{v_d^\#}, \overset{\rightarrow}{e^\#}), \phi^\# \rangle \rrbracket (\rho_{t^\#}, \rho_{a^\#}) \\
+    &= (\rho_{t_1^\#}, \rho_{a_1^\#}) \\
+    \text{where } target(C_{insert}^\#) &= t^\# \\
+    \overset{\rightarrow}{v_d^\#} &= \langle a_1^\#, a_2^\#, \dots, a_n^\# \rangle \\
+    &= attr(t^\#) \\
+    E^\# \llbracket \overset{\rightarrow}{e^\#} \rrbracket (\rho_{t^\#}, \rho_{a^\#})
+    &= \overset{\rightarrow}{r^\#} \\
+    &= \langle r_1^\#, r_2^\#, \dots, r_n^\# \rangle \\
+    l_{new}^\# &= \langle r_1^\#/a_1^\#, r_2^\#/a_2^\#, \dots r_n^\#/a_n^\# \rangle \\
+    \rho_{t_1^\#}(\overset{\rightarrow}{x^\#}) &= \rho_{t^\# \cup l_{new}^\#}(\overset{\rightarrow}{x^\#})
 \end{align*}
 
-\begin{lemma}
-    $S^\# \llbracket C_{insert}^\# \rrbracket$ is monotone.
-    %todo
-    \todo{Casper says: needs a proving.}
-\end{lemma}
+\begin{align*}
+    & S^\# \llbracket \texttt{INSERT INTO } N(t^\#) \texttt{ VALUES } \mathbf{e}^\# \texttt{;}\rrbracket (t^\#)
+    = t^\# \sqcup S(\mathbf{v}^\#) \\
+    \text{if }& \mathbf{v}^\# \in D(t^\#) \\
+    \text{where }& E^\# \llbracket \mathbf{e}^\# \rrbracket
+    = \mathbf{v}^\# \\
+\end{align*}
