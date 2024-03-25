@@ -13,3 +13,58 @@ We extend the semantics described in \cite{halder_abstract_2012}, to encompass o
     %todo
     \todo{Casper says: needs a proving.}
 \end{lemma}
+
+\begin{align*}
+    E^\# \llbracket R_1 C_{concatenate}^\# R_2 \rrbracket \\
+    = E^\# \llbracket R_1 \rrbracket \oplus  E^\# \llbracket R_2 \rrbracket \\
+    \text{where } E^\# \llbracket R \rrbracket \text{ is a regular language and }\\
+     \oplus \text{ is the concatenation operator.}
+\end{align*}
+
+\begin{align*}
+    E^\# \llbracket C_{bitLength}^\# (R) \rrbracket \\
+    = E^\# \llbracket Count(B(R)) \rrbracket \\
+    \text{where } B(R) \text{ is the binary representation of }R, \\ \text{ and Count determines the length.}
+\end{align*}
+
+\begin{align*}
+    E^\# \llbracket C_{charLength}^\# (S) \rrbracket \\
+    = E^\# \llbracket Count(S) \rrbracket \\
+    \text{where } S \text{ is a string and Count determines the length.} 
+\end{align*}
+
+\begin{align*}
+    E^\# \llbracket C_{lower}^\# (S) \rrbracket \\
+    = E^\# \llbracket MapToLower (S) \rrbracket \\
+    \text{where S is a string and } MapToLower \\
+    \text{ converts all characters to lowercase.}
+\end{align*}
+
+\begin{align*}
+    E^\# \llbracket C_{lower}^\# (S) \rrbracket \\
+    = E^\# \llbracket MapToUpper (S) \rrbracket \\
+    \text{where S is a string and } MapToUpper \\ 
+    \text{ converts all characters to uppercase.}
+\end{align*}
+
+\begin{align*}
+    E^\# \llbracket C_{position}^\# (S_1, in, S_2) \\
+    = E^\# \llbracket Position(S_1, in, S_2) \rrbracket \\
+    \text{where S is a string and } Position \\
+    \text{ returns the position of the first occurrence of } \\
+    S_2 \text{ in } S_1.
+\end{align*}
+
+\begin{align*}
+    E^\# \llbracket C_{subString}^\# (S, I_1, I_2) \rrbracket \\
+    = E^\# \llbracket SubString(S, I_1, I_2) \rrbracket \\
+    \text{where } S \text{ is a string, } I \text{ are integers, and } \\
+    SubString \text{ returns the substring of } S \text{ from } I_1 \text{ to } I_2.
+\end{align*}
+
+\begin{align*}
+    E^\# \llbracket C_{trim}^\# (S_1 from S_2) \rrbracket \\
+    = E^\# \llbracket Trim(S_1, S_2) \rrbracket \\
+    \text{where } S_1 \text{ and } S_2 \text{ are strings, and }\\
+    Trim \text{ removes all occurrences of } S_2 \text{ from } S_1.
+\end{align*}
