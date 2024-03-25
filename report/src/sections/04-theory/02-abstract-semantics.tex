@@ -1,0 +1,15 @@
+\subsection{Abstract Semantics}
+
+We extend the semantics described in \cite{halder_abstract_2012}, to encompass our taxonomy of abstract tables.
+
+\begin{align*}
+    S^\# \llbracket C_{insert}^\# \rrbracket (t) &= S^\# \llbracket insert(\mathbf{v}_d, e^\#) \rrbracket (t) \\
+    &= t \sqcup t' \\
+    \text{where } E^\# \llbracket e^\# \rrbracket &= t',
+\end{align*}
+
+\begin{lemma}
+    $S^\# \llbracket C_{insert}^\# \rrbracket$ is monotone.
+    %todo
+    \todo{Casper says: needs a proving.}
+\end{lemma}
