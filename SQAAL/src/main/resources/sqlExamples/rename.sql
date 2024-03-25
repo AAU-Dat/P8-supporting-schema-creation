@@ -1,1 +1,0 @@
-ALTER TABLE Student RENAME name TO FIRST_NAME;
