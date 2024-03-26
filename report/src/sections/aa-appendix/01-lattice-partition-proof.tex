@@ -1,0 +1,83 @@
+\section{Proof of theorem \ref{thm:partition}}
+
+\begin{lemma}\label{lem:finite-partition}
+    For a non-complete lattice $(S, \sqsubseteq, \sqcup, \sqcap)$ and a finite non-empty subset $X \subseteq S$ where $\bigsqcup X = \top$, $p_X(S)$ is finite.
+\end{lemma}
+
+\begin{proof}
+    \pf\
+    \step{base-case}{\case{$X = \{x\}$}}
+    \begin{proof}
+        \step{}{$x = \top$}
+        \begin{proof}
+            \pf\ By the assumption $\bigsqcup \{x\} = \top$.
+        \end{proof}
+        \step{}{$p_X(S) = \{\top\}$}
+        \begin{proof}
+            \pf\ By the definition of $p$: $\top \in p_X(S)$, $\top \sqcup \top = \top \in p_X(S)$ and $\top \sqcap \top = \top \in p_X(S)$.
+        \end{proof}
+    \end{proof}
+    \step{inductive-case}{\case{$|X| > 1$}}
+    \begin{proof}
+        \assume{$p_X(S)$ is finite.}
+        \prove{$p_{(X \cup \{y\})}(S)$ is finite, when $y \in S \setminus X$.}
+        \pf\ It should be obvious that $\forall x \in p_X(S) : x \in p_{(X \cup \{y\})}(S)$.
+        By the definition of $p$ $\forall x \in p_X(S) : x \sqcup y \in p_{(X \cup \{y\})}(S)$ (analogous for $\sqcap$).
+        Further $(x \sqcup y) \sqcup y = x \sqcup y$ (analogous for $\sqcap$), and $(x \sqcup y) \sqcap y = y$, and $(x \sqcap y) \sqcup y = y$.
+        This means that $\forall x \in p_X(S) : x \in p_{(X \cup \{y\})}(S) \land (x \sqcup y) \in p_{(X \cup \{y\})}(S)$ and no more elements are in $p_{(X \cup \{y\})}(S)$, thus $p_{(X \cup \{y\})}(S)$ is finite.
+    \end{proof}
+    \qedstep
+    \begin{proof}
+        \pf\ By induction, \stepref{base-case} and \stepref{inductive-case}.
+    \end{proof}
+\end{proof}
+
+\partition*
+
+\begin{proof}
+    \pf\
+    \assume{
+        $(S, \sqsubseteq, \sqcup, \sqcap)$ is a non-complete lattice and $X \subset S$ and $\bigsqcup X = \top$.
+    }
+    \prove{
+        $(p_X(S), \sqsubseteq, \sqcup, \sqcap) \text{ is a finite and complete lattice}$.
+    }
+    \step{complete}{A nonempty finite lattice is a complete lattice.}
+    \begin{proof}
+        \pf\ Know property \cite{moller_statitc_nodate}.
+    \end{proof}
+    \step{lattice}{$(p_X(S), \sqsubseteq, \sqcup, \sqcap)$ is a lattice.}
+    \begin{proof}
+        \step{poset}{$p_X(S)$ is a poset}
+        \begin{proof}
+            \step{poset-subset}{The subset of a poset is a poset under the same ordering relation.}
+            \begin{proof}
+                \pf\ Know property.\todo{source missing}
+            \end{proof}
+            \step{partition-subset}{$p_X(S) \subset S$}
+            \begin{proof}
+                \pf\ By the definition of a partition and lattices.
+            \end{proof}
+            \qedstep
+            \begin{proof}
+                \pf\ By \stepref{poset-subset} and \stepref{partition-subset}.
+            \end{proof}
+        \end{proof}
+        \step{capcup}{$\forall x, y \in p_X(S) : x \sqcup y \in p_X(S) \land x \sqcap y \in p_X(S)$}
+        \begin{proof}
+            \pf\ By the definition of $p_X(S)$.
+        \end{proof}
+        \qedstep
+        \begin{proof}
+            \pf\ By \stepref{poset} and \stepref{capcup}.
+        \end{proof}
+    \end{proof}
+    \step{finite}{$p_X(S)$ is finite.}
+    \begin{proof}
+        \pf\ By \autoref{lem:finite-partition}.
+    \end{proof}
+    \qedstep
+    \begin{proof}
+        \pf\ By \stepref{complete}, \stepref{lattice} and \stepref{finite}.
+    \end{proof}
+\end{proof}
