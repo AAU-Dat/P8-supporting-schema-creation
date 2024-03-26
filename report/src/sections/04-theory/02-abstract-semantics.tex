@@ -1,9 +1,11 @@
 \subsection{Abstract Semantics}
 
+Let $S(v)$ the function that in beds $v$ in a singleton table.
+
 \begin{align*}
     S^\# \llbracket C_{insert}^\# \rrbracket (\rho_{t^\#}, \rho_{a^\#})
     &= S^\# \llbracket \langle insert^\#(\overset{\rightarrow}{v_d^\#}, \overset{\rightarrow}{e^\#}), \phi^\# \rangle \rrbracket (\rho_{t^\#}, \rho_{a^\#}) \\
-    &= (\rho_{t_1^\#}, \rho_{a_1^\#}) \\
+    &= (\rho_{t_1^\#}, \rho_{a^\#}) \\
     \text{where } target(C_{insert}^\#) &= t^\# \\
     \overset{\rightarrow}{v_d^\#} &= \langle a_1^\#, a_2^\#, \dots, a_n^\# \rangle \\
     &= attr(t^\#) \\
@@ -11,13 +13,39 @@
     &= \overset{\rightarrow}{r^\#} \\
     &= \langle r_1^\#, r_2^\#, \dots, r_n^\# \rangle \\
     l_{new}^\# &= \langle r_1^\#/a_1^\#, r_2^\#/a_2^\#, \dots r_n^\#/a_n^\# \rangle \\
-    \rho_{t_1^\#}(\overset{\rightarrow}{x^\#}) &= \rho_{t^\# \cup l_{new}^\#}(\overset{\rightarrow}{x^\#})
+    \rho_{t_1^\#}(\overset{\rightarrow}{x^\#}) &= \rho_{\textcolor{red}{t^\# \sqcup S(l_{new}^\#)}}(\overset{\rightarrow}{x^\#})
 \end{align*}
 
+\begin{restatable}{theorem}
+    $S^\# \llbracket C_{insert}^\# \rrbracket$ is monotone.
+\end{restatable}
+
 \begin{align*}
-    & S^\# \llbracket \texttt{INSERT INTO } N(t^\#) \texttt{ VALUES } \mathbf{e}^\# \texttt{;}\rrbracket (t^\#)
-    = t^\# \sqcup S(\mathbf{v}^\#) \\
-    \text{if }& \mathbf{v}^\# \in D(t^\#) \\
-    \text{where }& E^\# \llbracket \mathbf{e}^\# \rrbracket
-    = \mathbf{v}^\# \\
+    \abssem{C^\#_{update}}(\env{\abstable}, \env{\absvars})
+    &= \abssem{\langle update^\#(\absattrs, \absexps), \abspred \rangle} (\env{\abstable}, \env{\absvars}) \\
+    &= (\env{\abstable_1}, \env{\absvars}) \\
+    \text{where } \env{\abstable_1}(\absattr) &=
+    \begin{cases}
+        \env{\abstable \downarrow_t \abspred}(\absattr) \textcolor{red}{\sqcup} \env{\abstable \downarrow_u \abspred}(\absattr) \textcolor{red}{\sqcup} \env{\abstable \downarrow_f \abspred}(\absattr) \\
+        \text{if } \absattr \notin \absattrs \\
+        \absexpsem{\absexp{i}}(\env{\abstable \downarrow_t \abspred}, \env{\absvars}) \textcolor{red}{\sqcup}
+        \left( \absexpsem{\absexp{i}}(\env{\abstable \downarrow_u \abspred}, \env{\absvars}) \sqcup \env{\abstable \downarrow_u \abspred}(\absattr) \right) \textcolor{red}{\sqcup} \env{\abstable \downarrow_f \abspred}(\absattr) \\
+        \text{if $\absattr$ is the $i$th component of $\absattrs$ and $\absexp{i}$ is the $i$th componenet of $\absexps$} \\
+    \end{cases}
 \end{align*}
+
+\begin{restatable}{theorem}
+    $\abssem{C_{update}^\#}$ is monotone.
+\end{restatable}
+
+\begin{align*}
+    \abssem{C^\#_{delete}}(\env{\abstable}, \env{\absvars})
+    &= \abssem{\langle delete^\#(\absattrs), \abspred \rangle} (\env{\abstable}, \env{\absvars}) \\
+    &= (\env{\abstable_1}, \env{\absvars}) \\
+    \text{where } \env{\abstable_1}(\absattr) &= \env{\abstable \downarrow_u \abspred}(\absattr) \textcolor{red}{\sqcup} \env{\abstable \downarrow_f \abspred}(\absattr)
+\end{align*}
+
+\begin{restatable}{theorem}
+    $\abssem{C_{delete}^\#}$ is monotone.
+\end{restatable}
+
