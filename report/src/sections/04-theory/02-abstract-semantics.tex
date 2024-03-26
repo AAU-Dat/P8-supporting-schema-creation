@@ -16,7 +16,7 @@ Let $S(v)$ the function that in beds $v$ in a singleton table.
     \rho_{t_1^\#}(\overset{\rightarrow}{x^\#}) &= \rho_{\textcolor{red}{t^\# \sqcup S(l_{new}^\#)}}(\overset{\rightarrow}{x^\#})
 \end{align*}
 
-\begin{restatable}{theorem}
+\begin{restatable}{lemma}{insert-monotone}
     $S^\# \llbracket C_{insert}^\# \rrbracket$ is monotone.
 \end{restatable}
 
@@ -34,7 +34,7 @@ Let $S(v)$ the function that in beds $v$ in a singleton table.
     \end{cases}
 \end{align*}
 
-\begin{restatable}{theorem}
+\begin{restatable}{lemma}{update-monotone}
     $\abssem{C_{update}^\#}$ is monotone.
 \end{restatable}
 
@@ -45,7 +45,7 @@ Let $S(v)$ the function that in beds $v$ in a singleton table.
     \text{where } \env{\abstable_1}(\absattr) &= \env{\abstable \downarrow_u \abspred}(\absattr) \textcolor{red}{\sqcup} \env{\abstable \downarrow_f \abspred}(\absattr)
 \end{align*}
 
-\begin{restatable}{theorem}
+\begin{restatable}{lemma}{delete-monotone}
     $\abssem{C_{delete}^\#}$ is monotone.
 \end{restatable}
 
