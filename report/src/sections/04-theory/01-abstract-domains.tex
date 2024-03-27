@@ -59,7 +59,7 @@ solvable compound linear inequalities with mixed integer solutions where chosen 
 
 \begin{definition}
     Given a finite subset $X \subseteq S$ of a lattice $(S, \sqsubseteq, \sqcup, \sqcap)$ where $\bigsqcup X = \top$.
-    A lattice partition of $S$ in respect to $X$ $p_{X}(S)$ is a set where:
+    A lattice partition of $S$ in respect to $X$ $p_{X}(S)$ is the minimum set where:
     \begin{itemize}
         \item $\forall x \in X: x \in p_X(S)$,
         \item $\forall x, y \in p_X(S) : x \sqcup y \in p_X(S)$,
@@ -68,7 +68,7 @@ solvable compound linear inequalities with mixed integer solutions where chosen 
 \end{definition}
 
 \begin{restatable}{theorem}{partition}\label{thm:partition}
-    For a non-complete lattice $(S, \sqsubseteq, \sqcup, \sqcap)$ and a finite non-empty subset $X \subseteq S$ $(p_X(S), \sqsubseteq, \sqcup, \sqcap)$ is finite and complete lattice.
+    For a non-complete lattice $(S, \sqsubseteq, \sqcup, \sqcap)$ and a finite non-empty subset $X \subseteq S$ $(p_X(S), \sqsubseteq, \sqcup, \sqcap)$ is a finite and complete lattice.
 \end{restatable}
 
 \section{Abstract domain of tables}\label{sec:abstract_domain_of_tables}
@@ -80,7 +80,7 @@ In the following we consider a table $t$ as function from the domain of possible
 The function $t$ describe the number of a given tuple in a table.
 We can then consider abstraction over the table $t$ by abstracting either the domain or codomain
 This gives rise to a taxonomy of abstract domains of tables shown in \autoref{tab:taxonomy_of_abstract_domain_of_tables}.
-In \autoref{tab:taxonomy_of_abstract_domain_of_tables} $\mathbb{T}^\#$ denotes an abstract domain of the set of possible tuples $\mathbb{T}$, such that it forms some complete lattice $(\mathbb{T}^\#, \sqsubseteq, \sqcap, \sqcup)$.
+In \autoref{tab:taxonomy_of_abstract_domain_of_tables} $\mathbb{T}^\#$ denotes an abstract domain of the set of possible tuples $\mathbb{T}$, such that it forms some complete lkjattice $(\mathbb{T}^\#, \sqsubseteq, \sqcap, \sqcup)$.
 
 \begin{table}
     \caption{Taxonomy of abstract domains of tables}
