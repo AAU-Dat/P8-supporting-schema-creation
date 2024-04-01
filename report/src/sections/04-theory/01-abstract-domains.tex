@@ -100,7 +100,7 @@ And the following lemmas immediately follow:
     \label{fig:tikz-reg-partition-lattice}
 \end{figure}
 
-\section{Abstract domain of tables}\label{sec:abstract_domain_of_tables}
+\subsection{Abstract domain of tables}\label{sec:abstract_domain_of_tables}
 
 In the following we consider a table $t$ as function from the domain of possible tuples in the table $\mathbb{T}$ to the codomain of natural (numbers including $0$) $\mathbb{N}$:
 \begin{equation}
@@ -109,7 +109,7 @@ In the following we consider a table $t$ as function from the domain of possible
 The function $t$ describe the number of a given tuple in a table.
 We can then consider abstraction over the table $t$ by abstracting either the domain or codomain
 This gives rise to a taxonomy of abstract domains of tables shown in \autoref{tab:taxonomy_of_abstract_domain_of_tables}.
-In \autoref{tab:taxonomy_of_abstract_domain_of_tables} $\mathbb{T}^\#$ denotes an abstract domain of the set of possible tuples $\mathbb{T}$, such that it forms some complete lkjattice $(\mathbb{T}^\#, \sqsubseteq, \sqcap, \sqcup)$.
+In \autoref{tab:taxonomy_of_abstract_domain_of_tables} $\mathbb{T}^\#$ let denote an abstract domain of the set of possible tuples $\mathbb{T}$, such that it forms a finite lattice $(\mathbb{T}^\#, \sqsubseteq, \sqcap, \sqcup)$ (and analogous for $\mathbb{N}$).
 
 \begin{table}
     \caption{Taxonomy of abstract domains of tables}
@@ -118,60 +118,51 @@ In \autoref{tab:taxonomy_of_abstract_domain_of_tables} $\mathbb{T}^\#$ denotes a
     Name & Function & Supported \\
     \hline
     \hline
-        Bag of tuples & $t : \mathbb{T} \rightarrow \mathbb{N}$ & \\
-        Abstract bag of tuples & $t : \mathbb{T} \rightarrow \mathbb{N}^\#$ & \\
-        Set of tuples & $t : \mathbb{T} \rightarrow 2$ & \\
-        Bag of abstract tuples & $t : \mathbb{T}^\# \rightarrow \mathbb{N}$ & \\
-        Abstract bag of abstract tuples & $t_\# : \mathbb{T}^\# \rightarrow \mathbb{N}^\#$ & \checkmark \\
-        Set of abstract tuples & $t_2 : \mathbb{T}^\# \rightarrow 2$ & \checkmark \\
-        Abstract tuple & $t_1 : 1 \rightarrow \mathbb{T}^\#$ & \checkmark \\
+        Bag of tuples & $\mathbb{T} \rightarrow \mathbb{N}$ & \\
+        Abstract bag of tuples & $\mathbb{T} \rightarrow \mathbb{N}^\#$ & \\
+        Set of tuples & $\mathbb{T} \rightarrow 2$ & \\
+        Bag of abstract tuples & $\mathbb{T}^\# \rightarrow \mathbb{N}$ & \\
+        Abstract bag of abstract tuples & $\mathbb{T}^\# \rightarrow \mathbb{N}^\#$ & \checkmark \\
+        Set of abstract tuples & $\mathbb{T}^\# \rightarrow \{0, some\}$ & \checkmark \\
+        Abstract tuple & $\{\cdot\} \rightarrow \mathbb{T}^\#$ & \checkmark \\
     \end{tabular}
     \label{tab:taxonomy_of_abstract_domain_of_tables}
 \end{table}
 
-\todo[inline]{
-    Casper asks: Do bags form a lattice under union and intersection?
-}
+We will only consider abstract bags of abstract tuples, sets of abstract tuples and abstract tuples because of their finite nature.
+In the sequel we will introduce the three abstraction more carefully.
 
 \paragraph{Abstract bag of abstract tuples}
 
-\begin{equation*}
-    (t_\# \sqcup t_\#')(e) = t_\#(e) + t_\#'(e)
-\end{equation*}
-\begin{equation*}
-    (t_\# \sqcap t_\#')(e) = \max\{0^\#, t_\#(e) - t_\#'(e), t_\#'(e) - t_\#(e)\}
-\end{equation*}
-\begin{equation*}
-    t_\# \sqsubseteq t_\#' \iff \forall e \in \mathbb{T}^\# : t_\#(e) \leq t_\#'(e)
-\end{equation*}
+\begin{align*}
+    (t \sqcup t')(e) &= t(e) + t'(e) \\
+    (t \sqcap t')(e) &= t(e) - t'(e) \\
+    t \sqsubseteq t &\iff \forall e \in \mathbb{T}^\# : t(e) \leq t'(e) \\
+\end{align*}
+
+If $(\mathbb{N}^\#, \leq, +, -)$ is finite lattice then $(\mathbb{T}^\# \rightarrow \mathbb{N}^\#, \sqsubseteq, \sqcup, \sqcap)$ is a finite lattice.
 
 \paragraph{Set of abstract tuples}
 
-\begin{equation*}
-    t_2 \sqcup t_2' = t_2 \cup t_2'
-\end{equation*}
-\begin{equation*}
-    t_2 \sqcap t_2' = t_2 \cap t_2'
-\end{equation*}
-\begin{equation*}
-    t_2 \sqsubseteq t_2' = t_2 \subseteq t_2'
-\end{equation*}
+This can be be seen as a specific case of abstract bags of abstract tuples, where the abstract domain $\mathbb{N}^\# = \{0, some\}$ (here some also includes the possibility of $0$) .
+We can represent such function as sets, interpreting inclusion to mean the value maps to $some$, and exclusion meaning the value maps to $0$ thus:
+
+\begin{align*}
+    t \sqcup t' &= t \cup t' \\
+    t \sqcap t' &= t \cap t' \\
+    t \sqsubseteq t' &\iff t \subseteq t' \\
+\end{align*}
+
+It should be obvious that $(\mathbb{T}^\# \rightarrow \{0, some\}, \sqsubseteq, \sqcup, \sqcap)$ is a finite lattice.
 
 \paragraph{Abstract tuple}
 
-\begin{equation*}
-    (t_1 \sqcup t_1')(\cdot) = t_1(\cdot) \sqcup t_1'(\cdot)
-\end{equation*}
-\begin{equation*}
-    (t_1 \sqcap t_1')(\cdot) = t_1(\cdot) \sqcap t_1'(\cdot)
-\end{equation*}
-\begin{equation*}
-    t_1 \sqsubseteq t_1' = t_1(\cdot) \sqsubseteq t_1'(\cdot)
-\end{equation*}
-\todo[inline]{Casper says: This is probably not necessary to write out.}
+In this case we seek to symbolize the table with just one tuple representing the subsets of the product of it each compound in the tuple.
 
-\begin{theorem}
-    $\forall i \in \{1, 2, \#\} : (t_i, \sqsubseteq, \sqcup, \sqcap)$ is a complete lattice.
-    %todo
-    \todo{Casper says: This should be proved.}
-\end{theorem}
+\begin{align*}
+    (t \sqcup t')(\cdot) &= t(\cdot) \sqcup t'(\cdot) \\
+    (t \sqcap t')(\cdot) &= t(\cdot) \sqcap t'(\cdot) \\
+    t \sqsubseteq t' &\iff t(\cdot) \sqsubseteq t'(\cdot) \\
+\end{align*}
+
+It should be obvious that $(\{\cdot\} \rightarrow \mathbb{T}^\#, \sqsubseteq, \sqcup, \sqcap)$ is a finite lattice.
