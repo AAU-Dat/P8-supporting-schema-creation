@@ -2,12 +2,14 @@
 
 Let $S(v)$ the function that in beds $v$ in a singleton table.
 
-\begin{restatable}{lemma}{deletemonotone}
-    $\abssem{C_{select}^\#}$ is monotone.
-\end{restatable}
-\pfsketch{
-    $\abssem{C_{select}^\#}$ leaves the database unchanged which is clearly monotone.
-}
+% todo Casper says: We don't need to prove this... I think. Remove once confirmed
+
+% \begin{restatable}{lemma}{deletemonotone}
+%     $\abssem{C_{select}^\#}$ is monotone.
+% \end{restatable}
+% \pfsketch{
+%     $\abssem{C_{select}^\#}$ leaves the database unchanged which is clearly monotone.
+% }
 
 \begin{align*}
     S^\# \llbracket C_{insert}^\# \rrbracket (\rho_{t^\#}, \rho_{a^\#})
@@ -23,12 +25,14 @@ Let $S(v)$ the function that in beds $v$ in a singleton table.
     \rho_{t_1^\#}(\overset{\rightarrow}{x^\#}) &= \rho_{\textcolor{red}{t^\# \sqcup S(l_{new}^\#)}}(\overset{\rightarrow}{x^\#})
 \end{align*}
 
-\begin{restatable}{lemma}{insertmonotone}
-    $S^\# \llbracket C_{insert}^\# \rrbracket$ is monotone.
-\end{restatable}
-\pfsketch{
-    Regardless of $(\env{\abstable}, \env{\absvars})$ the same element is inserted, thus the ordering between any two environments after $S^\# \llbracket C_{insert}^\# \rrbracket$ is applied is the same, because the ordering is determined by the elements that were already in the environments.
-}
+% todo same as above
+
+% \begin{restatable}{lemma}{insertmonotone}
+%     $S^\# \llbracket C_{insert}^\# \rrbracket$ is monotone.
+% \end{restatable}
+% \pfsketch{
+%     Regardless of $(\env{\abstable}, \env{\absvars})$ the same element is inserted, thus the ordering between any two environments after $S^\# \llbracket C_{insert}^\# \rrbracket$ is applied is the same, because the ordering is determined by the elements that were already in the environments.
+% }
 
 \begin{align*}
     \abssem{C^\#_{update}}(\env{\abstable}, \env{\absvars})
@@ -44,13 +48,15 @@ Let $S(v)$ the function that in beds $v$ in a singleton table.
     \end{cases}
 \end{align*}
 
-\begin{restatable}{lemma}{updatemonotone}
-    $\abssem{C_{update}^\#}$ is monotone.
-\end{restatable}
-\pfsketch{
-    For $\abstable \sqsubseteq \abstablep$ if $\abssem{C_{update}^\#}$ updates elements in $\abstable$ the same elements must be updated in $\abstablep$, therefore the order is determined by the remaining unchanged elements and therefore order is preserved.
-    If an element not in $\abstable$ is update is changed in $\abstablep$ order is still preserved as the element is 'swapped' for another.
-}
+% todo same as above
+
+% \begin{restatable}{lemma}{updatemonotone}
+%     $\abssem{C_{update}^\#}$ is monotone.
+% \end{restatable}
+% \pfsketch{
+%     For $\abstable \sqsubseteq \abstablep$ if $\abssem{C_{update}^\#}$ updates elements in $\abstable$ the same elements must be updated in $\abstablep$, therefore the order is determined by the remaining unchanged elements and therefore order is preserved.
+%     If an element not in $\abstable$ is update is changed in $\abstablep$ order is still preserved as the element is 'swapped' for another.
+% }
 
 \begin{align*}
     \abssem{C^\#_{delete}}(\env{\abstable}, \env{\absvars})
@@ -59,10 +65,12 @@ Let $S(v)$ the function that in beds $v$ in a singleton table.
     \text{where } \env{\abstable_1}(\absattr) &= \env{\abstable \downarrow_u \abspred}(\absattr) \textcolor{red}{\sqcup} \env{\abstable \downarrow_f \abspred}(\absattr)
 \end{align*}
 
-\begin{restatable}{lemma}{deletemonotone}
-    $\abssem{C_{delete}^\#}$ is monotone.
-\end{restatable}
-\pfsketch{
-    For $\abstable \sqsubseteq \abstablep$ if $\abssem{C_{delete}^\#}$ deletes elements in $\abstable$ the same elements in must also be deleted in $\abstablep$ and order is preserved, further deleting elements only in $\abstablep$ will 'close the gap' between $\abstable$ and $\abstablep$ but the order is still preserved.
-}
+% todo same as above
+
+% \begin{restatable}{lemma}{deletemonotone}
+%     $\abssem{C_{delete}^\#}$ is monotone.
+% \end{restatable}
+% \pfsketch{
+%     For $\abstable \sqsubseteq \abstablep$ if $\abssem{C_{delete}^\#}$ deletes elements in $\abstable$ the same elements in must also be deleted in $\abstablep$ and order is preserved, further deleting elements only in $\abstablep$ will 'close the gap' between $\abstable$ and $\abstablep$ but the order is still preserved.
+% }
 
