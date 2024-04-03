@@ -65,7 +65,7 @@ class Commands {
         loadProp(propPath)
 
         //load transition system
-        loadTS(tsPath)ta
+        loadTS(tsPath)
     }
 
     @Command(command = ["lsql"], description = "Main function for loading SQL")
