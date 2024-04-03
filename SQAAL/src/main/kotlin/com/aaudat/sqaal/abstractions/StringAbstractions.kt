@@ -56,4 +56,8 @@ abstract class StringAbstractions {
         val isSubset: Boolean = a.subsetOf(b)
         return isSubset
     }
+
+    private fun lattice() {
+
+    }
 }

@@ -16,6 +16,7 @@ class Commands {
     private val sqlParser: SQLParser = SQLParser()
     private val modelBuilder: ModelBuilder = ModelBuilder()
     private var model: Model = Model()
+
     @Command(command = ["hello"], description = "Hello World command", group = "Testing Commands")
     /**
      * Testing function printing "Hello world"
@@ -25,15 +26,19 @@ class Commands {
         return "Hello world"
     }
 
-    @Command(command = ["parse"], description = "Main function for parsing SQL", group = "Main Commands")
+    @Command(command = ["lmodel"], description = "Main function for loading model", group = "Main Commands")
     /**
-     * Main function for parsing SQL queries
+     * Main function for loading the model
      * Receives .sql file and uses the JSQLParser to parse the file
+     * Receives .prop file and parses the file
+     * Receives .ts file and parses the file
      * @exception FileNotFoundException If function cannot find the file given as argument
-     * @param filename Name of the .sql file containing the SQL query to be parsed
-     * @return TBD - String for now
+     * @param sqlPath Name of the .sql file containing the SQL query to be parsed
+     * @param propPath Name of the .prop file containing the property to be parsed
+     * @param tsPath Name of the .ts file containing the transition system to be parsed
+     * @return Nothing, but builds the model
      */
-    public fun parse(
+    public fun loadModel(
         @Option(
             longNames = ["sql"],
             label = "SQL Path",
@@ -52,25 +57,25 @@ class Commands {
             description = "Name of file containing SQL query",
             required = true
         ) tsPath: String
-    )   {
-         try {
-            val inputStream: InputStream = File("SQAAL/src/main/resources/sql examples/$sqlPath.sql").inputStream()
-            println("File '$sqlPath.sql' succesfully loaded!")
-            val inputString = inputStream.bufferedReader().use { it.readText() }
-            println("\nContents of file: $sqlPath.sql")
-            println("-------------------------------")
-            val parsedAST = sqlParser.sqlParser(inputString)
-            "$parsedAST"
-        } catch (e: FileNotFoundException) {
-            println("FILE ERROR - Could not find file '$sqlPath.sql'")
-            throw e
-        } catch (e: Exception) {
-            println("PARSING ERROR - Make sure the file '$sqlPath.sql' contains valid SQL syntax")
-            throw e
-        }
+    ) {
+        //load sql
+        loadSQL(sqlPath)
+
+        //load property
+        loadProp(propPath)
+
+        //load transition system
+        loadTS(tsPath)
     }
 
     @Command(command = ["lsql"], description = "Main function for loading SQL")
+    /**
+     * Main function for loading SQL
+     * Receives .sql file and uses the JSQLParser to parse the file
+     * @exception FileNotFoundException If function cannot find the file given as argument
+     * @param filepath Name of the .sql file containing the SQL query to be parsed
+     * @return Nothing, but builds the model
+     */
     public fun loadSQL(
         @Option(
             longNames = ["arg"],
