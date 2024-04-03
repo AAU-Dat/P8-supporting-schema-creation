@@ -13,6 +13,8 @@
 \usepackage{booktabs}
 \usepackage{tikz}
 \usepackage{pf2}
+\usepackage{thmtools, thm-restate}
+\usepackage{stmaryrd}
 
 % Packages with options set
 \usepackage[hidelinks]{hyperref}
@@ -33,8 +35,9 @@
 \addbibresource{bib/main.bib}
 
 % Other setup and options
-\newtheorem{theorem}{Theorem}
-\newtheorem{definition}{Definition}
+\declaretheorem{theorem}
+\declaretheorem{lemma}
+\declaretheorem{definition}
 \newfloat{algorithm}{htb!}{lop}
 \floatname{algorithm}{Algorithm}
 \newcommand{\algorithmautorefname}{Algorithm}
@@ -51,3 +54,6 @@
 \makeatother
 
 \makeglossaries
+
+\tikzstyle{state} = [rectangle, minimum width=1.5cm, minimum height=1cm, text centered, draw=black, fill=white!30]
+\tikzstyle{circle} = [ellipse, minimum width=1.5cm, minimum height=0.5cm, text centered, draw=black, fill=white!30]
