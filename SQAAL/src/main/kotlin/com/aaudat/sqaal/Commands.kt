@@ -6,6 +6,8 @@ import org.springframework.shell.command.annotation.Option
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.InputStream
+import kotlin.io.path.Path
+import kotlin.io.path.readText
 
 @Command
 /**
@@ -63,7 +65,8 @@ class Commands {
         ) filepath: String
     ): Statement {
         return try {
-            sqlParser.sqlParser(filepath)
+            val file = Path(filepath).readText()
+            sqlParser.sqlParser(file)
         } catch (e: FileNotFoundException) {
             throw e
         } catch (e: Exception) {
