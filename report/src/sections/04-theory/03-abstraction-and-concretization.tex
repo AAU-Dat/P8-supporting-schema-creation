@@ -1,0 +1,33 @@
+\subsection{Abstraction and Concretization}\label{subsec:abstraction-and-concretization}
+
+\begin{align}
+    \concrete &: \clattice{\mathcal{R}}{REG} \rightarrow 2^{\Sigma^\star} \\
+    \concrete(R) &= \mathcal{L}(R)
+\end{align}
+
+\begin{align}
+    \concrete &: \mathbb{T}^\# \rightarrow 2^\mathbb{T} \\
+    \concrete (e_1^\#, e_2^\#, \dots, e_n^\#) &= \concrete(e_1^\#) \times \concrete(e_2^\#) \times \dots \times \concrete(e_n^\#)
+\end{align}
+
+\begin{align}
+    \concrete &: (\mathbb{T}^\# \rightarrow \mathbb{N}^\#) \rightarrow 2^{(\mathbb{T} \rightarrow \mathbb{N})} \\
+    \concrete(t^\#) &= \{t \in (\mathbb{T} \rightarrow \mathbb{N}) \mid \forall e \in \mathbb{T} : \forall e^\# \in \mathbb{T}^\# : e \in \concrete(e^\#) \implies t(e) \in \concrete(t^\#(e^\#))\}
+\end{align}
+
+\begin{align}
+    \concrete(\env{t^\#}) = \{ \env{t} \mid t \in \concrete(t^\#) \}
+\end{align}
+
+\begin{align}
+    \concrete(d^\#) &= \concrete(\{t_1^\#, t_2^\#, \dots, t_n^\#\}) \\
+                    &= \{ \{ t_1, t_2, \dots, t_n \} \mid (t_1, t_2, \dots, t_n) \in \concrete(t_1^\#) \times \concrete(t_2^\#) \times \dots \times \concrete(t_n^\#) \}
+\end{align}
+
+\begin{align}
+    \concrete(\env{d^\#}) = \{ \env{d} \mid d \in \concrete(d^\#) \}
+\end{align}
+
+\begin{conjecture}
+    There exist an $\aabstract$ such that $\aabstract$ and $\concrete$ form a Galois connection.
+\end{conjecture}
