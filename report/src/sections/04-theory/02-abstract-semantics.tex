@@ -20,18 +20,30 @@ We extend the semantics described in \cite{halder_abstract_2012}, to encompass o
     \text{where } E^\# \llbracket R \rrbracket \text{ is a regular language and }\\
      \oplus \text{ is the concatenation operator.}
 \end{align*}
+\todo[inline]{Casper says:
+    Why $C_{concatenate}^\#$ and not just $\texttt{||}$?
+}
 
 \begin{align*}
     E^\# \llbracket C_{bitLength}^\# (R) \rrbracket \\
     = E^\# \llbracket Count(B(R)) \rrbracket \\
     \text{where } B(R) \text{ is the binary representation of }R, \\ \text{ and Count determines the length.}
 \end{align*}
+\todo[inline]{Casper says:
+    Why not just write $\texttt{bit\_length(} R \texttt{)}$, instead of $C_{bitLength}^\#$?
+    How would you derive the binary representation of $R$? What is it? How is it computed?
+    I think the way I would do this is by finding the shortest $s$ possible string, and the longest possible string $S$ in $R$ and then produce a range $[l(B(s)), l(B(S))]$ where $l$ is the length of a string and $B$ is the binary representation.
+
+}
 
 \begin{align*}
     E^\# \llbracket C_{charLength}^\# (S) \rrbracket \\
     = E^\# \llbracket Count(S) \rrbracket \\
-    \text{where } S \text{ is a string and Count determines the length.} 
+    \text{where } S \text{ is a string and Count determines the length.}
 \end{align*}
+\todo[inline]{Casper says:
+    Same as above? how do you count the lenght of a regular expression?
+}
 
 \begin{align*}
     E^\# \llbracket C_{lower}^\# (S) \rrbracket \\
@@ -39,13 +51,19 @@ We extend the semantics described in \cite{halder_abstract_2012}, to encompass o
     \text{where S is a string and } MapToLower \\
     \text{ converts all characters to lowercase.}
 \end{align*}
+\todo[inline]{Casper says:
+    How does $MapToLower$ work, I would suggest a recursive definition.
+}
 
 \begin{align*}
     E^\# \llbracket C_{lower}^\# (S) \rrbracket \\
     = E^\# \llbracket MapToUpper (S) \rrbracket \\
-    \text{where S is a string and } MapToUpper \\ 
+    \text{where S is a string and } MapToUpper \\
     \text{ converts all characters to uppercase.}
 \end{align*}
+\todo[inline]{Casper says:
+    Same as above.
+}
 
 \begin{align*}
     E^\# \llbracket C_{position}^\# (S_1, in, S_2) \\
@@ -69,6 +87,13 @@ We extend the semantics described in \cite{halder_abstract_2012}, to encompass o
     Trim \text{ removes all occurrences of } S_2 \text{ from } S_1.
 \end{align*}
 
+\todo[inline]{Casper says:
+    For the tree definitions above a definition should be give for position, substring and trim.
+    We should be able to implement the abstract semantics by following the semantics above.
+}
+
+
+
 \subsection{Abstract Interpretation of belongs}
 To provide a precise definition of the belongs function, envision a lattice composed of partitions of a language. We aim to identify the most precise partition that encompasses a given expression. In essence, we seek to pinpoint which element in the lattice accurately describes the expression's location. Simply stating that it resides somewhere within the entire set would lack practicality.
 
@@ -76,6 +101,6 @@ Partitions within this lattice may overlap, symbolizing intersections of languag
 
 Navigating this lattice involves starting from the top and descending until we reach a point where no partitions cover the expression. At this juncture, we have identified the most precise set of partitions that encompass the expression.
 
-$ belongs(x)=\cap\{x' \mid x \sqsubseteq x', x' \in X\} $
+$ belongs(x)=\bigsqcap\{x' \mid x \sqsubseteq x', x' \in X\} $
 Taking an expression $x$, we seek to identify the most precise partition that encompasses it. We do this by finding the greatest lowerbound of all partitions that contain $x$.
 
