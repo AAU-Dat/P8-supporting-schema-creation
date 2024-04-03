@@ -34,7 +34,8 @@ class ModelBuilder {
 }
 
 class Model(
-    val sqlObject: Statement?,
-    val tsString: String?,
-    val propertyString: String?
+    val sqlObject: Statement? = null,
+    val tsString: String? = null,
+    val propertyString: String? = null
 )
+

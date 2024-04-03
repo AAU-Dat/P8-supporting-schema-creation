@@ -15,6 +15,8 @@ import kotlin.io.path.readText
  */
 class Commands {
     private val sqlParser: SQLParser = SQLParser()
+    private val modelBuilder: ModelBuilder = ModelBuilder()
+    private var emptyModel: Model = Model()
     @Command(command = ["hello"], description = "Hello World command", group = "Testing Commands")
     /**
      * Testing function printing "Hello world"
@@ -63,10 +65,33 @@ class Commands {
             label = "SQLPath",
             description = "Path of file containing SQL query"
         ) filepath: String
-    ): Statement {
-        return try {
+    ) {
+        try {
             val file = Path(filepath).readText()
-            sqlParser.sqlParser(file)
+            val parsedSQL = sqlParser.sqlParser(file)
+            modelBuilder.withSQL(parsedSQL)
+            emptyModel = modelBuilder.build()
+            println("SQL file loaded successfully!")
+        } catch (e: FileNotFoundException) {
+            throw e
+        } catch (e: Exception) {
+            throw e
+        }
+    }
+
+    @Command(command = ["lprop"], description = "Main function for loading property")
+    public fun loadProp(
+        @Option(
+            longNames = ["arg"],
+            label = "propPath",
+            description = "Path of file containing property"
+        ) filepath: String
+    ) {
+        try {
+            val parsedProperty = "hello world!"
+            modelBuilder.withProperty(parsedProperty)
+            emptyModel = modelBuilder.build()
+            println("property file loaded successfully!")
         } catch (e: FileNotFoundException) {
             throw e
         } catch (e: Exception) {
