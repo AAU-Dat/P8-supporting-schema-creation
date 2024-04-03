@@ -1,6 +1,5 @@
 package com.aaudat.sqaal
 
-import net.sf.jsqlparser.statement.Statement
 import org.springframework.shell.command.annotation.Command
 import org.springframework.shell.command.annotation.Option
 import java.io.File
@@ -16,7 +15,7 @@ import kotlin.io.path.readText
 class Commands {
     private val sqlParser: SQLParser = SQLParser()
     private val modelBuilder: ModelBuilder = ModelBuilder()
-    private var emptyModel: Model = Model()
+    private var model: Model = Model()
     @Command(command = ["hello"], description = "Hello World command", group = "Testing Commands")
     /**
      * Testing function printing "Hello world"
@@ -36,24 +35,37 @@ class Commands {
      */
     public fun parse(
         @Option(
-            longNames = ["arg"],
-            label = "FileName",
-            description = "Name of file containing SQL query"
-        ) filename: String
-    ): String {
-        return try {
-            val inputStream: InputStream = File("SQAAL/src/main/resources/sql examples/$filename.sql").inputStream()
-            println("File '$filename.sql' succesfully loaded!")
+            longNames = ["sql"],
+            label = "SQL Path",
+            description = "Name of file containing SQL query",
+            required = true
+        ) sqlPath: String,
+        @Option(
+            longNames = ["prop"],
+            label = "Property Path",
+            description = "Name of file containing SQL query",
+            required = true
+        ) propPath: String,
+        @Option(
+            longNames = ["ts"],
+            label = "TS path",
+            description = "Name of file containing SQL query",
+            required = true
+        ) tsPath: String
+    )   {
+         try {
+            val inputStream: InputStream = File("SQAAL/src/main/resources/sql examples/$sqlPath.sql").inputStream()
+            println("File '$sqlPath.sql' succesfully loaded!")
             val inputString = inputStream.bufferedReader().use { it.readText() }
-            println("\nContents of file: $filename.sql")
+            println("\nContents of file: $sqlPath.sql")
             println("-------------------------------")
             val parsedAST = sqlParser.sqlParser(inputString)
             "$parsedAST"
         } catch (e: FileNotFoundException) {
-            println("FILE ERROR - Could not find file '$filename.sql'")
+            println("FILE ERROR - Could not find file '$sqlPath.sql'")
             throw e
         } catch (e: Exception) {
-            println("PARSING ERROR - Make sure the file '$filename.sql' contains valid SQL syntax")
+            println("PARSING ERROR - Make sure the file '$sqlPath.sql' contains valid SQL syntax")
             throw e
         }
     }
@@ -70,7 +82,7 @@ class Commands {
             val file = Path(filepath).readText()
             val parsedSQL = sqlParser.sqlParser(file)
             modelBuilder.withSQL(parsedSQL)
-            emptyModel = modelBuilder.build()
+            model = modelBuilder.build()
             println("SQL file loaded successfully!")
         } catch (e: FileNotFoundException) {
             throw e
@@ -88,10 +100,28 @@ class Commands {
         ) filepath: String
     ) {
         try {
-            val parsedProperty = "hello world!"
-            modelBuilder.withProperty(parsedProperty)
-            emptyModel = modelBuilder.build()
+            modelBuilder.withProperty(filepath)
+            model = modelBuilder.build()
             println("property file loaded successfully!")
+        } catch (e: FileNotFoundException) {
+            throw e
+        } catch (e: Exception) {
+            throw e
+        }
+    }
+
+    @Command(command = ["lts"], description = "Main function for loading transition system")
+    public fun loadTS(
+        @Option(
+            longNames = ["arg"],
+            label = "tsPath",
+            description = "Path of file containing transition system"
+        ) tspath: String
+    ) {
+        try {
+            modelBuilder.withTS(tspath)
+            model = modelBuilder.build()
+            println("transition system file loaded successfully!")
         } catch (e: FileNotFoundException) {
             throw e
         } catch (e: Exception) {
