@@ -65,7 +65,7 @@ class Commands {
         loadProp(propPath)
 
         //load transition system
-        loadTS(tsPath)
+        loadTS(tsPath)ta
     }
 
     @Command(command = ["lsql"], description = "Main function for loading SQL")
@@ -97,6 +97,13 @@ class Commands {
     }
 
     @Command(command = ["lprop"], description = "Main function for loading property")
+    /**
+     * Main function for loading property
+     * Receives .txt file and parses the file
+     * @exception FileNotFoundException If function cannot find the file given as argument
+     * @param filepath Name of the .txt file containing the property to be parsed
+     * @return Nothing, but builds the model
+     */
     public fun loadProp(
         @Option(
             longNames = ["arg"],
@@ -116,6 +123,13 @@ class Commands {
     }
 
     @Command(command = ["lts"], description = "Main function for loading transition system")
+    /**
+     * Main function for loading transition system
+     * Receives .txt file and parses the file
+     * @exception FileNotFoundException If function cannot find the file given as argument
+     * @param tspath Name of the .txt file containing the transition system to be parsed
+     * @return Nothing, but builds the model
+     */
     public fun loadTS(
         @Option(
             longNames = ["arg"],

@@ -57,7 +57,13 @@ abstract class StringAbstractions {
         return isSubset
     }
 
-    private fun lattice() {
+    private fun lattice(regExList: Array<RegExp>) {
+        var newArray = emptyArray<RegExp>()
+        for (regEx in regExList) {
+            for (regEx2 in regExList) {
+                // newArray += regEx.toAutomaton().union(regEx2.toAutomaton())
+            }
+        }
 
     }
 }
