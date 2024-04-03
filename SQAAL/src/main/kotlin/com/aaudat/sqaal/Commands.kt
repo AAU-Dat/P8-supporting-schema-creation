@@ -1,5 +1,6 @@
 package com.aaudat.sqaal
 
+import net.sf.jsqlparser.statement.Statement
 import org.springframework.shell.command.annotation.Command
 import org.springframework.shell.command.annotation.Option
 import java.io.File
@@ -49,6 +50,23 @@ class Commands {
             throw e
         } catch (e: Exception) {
             println("PARSING ERROR - Make sure the file '$filename.sql' contains valid SQL syntax")
+            throw e
+        }
+    }
+
+    @Command(command = ["lsql"], description = "Main function for loading SQL")
+    public fun loadSQL(
+        @Option(
+            longNames = ["arg"],
+            label = "SQLPath",
+            description = "Path of file containing SQL query"
+        ) filepath: String
+    ): Statement {
+        return try {
+            sqlParser.sqlParser(filepath)
+        } catch (e: FileNotFoundException) {
+            throw e
+        } catch (e: Exception) {
             throw e
         }
     }
