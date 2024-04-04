@@ -20,14 +20,15 @@
 \end{align}
 
 \begin{align}
-    \concrete(d^\#) &= \concrete(\{t_1^\#, t_2^\#, \dots, t_n^\#\}) \\
-                    &= \{ \{ t_1, t_2, \dots, t_n \} \mid (t_1, t_2, \dots, t_n) \in \concrete(t_1^\#) \times \concrete(t_2^\#) \times \dots \times \concrete(t_n^\#) \}
+    \concrete &: \prod_{i = 1}^{n} (\mathbb{T}^\#_i \rightarrow \mathbb{N}^\#_i) \rightarrow 2^{\prod_{i = 1}^{n} (\mathbb{T}_i \rightarrow \mathbb{N}_i)} \\
+    \concrete(d^\#) &= \concrete(t_1^\#, t_2^\#, \dots, t_n^\#) \\
+                    &= \concrete(t_1^\#) \times \concrete(t_2^\#) \times \dots \times \concrete(t_n^\#)
 \end{align}
 
 \begin{align}
-    \concrete(\env{d^\#}) = \{ \env{d} \mid d \in \concrete(d^\#) \}
+    \concrete(\env{d^\#}) &= \{ \env{d} \mid d \in \concrete(d^\#) \}
 \end{align}
 
 \begin{restatable}{theorem}{galois}\label{thm:galios}
-    There exist an $\aabstract$ such that $\aabstract$ and $\concrete$ form a Galois connection.
+    There exist an $\aabstract$ such that $\aabstract$ and $\concrete : \prod_{i = 1}^{n} (\mathbb{T}^\#_i \rightarrow \mathbb{N}^\#_i) \rightarrow 2^{\prod_{i = 1}^{n} (\mathbb{T}_i \rightarrow \mathbb{N}_i)}$ form a Galois connection.
 \end{restatable}
