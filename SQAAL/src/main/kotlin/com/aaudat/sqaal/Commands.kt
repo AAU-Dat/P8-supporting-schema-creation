@@ -1,10 +1,10 @@
 package com.aaudat.sqaal
 
+import dk.brics.automaton.Automaton
+import dk.brics.automaton.RegExp
 import org.springframework.shell.command.annotation.Command
 import org.springframework.shell.command.annotation.Option
-import java.io.File
 import java.io.FileNotFoundException
-import java.io.InputStream
 import kotlin.io.path.Path
 import kotlin.io.path.readText
 
@@ -146,6 +146,86 @@ class Commands {
         } catch (e: Exception) {
             throw e
         }
+    }
+
+    @Command(command = ["test"], description = "Test")
+    public fun test(
+    ): List<Automaton> {
+        val k = RegExp("x*").toAutomaton()
+        val c = RegExp("a*").toAutomaton()
+        val a = RegExp("ab(c|d)*").toAutomaton()
+
+        val list = mutableListOf(k, c, a)
+        return lattice(list)
+    }
+
+    public fun lattice(
+        list: List<Automaton>
+    ): List<Automaton> {
+        val newList = mutableListOf<Automaton>()
+        for (aut in list) {
+            for (aut2 in list) {
+                newList += aut.union(aut2)
+                newList += aut.intersection(aut2)
+            }
+        }
+        val newList2 = newList.distinct()
+        return if (newList2 == list) {
+            newList2
+        } else {
+            lattice(newList2)
+        }
+    }
+
+    @Command(command = ["belongs"], description = "Main function for loading transition system")
+    fun belongs(
+        @Option(
+            longNames = ["arg1"],
+            label = "RegEx",
+            description = "Regular expression to check whether is in lattice",
+            required = true
+        ) regEx: String, @Option(
+            longNames = ["arg2"],
+            label = "RegExList",
+            description = "List of regular expressions to create the lattice",
+            required = true
+        ) list: String
+    ): Automaton {
+        val regExAut = RegExp(regEx).toAutomaton()
+        val paramList = list.split(" ")
+        val autList = emptyList<Automaton>().toMutableList()
+        for (rexp in paramList) {
+            autList += RegExp(rexp).toAutomaton()
+        }
+
+        val lattice = lattice(autList)
+
+        val subsetList = emptyList<Automaton>().toMutableList()
+        for (aut in lattice) {
+            if (regExAut.subsetOf(aut)) {
+                subsetList += aut
+            }
+        }
+        try {
+            var minAut: Automaton = subsetList[0]
+            for (i in 1..<subsetList.size) {
+                minAut = minAut.intersection(subsetList[i])
+            }
+
+            val equivBoolList = emptyList<Boolean>().toMutableList()
+            val subsetBoolList = emptyList<Boolean>().toMutableList()
+            for (reg in subsetList) {
+                equivBoolList += regExAut == reg
+                subsetBoolList += regExAut.subsetOf(reg)
+            }
+            println(equivBoolList)
+            println(subsetBoolList)
+            return minAut
+        } catch (e: Exception) {
+            println("$regEx is not a subset of $paramList")
+            throw e // TODO: use log (RUNGE)
+        }
+
     }
 }
 
