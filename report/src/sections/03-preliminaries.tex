@@ -76,6 +76,10 @@ As a shorthand we take $x \sqcup y = \bigsqcup \{x, y\}$ and $x \sqcap y = \bigs
 
 \subsection{Abstract Interpretation}
 
+\begin{theorem}\label{thm:galoispre}
+    For $\gamma : L_1 \rightarrow L_2$ where $L_1$ and $L_2$ are complete lattices there exist a function $\alpha : L_2 \rightarrow L_1$ such that $\alpha$ and $\gamma$ forms a Galois connection if $\gamma(\bigsqcap B) = \bigsqcap_{b \in B}\gamma(b)$ for every $B \subseteq L_1$.
+\end{theorem}
+
 \subsection{Regular languages}
 
 
