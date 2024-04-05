@@ -22,7 +22,7 @@ class Commands {
      * Testing function printing "Hello world"
      * @return The String: "Hello world"
      */
-    public fun hello(): String {
+    fun hello(): String {
         return "Hello world"
     }
 
@@ -38,7 +38,7 @@ class Commands {
      * @param tsPath Name of the .ts file containing the transition system to be parsed
      * @return Nothing, but builds the model
      */
-    public fun loadModel(
+    fun loadModel(
         @Option(
             longNames = ["sql"],
             label = "SQL Path",
@@ -76,7 +76,7 @@ class Commands {
      * @param filepath Name of the .sql file containing the SQL query to be parsed
      * @return Nothing, but builds the model
      */
-    public fun loadSQL(
+    fun loadSQL(
         @Option(
             longNames = ["arg"],
             label = "SQLPath",
@@ -104,7 +104,7 @@ class Commands {
      * @param filepath Name of the .txt file containing the property to be parsed
      * @return Nothing, but builds the model
      */
-    public fun loadProp(
+    fun loadProp(
         @Option(
             longNames = ["arg"],
             label = "propPath",
@@ -130,7 +130,7 @@ class Commands {
      * @param tspath Name of the .txt file containing the transition system to be parsed
      * @return Nothing, but builds the model
      */
-    public fun loadTS(
+    fun loadTS(
         @Option(
             longNames = ["arg"],
             label = "tsPath",

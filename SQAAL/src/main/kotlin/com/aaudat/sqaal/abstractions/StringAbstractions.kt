@@ -20,9 +20,8 @@ class StringAbstractions {
      * @return [RegExp]
      */
     private fun toRegExp(parsedast: String): RegExp {
-        val re = RegExp(parsedast);
+        val re = RegExp(parsedast)
         return re
-        TODO("Convert ??? (maybe parsed SQL AST or String) to Regular Expression")
     }
 
     /**
@@ -114,7 +113,7 @@ class StringAbstractions {
 
             /**
              * List of which superset regular expressions that have an equivalent language to [regEx]
-             * Printed as a boolean list, where [true] means that the language of superset at index i is equivalent to the language of [regEx]
+             * Printed as a boolean list, where *true* means that the language of superset at index i is equivalent to the language of [regEx]
              */
             val equivBoolList = emptyList<Boolean>().toMutableList()
             for (reg in subsetList) {
@@ -167,7 +166,7 @@ class StringAbstractions {
             newList2
         } else {
             /**
-             * If [list] and [newList2] are not equal, it means that we are not done.
+             * If [list] and *newList2* are not equal, it means that we are not done.
              * Therefore, we call the function again recursively
              */
             lattice(newList2)
