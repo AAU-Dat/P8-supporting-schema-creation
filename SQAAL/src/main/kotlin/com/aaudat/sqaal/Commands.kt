@@ -148,6 +148,34 @@ class Commands {
         }
     }
 
+    @Command(command = ["lschema"], description = "Main function for loading schema")
+    /**
+     * Main function for loading schema
+     * Receives .sql file and parses the file
+     * @exception FileNotFoundException If function cannot find the file given as argument
+     * @param filepath Name of the .txt file containing the schema to be parsed
+     * @return Nothing, but builds the model
+     */
+    public fun loadSchema(
+        @Option(
+            longNames = ["arg"],
+            label = "schemaPath",
+            description = "Path of file containing schema"
+        ) filepath: String
+    ) {
+        try {
+            val file = Path(filepath).readText()
+            modelBuilder.withSchema(file)
+            model = modelBuilder.build()
+            println("schema file loaded successfully!")
+        } catch (e: FileNotFoundException) {
+            throw e
+        } catch (e: Exception) {
+            throw e
+        }
+    }
+
+
     @Command(command = ["test"], description = "Test")
     public fun test(
     ): List<Automaton> {
