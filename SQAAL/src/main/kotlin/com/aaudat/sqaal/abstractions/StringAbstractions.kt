@@ -112,16 +112,6 @@ class StringAbstractions {
             }
 
             /**
-             * List of which superset regular expressions that have an equivalent language to [regEx]
-             * Printed as a boolean list, where *true* means that the language of superset at index i is equivalent to the language of [regEx]
-             */
-            val equivBoolList = emptyList<Boolean>().toMutableList()
-            for (reg in subsetList) {
-                equivBoolList += regExAut == reg
-            }
-            println(equivBoolList)
-
-            /**
              * @return Intersection of all supersets of [regEx] in the [lattice]
              */
             return minAut
