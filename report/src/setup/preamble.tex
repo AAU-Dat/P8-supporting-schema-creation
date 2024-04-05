@@ -38,6 +38,8 @@
 \declaretheorem{theorem}
 \declaretheorem{lemma}
 \declaretheorem{definition}
+\declaretheorem{example}
+\declaretheorem{conjecture}
 \newfloat{algorithm}{htb!}{lop}
 \floatname{algorithm}{Algorithm}
 \newcommand{\algorithmautorefname}{Algorithm}
@@ -57,3 +59,19 @@
 
 \tikzstyle{state} = [rectangle, minimum width=1.5cm, minimum height=1cm, text centered, draw=black, fill=white!30]
 \tikzstyle{circle} = [ellipse, minimum width=1.5cm, minimum height=0.5cm, text centered, draw=black, fill=white!30]
+
+\newcommand{\abssem}[1]{S^\# \llbracket #1 \rrbracket}
+\newcommand{\absexpsem}[1]{E^\# \llbracket #1 \rrbracket}
+\newcommand{\env}[1]{\rho_{#1}}
+\newcommand{\abstable}{t^\#}
+\newcommand{\abstablep}{t'^{\#}}
+\newcommand{\absvars}{a^\#}
+\newcommand{\absattrs}{\overset{\rightarrow}{v_d^\#}}
+\newcommand{\absattr}{x^\#}
+\newcommand{\absexps}{\overset{\rightarrow}{e^\#}}
+\newcommand{\absexp}[1]{e^\#_{#1}}
+\newcommand{\abspred}{\phi^\#}
+\newcommand{\clattice}[2]{C_{#1}(#2)}
+\newcommand{\concrete}{\gamma}
+\newcommand{\aabstract}{\alpha}
+\DeclareMathOperator{\map}{map}

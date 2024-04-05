@@ -26,7 +26,7 @@ It is still a bit unclear, but it sounds like the expert interacts with some abs
 Gabriela: You may have to focus on only some of the things that are possible in DML.
 
 We need to decide if we want soundness or completeness.
-Gabriela: Especially important because you are using these formalizations and its important to consider which direction to go.
+Gabriela: Especially important because you are using these formalizations, and it's important to consider which direction to go.
 
 ## Action items
 *These action items should be written on the GitHub project board*

@@ -23,7 +23,7 @@ Time: 14:00
 3. Can we combine various database artifacts to more accurately and unambiguously describe the database.
 
 As a possible solution stated as problem statement :
-Can we define an abstract database language, that describes some problem domain unambiguously, but maps the description to multiple equivalent sql schemas? Can we leverage the fact that the description maps to multiple schemas to dynamically switch between them.
+Can we define an abstract database language, that describes some problem domain unambiguously, but maps the description to multiple equivalent sql schemas? Can we leverage the fact that the description maps to multiple schemas to dynamically switch between them?
 - Equivalent how? Content equivalence is too weak.
 
 ## Meeting notes
@@ -38,7 +38,7 @@ The third one is ambiguous: Database artifacts can be many different things
 Casper: We want just a single description of the database, so instead of combining the various artifacts, we would have a single, complete description.
 Rephrase: We want to abstract possibly the logical part away.
 
-Synthesizing queries based on a modified version of the database. - Casper, based on a PHD.
+Synthesizing queries based on a modified version of the database. - Casper, based on a PhD.
 
 Dynamically switch between schemas at runtime.
 

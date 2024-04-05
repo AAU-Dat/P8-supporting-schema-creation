@@ -1,0 +1,51 @@
+\section{Proof of theorem \ref{thm:partition}}
+
+\partition*
+
+\begin{proof}
+    \pf\
+    % \assume{
+    %     $(S, \sqsubseteq, \sqcup, \sqcap)$ is a non-complete lattice and $X \subset S$ and $\bigsqcup X = \top$.
+    % }
+    % \prove{
+    %     $(p_X(S), \sqsubseteq, \sqcup, \sqcap) \text{ is a finite and complete lattice}$.
+    % }
+    \step{complete}{A nonempty finite lattice is a complete lattice.}
+    \begin{proof}
+        \pf\ Know property \cite{moller_statitc_nodate}.
+    \end{proof}
+    \step{lattice}{$(\clattice{X}{S}, \subseteq, \cup, \cap)$ is a lattice.}
+    \begin{proof}
+        \step{poset}{$\clattice{X}{S}$ is a poset}
+        \begin{proof}
+            \step{poset-subset}{The subset of a poset is a poset under the same ordering relation.}
+            \begin{proof}
+                \pf\ Know property.\todo{source missing}
+            \end{proof}
+            \step{partition-subset}{$\clattice{X}{S} \subseteq S$}
+            \begin{proof}
+                \pf\ By the definition of a cover lattice and a lattice.
+            \end{proof}
+            \qedstep
+            \begin{proof}
+                \pf\ By \stepref{poset-subset} and \stepref{partition-subset}.
+            \end{proof}
+        \end{proof}
+        \step{capcup}{$\forall x, y \in \clattice{X}{S} : x \cup y \in \clattice{X}{S} \land x \cap y \in \clattice{X}{S}$}
+        \begin{proof}
+            \pf\ By the definition of $\clattice{X}{S}$.
+        \end{proof}
+        \qedstep
+        \begin{proof}
+            \pf\ By \stepref{poset} and \stepref{capcup}.
+        \end{proof}
+    \end{proof}
+    \step{finite}{$\clattice{X}{S}$ is finite.}
+    \begin{proof}
+        \pf\ Consider that a set in $E \in \clattice{X}{S}$ can be rewritten as a proposition of $e \in E \iff \Gamma$ where $\Gamma$ is a proposition about the membership of $e$ in the elements of $S$. Every such proposition about $\Gamma$ can be written in disjunctive normal form of which there are only finitely many.
+    \end{proof}
+    \qedstep
+    \begin{proof}
+        \pf\ By \stepref{complete}, \stepref{lattice} and \stepref{finite}.
+    \end{proof}
+\end{proof}
