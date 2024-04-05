@@ -151,7 +151,7 @@ class Commands {
     @Command(command = ["belongs"], description = "Main function for checking if a regular expression is a subset of a collection/lattice of other regular expressions")
     fun belongs(
         @Option(
-            longNames = ["arg1"],
+            longNames = ["regex"],
             label = "RegEx",
             description = "Regular expression to check whether is in lattice",
             required = true
