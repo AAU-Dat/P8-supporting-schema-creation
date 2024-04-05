@@ -1,56 +1,9 @@
 %! Author = Runge
 %! Date = 29-12-2023
 
-\section{Proof of theorem \ref{thm:partition}}
+\input{sections/aa-appendix/01-lattice-partition-proof}
+\input{sections/aa-appendix/03-galois}
+% \input{sections/aa-appendix/02-monotone}
 
-\partition*
-
-\begin{proof}
-    \pf\
-    \assume{
-        $(S, \sqsubseteq, \sqcup, \sqcap)$ is a non-complete lattice and $X \subset S$ and $\bigsqcup X = \top$.
-    }
-    \prove{
-        $(p(X), \sqsubseteq, \sqcup, \sqcap) \text{is a complete lattice}$.
-    }
-    \step{complete}{A nonempty finite lattice is a complete lattice.}
-    \begin{proof}
-        \pf\ Know property \cite{moller_statitc_nodate}.
-    \end{proof}
-    \step{lattice}{$(p(X), \sqsubseteq, \sqcup, \sqcap)$ is a lattice.}
-    \begin{proof}
-        \step{poset}{$p(X)$ is a poset}
-        \begin{proof}
-            \step{poset-subset}{The subset of a poset is a poset under the same ordering relation.}
-            \begin{proof}
-                \pf\ Know property.\todo{source missing}
-            \end{proof}
-            \step{partition-subset}{$p(X) \subset S$}
-            \begin{proof}
-                \pf\ By the definition of a partition and lattices.
-            \end{proof}
-            \qedstep
-            \begin{proof}
-                \pf\ By \stepref{poset-subset} and \stepref{partition-subset}.
-            \end{proof}
-        \end{proof}
-        \step{capcup}{$\forall x, y \in p(X) : x \sqcup y \in p(X) \land x \sqcap y \in p(X)$}
-        \begin{proof}
-            \pf\ By the definition of $p(X)$.
-        \end{proof}
-        \qedstep
-        \begin{proof}
-            \pf\ By \stepref{poset} and \stepref{capcup}.
-        \end{proof}
-    \end{proof}
-    \step{finite}{$p(X)$ is finite.}
-    \begin{proof}
-        \pf\ there is a finite number of ways to combine the elements of $X$ using $\sqcap$ and $\sqcup$ without repeating operations and repeated operations are idempotent, therefore $p(X)$ is finite.
-    \end{proof}
-    \qedstep
-    \begin{proof}
-        \pf\ By \stepref{complete}, \stepref{lattice} and \stepref{finite}.
-    \end{proof}
-\end{proof}
 
 
