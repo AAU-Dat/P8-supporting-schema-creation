@@ -5,40 +5,6 @@
 
 \partition*
 
-<<<<<<< HEAD
-\reglattice*
-\prove{
-    $(REG, \subseteq)$ is a partial order, and $\cup$ and $\cap$ are the join and meet respectively.
-    $\bigcup$ or $\bigcap$ is not the lup and glb respectively.
-}
-\begin{proof}
-    \pf\
-    \step{poset}{$(REG, \subseteq)$ is a partial order.}
-    \begin{proof}
-        \pf\ Know property.
-    \end{proof}
-    \step{cup}{
-        $\forall R_1, R_2 \in REG : R_1 \cup R_2 \in REG \land \{R_1, R_2\} \subseteq R_1 \cup R_2 \land \forall R \in REG : \{R_1, R_2\} \subseteq R \implies R_1 \cup R_2 \subseteq R$.
-    }
-    \begin{proof}
-        \pf\ Obvious, $REG$ is closed under finite union.
-    \end{proof}
-    \step{cap}{$\forall R_1, R_2 \in REG : R_1 \cap R_2 \subseteq \{R_1, R_2\} \land \forall R \in REG : R \subseteq \{R_1, R_2\} \implies R \subseteq R_1 \cap R_2$.}
-    \begin{proof}
-        \pf\ Obvious, $REG$ is closed under finite intersection.
-    \end{proof}
-    \step{notbigcup}{$\neg\forall \mathcal{R} \subseteq REG : \bigcup \mathcal{R} \in REG \land \dots$}
-    \begin{proof}
-        \pf\ $REG$ is not closed under transfinite union.
-    \end{proof}
-    \qedstep{}
-    \begin{proof}
-        \pf\ By \stepref{poset}, \stepref{cup}, \stepref{cap} and \stepref{notbigcup}.
-    \end{proof}
-\end{proof}
-
-Proofs of Theorem \ref{thm:finite-reg-lattice} and \ref{thm:reg-partition-lattice} are similar to the one above, but $\bigcup \mathcal{R}$ can be shown to be defined for all $\mathcal{R} \subseteq \mathcal{REG}$ where $\mathcal{REG} \in \{p(REG^\subset), REG^{\leq n}\}$, as these particular sets are finite.
-=======
 \begin{proof}
     \pf\
     \assume{
@@ -87,5 +53,4 @@ Proofs of Theorem \ref{thm:finite-reg-lattice} and \ref{thm:reg-partition-lattic
     \end{proof}
 \end{proof}
 
->>>>>>> 64e4125ab00c4fb504ddea70aeff50c8d947c654
 
