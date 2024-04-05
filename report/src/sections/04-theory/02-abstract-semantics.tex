@@ -1,3 +1,23 @@
+\subsection{Function definitions} \label{subsec:function-definitions}
+
+$s = shortestString(R) =$ A function that analyses a regular expression and returns the shortest string. This is done, by creating an automaton and finding the shortest route to the end state.
+
+$S = longestString(R) =$ A function that analyses a regular expression and returns the longest string. This is done by creating an automaton and finding the longest route to the end state. And returns $\infty$ if a loop is detected.
+s and S are representations for the longest and shortest strings.
+
+$length(x) = \mid x \mid $
+
+$Lower(R) =$ A function that converts all characters in a regular expression to lowercase.
+
+If $R$ is a single uppercase character $C$, then $lowercase(R)=lowercase(C)$ Which is the lowercase version of $C$.
+
+If $R$ is a concatenation $R=R1 \cdot R2$ then $lowercase(R)=lowercase(R1) \cdot lowercase(R2)$
+
+If $R$ is a union $R=R1 \cup R2$ then $lowercase(R)=lowercase(R1) \cup lowercase(R2)$
+
+If $R$ is a Kleene star $R=R1^*$ then $lowercase(R)=lowercase(R1)^*$
+\todo[inline]{Lars says: Should be make each function defintion an align?}
+
 \subsection{Abstract Semantics}
 
 We extend the semantics described in \cite{halder_abstract_2012}, to encompass our taxonomy of abstract tables.
@@ -15,39 +35,30 @@ We extend the semantics described in \cite{halder_abstract_2012}, to encompass o
 \end{lemma}
 
 \begin{align*}
-    E^\# \llbracket R_1 C_{concatenate}^\# R_2 \rrbracket \\
+    E^\# \llbracket R_1 \texttt{||} R_2 \rrbracket \\
     = E^\# \llbracket R_1 \rrbracket \oplus  E^\# \llbracket R_2 \rrbracket \\
     \text{where } E^\# \llbracket R \rrbracket \text{ is a regular language and }\\
      \oplus \text{ is the concatenation operator.}
 \end{align*}
-\todo[inline]{Casper says:
-    Why $C_{concatenate}^\#$ and not just $\texttt{||}$?
-}
 
 \begin{align*}
-    E^\# \llbracket C_{bitLength}^\# (R) \rrbracket \\
-    = E^\# \llbracket Count(B(R)) \rrbracket \\
-    \text{where } B(R) \text{ is the binary representation of }R, \\ \text{ and Count determines the length.}
+    E^\# \llbracket \texttt{bit\_length} (R) \rrbracket \\
+    =  [length(B(s)), length(B(S))] \\
+    bit\_length \text{ returns a range of the binary} \\
+    \text{ representation of } R. \\
+    \text{where } B(s) \text{ is the binary representation of }s
 \end{align*}
-\todo[inline]{Casper says:
-    Why not just write $\texttt{bit\_length(} R \texttt{)}$, instead of $C_{bitLength}^\#$?
-    How would you derive the binary representation of $R$? What is it? How is it computed?
-    I think the way I would do this is by finding the shortest $s$ possible string, and the longest possible string $S$ in $R$ and then produce a range $[l(B(s)), l(B(S))]$ where $l$ is the length of a string and $B$ is the binary representation.
-
-}
 
 \begin{align*}
-    E^\# \llbracket C_{charLength}^\# (S) \rrbracket \\
-    = E^\# \llbracket Count(S) \rrbracket \\
-    \text{where } S \text{ is a string and Count determines the length.}
+    E^\# \llbracket \texttt{char\_length} (R) \rrbracket \\
+    =  [length(s), lenght(S)] \\
+    char\_length \text{ returns a range of the shortest and} \\
+    \text{ longest string created from the regular expression} \\
 \end{align*}
-\todo[inline]{Casper says:
-    Same as above? how do you count the lenght of a regular expression?
-}
 
 \begin{align*}
-    E^\# \llbracket C_{lower}^\# (S) \rrbracket \\
-    = E^\# \llbracket MapToLower (S) \rrbracket \\
+    E^\# \llbracket \texttt{lower} (R) \rrbracket \\
+    =  MapToLower (S) \\
     \text{where S is a string and } MapToLower \\
     \text{ converts all characters to lowercase.}
 \end{align*}
@@ -56,7 +67,7 @@ We extend the semantics described in \cite{halder_abstract_2012}, to encompass o
 }
 
 \begin{align*}
-    E^\# \llbracket C_{lower}^\# (S) \rrbracket \\
+    E^\# \llbracket C_{upper}^\# (S) \rrbracket \\
     = E^\# \llbracket MapToUpper (S) \rrbracket \\
     \text{where S is a string and } MapToUpper \\
     \text{ converts all characters to uppercase.}
