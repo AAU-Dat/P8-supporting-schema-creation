@@ -8,7 +8,6 @@ import java.io.FileNotFoundException
 import kotlin.io.path.Path
 import kotlin.io.path.readText
 import net.sf.jsqlparser.statement.create.table.CreateTable
-import net.sf.jsqlparser.statement.insert.Insert
 
 
 @Command
