@@ -1,3 +1,23 @@
+\subsection{Function definitions} \label{subsec:function-definitions}
+
+$s = shortestString(R) =$ A function that analyses a regular expression and returns the shortest string. This is done, by creating an automaton and finding the shortest route to the end state.
+
+$S = longestString(R) =$ A function that analyses a regular expression and returns the longest string. This is done by creating an automaton and finding the longest route to the end state. And returns $\infty$ if a loop is detected.
+s and S are representations for the longest and shortest strings.
+
+$length(x) = \mid x \mid $
+
+$Lower(R) =$ A function that converts all characters in a regular expression to lowercase.
+
+If $R$ is a single uppercase character $C$, then $lowercase(R)=lowercase(C)$ Which is the lowercase version of $C$.
+
+If $R$ is a concatenation $R=R1 \cdot R2$ then $lowercase(R)=lowercase(R1) \cdot lowercase(R2)$
+
+If $R$ is a union $R=R1 \cup R2$ then $lowercase(R)=lowercase(R1) \cup lowercase(R2)$
+
+If $R$ is a Kleene star $R=R1^*$ then $lowercase(R)=lowercase(R1)^*$
+\todo[inline]{Lars says: Should be make each function defintion an align?}
+
 \subsection{Abstract Semantics}
 
 Let $S(v)$ the function that in beds $v$ in a singleton table.
@@ -48,16 +68,6 @@ Let $S(v)$ the function that in beds $v$ in a singleton table.
     \end{cases}
 \end{align*}
 
-% todo same as above
-
-% \begin{restatable}{lemma}{updatemonotone}
-%     $\abssem{C_{update}^\#}$ is monotone.
-% \end{restatable}
-% \pfsketch{
-%     For $\abstable \sqsubseteq \abstablep$ if $\abssem{C_{update}^\#}$ updates elements in $\abstable$ the same elements must be updated in $\abstablep$, therefore the order is determined by the remaining unchanged elements and therefore order is preserved.
-%     If an element not in $\abstable$ is update is changed in $\abstablep$ order is still preserved as the element is 'swapped' for another.
-% }
-
 \begin{align*}
     \abssem{C^\#_{delete}}(\env{\abstable}, \env{\absvars})
     &= \abssem{\langle delete^\#(\absattrs), \abspred \rangle} (\env{\abstable}, \env{\absvars}) \\
@@ -65,12 +75,81 @@ Let $S(v)$ the function that in beds $v$ in a singleton table.
     \text{where } \env{\abstable_1}(\absattr) &= \env{\abstable \downarrow_u \abspred}(\absattr) \textcolor{red}{\sqcup} \env{\abstable \downarrow_f \abspred}(\absattr)
 \end{align*}
 
-% todo same as above
+\begin{align*}
+    E^\# \llbracket R_1 \texttt{||} R_2 \rrbracket \\
+    = E^\# \llbracket R_1 \rrbracket \oplus  E^\# \llbracket R_2 \rrbracket \\
+    \text{where } E^\# \llbracket R \rrbracket \text{ is a regular language and }\\
+     \oplus \text{ is the concatenation operator.}
+\end{align*}
 
-% \begin{restatable}{lemma}{deletemonotone}
-%     $\abssem{C_{delete}^\#}$ is monotone.
-% \end{restatable}
-% \pfsketch{
-%     For $\abstable \sqsubseteq \abstablep$ if $\abssem{C_{delete}^\#}$ deletes elements in $\abstable$ the same elements in must also be deleted in $\abstablep$ and order is preserved, further deleting elements only in $\abstablep$ will 'close the gap' between $\abstable$ and $\abstablep$ but the order is still preserved.
-% }
+\begin{align*}
+    E^\# \llbracket \texttt{bit\_length} (R) \rrbracket \\
+    =  [length(B(s)), length(B(S))] \\
+    bit\_length \text{ returns a range of the binary} \\
+    \text{ representation of } R. \\
+    \text{where } B(s) \text{ is the binary representation of }s
+\end{align*}
 
+\begin{align*}
+    E^\# \llbracket \texttt{char\_length} (R) \rrbracket \\
+    =  [length(s), lenght(S)] \\
+    char\_length \text{ returns a range of the shortest and} \\
+    \text{ longest string created from the regular expression} \\
+\end{align*}
+
+\begin{align*}
+    E^\# \llbracket \texttt{lower} (R) \rrbracket \\
+    =  MapToLower (S) \\
+    \text{where S is a string and } MapToLower \\
+    \text{ converts all characters to lowercase.}
+\end{align*}
+\todo[inline]{Casper says:
+    How does $MapToLower$ work, I would suggest a recursive definition.
+}
+
+\begin{align*}
+    E^\# \llbracket C_{upper}^\# (S) \rrbracket \\
+    = E^\# \llbracket MapToUpper (S) \rrbracket \\
+    \text{where S is a string and } MapToUpper \\
+    \text{ converts all characters to uppercase.}
+\end{align*}
+\todo[inline]{Casper says:
+    Same as above.
+}
+
+\begin{align*}
+    E^\# \llbracket C_{position}^\# (S_1, in, S_2) \\
+    = E^\# \llbracket Position(S_1, in, S_2) \rrbracket \\
+    \text{where S is a string and } Position \\
+    \text{ returns the position of the first occurrence of } \\
+    S_2 \text{ in } S_1.
+\end{align*}
+
+\begin{align*}
+    E^\# \llbracket C_{subString}^\# (S, I_1, I_2) \rrbracket \\
+    = E^\# \llbracket SubString(S, I_1, I_2) \rrbracket \\
+    \text{where } S \text{ is a string, } I \text{ are integers, and } \\
+    SubString \text{ returns the substring of } S \text{ from } I_1 \text{ to } I_2.
+\end{align*}
+
+\begin{align*}
+    E^\# \llbracket C_{trim}^\# (S_1 from S_2) \rrbracket \\
+    = E^\# \llbracket Trim(S_1, S_2) \rrbracket \\
+    \text{where } S_1 \text{ and } S_2 \text{ are strings, and }\\
+    Trim \text{ removes all occurrences of } S_2 \text{ from } S_1.
+\end{align*}
+
+\todo[inline]{Casper says:
+    For the tree definitions above a definition should be give for position, substring and trim.
+    We should be able to implement the abstract semantics by following the semantics above.
+}
+
+\subsection{Abstract Interpretation of belongs}
+To provide a precise definition of the belongs function, envision a lattice composed of partitions of a language. We aim to identify the most precise partition that encompasses a given expression. In essence, we seek to pinpoint which element in the lattice accurately describes the expression's location. Simply stating that it resides somewhere within the entire set would lack practicality.
+
+Partitions within this lattice may overlap, symbolizing intersections of languages. The lattice itself is complete, with the top element representing the entire set of languages, and the bottom element indicating the empty set.
+
+Navigating this lattice involves starting from the top and descending until we reach a point where no partitions cover the expression. At this juncture, we have identified the most precise set of partitions that encompass the expression.
+
+$ belongs(x)=\bigsqcap\{x' \mid x \sqsubseteq x', x' \in X\} $
+Taking an expression $x$, we seek to identify the most precise partition that encompasses it. We do this by finding the greatest lowerbound of all partitions that contain $x$.

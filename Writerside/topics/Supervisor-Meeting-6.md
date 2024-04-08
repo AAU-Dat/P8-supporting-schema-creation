@@ -9,7 +9,7 @@ None
 - **Objective**
     - The objective is to present the current progress and access the proposed solutions.
 - **We have decided that the interface is going to be a CLI**
-    - For now we will integrate the CLI directly with the analysis backend.
+    - For now, we will integrate the CLI directly with the analysis backend.
 - **We have finalized the MoSCoW, do you have any comments?** (10 min)
     - Lead: Daniel
     - Preparation: Read the new MoSCoW provided below.

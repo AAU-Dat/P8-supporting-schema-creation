@@ -33,6 +33,9 @@ dependencies {
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    implementation("com.github.jsqlparser:jsqlparser:4.9")
+    implementation("dk.brics:automaton:1.12-4")
+    implementation("com.google.ortools:ortools-java:9.9.3963")
 }
 
 dependencyManagement {
