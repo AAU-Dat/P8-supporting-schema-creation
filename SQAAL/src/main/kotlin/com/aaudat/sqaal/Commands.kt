@@ -7,6 +7,8 @@ import org.springframework.shell.command.annotation.Option
 import java.io.FileNotFoundException
 import kotlin.io.path.Path
 import kotlin.io.path.readText
+import net.sf.jsqlparser.statement.create.table.CreateTable
+
 
 @Command
 /**
@@ -95,6 +97,41 @@ class Commands {
             throw e
         }
     }
+
+    @Command(command = ["lschema"], description = "Main function for loading SQL")
+    /**
+     * Main function for loading SQL
+     * Receives path to SQL file and uses the JSQLParser to parse the file
+     * @exception FileNotFoundException If function cannot find the file given as argument
+     * @param filepath Name of the .sql file containing the SQL query to be parsed
+     * @return Nothing, but builds the model
+     */
+    public fun loadSchema(
+        @Option(
+            longNames = ["arg"],
+            label = "SQLPath",
+            description = "Path of file containing SQL query"
+        ) filepath: String
+    ) {
+        try {
+            val file = Path(filepath).readText()
+            val parsedSQL = sqlParser.sqlParser(file)
+            if (parsedSQL is CreateTable) {
+                modelBuilder.withSchema(parsedSQL)
+                model = modelBuilder.build()
+                println("SQL file loaded successfully!")
+            }
+            else {
+                    throw Exception("SQL file is not a valid SQL schema")
+            }
+        }
+        catch (e: FileNotFoundException) {
+            throw e
+        } catch (e: Exception) {
+            throw e
+        }
+    }
+
 
     @Command(command = ["lprop"], description = "Main function for loading property")
     /**
