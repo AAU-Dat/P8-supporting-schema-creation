@@ -10,8 +10,6 @@ class ModelBuilder {
     private var sqlObject: Statement? = null
     private var tsString: String? = null
     private var propertyString: String? = null
-    private var tables: MutableList<String> = mutableListOf()
-    private var columnsMap: MutableMap<String, MutableList<String>> = mutableMapOf()
     private var sqlSchema: Statement? = null
 
     fun withSQL(sqlObject: Statement): ModelBuilder {
@@ -32,14 +30,6 @@ class ModelBuilder {
     fun withSchema(sqlSchema: Statement): ModelBuilder {
         this.sqlSchema = sqlSchema
         return this
-    }
-
-    fun getTables(): List<String> {
-        return tables.toList()
-    }
-
-    fun getColumns(tableName: String): List<String>? {
-        return columnsMap[tableName]
     }
 
     fun build(): Model {
