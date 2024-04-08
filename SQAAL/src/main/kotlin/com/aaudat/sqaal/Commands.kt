@@ -1,7 +1,7 @@
 package com.aaudat.sqaal
 
+import com.aaudat.sqaal.abstractions.StringAbstractions
 import dk.brics.automaton.Automaton
-import dk.brics.automaton.RegExp
 import org.springframework.shell.command.annotation.Command
 import org.springframework.shell.command.annotation.Option
 import java.io.FileNotFoundException
@@ -25,7 +25,7 @@ class Commands {
      * Testing function printing "Hello world"
      * @return The String: "Hello world"
      */
-    public fun hello(): String {
+    fun hello(): String {
         return "Hello world"
     }
 
@@ -41,7 +41,7 @@ class Commands {
      * @param tsPath Name of the .ts file containing the transition system to be parsed
      * @return Nothing, but builds the model
      */
-    public fun loadModel(
+    fun loadModel(
         @Option(
             longNames = ["sql"],
             label = "SQL Path",
@@ -79,7 +79,7 @@ class Commands {
      * @param filepath Name of the .sql file containing the SQL query to be parsed
      * @return Nothing, but builds the model
      */
-    public fun loadSQL(
+    fun loadSQL(
         @Option(
             longNames = ["arg"],
             label = "SQLPath",
@@ -89,6 +89,7 @@ class Commands {
         try {
             val file = Path(filepath).readText()
             val parsedSQL = sqlParser.sqlParser(file)
+            modelBuilder.withSQL(parsedSQL)
             model = modelBuilder.build()
             println("SQL file loaded successfully!")
         } catch (e: FileNotFoundException) {
@@ -141,7 +142,7 @@ class Commands {
      * @param filepath Name of the .txt file containing the property to be parsed
      * @return Nothing, but builds the model
      */
-    public fun loadProp(
+    fun loadProp(
         @Option(
             longNames = ["arg"],
             label = "propPath",
@@ -167,7 +168,7 @@ class Commands {
      * @param tspath Name of the .txt file containing the transition system to be parsed
      * @return Nothing, but builds the model
      */
-    public fun loadTS(
+    fun loadTS(
         @Option(
             longNames = ["arg"],
             label = "tsPath",
@@ -185,96 +186,22 @@ class Commands {
         }
     }
 
-    @Command(command = ["query"], description = "Get tables from SQL schema")
-    public fun query(): String {
-        val insertfile = "C:/Users/sebas/IdeaProjects/P8-supporting-schema-creation/SQAAL/src/main/resources/sql examples/create.sql"
-        val selectFile = "C:/Users/sebas/IdeaProjects/P8-supporting-schema-creation/SQAAL/src/main/resources/sql examples/select.sql"
-        loadSQL(insertfile)
-        loadSQL(selectFile)
-        val tables = modelBuilder.getTables()
-        val columns = modelBuilder.getColumns(tables[0])
-
-        return tables.toString()
-    }
-
-    @Command(command = ["test"], description = "Test")
-    public fun test(
-    ): List<Automaton> {
-        val k = RegExp("x*").toAutomaton()
-        val c = RegExp("a*").toAutomaton()
-        val a = RegExp("ab(c|d)*").toAutomaton()
-
-        val list = mutableListOf(k, c, a)
-        return lattice(list)
-    }
-
-    public fun lattice(
-        list: List<Automaton>
-    ): List<Automaton> {
-        val newList = mutableListOf<Automaton>()
-        for (aut in list) {
-            for (aut2 in list) {
-                newList += aut.union(aut2)
-                newList += aut.intersection(aut2)
-            }
-        }
-        val newList2 = newList.distinct()
-        return if (newList2 == list) {
-            newList2
-        } else {
-            lattice(newList2)
-        }
-    }
-
-    @Command(command = ["belongs"], description = "Main function for loading transition system")
+    @Command(command = ["belongs"], description = "Main function for checking if a regular expression is a subset of a collection/lattice of other regular expressions")
     fun belongs(
         @Option(
-            longNames = ["arg1"],
+            longNames = ["regex"],
             label = "RegEx",
             description = "Regular expression to check whether is in lattice",
             required = true
-        ) regEx: String, @Option(
-            longNames = ["arg2"],
-            label = "RegExList",
-            description = "List of regular expressions to create the lattice",
+        ) regEx: String,
+        @Option(
+            longNames = ["lattice"],
+            label = "LatticeString",
+            description = "List of regular expressions to create the lattice. Written as String, separated with a space",
             required = true
-        ) list: String
+        ) latticeString: String
     ): Automaton {
-        val regExAut = RegExp(regEx).toAutomaton()
-        val paramList = list.split(" ")
-        val autList = emptyList<Automaton>().toMutableList()
-        for (rexp in paramList) {
-            autList += RegExp(rexp).toAutomaton()
-        }
-
-        val lattice = lattice(autList)
-
-        val subsetList = emptyList<Automaton>().toMutableList()
-        for (aut in lattice) {
-            if (regExAut.subsetOf(aut)) {
-                subsetList += aut
-            }
-        }
-        try {
-            var minAut: Automaton = subsetList[0]
-            for (i in 1..<subsetList.size) {
-                minAut = minAut.intersection(subsetList[i])
-            }
-
-            val equivBoolList = emptyList<Boolean>().toMutableList()
-            val subsetBoolList = emptyList<Boolean>().toMutableList()
-            for (reg in subsetList) {
-                equivBoolList += regExAut == reg
-                subsetBoolList += regExAut.subsetOf(reg)
-            }
-            println(equivBoolList)
-            println(subsetBoolList)
-            return minAut
-        } catch (e: Exception) {
-            println("$regEx is not a subset of $paramList")
-            throw e // TODO: use log (RUNGE)
-        }
-
+        return StringAbstractions().belongs(regEx,latticeString)
     }
 }
 
