@@ -7,6 +7,9 @@ import org.springframework.shell.command.annotation.Option
 import java.io.FileNotFoundException
 import kotlin.io.path.Path
 import kotlin.io.path.readText
+import net.sf.jsqlparser.statement.create.table.CreateTable
+import net.sf.jsqlparser.statement.insert.Insert
+
 
 @Command
 /**
@@ -86,7 +89,6 @@ class Commands {
         try {
             val file = Path(filepath).readText()
             val parsedSQL = sqlParser.sqlParser(file)
-            modelBuilder.withSQL(parsedSQL)
             model = modelBuilder.build()
             println("SQL file loaded successfully!")
         } catch (e: FileNotFoundException) {
@@ -95,6 +97,41 @@ class Commands {
             throw e
         }
     }
+
+    @Command(command = ["lschema"], description = "Main function for loading SQL")
+    /**
+     * Main function for loading SQL
+     * Receives path to SQL file and uses the JSQLParser to parse the file
+     * @exception FileNotFoundException If function cannot find the file given as argument
+     * @param filepath Name of the .sql file containing the SQL query to be parsed
+     * @return Nothing, but builds the model
+     */
+    public fun loadSchema(
+        @Option(
+            longNames = ["arg"],
+            label = "SQLPath",
+            description = "Path of file containing SQL query"
+        ) filepath: String
+    ) {
+        try {
+            val file = Path(filepath).readText()
+            val parsedSQL = sqlParser.sqlParser(file)
+            if (parsedSQL is CreateTable) {
+                modelBuilder.withSchema(parsedSQL)
+                model = modelBuilder.build()
+                println("SQL file loaded successfully!")
+            }
+            else {
+                    throw Exception("SQL file is not a valid SQL schema")
+            }
+        }
+        catch (e: FileNotFoundException) {
+            throw e
+        } catch (e: Exception) {
+            throw e
+        }
+    }
+
 
     @Command(command = ["lprop"], description = "Main function for loading property")
     /**
@@ -148,33 +185,17 @@ class Commands {
         }
     }
 
-    @Command(command = ["lschema"], description = "Main function for loading schema")
-    /**
-     * Main function for loading schema
-     * Receives .sql file and parses the file
-     * @exception FileNotFoundException If function cannot find the file given as argument
-     * @param filepath Name of the .txt file containing the schema to be parsed
-     * @return Nothing, but builds the model
-     */
-    public fun loadSchema(
-        @Option(
-            longNames = ["arg"],
-            label = "schemaPath",
-            description = "Path of file containing schema"
-        ) filepath: String
-    ) {
-        try {
-            val file = Path(filepath).readText()
-            modelBuilder.withSchema(file)
-            model = modelBuilder.build()
-            println("schema file loaded successfully!")
-        } catch (e: FileNotFoundException) {
-            throw e
-        } catch (e: Exception) {
-            throw e
-        }
-    }
+    @Command(command = ["query"], description = "Get tables from SQL schema")
+    public fun query(): String {
+        val insertfile = "C:/Users/sebas/IdeaProjects/P8-supporting-schema-creation/SQAAL/src/main/resources/sql examples/create.sql"
+        val selectFile = "C:/Users/sebas/IdeaProjects/P8-supporting-schema-creation/SQAAL/src/main/resources/sql examples/select.sql"
+        loadSQL(insertfile)
+        loadSQL(selectFile)
+        val tables = modelBuilder.getTables()
+        val columns = modelBuilder.getColumns(tables[0])
 
+        return tables.toString()
+    }
 
     @Command(command = ["test"], description = "Test")
     public fun test(

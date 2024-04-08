@@ -12,7 +12,7 @@ class ModelBuilder {
     private var propertyString: String? = null
     private var tables: MutableList<String> = mutableListOf()
     private var columnsMap: MutableMap<String, MutableList<String>> = mutableMapOf()
-    private var sqlSchema: String? = null
+    private var sqlSchema: Statement? = null
 
     fun withSQL(sqlObject: Statement): ModelBuilder {
         this.sqlObject = sqlObject
@@ -29,26 +29,17 @@ class ModelBuilder {
         return this
     }
 
-    fun withSchema(sqlSchema: String): ModelBuilder {
-        try {
-            // Parse the SQL schema
-            val statementList = CCJSqlParserUtil.parseStatements(sqlSchema)
-            for (stmt in statementList) {
-                if (stmt is CreateTable) {
-                    val tableName = stmt.table.name
-                    val columnDefinitions = stmt.columnDefinitions
-
-                    tables.add(tableName)
-                    val columns = columnDefinitions.map { it.columnName }
-                    columnsMap[tableName] = columns.toMutableList()
-                }
-            }
-            // Store the parsed SQL schema
-            this.sqlSchema = sqlSchema
-        } catch (e: Exception) {
-            throw e
-        }
+    fun withSchema(sqlSchema: Statement): ModelBuilder {
+        this.sqlSchema = sqlSchema
         return this
+    }
+
+    fun getTables(): List<String> {
+        return tables.toList()
+    }
+
+    fun getColumns(tableName: String): List<String>? {
+        return columnsMap[tableName]
     }
 
     fun build(): Model {
@@ -66,6 +57,6 @@ class Model(
     val sqlObject: Statement? = null,
     val tsString: String? = null,
     val propertyString: String? = null,
-    val sqlSchema: String? = null
+    val sqlSchema: Statement? = null
 )
 
