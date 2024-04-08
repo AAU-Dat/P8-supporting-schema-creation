@@ -25,14 +25,14 @@ Linear inequalities essentially have the same problem as regular expressions. Le
 
 \subsubsection{Cover lattice}
 
-The resolve the issue presented above we introduce the notion of a cover lattice:
+The resolve the issue presented above we introduce the notion of a cover lattice, but first we need to define:
 
 \begin{definition}
-    A finite subset $X \subset S$ of a lattice $(S, \subseteq, \cup, \cap)$ is called a lattice cover whenever $\bigcup X = \top$ and $\bigcap X = \bot$.
+    A finite non-empty subset $X \subseteq S$ of a lattice $(S, \subseteq, \cup, \cap)$ is called a collectively disjoint top-cover of $S$ whenever $\bigcup X = \top$ and $\bigcap X = \bot$.
 \end{definition}
 
 \begin{definition}
-    Given a lattice cover $X$ of a lattice $(S, \subseteq, \cup, \cap)$.
+    Given a collectively disjoint top-cover $X$ of a lattice $(S, \subseteq, \cup, \cap)$.
     A cover lattice of $S$ in respect to $X$ denoted $\clattice{X}{S}$ is the minimum set where:
     \begin{itemize}
         \item $\forall x \in X: x \in \clattice{X}{S}$,
@@ -44,17 +44,17 @@ The resolve the issue presented above we introduce the notion of a cover lattice
 This gives rise to the following theorem:
 
 \begin{restatable}{theorem}{partition}\label{thm:partition}
-    For a non-complete lattice $(S, \subseteq, \cup, \cap)$ and lattice cover $X$ of $S$ the cover lattice $(\clattice{X}{S}, \subseteq, \cup, \cap)$ is a finite and complete lattice.
+    For a non-complete lattice $(S, \subseteq, \cup, \cap)$ and collectively disjoint top-cover $X$ of the cover lattice $(\clattice{X}{S}, \subseteq, \cup, \cap)$ is a finite and complete lattice.
 \end{restatable}
 
 And the following lemmas immediately follow:
 
 \begin{lemma}
-    If $X$ is a lattice cover of $(REG, \subseteq, \cup, \cap)$ then $(\clattice{X}{REG}, \subseteq, \cup, \cap)$ is a complete lattice.
+    If $\mathcal{R}$ is a collectively disjoint top-cover of $(REG, \subseteq, \cup, \cap)$ then $(\clattice{\mathcal{R}}{REG}, \subseteq, \cup, \cap)$ is a complete lattice.
 \end{lemma}
 
 \begin{lemma}
-    If $X$ is a lattice cover of $(MILP^n, \subseteq, \cup, \cap)$ then $(\clattice{X}{MILP^n}, \subseteq, \cup, \cap)$ is a complete lattice.
+    If $X$ is a collectively disjoint top-cover of $(MILP^n, \subseteq, \cup, \cap)$ then $(\clattice{X}{MILP^n}, \subseteq, \cup, \cap)$ is a complete lattice.
 \end{lemma}
 
 \begin{example}

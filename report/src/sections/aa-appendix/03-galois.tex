@@ -4,13 +4,52 @@
 
 \begin{proof}
     \pf\
-    \step{meet-morphism}{$\forall B \subseteq \prod_{i = 1}^{n} (\mathbb{T}^\#_i \rightarrow \mathbb{N}^\#_i) : \gamma(\bigsqcap B) = \bigsqcap_{b \in B} \gamma(b) $}
+    \step{meet-morphism-4}{$\concrete_4$ is a meet morphism.}
+    \begin{proof}
+        \pf\
+        \begin{align}
+            \concrete_4 \left( \bigcap_{i = 1}^n R_i \right)
+            &=  \mathcal{L} \left( \bigcap_{i = 1}^n R_i \right)\\
+            &=  \bigcap_{i = 1}^n \mathcal{L} \left( R_i \right)\\
+            &=  \bigcap_{i = 1}^n \concrete_4 \left( R_i \right)
+        \end{align}
+    \end{proof}
+    \step{meet-morphism-3}{$\concrete_3$ is a meet morphism.}
+    \begin{proof}
+        \pf\
+        \begin{align*}
+            \concrete_3 \left( \bigsqcap_{i = 1}^m (e_{i1}^\#, e_{i2}^\#, \dots, e_{in}) \right)
+            &= \concrete_3 \left( \bigsqcap_{i = 1}^m e_{i1}^\#, \bigsqcap_{i = 1}^m e_{i2}^\#, \dots, \bigsqcap_{i = 1}^m e_{in}^\# \right) \\
+            &= \bigtimes_{j = 1}^n \concrete_4 \left( \bigsqcap_{i = 1}^m e_{ij}^\# \right) \\
+            &= \bigtimes_{j = 1}^n \bigcap_{i = 1}^m \concrete_4 (e_{ij}^\#) \text{ as $\concrete_4$ is a meet morphism by \stepref{meet-morphism-4}} \\
+            &= \bigcap_{i = 1}^m \bigtimes_{j = 1}^n \concrete_4 (e_{ij}^\#) \\
+            &= \bigcap_{i = 1}^m \concrete_3 (e_{i1}^\#, e_{i2}^\#, \dots, e_{in}^\#) \\
+        \end{align*}
+    \end{proof}
+    \step{meet-morphism-2}{$\concrete_2$ is a meet morphism.}
+    \begin{proof}
+        \pf\
+        \begin{align}
+            \concrete_2 (\bigsqcap_{i = 1}^n t_i^\#)
+            &= \{t \in (\mathbb{T} \rightarrow \mathbb{N}) | \forall e \in \mathbb{T} : \forall e^\# \in \mathbb{T}^\# : e \in \concrete_3(e^\#) \implies t(e) \in \concrete_3((\bigsqcap_{i = 1}^n t^\#_i)(e^\#)) \} \\
+            \concrete_2 (\bigsqcap_{i = 1}^n t_i^\#)
+            &= \{t \in (\mathbb{T} \rightarrow \mathbb{N}) | \forall e \in \mathbb{T} : \forall e^\# \in \mathbb{T}^\# : e \in \concrete_3(e^\#) \implies t(e) \in \concrete_3(\bigsqcap_{i = 1}^n t^\#_i(e^\#)) \} \\
+            &= \{t \in (\mathbb{T} \rightarrow \mathbb{N}) | \forall e \in \mathbb{T} : \forall e^\# \in \mathbb{T}^\# : e \in \concrete_3(e^\#) \implies t(e) \in \bigcap_{i = 1}^n \concrete_3(t^\#_i(e^\#)) \} \\
+            \bigcap_{i = 1}^n \concrete_2 (t_i^\#)
+            &= \bigcap_{i = 1}^n \{t \in (\mathbb{T} \rightarrow \mathbb{N}) | \forall e \in \mathbb{T} : \forall e^\# \in \mathbb{T}^\# : e \in \concrete_3(e^\#) \implies t(e) \in \concrete_3(t^\#_i(e^\#)) \} \\
+        \end{align}
+        \begin{align}
+            t \in \concrete_2 (\bigsqcap_{i = 1}^n t_i^\#) \iff \forall e \in \mathbb{T} : \forall e^\# \in \mathbb{T}^\# : e \in \concrete_3(e^\#) \implies t(e) \in \concrete_3((\bigsqcap_{i = 1}^n t^\#_i)(e^\#)) \\
+            \equiv
+            t \in \concrete_2 (\bigsqcap_{i = 1}^n t_i^\#) \iff \forall e \in \mathbb{T} : \forall e^\# \in \mathbb{T}^\# : e \in \concrete_3(e^\#) \implies t(e) \in \concrete_3((\bigsqcap_{i = 1}^n t^\#_i)(e^\#)) \\
+        \end{align}
+    \end{proof}
+    \step{meet-morphism-1}{$\concrete_1$ is a meet morphism.}
+    \begin{proof}
+        \pf\ Analogous to \stepref{meet-morphism-3}.
+    \end{proof}
     \qedstep
     \begin{proof}
-        \step{}
-
-    \end{proof}
-    \begin{proof}
-        \pf\ By \autoref{thm:galoispre} and \stepref{meet-morphism}.
+        \pf\ By \autoref{thm:galoispre} and \stepref{meet-morphism-1}.
     \end{proof}
 \end{proof}
