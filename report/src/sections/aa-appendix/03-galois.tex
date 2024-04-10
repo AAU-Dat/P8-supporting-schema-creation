@@ -29,20 +29,33 @@
     \step{meet-morphism-2}{$\concrete_2$ is a meet morphism.}
     \begin{proof}
         \pf\
-        \begin{align}
-            \concrete_2 (\bigsqcap_{i = 1}^n t_i^\#)
-            &= \{t \in (\mathbb{T} \rightarrow \mathbb{N}) | \forall e \in \mathbb{T} : \forall e^\# \in \mathbb{T}^\# : e \in \concrete_3(e^\#) \implies t(e) \in \concrete_3((\bigsqcap_{i = 1}^n t^\#_i)(e^\#)) \} \\
-            \concrete_2 (\bigsqcap_{i = 1}^n t_i^\#)
-            &= \{t \in (\mathbb{T} \rightarrow \mathbb{N}) | \forall e \in \mathbb{T} : \forall e^\# \in \mathbb{T}^\# : e \in \concrete_3(e^\#) \implies t(e) \in \concrete_3(\bigsqcap_{i = 1}^n t^\#_i(e^\#)) \} \\
-            &= \{t \in (\mathbb{T} \rightarrow \mathbb{N}) | \forall e \in \mathbb{T} : \forall e^\# \in \mathbb{T}^\# : e \in \concrete_3(e^\#) \implies t(e) \in \bigcap_{i = 1}^n \concrete_3(t^\#_i(e^\#)) \} \\
-            \bigcap_{i = 1}^n \concrete_2 (t_i^\#)
-            &= \bigcap_{i = 1}^n \{t \in (\mathbb{T} \rightarrow \mathbb{N}) | \forall e \in \mathbb{T} : \forall e^\# \in \mathbb{T}^\# : e \in \concrete_3(e^\#) \implies t(e) \in \concrete_3(t^\#_i(e^\#)) \} \\
-        \end{align}
-        \begin{align}
-            t \in \concrete_2 (\bigsqcap_{i = 1}^n t_i^\#) \iff \forall e \in \mathbb{T} : \forall e^\# \in \mathbb{T}^\# : e \in \concrete_3(e^\#) \implies t(e) \in \concrete_3((\bigsqcap_{i = 1}^n t^\#_i)(e^\#)) \\
-            \equiv
-            t \in \concrete_2 (\bigsqcap_{i = 1}^n t_i^\#) \iff \forall e \in \mathbb{T} : \forall e^\# \in \mathbb{T}^\# : e \in \concrete_3(e^\#) \implies t(e) \in \concrete_3((\bigsqcap_{i = 1}^n t^\#_i)(e^\#)) \\
-        \end{align}
+        \pflet{$T^\# = \{ t^\#_1, t^\#_2, \dots, t^\#_n \}$}
+        \begin{align*}
+            t \in \concrete_2(\bigsqcap T^\#)
+            &\iff \\
+            \forall e \in \mathbb{T} : t(e) \in \concrete_3((\bigsqcap T^\#)(\aabstract_3(e)))
+            &\equiv
+            \forall e \in \mathbb{T} : t(e) \in \bigcap_{t^\# \in T^\#}\concrete_3(t^\#(\aabstract_3(e))) \\
+            &\equiv
+            \forall e \in \mathbb{T} : \forall t^\# \in T^\# : t(e) \in \concrete_3(t^\#(\aabstract_3(e))) \\
+            &\equiv
+            \forall t^\# \in T^\# : \forall e \in \mathbb{T} :  t(e) \in \concrete_3(t^\#(\aabstract_3(e))) \\
+            &\iff t \in \bigcap_{t^\# \in T^\#} \concrete_2(t^\#)
+        \end{align*}
+        % \step{}{$\concrete_2 (\bigsqcap T^\#) \subseteq \bigcap_{t^\# \in T^\#} \concrete_2 (t^\#)$}
+        % \begin{proof}
+        %     \assume{$t \in \concrete_2 (\bigsqcap T^\#)$}
+        %     \step{}{$ \forall e^\# \in \mathbb{T}^\# : \exists n \in \concrete_3((\bigsqcap T^\#)(e^\#)) : n = \sum_{e \in \concrete_3(e^\#)} t(e)$}
+        %     \step{}{$ \forall e^\# \in \mathbb{T}^\# : \exists n \in \concrete_3(\bigsqcap_{t^\# \in T^\#} t^\#(e^\#)) : n = \sum_{e \in \concrete_3(e^\#)} t(e)$}
+        %     \step{}{$ \forall e^\# \in \mathbb{T}^\# : \exists n \in \bigcap_{t^\# \in T^\#}\concrete_3(t^\#(e^\#)) : n = \sum_{e \in \concrete_3(e^\#)} t(e)$}
+        %     \step{}{$ \forall e^\# \in \mathbb{T}^\# : \exists n \in \mathbb{N} : \forall t^\# \in T^\# : n \in \concrete_3(t^\#(e^\#)) \land n = \sum_{e \in \concrete_3(e^\#)} t(e)$}
+        % \end{proof}
+        % \step{}{$\concrete_2 (\bigsqcap T^\#) \overset{?}{\supseteq} \bigcap_{t^\# \in T^\#} \concrete_2 (t^\#)$}
+        % \begin{proof}
+        %     \step{}{$ \forall t^\# \in T^\# : \forall e^\# \in \mathbb{T}^\# : \exists n \in \concrete_3(t^\#(e^\#)) : n = \sum_{e \in \concrete_3(e^\#)} t(e)$}
+        %     \step{}{$ \forall e^\# \in \mathbb{T}^\# : \forall t^\# \in T^\# : \exists n \in \concrete_3(t^\#(e^\#)) : n = \sum_{e \in \concrete_3(e^\#)} t(e)$}
+        %     \step{}{$ \forall e^\# \in \mathbb{T}^\# : \forall t^\# \in T^\# : \exists n \in \mathbb{N} : n \in \concrete_3(t^\#(e^\#)) \land n = \sum_{e \in \concrete_3(e^\#)} t(e)$}
+        % \end{proof}
     \end{proof}
     \step{meet-morphism-1}{$\concrete_1$ is a meet morphism.}
     \begin{proof}

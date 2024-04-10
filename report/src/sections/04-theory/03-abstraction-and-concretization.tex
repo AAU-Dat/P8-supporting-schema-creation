@@ -12,12 +12,12 @@
 
 \begin{align}
     \concrete_2 &: (\mathbb{T}^\# \rightarrow \mathbb{N}^\#) \rightarrow 2^{(\mathbb{T} \rightarrow \mathbb{N})} \\
-    \concrete_2(t^\#) &= \{t \in (\mathbb{T} \rightarrow \mathbb{N}) \mid \forall e \in \mathbb{T} : \forall e^\# \in \mathbb{T}^\# : e \in \concrete(e^\#) \implies t(e) \in \concrete(t^\#(e^\#))\}
+    \concrete_2 (t^\#) &= \left\{ t \in (\mathbb{T} \rightarrow \mathbb{N}) \left|\; \forall e^\# \in \mathbb{T}^\# : \exists n \in \concrete_3(t^\#(e^\#)) : n = \sum_{e \in \concrete_3(e^\#)} t(e) \right. \right\}
 \end{align}
 
 \begin{align}
     \concrete_2 &: (\mathbb{T}^\# \rightarrow \mathbb{N}^\#) \rightarrow 2^{(\mathbb{T} \rightarrow \mathbb{N})} \\
-    \concrete_2 (t^\#) &= \left\{ t \in (\mathbb{T} \rightarrow \mathbb{N}) \left|\; \forall e^\# \in \mathbb{T}^\# : \exists n \in \concrete_3(t^\#(e^\#)) : n = \sum_{e \in \concrete_3(e^\#)} t(e) \right. \right\}
+    \concrete_2 (t^\#) &= \{ t \in (\mathbb{T} \rightarrow \mathbb{N}) | \forall e \in \mathbb{T} : t(e) \in \concrete_3(t^\#(\aabstract_3(e))) \}
 \end{align}
 
 \begin{align}
