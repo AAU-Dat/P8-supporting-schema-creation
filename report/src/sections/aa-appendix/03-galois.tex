@@ -29,33 +29,26 @@
     \step{meet-morphism-2}{$\concrete_2$ is a meet morphism.}
     \begin{proof}
         \pf\
-        \pflet{$T^\# = \{ t^\#_1, t^\#_2, \dots, t^\#_n \}$}
+        \pflet{$T^\# = \left\{ t^\#_1, t^\#_2, \dots, t^\#_n \right\}$}
         \begin{align*}
-            t \in \concrete_2(\bigsqcap T^\#)
+            t \in \concrete_2\left(\bigsqcap T^\#\right)
             &\iff \\
-            \forall e \in \mathbb{T} : t(e) \in \concrete_3((\bigsqcap T^\#)(\aabstract_3(e)))
+            \forall e^\# \in \mathbb{T}^\# : \left( \sum_{e \in \concrete_3\left(e^\#\right)} t\left(e\right) \right) \in \concrete_3\left(\left(\bigsqcap T^\#\right)\left(e^\#\right)\right)
             &\equiv
-            \forall e \in \mathbb{T} : t(e) \in \bigcap_{t^\# \in T^\#}\concrete_3(t^\#(\aabstract_3(e))) \\
+            \forall e^\# \in \mathbb{T}^\# : \left( \sum_{e \in \concrete_3\left(e^\#\right)} t\left(e\right) \right) \in \concrete_3\left(\bigsqcap_{t^\# \in T^\#} t^\#\left(e^\#\right)\right) \\
             &\equiv
-            \forall e \in \mathbb{T} : \forall t^\# \in T^\# : t(e) \in \concrete_3(t^\#(\aabstract_3(e))) \\
+            \forall e^\# \in \mathbb{T}^\# : \left( \sum_{e \in \concrete_3\left(e^\#\right)} t\left(e\right) \right) \in \bigcap_{t^\# \in T^\#} \concrete_3\left(t^\#\left(e^\#\right)\right) \\
             &\equiv
-            \forall t^\# \in T^\# : \forall e \in \mathbb{T} :  t(e) \in \concrete_3(t^\#(\aabstract_3(e))) \\
-            &\iff t \in \bigcap_{t^\# \in T^\#} \concrete_2(t^\#)
+            \forall e^\# \in \mathbb{T}^\# : \bigwedge_{t^\# \in T^\#} \left( \sum_{e \in \concrete_3\left(e^\#\right)} t\left(e\right) \right) \in \concrete_3\left(t^\#\left(e^\#\right)\right) \\
+            &\equiv
+            \forall e^\# \in \mathbb{T}^\# : \forall t^\# \in T^\# : \left( \sum_{e \in \concrete_3\left(e^\#\right)} t\left(e\right) \right) \in \concrete_3\left(t^\#\left(e^\#\right)\right) \\
+            &\equiv
+            \forall t^\# \in T^\# : \forall e^\# \in \mathbb{T}^\# : \left( \sum_{e \in \concrete_3\left(e^\#\right)} t\left(e\right) \right) \in \concrete_3\left(t^\#\left(e^\#\right)\right) \\
+            &\equiv
+            \bigwedge_{t^\# \in T^\#} \forall e^\# \in \mathbb{T}^\# : \left( \sum_{e \in \concrete_3\left(e^\#\right)} t\left(e\right) \right) \in \concrete_3\left(t^\#\left(e^\#\right)\right) \\
+            &\iff
+            t \in \bigcap_{t^\# \in T^\#} \concrete_2\left(t^\#\right)
         \end{align*}
-        % \step{}{$\concrete_2 (\bigsqcap T^\#) \subseteq \bigcap_{t^\# \in T^\#} \concrete_2 (t^\#)$}
-        % \begin{proof}
-        %     \assume{$t \in \concrete_2 (\bigsqcap T^\#)$}
-        %     \step{}{$ \forall e^\# \in \mathbb{T}^\# : \exists n \in \concrete_3((\bigsqcap T^\#)(e^\#)) : n = \sum_{e \in \concrete_3(e^\#)} t(e)$}
-        %     \step{}{$ \forall e^\# \in \mathbb{T}^\# : \exists n \in \concrete_3(\bigsqcap_{t^\# \in T^\#} t^\#(e^\#)) : n = \sum_{e \in \concrete_3(e^\#)} t(e)$}
-        %     \step{}{$ \forall e^\# \in \mathbb{T}^\# : \exists n \in \bigcap_{t^\# \in T^\#}\concrete_3(t^\#(e^\#)) : n = \sum_{e \in \concrete_3(e^\#)} t(e)$}
-        %     \step{}{$ \forall e^\# \in \mathbb{T}^\# : \exists n \in \mathbb{N} : \forall t^\# \in T^\# : n \in \concrete_3(t^\#(e^\#)) \land n = \sum_{e \in \concrete_3(e^\#)} t(e)$}
-        % \end{proof}
-        % \step{}{$\concrete_2 (\bigsqcap T^\#) \overset{?}{\supseteq} \bigcap_{t^\# \in T^\#} \concrete_2 (t^\#)$}
-        % \begin{proof}
-        %     \step{}{$ \forall t^\# \in T^\# : \forall e^\# \in \mathbb{T}^\# : \exists n \in \concrete_3(t^\#(e^\#)) : n = \sum_{e \in \concrete_3(e^\#)} t(e)$}
-        %     \step{}{$ \forall e^\# \in \mathbb{T}^\# : \forall t^\# \in T^\# : \exists n \in \concrete_3(t^\#(e^\#)) : n = \sum_{e \in \concrete_3(e^\#)} t(e)$}
-        %     \step{}{$ \forall e^\# \in \mathbb{T}^\# : \forall t^\# \in T^\# : \exists n \in \mathbb{N} : n \in \concrete_3(t^\#(e^\#)) \land n = \sum_{e \in \concrete_3(e^\#)} t(e)$}
-        % \end{proof}
     \end{proof}
     \step{meet-morphism-1}{$\concrete_1$ is a meet morphism.}
     \begin{proof}
