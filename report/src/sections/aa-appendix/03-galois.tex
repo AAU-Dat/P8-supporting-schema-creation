@@ -4,58 +4,80 @@
 
 \begin{proof}
     \pf\
-    \step{meet-morphism-4}{$\concrete_4$ is a meet morphism.}
+    \step{meet-morphism-1}{$\concrete_1$ is a meet morphism.}
     \begin{proof}
         \pf\
         \begin{align}
-            \concrete_4 \left( \bigcap_{i = 1}^n R_i \right)
-            &=  \mathcal{L} \left( \bigcap_{i = 1}^n R_i \right)\\
-            &=  \bigcap_{i = 1}^n \mathcal{L} \left( R_i \right)\\
-            &=  \bigcap_{i = 1}^n \concrete_4 \left( R_i \right)
+            \concrete_1 \left( \bigcap \mathcal{R} \right)
+            &=  \mathcal{L} \left( \bigcap \mathcal{R} \right)\\
+            &=  \bigcap_{R \in \mathcal{R}} \mathcal{L} \left( R \right)\\
+            &=  \bigcap_{R \in \mathcal{R}} \concrete_1 \left( R \right)
+        \end{align}
+    \end{proof}
+    \step{meet-morphism-2}{$\concrete_2$ is a meet morphism.}
+    \begin{proof}
+        \pf\
+        \begin{align}
+            \concrete_2 \left( \bigsqcap_{i = 1}^m (e_{i1}^\#, e_{i2}^\#, \dots, e_{in}^\#) \right)
+            &= \concrete_2 \left( \bigsqcap_{i = 1}^m e_{i1}^\#, \bigsqcap_{i = 1}^m e_{i2}^\#, \dots, \bigsqcap_{i = 1}^m e_{in}^\# \right) \\
+            &= \bigtimes_{j = 1}^n \concrete_1 \left( \bigsqcap_{i = 1}^m e_{ij}^\# \right) \\
+            &= \bigtimes_{j = 1}^n \bigcap_{i = 1}^m \concrete_1 (e_{ij}^\#) \text{ as $\concrete_1$ is a meet morphism by \stepref{meet-morphism-1}} \\
+            &= \bigcap_{i = 1}^m \bigtimes_{j = 1}^n \concrete_1 (e_{ij}^\#) \\
+            &= \bigcap_{i = 1}^m \concrete_2 (e_{i1}^\#, e_{i2}^\#, \dots, e_{in}^\#) \\
         \end{align}
     \end{proof}
     \step{meet-morphism-3}{$\concrete_3$ is a meet morphism.}
     \begin{proof}
         \pf\
-        \begin{align*}
-            \concrete_3 \left( \bigsqcap_{i = 1}^m (e_{i1}^\#, e_{i2}^\#, \dots, e_{in}) \right)
-            &= \concrete_3 \left( \bigsqcap_{i = 1}^m e_{i1}^\#, \bigsqcap_{i = 1}^m e_{i2}^\#, \dots, \bigsqcap_{i = 1}^m e_{in}^\# \right) \\
-            &= \bigtimes_{j = 1}^n \concrete_4 \left( \bigsqcap_{i = 1}^m e_{ij}^\# \right) \\
-            &= \bigtimes_{j = 1}^n \bigcap_{i = 1}^m \concrete_4 (e_{ij}^\#) \text{ as $\concrete_4$ is a meet morphism by \stepref{meet-morphism-4}} \\
-            &= \bigcap_{i = 1}^m \bigtimes_{j = 1}^n \concrete_4 (e_{ij}^\#) \\
-            &= \bigcap_{i = 1}^m \concrete_3 (e_{i1}^\#, e_{i2}^\#, \dots, e_{in}^\#) \\
-        \end{align*}
-    \end{proof}
-    \step{meet-morphism-2}{$\concrete_2$ is a meet morphism.}
-    \begin{proof}
-        \pf\
         \pflet{$T^\# = \left\{ t^\#_1, t^\#_2, \dots, t^\#_n \right\}$}
-        \begin{align*}
-            t \in \concrete_2\left(\bigsqcap T^\#\right)
+        \begin{align}
+            t \in \concrete_3\left(\bigsqcap T^\#\right)
             &\iff \\
-            \forall e^\# \in \mathbb{T}^\# : \left( \sum_{e \in \concrete_3\left(e^\#\right)} t\left(e\right) \right) \in \concrete_3\left(\left(\bigsqcap T^\#\right)\left(e^\#\right)\right)
+            \forall e^\# \in \mathbb{T}^\# : \left( \sum_{e \in \concrete_2\left(e^\#\right)} t\left(e\right) \right) \in \concrete_2\left(\left(\bigsqcap T^\#\right)\left(e^\#\right)\right)
             &\equiv
-            \forall e^\# \in \mathbb{T}^\# : \left( \sum_{e \in \concrete_3\left(e^\#\right)} t\left(e\right) \right) \in \concrete_3\left(\bigsqcap_{t^\# \in T^\#} t^\#\left(e^\#\right)\right) \\
+            \forall e^\# \in \mathbb{T}^\# : \left( \sum_{e \in \concrete_2\left(e^\#\right)} t\left(e\right) \right) \in \concrete_2\left(\bigsqcap_{t^\# \in T^\#} t^\#\left(e^\#\right)\right) \\
             &\equiv
-            \forall e^\# \in \mathbb{T}^\# : \left( \sum_{e \in \concrete_3\left(e^\#\right)} t\left(e\right) \right) \in \bigcap_{t^\# \in T^\#} \concrete_3\left(t^\#\left(e^\#\right)\right) \\
+            \forall e^\# \in \mathbb{T}^\# : \left( \sum_{e \in \concrete_2\left(e^\#\right)} t\left(e\right) \right) \in \bigcap_{t^\# \in T^\#} \concrete_2\left(t^\#\left(e^\#\right)\right) \\
             &\equiv
-            \forall e^\# \in \mathbb{T}^\# : \bigwedge_{t^\# \in T^\#} \left( \sum_{e \in \concrete_3\left(e^\#\right)} t\left(e\right) \right) \in \concrete_3\left(t^\#\left(e^\#\right)\right) \\
+            \forall e^\# \in \mathbb{T}^\# : \forall t^\# \in T^\# : \left( \sum_{e \in \concrete_2\left(e^\#\right)} t\left(e\right) \right) \in \concrete_2\left(t^\#\left(e^\#\right)\right) \\
             &\equiv
-            \forall e^\# \in \mathbb{T}^\# : \forall t^\# \in T^\# : \left( \sum_{e \in \concrete_3\left(e^\#\right)} t\left(e\right) \right) \in \concrete_3\left(t^\#\left(e^\#\right)\right) \\
-            &\equiv
-            \forall t^\# \in T^\# : \forall e^\# \in \mathbb{T}^\# : \left( \sum_{e \in \concrete_3\left(e^\#\right)} t\left(e\right) \right) \in \concrete_3\left(t^\#\left(e^\#\right)\right) \\
-            &\equiv
-            \bigwedge_{t^\# \in T^\#} \forall e^\# \in \mathbb{T}^\# : \left( \sum_{e \in \concrete_3\left(e^\#\right)} t\left(e\right) \right) \in \concrete_3\left(t^\#\left(e^\#\right)\right) \\
+            \forall t^\# \in T^\# : \forall e^\# \in \mathbb{T}^\# : \left( \sum_{e \in \concrete_2\left(e^\#\right)} t\left(e\right) \right) \in \concrete_2\left(t^\#\left(e^\#\right)\right) \\
             &\iff
-            t \in \bigcap_{t^\# \in T^\#} \concrete_2\left(t^\#\right)
-        \end{align*}
+            t \in \bigcap_{t^\# \in T^\#} \concrete_3\left(t^\#\right)
+        \end{align}
     \end{proof}
-    \step{meet-morphism-1}{$\concrete_1$ is a meet morphism.}
+    \step{meet-morphism-4}{$\concrete_4$ is a meet morphism.}
     \begin{proof}
-        \pf\ Analogous to \stepref{meet-morphism-3}.
+        \pf\ Analogous to \stepref{meet-morphism-2}.
+    \end{proof}
+    \step{meet-morphism-5}{$\concrete_5$ is a meet morphism.}
+    \begin{proof}
+        \pf\ The proof of $\concrete_5(\bigsqcap D^\#) = \bigsqcap_{\rho_{d^\#} \in D^\#} \concrete_5(\rho_{d^\#})$ is analogous to the one below.
+        \pflet{
+            $P^\# = \{ \rho_{t_1^\#}, \rho_{t_2^\#}, \dots, \rho_{t_n^\#} \}$ \\
+            $T^\# = \{ t_1^\#, t_2^\#, \dots, t_n^\# \}$
+        }
+        \begin{align}
+            \concrete_5 \left( \bigsqcap P^\# \right) &=  \concrete_5 \left( \rho_{\bigsqcap T^\#} \right) \\
+            &= \left\{ \left. \env{t} \ \middle| \ t \in \concrete_3 \left( \bigsqcap T^\# \right) \right. \right\}
+        \end{align}
+        \begin{align}
+            \bigcap_{\rho_{t^\#} \in P^\#} \concrete_5 \left( \rho_{t^\#} \right) &= \bigcap_{t^\# \in T^\#} \concrete_5 \left( \rho_{t^\#} \right) \\
+            &= \bigcap_{t^\# \in T^\#} \left\{ \left. \env{t} \ \middle| \ t \in \concrete_3 \left( t^\# \right) \right. \right\}
+        \end{align}
+        \begin{align}
+            \rho_t \in \concrete_5 \left( \bigsqcap P^\# \right)
+            &\iff \\
+            t \in \concrete_3 \left( \bigsqcap T^\# \right)
+            &\equiv
+            t \in \bigcap_{t^\# \in T^\#} \concrete_3 \left(t^\# \right) \\
+            &\equiv
+            \forall t^\# \in T^\# : t \in \concrete_3 \left(t^\# \right) \\
+            &\iff \bigsqcap_{\rho_{t^\#} \in P^\#} \concrete_5 \left( \rho_{t^\#} \right)
+        \end{align}
     \end{proof}
     \qedstep
     \begin{proof}
-        \pf\ By \autoref{thm:galoispre} and \stepref{meet-morphism-1}.
+        \pf\ By \autoref{thm:galoispre} and \stepref{meet-morphism-5}.
     \end{proof}
 \end{proof}
