@@ -116,12 +116,12 @@ Let $S(v)$ the function that in beds $v$ in a singleton table.
     \end{cases}
 \end{align*}
 
-
-\begin{lemma}
-    $S^\# \llbracket C_{insert}^\# \rrbracket$ is monotone.
-    %todo
-    \todo{Casper says: needs a proving.}
-\end{lemma}
+\begin{align*}
+    \abssem{C^\#_{delete}}(\env{\abstable}, \env{\absvars})
+    &= \abssem{\langle delete^\#(\absattrs), \abspred \rangle} (\env{\abstable}, \env{\absvars}) \\
+    &= (\env{\abstable_1}, \env{\absvars}) \\
+    \text{where } \env{\abstable_1}(\absattr) &= \env{\abstable \downarrow_u \abspred}(\absattr) \textcolor{red}{\sqcup} \env{\abstable \downarrow_f \abspred}(\absattr)
+\end{align*}
 
 \begin{align*}
     E^\# \llbracket R_1 \texttt{||} R_2 \rrbracket                          \\
@@ -185,8 +185,6 @@ Let $S(v)$ the function that in beds $v$ in a singleton table.
     For the tree definitions above a definition should be give for position, substring and trim.
     We should be able to implement the abstract semantics by following the semantics above.
 }
-
-
 
 \subsection{Abstract Interpretation of belongs}
 To provide a precise definition of the belongs function, envision a lattice composed of partitions of a language. We aim to identify the most precise partition that encompasses a given expression. In essence, we seek to pinpoint which element in the lattice accurately describes the expression's location. Simply stating that it resides somewhere within the entire set would lack practicality.

@@ -25,14 +25,14 @@ Linear inequalities essentially have the same problem as regular expressions. Le
 
 \subsubsection{Cover lattice}
 
-The resolve the issue presented above we introduce the notion of a cover lattice:
+The resolve the issue presented above we introduce the notion of a cover lattice, but first we need to define:
 
 \begin{definition}
-    A finite subset $X \subset S$ of a lattice $(S, \subseteq, \cup, \cap)$ is called a lattice cover whenever $\bigcup X = \top$ and $\bigcap X = \bot$.
+    A finite non-empty subset $X \subseteq S$ of a lattice $(S, \subseteq, \cup, \cap)$ is called a collectively disjoint top-cover of $S$ whenever $\bigcup X = \top$ and $\bigcap X = \bot$.
 \end{definition}
 
 \begin{definition}
-    Given a lattice cover $X$ of a lattice $(S, \subseteq, \cup, \cap)$.
+    Given a collectively disjoint top-cover $X$ of a lattice $(S, \subseteq, \cup, \cap)$.
     A cover lattice of $S$ in respect to $X$ denoted $\clattice{X}{S}$ is the minimum set where:
     \begin{itemize}
         \item $\forall x \in X: x \in \clattice{X}{S}$,
@@ -44,17 +44,17 @@ The resolve the issue presented above we introduce the notion of a cover lattice
 This gives rise to the following theorem:
 
 \begin{restatable}{theorem}{partition}\label{thm:partition}
-    For a non-complete lattice $(S, \subseteq, \cup, \cap)$ and lattice cover $X$ of $S$ the cover lattice $(\clattice{X}{S}, \subseteq, \cup, \cap)$ is a finite and complete lattice.
+    For a non-complete lattice $(S, \subseteq, \cup, \cap)$ and collectively disjoint top-cover $X$ of the cover lattice $(\clattice{X}{S}, \subseteq, \cup, \cap)$ is a finite and complete lattice.
 \end{restatable}
 
 And the following lemmas immediately follow:
 
 \begin{lemma}
-    If $X$ is a lattice cover of $(REG, \subseteq, \cup, \cap)$ then $(\clattice{X}{REG}, \subseteq, \cup, \cap)$ is a complete lattice.
+    If $\mathcal{R}$ is a collectively disjoint top-cover of $(REG, \subseteq, \cup, \cap)$ then $(\clattice{\mathcal{R}}{REG}, \subseteq, \cup, \cap)$ is a complete lattice.
 \end{lemma}
 
 \begin{lemma}
-    If $X$ is a lattice cover of $(MILP^n, \subseteq, \cup, \cap)$ then $(\clattice{X}{MILP^n}, \subseteq, \cup, \cap)$ is a complete lattice.
+    If $X$ is a collectively disjoint top-cover of $(MILP^n, \subseteq, \cup, \cap)$ then $(\clattice{X}{MILP^n}, \subseteq, \cup, \cap)$ is a complete lattice.
 \end{lemma}
 
 \begin{example}
@@ -102,7 +102,7 @@ And the following lemmas immediately follow:
 
 \subsubsection{Abstract domain of tables}\label{subsubsec:abstract_domain_of_tables}
 
-In the following we consider a table $t$ as function from the domain of possible tuples in the table $\mathbb{T}$ to the codomain of natural (numbers including $0$) $\mathbb{N}$:
+In the following we consider a table $t$ as function from the domain of possible tuples in the table $\mathbb{T}$ to the codomain of natural numbers including $0$, $\mathbb{N}$:
 \begin{equation}
     t : \mathbb{T} \rightarrow \mathbb{N}.
 \end{equation}
@@ -130,39 +130,5 @@ In \autoref{tab:taxonomy_of_abstract_domain_of_tables} $\mathbb{T}^\#$ let denot
 \end{table}
 
 We will only consider abstract bags of abstract tuples, sets of abstract tuples and abstract tuples because of their finite nature.
-In the sequel we will introduce the three abstraction more carefully.
-
-\paragraph{Abstract bag of abstract tuples}
-
-\begin{align*}
-    (t \sqcup t')(e) &= t(e) + t'(e) \\
-    (t \sqcap t')(e) &= t(e) - t'(e) \\
-    t \sqsubseteq t &\iff \forall e \in \mathbb{T}^\# : t(e) \leq t'(e) \\
-\end{align*}
-
-If $(\mathbb{N}^\#, \leq, +, -)$ is finite lattice then $(\mathbb{T}^\# \rightarrow \mathbb{N}^\#, \sqsubseteq, \sqcup, \sqcap)$ is a finite lattice.
-
-\paragraph{Set of abstract tuples}
-
-This can be be seen as a specific case of abstract bags of abstract tuples, where the abstract domain $\mathbb{N}^\# = \{0, some\}$ (here some also includes the possibility of $0$) .
-We can represent such function as sets, interpreting inclusion to mean the value maps to $some$, and exclusion meaning the value maps to $0$ thus:
-
-\begin{align*}
-    t \sqcup t' &= t \cup t' \\
-    t \sqcap t' &= t \cap t' \\
-    t \sqsubseteq t' &\iff t \subseteq t' \\
-\end{align*}
-
-It should be obvious that $(\mathbb{T}^\# \rightarrow \{0, some\}, \sqsubseteq, \sqcup, \sqcap)$ is a finite lattice.
-
-\paragraph{Abstract tuple}
-
-In this case we seek to symbolize the table with just one tuple representing the subsets of the product of it each compound in the tuple.
-
-\begin{align*}
-    (t \sqcup t')(\cdot) &= t(\cdot) \sqcup t'(\cdot) \\
-    (t \sqcap t')(\cdot) &= t(\cdot) \sqcap t'(\cdot) \\
-    t \sqsubseteq t' &\iff t(\cdot) \sqsubseteq t'(\cdot) \\
-\end{align*}
-
-It should be obvious that $(\{\cdot\} \rightarrow \mathbb{T}^\#, \sqsubseteq, \sqcup, \sqcap)$ is a finite lattice.
+It should be clear that sets of abstract tuples to is just a special case of abstract bags of abstract tuples.
+Naturally these maps all form map lattices.
