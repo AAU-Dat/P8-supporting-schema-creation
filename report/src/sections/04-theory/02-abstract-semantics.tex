@@ -1,5 +1,48 @@
 \subsection{Function definitions} \label{subsec:function-definitions}
 
+\todo[inline]{Lars says: Write the tables in from the paper:Abstract interpretation of database query languages}
+\begin{center}
+    \begin{tabular}{l l}
+        $n: \mathbb{Z}$                          & Integer                                                   \\
+        $k: \S$                                  & String                                                    \\
+        $c: \mathbb{C}$                          & Constants                                                 \\
+        $v_a: \mathbb{V}_a$                      & Application variables                                     \\
+        $v_d: \mathbb{V}_d$                      & Database variables (attributes) involved in SQL commands  \\
+        $v: \mathbb{V} \triangleq \mathbb{V}_d $ & Variables                                                 \\
+        $e: \mathbb{E}$                          & Arithmetic expressions                                    \\
+        $b: \mathbb{B}$                          & Boolean expressions                                       \\
+        $A_{sql}: \mathbb{A}_{sql}$              & Action part of SQL commands                               \\
+        $\tau: \mathbb{T}$                       & Terms                                                     \\
+        $a_f: \mathbb{A}_f$                      & Atomic formulas                                           \\
+        $\phi : \mathbb{W}$                      & Well-formed formulas (pre-condition part of SQL commands) \\
+        $C_{sql}: \mathbb{C}_{sql}$              & SQL commands                                              \\
+        $I: \mathbb{I}$                          & Instructions/commands                                     \\
+    \end{tabular}
+\end{center}
+
+\begin{center}
+    \begin{tabular}{l l}
+        $c ::=$ & $n \mid k$ \\
+        $e ::=$ & $c \mid v_d \mid v_a \mid ap_u e \mid e_1 op_b e_2$ , where $op_u$ and $op_b$ represent unary and binary arithmetic operations respectively. \\
+        $e ::=$ & $e_1 = e_2 \mid e_1 \geq \mid e_1 \leq e_2 \mid e_1 > e_2 \mid e_1 < e_2 \mid e_1 \neq e_2 \mid \neg b \mid b_1 \lor b_2 \mid b_1 \land b_2 \mid \texttt{true} \mid \texttt{flase}$ \\
+        $\tau ::=$ & $c \mid v_a \mid v_d \mid f_n(\tau_1, \tau_2, \dots, \tau_n)$, where $f_n$ is an $n$-any function. \\
+        $a_f ::=$ & $R_n(\tau_1, \tau_2, \dots, \tau_n) \mid \tau_1 = \tau2$, where $R_n$ is an $n$-ary relation: $R_n(\tau_1, \tau_2, \dots, \tau_n) \in \{ \texttt{true}, \texttt{false}\}$ \\
+        $\phi ::=$ & $a_f \mid \neg \phi_1 \mid \phi_1 \lor \phi_2 \mid \phi_1 \land \phi_2 \mid \forall \textbf{x}_i \phi \mid \exists \textbf{x}_i \phi$ \\
+        $g(\overrightarrow{e}) ::=$  & $\texttt{GROUP BY} \overrightarrow{e} \mid id$ \\
+        $r ::= $ & $\texttt{DISTINCT} \mid \texttt{ALL}$ \\
+        $s ::= $ & $\texttt{AVG} \mid \texttt{SUM} \mid \texttt{MAX} \mid \texttt{MIN} \mid \texttt{COUNT}$ \\
+        $h(e) ::= $ & $s \bigcirc r(e) \mid \texttt{DISTINCT}(e) \mid id$ \\
+        $h(*) ::= $ & $\texttt{COUNT(*)}$ \\
+        $\overrightarrow{h}(\overrightarrow{\textbf{x}}) ::= $ & $\langle h_1(\textbf{x}_1), \dots, h_n(\textbf{x}_n)\rangle$, where $\overrightarrow{h} = \langle \rangle$ \\
+        $f(\overrightarrow{e}) ::=$ & $\texttt{ORDER BY ACE}(\overrightarrow{e}) \mid \texttt{ORDER BY DESC}(\overrightarrow{e}) \mid id$ \\
+        $A_{sql} :: =$ & $select(v_a, f(\overrightarrow{e'}), r(\overrightarrow{h}(\overrightarrow{\textbf{x}})), \phi, g(\overrightarrow{e})) \mid update(\overrightarrow{v_d}, \overrightarrow{e}) \mid delete(\overrightarrow{v_d})$ \\
+        $C_{sql} ::=$ & $\langle A_{sql}, \phi \rangle \mid C_{sql}' \texttt{UNION} C_{sql}'' \mid C_{sql}' \texttt{INTERSECT} C_{sql}'' \mid C_{sql}' \texttt{MINUS} C_{sql}''$ \\
+        $I ::=$ & $skip \mid v_a := e \mid v_a := ? \mid C_{sql} \mid$ if $b$ then $I_1$ else $I_2$ $\mid$ while $b$ do $I$ $\mid$ $I_1; I_2$ \\ 
+    \end{tabular}
+\end{center}
+
+
+
 $s = shortestString(R) =$ A function that analyses a regular expression and returns the shortest string. This is done, by creating an automaton and finding the shortest route to the end state.
 
 $S = longestString(R) =$ A function that analyses a regular expression and returns the longest string. This is done by creating an automaton and finding the longest route to the end state. And returns $\infty$ if a loop is detected.
@@ -7,15 +50,24 @@ s and S are representations for the longest and shortest strings.
 
 $length(x) = \mid x \mid $
 
-$Lower(R) =$ A function that converts all characters in a regular expression to lowercase.
+$position(R1, in, R2) =$ A function that returns the first position of the first possible occurrence of $R1$ in $R2$.
+R1 and $R2$ are regular expressions, the function can be defined by traversing $R2$ and check for the first possible occurrence of $R1$. If no occurrence is found, the function returns $0$.
 
-If $R$ is a single uppercase character $C$, then $lowercase(R)=lowercase(C)$ Which is the lowercase version of $C$.
+$substring(R, I_1, I_2)$ A function that returns the sub regular expression of $R$ from position $I_1$ to $I_2$.
+$R$ is a regular expression and $I_1$ and $I_2$ are integers. The function can be defined by traversing $R$ and returning a list of all possible
 
-If $R$ is a concatenation $R=R1 \cdot R2$ then $lowercase(R)=lowercase(R1) \cdot lowercase(R2)$
 
-If $R$ is a union $R=R1 \cup R2$ then $lowercase(R)=lowercase(R1) \cup lowercase(R2)$
+$trim(pos, R_1 from R_2) =$ A function that, depending on the position variable, either removes all leading, trailing, or both leading and trailing occurrences of $R_1$ from $R_2$.
+$R_1$ and $R_2$ are regular expressions. $pos$ is a string that can be either "leading", "trailing", or "both", "both" is the default.
+\[
+    \text{trim}(\text{pos}, R_1, R_2) =
+    \begin{cases}
+        \{ s \mid s \in R_2, s \text{ does not start with } R_1 \}        & \text{if } \text{pos} = \text{"leading"} \text{ or } \text{pos} = \text{"both"}  \\
+        \{ s \mid s \in R_2, s \text{ does not end with } R_1 \}          & \text{if } \text{pos} = \text{"trailing"} \text{ or } \text{pos} = \text{"both"} \\
+        \{ s \mid s \in R_2, s \text{ does not start or end with } R_1 \} & \text{if } \text{pos} = \text{"both"}                                            \\
+    \end{cases}
+\]
 
-If $R$ is a Kleene star $R=R1^*$ then $lowercase(R)=lowercase(R1)^*$
 \todo[inline]{Lars says: Should be make each function defintion an align?}
 
 \subsection{Abstract Semantics}
@@ -33,16 +85,16 @@ Let $S(v)$ the function that in beds $v$ in a singleton table.
 
 \begin{align*}
     S^\# \llbracket C_{insert}^\# \rrbracket (\rho_{t^\#}, \rho_{a^\#})
-    &= S^\# \llbracket \langle insert^\#(\overset{\rightarrow}{v_d^\#}, \overset{\rightarrow}{e^\#}), \phi^\# \rangle \rrbracket (\rho_{t^\#}, \rho_{a^\#}) \\
-    &= (\rho_{t_1^\#}, \rho_{a^\#}) \\
-    \text{where } target(C_{insert}^\#) &= t^\# \\
-    \overset{\rightarrow}{v_d^\#} &= \langle a_1^\#, a_2^\#, \dots, a_n^\# \rangle \\
-    &= attr(t^\#) \\
+                                               & = S^\# \llbracket \langle insert^\#(\overset{\rightarrow}{v_d^\#}, \overset{\rightarrow}{e^\#}), \phi^\# \rangle \rrbracket (\rho_{t^\#}, \rho_{a^\#}) \\
+                                               & = (\rho_{t_1^\#}, \rho_{a^\#})                                                                                                                         \\
+    \text{where } target(C_{insert}^\#)        & = t^\#                                                                                                                                                 \\
+    \overset{\rightarrow}{v_d^\#}              & = \langle a_1^\#, a_2^\#, \dots, a_n^\# \rangle                                                                                                        \\
+                                               & = attr(t^\#)                                                                                                                                           \\
     E^\# \llbracket \overset{\rightarrow}{e^\#} \rrbracket (\rho_{t^\#}, \rho_{a^\#})
-    &= \overset{\rightarrow}{r^\#} \\
-    &= \langle r_1^\#, r_2^\#, \dots, r_n^\# \rangle \\
-    l_{new}^\# &= \langle r_1^\#/a_1^\#, r_2^\#/a_2^\#, \dots r_n^\#/a_n^\# \rangle \\
-    \rho_{t_1^\#}(\overset{\rightarrow}{x^\#}) &= \rho_{\textcolor{red}{t^\# \sqcup S(l_{new}^\#)}}(\overset{\rightarrow}{x^\#})
+                                               & = \overset{\rightarrow}{r^\#}                                                                                                                          \\
+                                               & = \langle r_1^\#, r_2^\#, \dots, r_n^\# \rangle                                                                                                        \\
+    l_{new}^\#                                 & = \langle r_1^\#/a_1^\#, r_2^\#/a_2^\#, \dots r_n^\#/a_n^\# \rangle                                                                                    \\
+    \rho_{t_1^\#}(\overset{\rightarrow}{x^\#}) & = \rho_{\textcolor{red}{t^\# \sqcup S(l_{new}^\#)}}(\overset{\rightarrow}{x^\#})
 \end{align*}
 
 % todo same as above
@@ -56,15 +108,15 @@ Let $S(v)$ the function that in beds $v$ in a singleton table.
 
 \begin{align*}
     \abssem{C^\#_{update}}(\env{\abstable}, \env{\absvars})
-    &= \abssem{\langle update^\#(\absattrs, \absexps), \abspred \rangle} (\env{\abstable}, \env{\absvars}) \\
-    &= (\env{\abstable_1}, \env{\absvars}) \\
-    \text{where } \env{\abstable_1}(\absattr) &=
+                                              & = \abssem{\langle update^\#(\absattrs, \absexps), \abspred \rangle} (\env{\abstable}, \env{\absvars}) \\
+                                              & = (\env{\abstable_1}, \env{\absvars})                                                                 \\
+    \text{where } \env{\abstable_1}(\absattr) & =
     \begin{cases}
-        \env{\abstable \downarrow_t \abspred}(\absattr) \textcolor{red}{\sqcup} \env{\abstable \downarrow_u \abspred}(\absattr) \textcolor{red}{\sqcup} \env{\abstable \downarrow_f \abspred}(\absattr) \\
-        \text{if } \absattr \notin \absattrs \\
+        \env{\abstable \downarrow_t \abspred}(\absattr) \textcolor{red}{\sqcup} \env{\abstable \downarrow_u \abspred}(\absattr) \textcolor{red}{\sqcup} \env{\abstable \downarrow_f \abspred}(\absattr)                             \\
+        \text{if } \absattr \notin \absattrs                                                                                                                                                                                        \\
         \absexpsem{\absexp{i}}(\env{\abstable \downarrow_t \abspred}, \env{\absvars}) \textcolor{red}{\sqcup}
         \left( \absexpsem{\absexp{i}}(\env{\abstable \downarrow_u \abspred}, \env{\absvars}) \sqcup \env{\abstable \downarrow_u \abspred}(\absattr) \right) \textcolor{red}{\sqcup} \env{\abstable \downarrow_f \abspred}(\absattr) \\
-        \text{if $\absattr$ is the $i$th component of $\absattrs$ and $\absexp{i}$ is the $i$th componenet of $\absexps$} \\
+        \text{if $\absattr$ is the $i$th component of $\absattrs$ and $\absexp{i}$ is the $i$th componenet of $\absexps$}                                                                                                           \\
     \end{cases}
 \end{align*}
 
@@ -76,67 +128,61 @@ Let $S(v)$ the function that in beds $v$ in a singleton table.
 \end{align*}
 
 \begin{align*}
-    E^\# \llbracket R_1 \texttt{||} R_2 \rrbracket \\
+    E^\# \llbracket R_1 \texttt{||} R_2 \rrbracket                          \\
     = E^\# \llbracket R_1 \rrbracket \oplus  E^\# \llbracket R_2 \rrbracket \\
-    \text{where } E^\# \llbracket R \rrbracket \text{ is a regular language and }\\
-     \oplus \text{ is the concatenation operator.}
+    \text{where } R_1 \text{ and } R_2 \text{ are regular expressions and } \\
+    \oplus \text{ is the concatenation operator.}
 \end{align*}
 
 \begin{align*}
     E^\# \llbracket \texttt{bit\_length} (R) \rrbracket \\
-    =  [length(B(s)), length(B(S))] \\
-    bit\_length \text{ returns a range of the binary} \\
-    \text{ representation of } R. \\
+    =  [length(B(s)), length(B(S))]                     \\
+    bit\_length \text{ returns a range of the binary}   \\
+    \text{ representation of regular expression } R.    \\
     \text{where } B(s) \text{ is the binary representation of }s
 \end{align*}
 
 \begin{align*}
-    E^\# \llbracket \texttt{char\_length} (R) \rrbracket \\
-    =  [length(s), lenght(S)] \\
-    char\_length \text{ returns a range of the shortest and} \\
+    E^\# \llbracket \texttt{char\_length} (R) \rrbracket       \\
+    =  [length(s), lenght(S)]                                  \\
+    char\_length \text{ returns a range of the shortest and}   \\
     \text{ longest string created from the regular expression} \\
 \end{align*}
 
 \begin{align*}
-    E^\# \llbracket \texttt{lower} (R) \rrbracket \\
-    =  MapToLower (S) \\
-    \text{where S is a string and } MapToLower \\
-    \text{ converts all characters to lowercase.}
-\end{align*}
-\todo[inline]{Casper says:
-    How does $MapToLower$ work, I would suggest a recursive definition.
-}
-
-\begin{align*}
-    E^\# \llbracket C_{upper}^\# (S) \rrbracket \\
-    = E^\# \llbracket MapToUpper (S) \rrbracket \\
-    \text{where S is a string and } MapToUpper \\
-    \text{ converts all characters to uppercase.}
-\end{align*}
-\todo[inline]{Casper says:
-    Same as above.
-}
-
-\begin{align*}
-    E^\# \llbracket C_{position}^\# (S_1, in, S_2) \\
-    = E^\# \llbracket Position(S_1, in, S_2) \rrbracket \\
-    \text{where S is a string and } Position \\
-    \text{ returns the position of the first occurrence of } \\
-    S_2 \text{ in } S_1.
+    E^\# \llbracket \texttt{lower} (c) \rrbracket =c'                                                    \\
+    E^\# \llbracket \texttt{lower}(R_1 \cup R_2) \rrbracket                                              \\
+    = E^\# \llbracket \texttt{lower}(R_1) \rrbracket \cup E^\# \llbracket \texttt{lower}(R_2) \rrbracket \\
+    E^\# \llbracket \texttt{lower}(R_1 \cap R_2) \rrbracket                                              \\
+    = E^\# \llbracket \texttt{lower}(R_1) \rrbracket \cap E^\# \llbracket \texttt{lower}(R_2) \rrbracket \\
+    E^\# \llbracket \texttt{lower}(R_1^*) \rrbracket                                                     \\
+    = E^\# \llbracket \texttt{lower}(R_1)^* \rrbracket                                                   \\
+    \text{Where }c \in \Sigma \text{ and } c' \text{ is the lower case of } c.                           \\
+    R_1 \text{ and } R_2 \text{ are regular expressions.}                                                \\
 \end{align*}
 
 \begin{align*}
-    E^\# \llbracket C_{subString}^\# (S, I_1, I_2) \rrbracket \\
-    = E^\# \llbracket SubString(S, I_1, I_2) \rrbracket \\
-    \text{where } S \text{ is a string, } I \text{ are integers, and } \\
-    SubString \text{ returns the substring of } S \text{ from } I_1 \text{ to } I_2.
+    E^\# \llbracket \texttt{upper}(R) \rrbracket \\
+    \text{Where upper is the same as lower but converts to upper case.}
 \end{align*}
 
 \begin{align*}
-    E^\# \llbracket C_{trim}^\# (S_1 from S_2) \rrbracket \\
-    = E^\# \llbracket Trim(S_1, S_2) \rrbracket \\
-    \text{where } S_1 \text{ and } S_2 \text{ are strings, and }\\
-    Trim \text{ removes all occurrences of } S_2 \text{ from } S_1.
+    E^\# \llbracket \texttt{position}(R_1, in, R_2) \rrbracket \\
+    = I                                             \\
+    \text{where } R1 \text{ and } R2 \text{ are regular expressions and }
+    I \text{ is an integer.}                        \\
+\end{align*}
+
+\begin{align*}
+    E^\# \llbracket \texttt{sub\_string} (R, I_1, I_2) \rrbracket \\
+    = []                                                          \\
+\end{align*}
+
+\begin{align*}
+    E^\# \llbracket \texttt{trim} ('pos', R_1 \text{ from } R_2) \rrbracket                            \\
+    =  \texttt{trim}('pos', R_1 \text{ from } R_2)                                                     \\
+    \texttt{trim} \text{ removes all leading, trailing or both occurrences of } R_2 \text{ from } R_1. \\
+    \text{where } R_1 \text{ and } E_2 \text{ are regular expressions, and 'pos' is a string.}         \\
 \end{align*}
 
 \todo[inline]{Casper says:
@@ -153,3 +199,20 @@ Navigating this lattice involves starting from the top and descending until we r
 
 $ belongs(x)=\bigsqcap\{x' \mid x \sqsubseteq x', x' \in X\} $
 Taking an expression $x$, we seek to identify the most precise partition that encompasses it. We do this by finding the greatest lowerbound of all partitions that contain $x$.
+% todo same as above
+
+% \begin{restatable}{lemma}{updatemonotone}
+%     $\abssem{C_{update}^\#}$ is monotone.
+% \end{restatable}
+% \pfsketch{
+%     For $\abstable \sqsubseteq \abstablep$ if $\abssem{C_{update}^\#}$ updates elements in $\abstable$ the same elements must be updated in $\abstablep$, therefore the order is determined by the remaining unchanged elements and therefore order is preserved.
+%     If an element not in $\abstable$ is update is changed in $\abstablep$ order is still preserved as the element is 'swapped' for another.
+% }
+
+\begin{align*}
+    \abssem{C^\#_{delete}}(\env{\abstable}, \env{\absvars})
+                                              & = \abssem{\langle delete^\#(\absattrs), \abspred \rangle} (\env{\abstable}, \env{\absvars})                               \\
+                                              & = (\env{\abstable_1}, \env{\absvars})                                                                                     \\
+    \text{where } \env{\abstable_1}(\absattr) & = \env{\abstable \downarrow_u \abspred}(\absattr) \textcolor{red}{\sqcup} \env{\abstable \downarrow_f \abspred}(\absattr)
+\end{align*}
+
