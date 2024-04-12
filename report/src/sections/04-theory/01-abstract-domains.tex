@@ -102,7 +102,7 @@ And the following lemmas immediately follow:
 
 \subsubsection{Abstract domain of tables}\label{subsubsec:abstract_domain_of_tables}
 
-In the following we consider a table $t$ as function from the domain of possible tuples in the table $\mathbb{T}$ to the codomain of natural (numbers including $0$) $\mathbb{N}$:
+In the following we consider a table $t$ as function from the domain of possible tuples in the table $\mathbb{T}$ to the codomain of natural numbers including $0$, $\mathbb{N}$:
 \begin{equation}
     t : \mathbb{T} \rightarrow \mathbb{N}.
 \end{equation}
@@ -130,39 +130,5 @@ In \autoref{tab:taxonomy_of_abstract_domain_of_tables} $\mathbb{T}^\#$ let denot
 \end{table}
 
 We will only consider abstract bags of abstract tuples, sets of abstract tuples and abstract tuples because of their finite nature.
-In the sequel we will introduce the three abstraction more carefully.
-
-\paragraph{Abstract bag of abstract tuples}
-
-\begin{align*}
-    (t \sqcup t')(e) &= t(e) + t'(e) \\
-    (t \sqcap t')(e) &= t(e) - t'(e) \\
-    t \sqsubseteq t &\iff \forall e \in \mathbb{T}^\# : t(e) \leq t'(e) \\
-\end{align*}
-
-If $(\mathbb{N}^\#, \leq, +, -)$ is finite lattice then $(\mathbb{T}^\# \rightarrow \mathbb{N}^\#, \sqsubseteq, \sqcup, \sqcap)$ is a finite lattice.
-
-\paragraph{Set of abstract tuples}
-
-This can be be seen as a specific case of abstract bags of abstract tuples, where the abstract domain $\mathbb{N}^\# = \{0, some\}$ (here some also includes the possibility of $0$) .
-We can represent such function as sets, interpreting inclusion to mean the value maps to $some$, and exclusion meaning the value maps to $0$ thus:
-
-\begin{align*}
-    t \sqcup t' &= t \cup t' \\
-    t \sqcap t' &= t \cap t' \\
-    t \sqsubseteq t' &\iff t \subseteq t' \\
-\end{align*}
-
-It should be obvious that $(\mathbb{T}^\# \rightarrow \{0, some\}, \sqsubseteq, \sqcup, \sqcap)$ is a finite lattice.
-
-\paragraph{Abstract tuple}
-
-In this case we seek to symbolize the table with just one tuple representing the subsets of the product of it each compound in the tuple.
-
-\begin{align*}
-    (t \sqcup t')(\cdot) &= t(\cdot) \sqcup t'(\cdot) \\
-    (t \sqcap t')(\cdot) &= t(\cdot) \sqcap t'(\cdot) \\
-    t \sqsubseteq t' &\iff t(\cdot) \sqsubseteq t'(\cdot) \\
-\end{align*}
-
-It should be obvious that $(\{\cdot\} \rightarrow \mathbb{T}^\#, \sqsubseteq, \sqcup, \sqcap)$ is a finite lattice.
+It should be clear that sets of abstract tuples to is just a special case of abstract bags of abstract tuples.
+Naturally these maps all form map lattices.
