@@ -37,7 +37,7 @@
         $f(\overrightarrow{e}) ::=$ & $\texttt{ORDER BY ACE}(\overrightarrow{e}) \mid \texttt{ORDER BY DESC}(\overrightarrow{e}) \mid id$ \\
         $A_{sql} :: =$ & $select(v_a, f(\overrightarrow{e'}), r(\overrightarrow{h}(\overrightarrow{\textbf{x}})), \phi, g(\overrightarrow{e})) \mid update(\overrightarrow{v_d}, \overrightarrow{e}) \mid delete(\overrightarrow{v_d})$ \\
         $C_{sql} ::=$ & $\langle A_{sql}, \phi \rangle \mid C_{sql}' \texttt{UNION} C_{sql}'' \mid C_{sql}' \texttt{INTERSECT} C_{sql}'' \mid C_{sql}' \texttt{MINUS} C_{sql}''$ \\
-        $I ::=$ & $skip \mid v_a := e \mid v_a := ? \mid C_{sql} \mid$ if $b$ then $I_1$ else $I_2$ $\mid$ while $b$ do $I$ $\mid$ $I_1; I_2$ \\ 
+        $I ::=$ & $skip \mid v_a := e \mid v_a := ? \mid C_{sql} \mid$ if $b$ then $I_1$ else $I_2$ $\mid$ while $b$ do $I$ $\mid$ $I_1; I_2$ \\
     \end{tabular}
 \end{center}
 
@@ -71,6 +71,98 @@ $R_1$ and $R_2$ are regular expressions. $pos$ is a string that can be either "l
 \todo[inline]{Lars says: Should be make each function defintion an align?}
 
 \subsection{Abstract Semantics}
+
+\begin{align}
+    S_1 \aop S_2 = \{ s_1 \aaop s_2 \mid s_1 \in S_1, s_2 \in S_2 \}
+\end{align}
+
+\subsubsection{Abstract Semantics of Boolean expressions}
+
+\begin{align}
+    B_1 \;\aab{bop}\; B_2 = \bigcup_{b_1 \in B_2, b_2 \in B_2} b_1 \;\aaab{bop}\; b_2
+\end{align}
+
+\begin{align}
+    \absboolsem{\texttt{true}}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \{\{\true\}\} \\
+    \absboolsem{\texttt{false}}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \{\{\false\}\} \\
+    \absboolsem{b_1 \lor b_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absboolsem{b_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ab{\lor} \absboolsem{b_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
+    \absboolsem{b_1 \land b_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absboolsem{b_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ab{\land} \absboolsem{b_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
+    \absboolsem{\neg b}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{\neg} \absboolsem{b}(\rho_{\ab{d}}, \rho_{\ab{a}})
+\end{align}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{c|ccc}
+        $\aaab{\lor}$ & $\true$ & $\false$ & $\mnull$ \\
+        \hline
+        $\true$ & $\{\true\}$ & $\{\false\}$ & $\{\mnull\}$ \\
+        $\false$ & $\{\false\}$ & $\{\false\}$ & $\{\false\}$ \\
+        $\mnull$ & $\{\mnull\}$ & $\{\false\}$ & $\{\mnull\}$ \\
+    \end{tabular}
+    \label{tab:aaablor}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{c|ccc}
+        $\aaab{\land}$ & $\true$ & $\false$ & $\mnull$ \\
+        \hline
+        $\true$ & $\{\true\}$ & $\{\true\}$ & $\{\true\}$ \\
+        $\false$ & $\{\true\}$ & $\{\false\}$ & $\{\mnull\}$ \\
+        $\mnull$ & $\{\true\}$ & $\{\mnull\}$ & $\{\mnull\}$ \\
+    \end{tabular}
+    \label{tab:aaabland}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{c|ccc}
+        $\aaab{\neg}$ & $\true$ & $\false$ & $\mnull$ \\
+        \hline
+        $\true$ & $\{\false\}$ & $\{\true\}$ & $\{\mnull\}$ \\
+    \end{tabular}
+    \label{tab:aaabneg}
+\end{table}
+
+\begin{align}
+    \absboolsem{e_1 \neq e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{\neg}(\absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \;\ab{=}\; \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}})) \\
+    \absboolsem{e_1 \;comp\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \;\ab{\comp}\; \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
+\end{align}
+
+For regular expressions $R, R_1, R_2$, linear inequalities over one variable $N, N_1, N_2$ and arbitrary values $X$:
+
+\begin{align}
+    R_1 \;\aab{=}\; R_2 &= \begin{cases}
+        \{\false\} & \text{if } R_1 \cap R_2 = \emptyset \\
+        \{\true, \false\} & \text{if } R_1 \cap R_2 \neq \emptyset \\
+    \end{cases} \\
+    N_1 \;\aab{=}\; N_2 &= \begin{cases}
+        \{\false\} & \text{if } N_1 \cap N_2 = \emptyset \\
+        \{\true, \false\} & \text{if } N_1 \cap N_2 \neq \emptyset \\
+    \end{cases} \\
+    N \;\aab{=}\; R &= \{\false\} \\
+    R \;\aab{=}\; N &= \{\false\} \\
+\end{align}
+
+\begin{align}
+    R \;\aab{<}\; X &= \{\false\} \\
+    X \;\aab{<}\; R &= \{\false\} \\
+    N_1 \;\aab{<}\; N_2 &= \begin{cases}
+        \{\true\} & \text{if } \max(N_1) < \min(N_2) \\
+        \{\false\} & \text{if } \max(N_2) \leq min (N_1) \\
+        \{\true, \false\} & \text{otherwise}
+    \end{cases} \\
+\end{align}
+
+\begin{align}
+    R \;\aab{\leq}\; X &= \{\false\} \\
+    X \;\aab{\leq}\; R &= \{\false\} \\
+    N_1 \;\aab{\leq}\; N_2 &= \begin{cases}
+        \{\true\} & \text{if } \max(N_1) \leq \min(N_2) \\
+        \{\false\} & \text{if } \max(N_2) < min (N_1) \\
+        \{\true, \false\} & \text{otherwise}
+    \end{cases} \\
+\end{align}
 
 Let $S(v)$ the function that in beds $v$ in a singleton table.
 
