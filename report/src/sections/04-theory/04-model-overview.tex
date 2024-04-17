@@ -1,0 +1,69 @@
+\subsection{Model Overview}\label{subsec:model-overview}
+
+In the following sections, we will be giving an overview of the model we are implementing.
+
+\subsubsection{Overall model}\label{subsubsec:overall-model}
+
+This is a general overview of our model
+
+\begin{algorithm}[htb!]
+    \begin{codebox}
+        \Procname{$\proc{SQAAL}(S, P, A)$}
+        \li $G = programGraph(A)$
+        \li $ass = analyze(G,S)$
+        \li $result = check(ass,P)$
+        \li \Return $result$
+    \end{codebox}
+    \caption{General model}
+    \label{alg:model}
+\end{algorithm}
+\noindent where, $S$ is the database schema, $P$ are the properties, and $A$ is the application in which the database is running.
+
+\subsubsection{Program graph}\label{subsubsec:program-graph}
+
+We will now describe how to make a graph of the state space
+
+\begin{algorithm}[htb!]
+    \begin{codebox}
+        \Procname{$\proc{programGraph}(A)$}
+        \li $G = programGraph(A)$
+        \li $ass = analyze(G,S)$
+        \li $result = check(ass,P)$
+        \li \Return $result$
+    \end{codebox}
+    \caption{General model}
+    \label{alg:program-graph}
+\end{algorithm}
+
+\subsubsection{Analysis}\label{subsubsec:analysis}
+
+We will now describe how our analysis works
+
+\begin{algorithm}[htb!]
+    \begin{codebox}
+        \Procname{$\proc{SQAAL}(S, P, A)$}
+        \li $G = programGraph(A)$
+        \li $ass = analyze(G,S)$
+        \li $result = check(ass,P)$
+        \li \Return $result$
+    \end{codebox}
+    \caption{General model}
+    \label{alg:analysis}
+
+\end{algorithm}
+
+\subsubsection{Check}\label{subsubsec:check}
+
+We will now describe how we check different properties
+
+\begin{algorithm}[htb!]
+    \begin{codebox}
+        \Procname{$\proc{SQAAL}(S, P, A)$}
+        \li $G = programGraph(A)$
+        \li $ass = analyze(G,S)$
+        \li $result = check(ass,P)$
+        \li \Return $result$
+    \end{codebox}
+    \caption{General model}
+    \label{alg:check}
+\end{algorithm}
