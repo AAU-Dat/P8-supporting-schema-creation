@@ -87,7 +87,9 @@ $R_1$ and $R_2$ are regular expressions. $pos$ is a string that can be either "l
     \absboolsem{\texttt{false}}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \{\{\false\}\} \\
     \absboolsem{b_1 \lor b_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absboolsem{b_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ab{\lor} \absboolsem{b_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
     \absboolsem{b_1 \land b_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absboolsem{b_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ab{\land} \absboolsem{b_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
-    \absboolsem{\neg b}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{\neg} \absboolsem{b}(\rho_{\ab{d}}, \rho_{\ab{a}})
+    \absboolsem{\neg b}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{\neg} \absboolsem{b}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
+    \absboolsem{e_1 \neq e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{\neg}(\absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \;\ab{=}\; \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}})) \\
+    \absboolsem{e_1 \;comp\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \;\ab{\comp}\; \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
 \end{align}
 
 \begin{table}[H]
@@ -124,11 +126,6 @@ $R_1$ and $R_2$ are regular expressions. $pos$ is a string that can be either "l
     \label{tab:aaabneg}
 \end{table}
 
-\begin{align}
-    \absboolsem{e_1 \neq e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{\neg}(\absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \;\ab{=}\; \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}})) \\
-    \absboolsem{e_1 \;comp\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \;\ab{\comp}\; \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
-\end{align}
-
 For regular expressions $R, R_1, R_2$, linear inequalities over one variable $N, N_1, N_2$ and arbitrary values $X$:
 
 \begin{align}
@@ -164,6 +161,149 @@ For regular expressions $R, R_1, R_2$, linear inequalities over one variable $N,
     \end{cases} \\
 \end{align}
 
+\subsubsection{Abstract Semantics of Expressions}
+
+\begin{align}
+    \absexpsem{n}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \left\{ \mathcal{N} \left(
+        \begin{bmatrix}
+            1 \\
+            -1
+        \end{bmatrix}
+        \begin{bmatrix}
+           x
+        \end{bmatrix}
+        \leq
+        \begin{bmatrix}
+            n \\
+            -n
+        \end{bmatrix}
+    \right) \right\} \\
+    \absexpsem{k}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \{ R \} \text{ such that }\mathcal{L}(R) \\
+    \absexpsem{v_a}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=  \rho_{\ab{a}}(v_a) \\
+    \absexpsem{v_d}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=  \rho_{\ab{t}}(v_d) \text{ such that } \ab{t} \in dom(\ab{d}) \text{ and } v_d \in attr(\ab{t}) \\
+    \absexpsem{op \; e}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{op} \; (\absexpsem{e}(\rho_{\ab{d}}, \rho_{\ab{a}})) \\
+    \absexpsem{e_1 \; op \; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absexpsem{e}(\rho_{\ab{d}}, \rho_{\ab{a}}) \;\ab{op}\; \absexpsem{e}(\rho_{\ab{d}}, \rho_{\ab{a}})\\
+\end{align}
+
+We define the length of a regular expression $R$, $|R|$:
+
+\begin{align}
+    |R| = \begin{cases}
+        \mathcal{N} \left(
+            \begin{bmatrix}
+                1 \\
+                -1
+            \end{bmatrix}
+            \begin{bmatrix}
+               x
+            \end{bmatrix}
+            \leq
+            \begin{bmatrix}
+                |\max(R)| \\
+                -|\min(R)|
+            \end{bmatrix}
+        \right) & \text{if $\max(R)$ is defined} \\
+        \mathcal{N} \left(
+            \begin{bmatrix}
+                -1
+            \end{bmatrix}
+            \begin{bmatrix}
+               x
+            \end{bmatrix}
+            \leq
+            \begin{bmatrix}
+                -|\min(R)|
+            \end{bmatrix}
+        \right) & \text{if $\max(R)$ is undefined} \\
+    \end{cases}
+\end{align}
+
+\begin{align}
+    \min(R) = s \text{ such that } s \in \{ s' \in R \mid \forall s'' \in R : |s'| \leq |s''| \} \\
+    \max(R) = s \text{ such that } s \in \{ s' \in R \mid \forall s'' \in R : |s'| \ \geq |s''| \}
+\end{align}
+
+\begin{align}
+    cvt(op, R_1 \cup R_2) &= cvt(op, R_1) \cup cvt(op, R_2) \\
+    cvt(op, R_1 \cap R_2) &= cvt(op, R_1) \cap cvt(op, R_2) \\
+    cvt(op, R_1R_2) &= cvt(op, R_1) \; cvt(op, R_2) \\
+    cvt(op, R) &= (cvt(op, R_1))^\star \\
+    cvt(op, \sigma) &= op(\sigma)
+\end{align}
+
+\begin{align}
+    R_1 \;\aab{||}\; R_2 &= R_1R_2 \\
+    \aab{lower}(R) &= cvt(\sigma \mapsto \sigma', R) \text{ such that $\sigma'$ is the lowercase representation of $\sigma$}\\
+    \aab{upper}(R) &= cvt(\sigma \mapsto \sigma', R) \text{ such that $\sigma'$ is the uppercase representation of $\sigma$}\\
+    \aab{bit\_length}(R) &= |cvt(\sigma \mapsto \sigma', R)| \text{ such that $\sigma'$ is the bit string of $\sigma$} \\
+    \aab{length}(R) &= |R|
+\end{align}
+
+\begin{align}
+    N_1 \;\aab{+}\; N_2 &=
+        \mathcal{N} \left(
+            \begin{bmatrix}
+                1 \\
+                -1
+            \end{bmatrix}
+            \begin{bmatrix}
+               x
+            \end{bmatrix}
+            \leq
+            \begin{bmatrix}
+                \max(N_1) + \max(N_2) \\
+                -(\min(N_1) + \min(N_2))
+            \end{bmatrix}
+        \right) \\
+    N_1 \;\aab{\cdot}\; N_2 &=
+        \mathcal{N} \left(
+            \begin{bmatrix}
+                1 \\
+                -1
+            \end{bmatrix}
+            \begin{bmatrix}
+               x
+            \end{bmatrix}
+            \leq
+            \begin{bmatrix}
+                \max(N_1) \cdot \max(N_2) \\
+                -(\min(N_1) \cdot \min(N_2))
+            \end{bmatrix}
+        \right) \\
+    N_1 \;\aab{-}\; N_2 &=
+        \mathcal{N} \left(
+            \begin{bmatrix}
+                1 \\
+                -1
+            \end{bmatrix}
+            \begin{bmatrix}
+               x
+            \end{bmatrix}
+            \leq
+            \begin{bmatrix}
+                \max(N_1) - \min(N_2) \\
+                -(\min(N_1) - \max(N_2))
+            \end{bmatrix}
+        \right) \\
+    N_1 \;\aab{/}\; N_2 &=
+        \mathcal{N} \left(
+            \begin{bmatrix}
+                1 \\
+                -1
+            \end{bmatrix}
+            \begin{bmatrix}
+               x
+            \end{bmatrix}
+            \leq
+            \begin{bmatrix}
+                \max(N_1) / \min(N_2) \\
+                -(\min(N_1) / \max(N_2))
+            \end{bmatrix}
+        \right)
+\end{align}
+
+\subsubsection{Abstract Semantics of SQL statements}
+
 Let $S(v)$ the function that in beds $v$ in a singleton table.
 
 % todo Casper says: We don't need to prove this... I think. Remove once confirmed
@@ -177,7 +317,7 @@ Let $S(v)$ the function that in beds $v$ in a singleton table.
 
 \begin{align*}
     S^\# \llbracket C_{insert}^\# \rrbracket (\rho_{t^\#}, \rho_{a^\#})
-                                               & = S^\# \llbracket \langle insert^\#(\overset{\rightarrow}{v_d^\#}, \overset{\rightarrow}{e^\#}), \phi^\# \rangle \rrbracket (\rho_{t^\#}, \rho_{a^\#}) \\
+                                               & = S^\# \llbracket \langle insert^\#additio of solutions to linear inequalities(\overset{\rightarrow}{v_d^\#}, \overset{\rightarrow}{e^\#}), \phi^\# \rangle \rrbracket (\rho_{t^\#}, \rho_{a^\#}) \\
                                                & = (\rho_{t_1^\#}, \rho_{a^\#})                                                                                                                         \\
     \text{where } target(C_{insert}^\#)        & = t^\#                                                                                                                                                 \\
     \overset{\rightarrow}{v_d^\#}              & = \langle a_1^\#, a_2^\#, \dots, a_n^\# \rangle                                                                                                        \\
