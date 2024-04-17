@@ -1,4 +1,4 @@
-\subsection{Model Overview}\label{subsec:model-overview}
+\usepackage{algpseudocode}\subsection{Model Overview}\label{subsec:model-overview}
 
 In the following sections, we will be giving an overview of the model we are implementing.
 
@@ -31,7 +31,7 @@ We will now describe how to make a graph of the state space
         \li $result = check(ass,P)$
         \li \Return $result$
     \end{codebox}
-    \caption{General model}
+    \caption{Construction of program graph}
     \label{alg:program-graph}
 \end{algorithm}
 
@@ -60,7 +60,7 @@ We will now describe how our analysis works
         \End
         \li \Return $state\_space$
     \end{codebox}
-    \caption{General model}
+    \caption{Analysis function}
     \label{alg:analysis}
 
 \end{algorithm}
@@ -71,12 +71,21 @@ We will now describe how we check different properties
 
 \begin{algorithm}[htb!]
     \begin{codebox}
-        \Procname{$\proc{SQAAL}(S, P, A)$}
-        \li $kk$
-        \li $ass = analyze(G,S)$
-        \li $result = check(ass,P)$
-        \li \Return $result$
+        \Procname{$\proc{Check}(ass, P)$}
+        \li $failed\_prop := []$
+        \li \ForAll{$p$ \textbf{in} $P$}
+        \li \Do \ForAll{$s$ \textbf{in} ass$$}
+        \li \Do \If{$p$ \textbf{not holds in} $s$}
+        \li \Do $failed\_prop.insert(p)$
+        \EndIf
+        \End
+        \li \textbf{break}
+        \EndFor
+        \End
+        \EndFor
+        \End
+        \li \Return $failed\_prop$
     \end{codebox}
-    \caption{General model}
+    \caption{Check with properties}
     \label{alg:check}
 \end{algorithm}
