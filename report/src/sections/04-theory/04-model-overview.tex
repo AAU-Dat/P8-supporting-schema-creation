@@ -41,11 +41,24 @@ We will now describe how our analysis works
 
 \begin{algorithm}[htb!]
     \begin{codebox}
-        \Procname{$\proc{SQAAL}(S, P, A)$}
-        \li $G = programGraph(A)$
-        \li $ass = analyze(G,S)$
-        \li $result = check(ass,P)$
-        \li \Return $result$
+        \Procname{$\proc{Analysis}(G,S)$}
+        \li $todo := G.initial\_state$
+        \li $state\_space := \emptyset$
+        \li \While{$todo \neq \emptyset$}
+        \li \Do
+        $(s,\rho_d,\rho_a):=pop(todo)$
+        \li \ForAll{$\xrightarrow[]{\text{i}}s'\in s$}
+        \li \Do $(\rho'_d,\rho'_a):=\widehat{\mathcal{S}}\llbracket i\rrbracket(\rho_d,\rho_a)$
+        \li \If{$(s',\rho'_d,\rho'_a)$ \textbf{not in} $state\_space$}
+        \li \Do $Insert(s',\rho'_d,\rho'_a,todo)$
+        \EndIf
+        \End
+        \li $Insert(s,\rho_d,\rho_a,state\_space)$
+        \EndFor
+        \End
+        \EndWhile
+        \End
+        \li \Return $state\_space$
     \end{codebox}
     \caption{General model}
     \label{alg:analysis}
@@ -59,7 +72,7 @@ We will now describe how we check different properties
 \begin{algorithm}[htb!]
     \begin{codebox}
         \Procname{$\proc{SQAAL}(S, P, A)$}
-        \li $G = programGraph(A)$
+        \li $kk$
         \li $ass = analyze(G,S)$
         \li $result = check(ass,P)$
         \li \Return $result$
