@@ -277,148 +277,132 @@ We define the length of a regular expression $R$, $|R|$:
 
 \subsubsection{Abstract Semantics of SQL statements}
 
-Let $S(v)$ the function that in beds $v$ in a singleton table.
+Let
+\begin{equation}
+    \mathcal{C} : \mathbb{V}_a \cup \mathbb{V}_d \rightarrow \{ C_{X_1}(S_1), C_{X_2}(S_2), \dots, C_{X_n}(S_n) \}
+\end{equation}
 
-% todo Casper says: We don't need to prove this... I think. Remove once confirmed
+\begin{align}
+    \abssqlsem{\langle C_{insert}, \phi \rangle}(\rho_{\ab{d}}, \rho_{\ab{a}}) & =
+    \abssqlsem{\langle insert(\mathbf{v}_d, \mathbf{e}), \phi \rangle}(\rho_{\ab{t}}, \rho_{\ab{a}})\\
+    & = (\rho_{\ab{t} \sqcup s}, \rho_{\ab{a}}) \\
+    \text{where } target(C_{insert})        & = \ab{t}                                                                                                                                                 \\
+    \mathbf{v}_d              & = \langle a_1, a_2, \dots, a_n \rangle                                                                                                        \\
+                                               & = attr(\ab{t})                                                                                                                                           \\
+    \mathbf{e} & = \langle e_1, e_2, \dots, e_n \rangle \\
+    s &= \{ (s_1/a_1, s_2/a_2, \dots, s_n/a_n) \mid (s_1, s_2, \dots, s_n) \in \bigtimes_{i = 1}^{n} \left( \absexpsem{e_i}(\rho_{\ab{d}}, \rho_{\ab{a}}) \into \lookupcl(a_i) \right) \}
+\end{align}
 
-% \begin{restatable}{lemma}{deletemonotone}
-%     $\abssem{C_{select}^\#}$ is monotone.
-% \end{restatable}
-% \pfsketch{
-%     $\abssem{C_{select}^\#}$ leaves the database unchanged which is clearly monotone.
-% }
-
-\begin{align*}
-    S^\# \llbracket C_{insert}^\# \rrbracket (\rho_{t^\#}, \rho_{a^\#})
-                                               & = S^\# \llbracket \langle insert^\#additio of solutions to linear inequalities(\overset{\rightarrow}{v_d^\#}, \overset{\rightarrow}{e^\#}), \phi^\# \rangle \rrbracket (\rho_{t^\#}, \rho_{a^\#}) \\
-                                               & = (\rho_{t_1^\#}, \rho_{a^\#})                                                                                                                         \\
-    \text{where } target(C_{insert}^\#)        & = t^\#                                                                                                                                                 \\
-    \overset{\rightarrow}{v_d^\#}              & = \langle a_1^\#, a_2^\#, \dots, a_n^\# \rangle                                                                                                        \\
-                                               & = attr(t^\#)                                                                                                                                           \\
-    E^\# \llbracket \overset{\rightarrow}{e^\#} \rrbracket (\rho_{t^\#}, \rho_{a^\#})
-                                               & = \overset{\rightarrow}{r^\#}                                                                                                                          \\
-                                               & = \langle r_1^\#, r_2^\#, \dots, r_n^\# \rangle                                                                                                        \\
-    l_{new}^\#                                 & = \langle r_1^\#/a_1^\#, r_2^\#/a_2^\#, \dots r_n^\#/a_n^\# \rangle                                                                                    \\
-    \rho_{t_1^\#}(\overset{\rightarrow}{x^\#}) & = \rho_{\textcolor{red}{t^\# \sqcup S(l_{new}^\#)}}(\overset{\rightarrow}{x^\#})
-\end{align*}
-
-% todo same as above
-
-% \begin{restatable}{lemma}{insertmonotone}
-%     $S^\# \llbracket C_{insert}^\# \rrbracket$ is monotone.
-% \end{restatable}
-% \pfsketch{
-%     Regardless of $(\env{\abstable}, \env{\absvars})$ the same element is inserted, thus the ordering between any two environments after $S^\# \llbracket C_{insert}^\# \rrbracket$ is applied is the same, because the ordering is determined by the elements that were already in the environments.
-% }
-
-\begin{align*}
-    \abssem{C^\#_{update}}(\env{\abstable}, \env{\absvars})
-                                              & = \abssem{\langle update^\#(\absattrs, \absexps), \abspred \rangle} (\env{\abstable}, \env{\absvars}) \\
-                                              & = (\env{\abstable_1}, \env{\absvars})                                                                 \\
-    \text{where } \env{\abstable_1}(\absattr) & =
+\begin{align}
+    \abssem{C_{update}}(\env{\abstable}, \env{\absvars})
+                                              & = \abssem{\langle update(\absattrs, \absexps), \abspred \rangle} (\env{\abstable}, \env{\absvars}) \\
+                                              & = (\env{\abstable'}, \env{\absvars})                                                                 \\
+    \text{where } \env{\abstable'}(\absattr) & =
     \begin{cases}
-        \env{\abstable \downarrow_t \abspred}(\absattr) \textcolor{red}{\sqcup} \env{\abstable \downarrow_u \abspred}(\absattr) \textcolor{red}{\sqcup} \env{\abstable \downarrow_f \abspred}(\absattr)                             \\
-        \text{if } \absattr \notin \absattrs                                                                                                                                                                                        \\
-        \absexpsem{\absexp{i}}(\env{\abstable \downarrow_t \abspred}, \env{\absvars}) \textcolor{red}{\sqcup}
-        \left( \absexpsem{\absexp{i}}(\env{\abstable \downarrow_u \abspred}, \env{\absvars}) \sqcup \env{\abstable \downarrow_u \abspred}(\absattr) \right) \textcolor{red}{\sqcup} \env{\abstable \downarrow_f \abspred}(\absattr) \\
-        \text{if $\absattr$ is the $i$th component of $\absattrs$ and $\absexp{i}$ is the $i$th componenet of $\absexps$}                                                                                                           \\
+        \env{\abstable \downarrow_t \abspred}(\absattr) \sqcup \env{\abstable \downarrow_u \abspred}(\absattr) \sqcup \env{\abstable \downarrow_f \abspred}(\absattr) & \text{if } \absattr \notin \absattrs \\
+        \absexpsem{\absexp{i}}(\env{\abstable \downarrow_t \abspred}, \env{\absvars}) \sqcup
+        \left( \absexpsem{\absexp{i}}(\env{\abstable \downarrow_u \abspred}, \env{\absvars}) \sqcup \env{\abstable \downarrow_u \abspred}(\absattr) \right) \sqcup \env{\abstable \downarrow_f \abspred}(\absattr) \\
+        \text{if $\absattr$ is the $i$th component of $\absattrs$ and $\absexp{i}$ is the $i$th componenet of $\absexps$} \\
     \end{cases}
-\end{align*}
+\end{align}
 
 \begin{align*}
-    \abssem{C^\#_{delete}}(\env{\abstable}, \env{\absvars})
-    &= \abssem{\langle delete^\#(\absattrs), \abspred \rangle} (\env{\abstable}, \env{\absvars}) \\
-    &= (\env{\abstable_1}, \env{\absvars}) \\
-    \text{where } \env{\abstable_1}(\absattr) &= \env{\abstable \downarrow_u \abspred}(\absattr) \textcolor{red}{\sqcup} \env{\abstable \downarrow_f \abspred}(\absattr)
+    \abssem{C_{delete}}(\env{\abstable}, \env{\absvars})
+    &= \abssem{\langle delete(\absattrs), \abspred \rangle} (\env{\abstable}, \env{\absvars}) \\
+    &= (\env{\abstable'}, \env{\absvars}) \\
+    \text{where } \env{\abstable'}(\absattr) &= \env{\abstable \downarrow_u \abspred}(\absattr) \sqcup \env{\abstable \downarrow_f \abspred}(\absattr)
 \end{align*}
 
-\subsubsection{Abstract Semantics of strings}
-\begin{align*}
-    E^\# \llbracket R_1 \texttt{||} R_2 \rrbracket                          \\
-    = E^\# \llbracket R_1 \rrbracket \oplus  E^\# \llbracket R_2 \rrbracket \\
-    \text{where } R_1 \text{ and } R_2 \text{ are regular expressions and } \\
-    \oplus \text{ is the concatenation operator.}
-\end{align*}
+\subsubsection{Abstract Semantics of Actions}
 
-\begin{align*}
-    E^\# \llbracket \texttt{bit\_length} (R) \rrbracket \\
-    =  [length(B(s)), length(B(S))]                     \\
-    bit\_length \text{ returns a range of the binary}   \\
-    \text{ representation of regular expression } R.    \\
-    \text{where } B(s) \text{ is the binary representation of }s
-\end{align*}
+Let $\ab{P}$ be a set of abstract environments $(\env{\abstable}, \env{\absvars})$.
 
-\begin{align*}
-    E^\# \llbracket \texttt{char\_length} (R) \rrbracket       \\
-    =  [length(s), lenght(S)]                                  \\
-    char\_length \text{ returns a range of the shortest and}   \\
-    \text{ longest string created from the regular expression} \\
-\end{align*}
+\begin{align}
+    \abssem{\texttt{skip}}(\ab{P}) &= \ab{P} \\
+    \abssem{v_a := e}(\ab{P}) &= \{(\env{\abstable}, \env{\absvars}[v_a \mapsto s']) \mid (\env{\abstable}, \env{\absvars}) \in \ab{P} \land s = \absexpsem{e}(\env{\abstable}, \env{\absvars}) \land s' = s \into \lookupcl(v_a) \} \\
+    \abssem{v_a := \; ?}(\ab{P}) &= \{(\env{\abstable}, \env{\absvars}[v_a \mapsto \top]) \mid (\env{\abstable}, \env{\absvars}) \in \ab{P} \} \\
+    \abssem{b}(\ab{P}) &= \{ (\env{\abstable}, \env{\absvars}) \in \ab{P} \mid \true \in B \land B \in \absboolsem{b}(\env{\abstable}, \env{\absvars}) \} \\
+    \abssem{C_{sql}}(\ab{P}) &= \{\abssqlsem{C_{sql}}(\env{\abstable}, \env{\absvars}) \mid (\env{\abstable}, \env{\absvars}) \in \ab{P} \}
+\end{align}
 
-\begin{align*}
-    E^\# \llbracket \texttt{lower} (c) \rrbracket =c'                                                    \\
-    E^\# \llbracket \texttt{lower}(R_1 \cup R_2) \rrbracket                                              \\
-    = E^\# \llbracket \texttt{lower}(R_1) \rrbracket \cup E^\# \llbracket \texttt{lower}(R_2) \rrbracket \\
-    E^\# \llbracket \texttt{lower}(R_1 \cap R_2) \rrbracket                                              \\
-    = E^\# \llbracket \texttt{lower}(R_1) \rrbracket \cap E^\# \llbracket \texttt{lower}(R_2) \rrbracket \\
-    E^\# \llbracket \texttt{lower}(R_1^*) \rrbracket                                                     \\
-    = E^\# \llbracket \texttt{lower}(R_1)^* \rrbracket                                                   \\
-    \text{Where }c \in \Sigma \text{ and } c' \text{ is the lower case of } c.                           \\
-    R_1 \text{ and } R_2 \text{ are regular expressions.}                                                \\
-\end{align*}
-
-\begin{align*}
-    E^\# \llbracket \texttt{upper}(R) \rrbracket \\
-    \text{Where upper is the same as lower but converts to upper case.}
-\end{align*}
-
-\begin{align*}
-    E^\# \llbracket \texttt{position}(R_1, in, R_2) \rrbracket \\
-    = I                                             \\
-    \text{where } R1 \text{ and } R2 \text{ are regular expressions and }
-    I \text{ is an integer.}                        \\
-\end{align*}
-
-\begin{align*}
-    E^\# \llbracket \texttt{sub\_string} (R, I_1, I_2) \rrbracket \\
-    = []                                                          \\
-\end{align*}
-
-\begin{align*}
-    E^\# \llbracket \texttt{trim} ('pos', R_1 \text{ from } R_2) \rrbracket                            \\
-    =  \texttt{trim}('pos', R_1 \text{ from } R_2)                                                     \\
-    \texttt{trim} \text{ removes all leading, trailing or both occurrences of } R_2 \text{ from } R_1. \\
-    \text{where } R_1 \text{ and } E_2 \text{ are regular expressions, and 'pos' is a string.}         \\
-\end{align*}
-
-\todo[inline]{Casper says:
-    For the tree definitions above a definition should be give for position, substring and trim.
-    We should be able to implement the abstract semantics by following the semantics above.
-}
-
-\subsection{Abstract Interpretation of belongs}
-To provide a precise definition of the belongs function, envision a lattice composed of partitions of a language. We aim to identify the most precise partition that encompasses a given expression. In essence, we seek to pinpoint which element in the lattice accurately describes the expression's location. Simply stating that it resides somewhere within the entire set would lack practicality.
-
-Partitions within this lattice may overlap, symbolizing intersections of languages. The lattice itself is complete, with the top element representing the entire set of languages, and the bottom element indicating the empty set.
-
-Navigating this lattice involves starting from the top and descending until we reach a point where no partitions cover the expression. At this juncture, we have identified the most precise set of partitions that encompass the expression.
-
-$ belongs(x)=\bigsqcap\{x' \mid x \sqsubseteq x', x' \in X\} $
-Taking an expression $x$, we seek to identify the most precise partition that encompasses it. We do this by finding the greatest lowerbound of all partitions that contain $x$.
-% todo same as above
-
-% \begin{restatable}{lemma}{updatemonotone}
-%     $\abssem{C_{update}^\#}$ is monotone.
-% \end{restatable}
-% \pfsketch{
-%     For $\abstable \sqsubseteq \abstablep$ if $\abssem{C_{update}^\#}$ updates elements in $\abstable$ the same elements must be updated in $\abstablep$, therefore the order is determined by the remaining unchanged elements and therefore order is preserved.
-%     If an element not in $\abstable$ is update is changed in $\abstablep$ order is still preserved as the element is 'swapped' for another.
+% \begin{align*}
+%     E^\# \llbracket R_1 \texttt{||} R_2 \rrbracket                          \\
+%     = E^\# \llbracket R_1 \rrbracket \oplus  E^\# \llbracket R_2 \rrbracket \\
+%     \text{where } R_1 \text{ and } R_2 \text{ are regular expressions and } \\
+%     \oplus \text{ is the concatenation operator.}
+% \end{align*}
+%
+% \begin{align*}
+%     E^\# \llbracket \texttt{bit\_length} (R) \rrbracket \\
+%     =  [length(B(s)), length(B(S))]                     \\
+%     bit\_length \text{ returns a range of the binary}   \\
+%     \text{ representation of regular expression } R.    \\
+%     \text{where } B(s) \text{ is the binary representation of }s
+% \end{align*}
+%
+% \begin{align*}
+%     E^\# \llbracket \texttt{char\_length} (R) \rrbracket       \\
+%     =  [length(s), lenght(S)]                                  \\
+%     char\_length \text{ returns a range of the shortest and}   \\
+%     \text{ longest string created from the regular expression} \\
+% \end{align*}
+%
+% \begin{align*}
+%     E^\# \llbracket \texttt{lower} (c) \rrbracket =c'                                                    \\
+%     E^\# \llbracket \texttt{lower}(R_1 \cup R_2) \rrbracket                                              \\
+%     = E^\# \llbracket \texttt{lower}(R_1) \rrbracket \cup E^\# \llbracket \texttt{lower}(R_2) \rrbracket \\
+%     E^\# \llbracket \texttt{lower}(R_1 \cap R_2) \rrbracket                                              \\
+%     = E^\# \llbracket \texttt{lower}(R_1) \rrbracket \cap E^\# \llbracket \texttt{lower}(R_2) \rrbracket \\
+%     E^\# \llbracket \texttt{lower}(R_1^*) \rrbracket                                                     \\
+%     = E^\# \llbracket \texttt{lower}(R_1)^* \rrbracket                                                   \\
+%     \text{Where }c \in \Sigma \text{ and } c' \text{ is the lower case of } c.                           \\
+%     R_1 \text{ and } R_2 \text{ are regular expressions.}                                                \\
+% \end{align*}
+%
+% \begin{align*}
+%     E^\# \llbracket \texttt{upper}(R) \rrbracket \\
+%     \text{Where upper is the same as lower but converts to upper case.}
+% \end{align*}
+%
+% \begin{align*}
+%     E^\# \llbracket \texttt{position}(R_1, in, R_2) \rrbracket \\
+%     = I                                             \\
+%     \text{where } R1 \text{ and } R2 \text{ are regular expressions and }
+%     I \text{ is an integer.}                        \\
+% \end{align*}
+%
+% \begin{align*}
+%     E^\# \llbracket \texttt{sub\_string} (R, I_1, I_2) \rrbracket \\
+%     = []                                                          \\
+% \end{align*}
+%
+% \begin{align*}
+%     E^\# \llbracket \texttt{trim} ('pos', R_1 \text{ from } R_2) \rrbracket                            \\
+%     =  \texttt{trim}('pos', R_1 \text{ from } R_2)                                                     \\
+%     \texttt{trim} \text{ removes all leading, trailing or both occurrences of } R_2 \text{ from } R_1. \\
+%     \text{where } R_1 \text{ and } E_2 \text{ are regular expressions, and 'pos' is a string.}         \\
+% \end{align*}
+%
+% \todo[inline]{Casper says:
+%     For the tree definitions above a definition should be give for position, substring and trim.
+%     We should be able to implement the abstract semantics by following the semantics above.
 % }
-
-\begin{align*}
-    \abssem{C^\#_{delete}}(\env{\abstable}, \env{\absvars})
-                                              & = \abssem{\langle delete^\#(\absattrs), \abspred \rangle} (\env{\abstable}, \env{\absvars})                               \\
-                                              & = (\env{\abstable_1}, \env{\absvars})                                                                                     \\
-    \text{where } \env{\abstable_1}(\absattr) & = \env{\abstable \downarrow_u \abspred}(\absattr) \textcolor{red}{\sqcup} \env{\abstable \downarrow_f \abspred}(\absattr)
-\end{align*}
-
+%
+% \subsection{Abstract Interpretation of belongs}
+% To provide a precise definition of the belongs function, envision a lattice composed of partitions of a language. We aim to identify the most precise partition that encompasses a given expression. In essence, we seek to pinpoint which element in the lattice accurately describes the expression's location. Simply stating that it resides somewhere within the entire set would lack practicality.
+%
+% Partitions within this lattice may overlap, symbolizing intersections of languages. The lattice itself is complete, with the top element representing the entire set of languages, and the bottom element indicating the empty set.
+%
+% Navigating this lattice involves starting from the top and descending until we reach a point where no partitions cover the expression. At this juncture, we have identified the most precise set of partitions that encompass the expression.
+%
+% $ belongs(x)=\bigsqcap\{x' \mid x \sqsubseteq x', x' \in X\} $
+% Taking an expression $x$, we seek to identify the most precise partition that encompasses it. We do this by finding the greatest lowerbound of all partitions that contain $x$.
+% % todo same as above
+%
+% % \begin{restatable}{lemma}{updatemonotone}
+% %     $\abssem{C_{update}^\#}$ is monotone.
+% % \end{restatable}
+% % \pfsketch{
+% %     For $\abstable \sqsubseteq \abstablep$ if $\abssem{C_{update}^\#}$ updates elements in $\abstable$ the same elements must be updated in $\abstablep$, therefore the order is determined by the remaining unchanged elements and therefore order is preserved.
+% %     If an element not in $\abstable$ is update is changed in $\abstablep$ order is still preserved as the element is 'swapped' for another.
+% % }
