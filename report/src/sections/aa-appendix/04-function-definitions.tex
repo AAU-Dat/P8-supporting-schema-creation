@@ -1,0 +1,28 @@
+\section{Function definitions} \label{subsec:function-definitions}
+$sk = shortestString(R) =$ A function that analyses a regular expression and returns the shortest string. This is done, by creating an automaton and finding the shortest route to the end state.
+
+$lk = longestString(R) =$ A function that analyses a regular expression and returns the longest string. This is done by creating an automaton and finding the longest route to the end state. And returns $\infty$ if a loop is detected.
+s and S are representations for the longest and shortest strings.
+
+$length(n) = \mid n \mid$
+$length(k) = \mid k \mid$
+
+
+$position(R1, in, R2) =$ A function that returns the first position of the first possible occurrence of $R1$ in $R2$.
+R1 and $R2$ are regular expressions, the function can be defined by traversing $R2$ and check for the first possible occurrence of $R1$. If no occurrence is found, the function returns $0$.
+
+$substring(R, I_1, I_2)$ A function that returns the sub regular expression of $R$ from position $I_1$ to $I_2$.
+$R$ is a regular expression and $I_1$ and $I_2$ are integers. The function can be defined by traversing $R$ and returning a list of all possible
+
+
+$trim(pos, R_1 from R_2) =$ A function that, depending on the position variable, either removes all leading, trailing, or both leading and trailing occurrences of $R_1$ from $R_2$.
+$R_1$ and $R_2$ are regular expressions. $pos$ is a string that can be either "leading", "trailing", or "both", "both" is the default.
+\[
+    \text{trim}(\text{pos}, R_1, R_2) =
+    \begin{cases}
+        \{ s \mid s \in R_2, s \text{ does not start with } R_1 \}        & \text{if } \text{pos} = \text{"leading"} \text{ or } \text{pos} = \text{"both"}  \\
+        \{ s \mid s \in R_2, s \text{ does not end with } R_1 \}          & \text{if } \text{pos} = \text{"trailing"} \text{ or } \text{pos} = \text{"both"} \\
+        \{ s \mid s \in R_2, s \text{ does not start or end with } R_1 \} & \text{if } \text{pos} = \text{"both"}                                            \\
+    \end{cases}
+\]
+\todo[inline]{Lars says: Should be make each function defintion an align?}
