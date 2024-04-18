@@ -63,9 +63,7 @@
 \tikzstyle{circle} = [ellipse, minimum width=1.5cm, minimum height=0.5cm, text centered, draw=black, fill=white!30]
 
 \newcommand{\abssem}[1]{S^\# \llbracket #1 \rrbracket}
-\newcommand{\absexpsem}[1]{E^\# \llbracket #1 \rrbracket}
 \newcommand{\env}[1]{\rho_{#1}}
-\newcommand{\abstable}{t^\#}
 \newcommand{\abstablep}{t'^{\#}}
 \newcommand{\absvars}{a^\#}
 \newcommand{\absattrs}{\overset{\rightarrow}{v_d^\#}}
@@ -77,3 +75,15 @@
 \newcommand{\concrete}{\gamma}
 \newcommand{\aabstract}{\alpha}
 \DeclareMathOperator{\map}{map}
+\newcommand{\absboolsem}[1]{\widehat{\mathcal{B}}\llbracket #1 \rrbracket}
+\newcommand{\absexpsem}[1]{\widehat{\mathcal{E}}\llbracket #1 \rrbracket}
+\newcommand{\true}{t\!t}
+\newcommand{\false}{f\!\!f}
+\newcommand{\ab}[1]{\widehat{#1}}
+\newcommand{\aab}[1]{\widetilde{#1}}
+\newcommand{\aaab}[1]{\widetilde{\widetilde{#1}}}
+\newcommand{\aop}{\;\ab{op}\;}
+\newcommand{\aaop}{\;\aab{op}\;}
+\newcommand{\mnull}{null}
+\newcommand{\abstable}{\ab{t}}
+\newcommand{\comp}{comp}
