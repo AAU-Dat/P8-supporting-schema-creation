@@ -219,8 +219,9 @@ We define the length of a regular expression $R$, $|R|$:
 \end{align}
 
 \begin{align}
-    \min(R) = s \text{ such that } s \in \{ s' \in R \mid \forall s'' \in R : |s'| \leq |s''| \} \\
-    \max(R) = s \text{ such that } s \in \{ s' \in R \mid \forall s'' \in R : |s'| \ \geq |s''| \}
+    |\min(R)| &= \min\{ |s| \mid s \in R \} \\
+    |\max(R)| &= \max\{ |s| \mid s \in R \} \\
+    \text{where $|s|$ is the length of the word $s$}
 \end{align}
 
 \begin{align}
