@@ -1,4 +1,4 @@
-\usepackage{algpseudocode}\subsection{Model Overview}\label{subsec:model-overview}
+\subsection{Model Overview}\label{subsec:model-overview}
 
 In the following sections, we will be giving an overview of the model we are implementing.
 
@@ -26,10 +26,7 @@ We will now describe how to make a graph of the state space
 \begin{algorithm}[htb!]
     \begin{codebox}
         \Procname{$\proc{programGraph}(A)$}
-        \li $G = programGraph(A)$
-        \li $ass = analyze(G,S)$
-        \li $result = check(ass,P)$
-        \li \Return $result$
+        \li TODO
     \end{codebox}
     \caption{Construction of program graph}
     \label{alg:program-graph}
@@ -37,7 +34,9 @@ We will now describe how to make a graph of the state space
 
 \subsubsection{Analysis}\label{subsubsec:analysis}
 
-We will now describe how our analysis works
+We will now describe how our analysis works.
+Here we create our state space, represented as a transition system.
+This allows us to do model checking
 
 \begin{algorithm}[htb!]
     \begin{codebox}
@@ -67,11 +66,14 @@ We will now describe how our analysis works
 
 \subsubsection{Check}\label{subsubsec:check}
 
-We will now describe how we check different properties
+We will now describe how we check different properties.
+For this, we will be using Linear Temporal Logic to determine whether a property holds.
 
 \begin{algorithm}[htb!]
     \begin{codebox}
         \Procname{$\proc{Check}(ass, P)$}
+        \li Model check on state space/transition system with LTL properties
+        \li // Dismiss the following for now
         \li $failed\_prop := []$
         \li \ForAll{$p$ \textbf{in} $P$}
         \li \Do \ForAll{$s$ \textbf{in} ass$$}
