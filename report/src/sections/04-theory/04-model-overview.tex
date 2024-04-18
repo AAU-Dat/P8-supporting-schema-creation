@@ -46,16 +46,16 @@ This allows us to do model checking
         \li \While{$todo \neq \emptyset$}
         \li \Do
         $(s,\rho_d,\rho_a):=pop(todo)$
-        \li \ForAll{$\xrightarrow[]{\text{i}}s'\in s$}
+        \li \For{$\xrightarrow[]{\text{i}}s'\in s$}
         \li \Do $(\rho'_d,\rho'_a):=\widehat{\mathcal{S}}\llbracket i\rrbracket(\rho_d,\rho_a)$
         \li \If{$(s',\rho'_d,\rho'_a)$ \textbf{not in} $state\_space$}
         \li \Do $Insert(s',\rho'_d,\rho'_a,todo)$
-        \EndIf
+        \End
         \End
         \li $Insert(s,\rho_d,\rho_a,state\_space)$
-        \EndFor
         \End
-        \EndWhile
+        \End
+        \End
         \End
         \li \Return $state\_space$
     \end{codebox}
@@ -75,16 +75,16 @@ For this, we will be using Linear Temporal Logic to determine whether a property
         \li Model check on state space/transition system with LTL properties
         \li // Dismiss the following for now
         \li $failed\_prop := []$
-        \li \ForAll{$p$ \textbf{in} $P$}
-        \li \Do \ForAll{$s$ \textbf{in} ass$$}
+        \li \For{$p$ \textbf{in} $P$}
+        \li \Do \For{$s$ \textbf{in} ass$$}
         \li \Do \If{$p$ \textbf{not holds in} $s$}
         \li \Do $failed\_prop.insert(p)$
-        \EndIf
+        \End
         \End
         \li \textbf{break}
-        \EndFor
         \End
-        \EndFor
+        \End
+        \End
         \End
         \li \Return $failed\_prop$
     \end{codebox}
