@@ -11,17 +11,37 @@ Let $REG$ denote the set of regular languages. % and
 % \begin{equation*}
 %     REG^{\leq n} = \{R \in REG \mid \forall w \in R : |w| \leq n\}.
 % \end{equation*}
-In the following we do not distinguish between regular expressions and their languages.
+% In general we do not distinguish between regular expressions and their languages.
 
 The lattice of $(REG, \subseteq, \cup, \cap)$ is a lattice but not a complete one as the set of regular languages is transfinite and closed under finite union and intersection, but not closed under transfinite union and intersection.
 This is a problem: Essentially we can not employ Kleene fixed-point theorem (\autoref{thm:kleene_finite} or \autoref{thm:kleene_scott}) to prove termination of our analysis.
 
-\subsubsection{Abstract domain of numbers as linear inequalities}\label{subsubsec:abstract_domains_numbers}
+\subsubsection{Abstract domain of numbers as disjunctions of intervals}\label{subsubsec:abstract_domains_numbers}
 
-To represent the abstract domain of the family of SQL number data types when have chosen compound linear inequalities with mixed integer solutions that are algorithmically solvable with MILP solvers (henceforth linear inequalities).
-Linear inequalities with mixed integer solutions where chosen for the prevalence and speed of MILP solvers.
+To represent the abstract domain of the family of SQL number data types we have chosen finite disjunction of intervals.
+We represent such disjunctions of intervals as a set of disjoint intervals thus for a set of intervals $I$:
+\begin{equation}
+    n \in \gamma(I) \iff \exists i \in I : n \in \gamma(i)
+\end{equation}
+and
+\begin{equation}
+    I \sqsubseteq I' \iff \forall i \in I : \exists i' \in I' : i \sqsubseteq i'
+\end{equation}
 
-Linear inequalities essentially have the same problem as regular expressions. Let $MILP^n$ represent the set of sets of solutions to linear inequalities with $n$ unknowns, then $(MILP^n, \subseteq, \cup, \cap)$ is a non-complete lattice.
+Let $\mathbb{IR}$ be the set of such intervals in the domain of reals numbers and $\mathbb{IZ}$ for the domain of whole numbers, in general we take $\mathscr{I} \in \mathbb{IR}$ and $\mathsf{I} \in \mathbb{IZ}$, and when the distinction does not matter we just write $I$.
+We define the meet and join of disjunctions as follows:
+\begin{align}
+    I \sqcup I' &= m(I \cup I') \\
+    \text{where } m(I) &= \begin{cases}
+        m(\{ i \sqcup i' | i, i' \in I \land i \sqcap i' \neq \bot \} \cup \{ i \in I | \forall i' \in I : i \sqcap i' = \bot \}) & \text{if } \exists i, i' \in I: i \sqcap i' \neq \bot \\
+        I & \text{otherwise}
+    \end{cases} \\
+    I \sqcap I' &= \{i \sqcap i' \mid i \in I \land i' \in I'\}
+\end{align}
+
+This intuitively models intersection and union of the underlying sets, that is $\gamma(I \sqcup I') = \gamma(I) \cup \gamma(I')$ (analogous for $\sqcap$, $\cap$), and also $I \sqsubseteq I' \iff \gamma(I) \subseteq \gamma(I')$.
+
+This representation of numbers has the same issue as regular expression mention in the prequel.
 
 \subsubsection{Cover lattice}
 
