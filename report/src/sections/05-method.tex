@@ -6,3 +6,96 @@
 -Creating the semantics for the abstract representations
 -implementing the abstract representations in kotlin
 -through CLI it takes a database in the form af SQL queries and returns the abstract representation of the database after a set of operations have been performed on it defined by the user
+
+
+\subsection{Example}\label{subsec:example}
+To illustrate the method, we will use a simple example.
+Consider a database with a single table, \texttt{account}, with two columns, \texttt{name} and \texttt{balance}.
+For the program to work, we need to define the table for the database, this is shown in \autoref{lst:database-schema}.
+
+\begin{lstlisting}[language=SQL,label={lst:database-schema}]
+    CREATE TABLE account (
+    name VARCHAR(50),
+    balance INT
+    );
+\end{lstlisting}
+The UML diagram of the database schema is shown in \autoref{fig:uml-account}.
+
+\begin{figure}[htb!]
+    \centering
+    \includegraphics[width=0.25\textwidth]{figures/account.png}
+    \caption{UML diagram of the abstract representation of the database schema}
+    \label{fig:uml-account}
+\end{figure}
+
+Now we want to perform two operations on the database.
+The database has two operations, \texttt{insert} and \texttt{update}.
+The \texttt{insert} operation inserts a new row into the table, i.e. a new user, and the \texttt{update} operation updates the balance of two accounts.
+The SQL queries for the operations are shown in \autoref{lst:sql-queries} and \autoref{lst:sql-queries2}.
+
+\begin{lstlisting}[language=SQL,label={lst:sql-queries}]
+    INSERT INTO account (name, balance)
+    VALUES (RANDOM_NAME, RANDOM_AMOUNT);
+\end{lstlisting}
+
+\begin{lstlisting}[language=SQL, label={lst:sql-queries2}]
+    UPDATE account
+    SET balance = CASE
+    WHEN name = "name1" THEN balance - <amount_to_transfer>
+    WHEN name = name2 THEN balance + <amount_to_transfer>
+    ELSE balance
+    END
+    WHERE name IN (name1, name2);
+\end{lstlisting}
+
+Now that we have what the database looks like and what the basic operations it should do, it is time to define what type of the behavior the database should withstand.
+The program first checks if there is 2 accounts or more in the database, if not, it inserts a new user, that that is the Insert operation.
+If there is more than two accounts, we try to transfer an amount from one account to another, that is the Update operation.
+
+The program that defines the behavior of the operations is shown in \autoref{lst:program}.
+
+\begin{lstlisting}[label={lst:program}]
+tansferamount:=?
+formID:=R_ID
+toID:=R_ID
+if(transferAmount>0)
+    <select(fromB,id,DISTINCT(id(AccBalance)),true,id),toID=AccID>
+    <select(toB,id,DISTINCT(id(AccBalance)),true,id),toID=AccID>
+    if(formB-transferAmount>0)
+        <update(<AccBalance>,>fromB-transferAmount>),fromID=AccID>
+        <update(<AccBalance>,>toB-transferAmount>),toID=AccID>
+
+
+transF||newuser
+
+
+B:=+
+U:=?
+<insert(U,B)> into (account)
+
+
+
+
+while true do
+    rand:=?
+if rand<0
+    then transF
+    else newuser
+\end{lstlisting}
+
+Now everything for the analysis is ready, we just need to define what the analysis should check for, this is defined by properties, that is defined by the LTL grammar on the attributes in the database.
+The properties we want to check on the database are shown in \autoref{lst:properties}.
+
+\begin{lstlisting}[label={lst:properties}]
+<>(transferAmount>0)
+[](fromB-TransferAmount>0)
+    \end{lstlisting}
+
+After inserting all the information into the program, the program makes a graph of system, which is shown in \autoref{fig:-program_graph}.
+
+\begin{figure}[htb!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{figures/program_graph.png}
+    \caption{Program graph of the system}
+    \label{fig:-program_graph}
+\end{figure}
