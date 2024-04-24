@@ -148,7 +148,8 @@ We define the length of a regular expression $R$, $\|R\|$:
 \begin{align}
     \|R\| = \begin{cases}
         \{ [\|\min(R)\|, \|\max(R)\|] \} & \text{if $\|\max(R)\|$ is defined} \\
-        \{ [\|\min(R)\|, +\infty) \} & \text{if $\|\max(R)\|$ is undefined}
+        % todo uncomment this
+        % \{ \left[ \|\min(R)\|, +\infty \right) \} & \text{if $\|\max(R)\|$ is undefined}
     \end{cases}
 \end{align}
 
@@ -179,17 +180,34 @@ We define the length of a regular expression $R$, $\|R\|$:
     I_1 \;\aab{aop}\; I_2 &= m(\{i_1 \; aop \; i_2 \mid i_1 \in I_1 \land i_2 \in I_2\}) \\
 \end{align}
 
+\subsubsection{Abstract Semantics of Predicates}
+
+\begin{align}
+    \abspredsem{a_f}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absboolsem{a_f}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
+    \abspredsem{\neg \phi}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{\neg} \left( \abspredsem{\phi}(\rho_{\ab{d}}, \rho_{\ab{a}}) \right) \\
+    \abspredsem{\phi_1 \lor \phi_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \abspredsem{\phi_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ab{\lor} \abspredsem{\phi_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
+    \abspredsem{\phi_1 \land \phi_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \abspredsem{\phi_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ab{\land} \abspredsem{\phi_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
+    \abspredsem{\exists x \; \phi}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \underset{s \in \absexpsem{x}}{\ab{\bigvee}} \abspredsem{\phi[s/x]} \\
+    \abspredsem{\forall x \; \phi}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \underset{s \in \absexpsem{x}}{\ab{\bigwedge}} \abspredsem{\phi[s/x]}
+\end{align}
+
 \subsubsection{Abstract Semantics of SQL statements}
 
 Let
 \begin{equation}
     \mathcal{C} : \mathbb{V}_a \cup \mathbb{V}_d \rightarrow \{ C_{X_1}(S_1), C_{X_2}(S_2), \dots, C_{X_n}(S_n) \}
 \end{equation}
+and
+\begin{align}
+    \abstable \downarrow_{\true} \phi &= \{ l \in \ab{t} \mid \{\{ \true \}\} = \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]} \} \\
+    \abstable \downarrow_{\false} \phi &= \{ l \in \ab{t} \mid \{\{ \false \}\} = \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]} \} \\
+    \abstable \downarrow_{\unknown} \phi &= \{ l \in \ab{t} \mid \{\{ \true \}\} \neq \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]} \land \{\{ \false \}\} \neq \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]}\} \\
+\end{align}
 
 \begin{align}
     \abssqlsem{\langle C_{insert}, \phi \rangle}(\rho_{\ab{d}}, \rho_{\ab{a}}) & =
     \abssqlsem{\langle insert(\mathbf{v}_d, \mathbf{e}), \phi \rangle}(\rho_{\ab{t}}, \rho_{\ab{a}})\\
-    & = (\rho_{\ab{t} \sqcup s}, \rho_{\ab{a}}) \\
+    & = (\rho_{\ab{t} \cup s}, \rho_{\ab{a}}) \\
     \text{where } target(C_{insert})        & = \ab{t}                                                                                                                                                 \\
     \mathbf{v}_d              & = \langle a_1, a_2, \dots, a_n \rangle                                                                                                        \\
                                                & = attr(\ab{t})                                                                                                                                           \\
@@ -197,15 +215,16 @@ Let
     s &= \{ (s_1/a_1, s_2/a_2, \dots, s_n/a_n) \mid (s_1, s_2, \dots, s_n) \in \bigtimes_{i = 1}^{n} \left( \absexpsem{e_i}(\rho_{\ab{d}}, \rho_{\ab{a}}) \into \lookupcl(a_i) \right) \}
 \end{align}
 
+
 \begin{align}
     \abssqlsem{C_{update}}(\env{\abstable}, \env{\absvars})
                                               & = \abssqlsem{\langle update(\absattrs, \absexps), \abspred \rangle} (\env{\abstable}, \env{\absvars}) \\
                                               & = (\env{\abstable'}, \env{\absvars})                                                                 \\
     \text{where } \env{\abstable'}(\absattr) & =
     \begin{cases}
-        \env{\abstable \downarrow_t \abspred}(\absattr) \sqcup \env{\abstable \downarrow_u \abspred}(\absattr) \sqcup \env{\abstable \downarrow_f \abspred}(\absattr) & \text{if } \absattr \notin \absattrs \\
-        \absexpsem{\absexp{i}}(\env{\abstable \downarrow_t \abspred}, \env{\absvars}) \sqcup
-        \left( \absexpsem{\absexp{i}}(\env{\abstable \downarrow_u \abspred}, \env{\absvars}) \sqcup \env{\abstable \downarrow_u \abspred}(\absattr) \right) \sqcup \env{\abstable \downarrow_f \abspred}(\absattr) \\
+        \env{\abstable \downarrow_{\true} \abspred}(\absattr) \cup \env{\abstable \downarrow_{\unknown} \abspred}(\absattr) \cup \env{\abstable \downarrow_{\false} \abspred}(\absattr) & \text{if } \absattr \notin \absattrs \\
+        \left( \absexpsem{\absexp{i}}(\env{\abstable \downarrow_{\true} \abspred}, \env{\absvars}) \cup
+        \absexpsem{\absexp{i}}(\env{\abstable \downarrow_{\unknown} \abspred}, \env{\absvars}) \cup \env{\abstable \downarrow_{\unknown} \abspred}(\absattr) \cup \env{\abstable \downarrow_{\false} \abspred}(\absattr) \right) \into \lookupcl(v_{d})\\
         \text{if $\absattr$ is the $i$th component of $\absattrs$ and $\absexp{i}$ is the $i$th componenet of $\absexps$} \\
     \end{cases}
 \end{align}
@@ -214,7 +233,7 @@ Let
     \abssqlsem{C_{delete}}(\env{\abstable}, \env{\absvars})
     &= \abssqlsem{\langle delete(\absattrs), \abspred \rangle} (\env{\abstable}, \env{\absvars}) \\
     &= (\env{\abstable'}, \env{\absvars}) \\
-    \text{where } \env{\abstable'}(\absattr) &= \env{\abstable \downarrow_u \abspred}(\absattr) \sqcup \env{\abstable \downarrow_f \abspred}(\absattr)
+    \text{where } \env{\abstable'}(\absattr) &= \left( \env{\abstable \downarrow_{\unknown} \abspred}(\absattr) \cup \env{\abstable \downarrow_{\false} \abspred}(\absattr) \right) \into \lookupcl(v_d)
 \end{align*}
 
 \subsubsection{Abstract Semantics of Actions}
