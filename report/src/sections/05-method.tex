@@ -33,7 +33,6 @@ The UML diagram of the database schema is shown in \autoref{fig:uml-account}.
     \label{fig:uml-account}
 \end{figure}
 
-Now we want to perform two operations on the database.
 The database has two operations, \texttt{insert} and \texttt{update}.
 The \texttt{insert} operation inserts a new row into the table, i.e. a new user, and the \texttt{update} operation updates the balance of two accounts.
 The SQL queries for the operations are shown in \autoref{lst:sql-queries} and \autoref{lst:sql-queries2}.
@@ -59,11 +58,11 @@ The SQL queries for the operations are shown in \autoref{lst:sql-queries} and \a
 \label{lst:sql-queries2}
 \caption{SQL query for the update operation}
 \end{figure}
-Now that we have what the database looks like and what the basic operations it should do, it is time to define what type of the behavior the database should withstand.
-The program first checks if there is 2 accounts or more in the database, if not, it inserts a new user, that that is the Insert operation.
-If there is more than two accounts, we try to transfer an amount from one account to another, that is the Update operation.
 
+Now the database schema and the operations are defined, we need to define the behavior of the operations.
 The program that defines the behavior of the operations is shown in \autoref{lst:program}.
+The program first checks if there are 2 or more accounts in the database, if not, it inserts a new account, with the \texttt{Insert} operation.
+If there are more than two accounts, we try to transfer an amount from one account to another, that is the \texttt{Update} operation.
 
 \begin{figure}[htb!]
 \begin{lstlisting}
