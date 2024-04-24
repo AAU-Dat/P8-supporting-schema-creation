@@ -11,14 +11,19 @@
 \subsection{Example}\label{subsec:example}
 To illustrate the method, we will use a simple example.
 Consider a database with a single table, \texttt{account}, with two columns, \texttt{name} and \texttt{balance}.
-For the program to work, we need to define the table for the database, this is shown in \autoref{lst:database-schema}.
+For the program to work, we need to define the table for the database, this is shown in \autoref{fig:database-schema}.
 
-\begin{lstlisting}[language=SQL,label={lst:database-schema}]
+\begin{figure}[htb!]
+\begin{lstlisting}[language=SQL]
     CREATE TABLE account (
     name VARCHAR(50),
     balance INT
     );
 \end{lstlisting}
+\caption{SQL query for creating the table in the database}
+\label{fig:database-schema}
+\end{figure}
+
 The UML diagram of the database schema is shown in \autoref{fig:uml-account}.
 
 \begin{figure}[htb!]
@@ -32,13 +37,17 @@ Now we want to perform two operations on the database.
 The database has two operations, \texttt{insert} and \texttt{update}.
 The \texttt{insert} operation inserts a new row into the table, i.e. a new user, and the \texttt{update} operation updates the balance of two accounts.
 The SQL queries for the operations are shown in \autoref{lst:sql-queries} and \autoref{lst:sql-queries2}.
-
-\begin{lstlisting}[language=SQL,label={lst:sql-queries}]
+\begin{figure}
+\begin{lstlisting}[language=SQL]
     INSERT INTO account (name, balance)
     VALUES (RANDOM_NAME, RANDOM_AMOUNT);
 \end{lstlisting}
+\label{lst:sql-queries}
+\caption{SQL query for the insert operation}
+\end{figure}
 
-\begin{lstlisting}[language=SQL, label={lst:sql-queries2}]
+\begin{figure}[htb!]
+\begin{lstlisting}[language=SQL]
     UPDATE account
     SET balance = CASE
     WHEN name = "name1" THEN balance - <amount_to_transfer>
@@ -47,14 +56,17 @@ The SQL queries for the operations are shown in \autoref{lst:sql-queries} and \a
     END
     WHERE name IN (name1, name2);
 \end{lstlisting}
-
+\label{lst:sql-queries2}
+\caption{SQL query for the update operation}
+\end{figure}
 Now that we have what the database looks like and what the basic operations it should do, it is time to define what type of the behavior the database should withstand.
 The program first checks if there is 2 accounts or more in the database, if not, it inserts a new user, that that is the Insert operation.
 If there is more than two accounts, we try to transfer an amount from one account to another, that is the Update operation.
 
 The program that defines the behavior of the operations is shown in \autoref{lst:program}.
 
-\begin{lstlisting}[label={lst:program}]
+\begin{figure}[htb!]
+\begin{lstlisting}
 tansferamount:=?
 formID:=R_ID
 toID:=R_ID
@@ -82,14 +94,20 @@ if rand<0
     then transF
     else newuser
 \end{lstlisting}
+\label{lst:program}
+\caption{Program that defines the behavior of the operations}
+\end{figure}
 
 Now everything for the analysis is ready, we just need to define what the analysis should check for, this is defined by properties, that is defined by the LTL grammar on the attributes in the database.
 The properties we want to check on the database are shown in \autoref{lst:properties}.
-
-\begin{lstlisting}[label={lst:properties}]
+\begin{figure}[htb!]
+\begin{lstlisting}
 <>(transferAmount>0)
 [](fromB-TransferAmount>0)
     \end{lstlisting}
+\label{lst:properties}
+\caption{Properties that the analysis check for}
+\end{figure}
 
 After inserting all the information into the program, the program makes a graph of system, which is shown in \autoref{fig:-program_graph}.
 
@@ -99,3 +117,4 @@ After inserting all the information into the program, the program makes a graph 
     \caption{Program graph of the system}
     \label{fig:-program_graph}
 \end{figure}
+\todo{Make the graph in tikz}
