@@ -45,7 +45,8 @@
 \subsection{Abstract Semantics}
 
 \begin{align}
-    S_1 \aop S_2 = \{ s_1 \aaop s_2 \mid s_1 \in S_1, s_2 \in S_2 \}
+    S_1 \aop S_2 &= \{ s_1 \aaop s_2 \mid s_1 \in S_1, s_2 \in S_2 \} \\
+    \aop S &= \{\aaop s \mid s \in S \}
 \end{align}
 
 \subsubsection{Abstract Semantics of Boolean expressions}
@@ -101,106 +102,65 @@
 For regular expressions $R, R_1, R_2$, linear inequalities over one variable $N, N_1, N_2$ and arbitrary values $X$:
 
 \begin{align}
-    R_1 \;\aab{=}\; R_2 &= \begin{cases}
-        \{\false\} & \text{if } R_1 \cap R_2 = \emptyset \\
-        \{\true, \false\} & \text{if } R_1 \cap R_2 \neq \emptyset \\
-    \end{cases} \\
-    N_1 \;\aab{=}\; N_2 &= \begin{cases}
-        \{\false\} & \text{if } N_1 \cap N_2 = \emptyset \\
-        \{\true, \false\} & \text{if } N_1 \cap N_2 \neq \emptyset \\
-    \end{cases} \\
-    N \;\aab{=}\; R &= \{\false\} \\
-    R \;\aab{=}\; N &= \{\false\} \\
-\end{align}
-
-\begin{align}
-    R \;\aab{<}\; X &= \{\false\} \\
-    X \;\aab{<}\; R &= \{\false\} \\
-    N_1 \;\aab{<}\; N_2 &= \begin{cases}
-        \{\true\} & \text{if } \max(N_1) < \min(N_2) \\
-        \{\false\} & \text{if } \max(N_2) \leq min (N_1) \\
-        \{\true, \false\} & \text{otherwise}
+    X_1 \;\aab{=}\; X_2 &= \begin{cases}
+        \begin{cases}
+        \{\true \} & \text{if } |X_1| = |X_2| = 1 \land X_1 = X_2 \\
+        \{\false\} & \text{if } X_1 \cap X_2 = \emptyset \\
+        \{\true, \false\} & \text{if } X_1 \cap X_2 \neq \emptyset
+        \end{cases} & \text{if $X_1$ and $X_2$ is of the same type} \\
+        \text{undefined} & \text{otherwise}
     \end{cases} \\
 \end{align}
 
 \begin{align}
-    R \;\aab{\leq}\; X &= \{\false\} \\
-    X \;\aab{\leq}\; R &= \{\false\} \\
-    N_1 \;\aab{\leq}\; N_2 &= \begin{cases}
-        \{\true\} & \text{if } \max(N_1) \leq \min(N_2) \\
-        \{\false\} & \text{if } \max(N_2) < min (N_1) \\
+    I_1 \;\aab{<}\; I_2 &= \begin{cases}
+        \{\true\} & \text{if } \max(X_1) < \min(X_2) \\
+        \{\false\} & \text{if } \max(X_2) \leq \min (X_1) \\
         \{\true, \false\} & \text{otherwise}
-    \end{cases} \\
+    \end{cases}
+\end{align}
+
+\begin{align}
+    I_1 \;\aab{\leq}\; I_2 &= \begin{cases}
+        \{\true\} & \text{if } \max(X_1) \leq \min(X_2) \\
+        \{\false\} & \text{if } \max(X_2) < \min (X_1) \\
+        \{\true, \false\} & \text{otherwise}
+    \end{cases}
 \end{align}
 
 \subsubsection{Abstract Semantics of Expressions}
 
 \begin{align}
-    \absexpsem{n}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \left\{ \mathcal{N} \left(
-        \begin{bmatrix}
-            1 \\
-            -1
-        \end{bmatrix}
-        \begin{bmatrix}
-           x
-        \end{bmatrix}
-        \leq
-        \begin{bmatrix}
-            n \\
-            -n
-        \end{bmatrix}
-    \right) \right\} \\
-    \absexpsem{k}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \{ R \} \text{ such that }\mathcal{L}(R) \\
+    \absexpsem{n}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \{ \{ [n, n] \} \}\\
+    \absexpsem{k}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \{ R \} \text{ such that }\mathcal{L}(R) = \{ k \} \\
     \absexpsem{v_a}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=  \rho_{\ab{a}}(v_a) \\
     \absexpsem{v_d}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=  \rho_{\ab{t}}(v_d) \text{ such that } \ab{t} \in dom(\ab{d}) \text{ and } v_d \in attr(\ab{t}) \\
     \absexpsem{op \; e}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{op} \; (\absexpsem{e}(\rho_{\ab{d}}, \rho_{\ab{a}})) \\
     \absexpsem{e_1 \; op \; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absexpsem{e}(\rho_{\ab{d}}, \rho_{\ab{a}}) \;\ab{op}\; \absexpsem{e}(\rho_{\ab{d}}, \rho_{\ab{a}})\\
 \end{align}
 
-We define the length of a regular expression $R$, $|R|$:
+We define the length of a regular expression $R$, $\|R\|$:
 
 \begin{align}
-    |R| = \begin{cases}
-        \mathcal{N} \left(
-            \begin{bmatrix}
-                1 \\
-                -1
-            \end{bmatrix}
-            \begin{bmatrix}
-               x
-            \end{bmatrix}
-            \leq
-            \begin{bmatrix}
-                |\max(R)| \\
-                -|\min(R)|
-            \end{bmatrix}
-        \right) & \text{if $\max(R)$ is defined} \\
-        \mathcal{N} \left(
-            \begin{bmatrix}
-                -1
-            \end{bmatrix}
-            \begin{bmatrix}
-               x
-            \end{bmatrix}
-            \leq
-            \begin{bmatrix}
-                -|\min(R)|
-            \end{bmatrix}
-        \right) & \text{if $\max(R)$ is undefined} \\
+    \|R\| = \begin{cases}
+        \{ [\|\min(R)\|, \|\max(R)\|] \} & \text{if $\|\max(R)\|$ is defined} \\
+        % todo uncomment this
+        % \{ \left[ \|\min(R)\|, +\infty \right) \} & \text{if $\|\max(R)\|$ is undefined}
     \end{cases}
 \end{align}
 
 \begin{align}
-    |\min(R)| &= \min\{ |s| \mid s \in R \} \\
-    |\max(R)| &= \max\{ |s| \mid s \in R \} \\
-    \text{where $|s|$ is the length of the word $s$}
+    \|\min(R)\| &= \min\{ \|s\| \mid s \in R \} \\
+    \|\max(R)\| &= \max\{ \|s\| \mid s \in R \} \\
+    \text{where $\|s\|$ is the length of the word $s$}
 \end{align}
 
 \begin{align}
     cvt(op, R_1 \cup R_2) &= cvt(op, R_1) \cup cvt(op, R_2) \\
     cvt(op, R_1 \cap R_2) &= cvt(op, R_1) \cap cvt(op, R_2) \\
     cvt(op, R_1R_2) &= cvt(op, R_1) \; cvt(op, R_2) \\
-    cvt(op, R) &= (cvt(op, R_1))^\star \\
+    cvt(op, R) &= (cvt(op, R))^\star \\
+    cvt(op, \overline{R}) &= cvt(op, (\mathcal{R} \circ \mathcal{A}) (\overline{R})) \\
     cvt(op, \sigma) &= op(\sigma)
 \end{align}
 
@@ -208,71 +168,23 @@ We define the length of a regular expression $R$, $|R|$:
     R_1 \;\aab{||}\; R_2 &= R_1R_2 \\
     \aab{lower}(R) &= cvt(\sigma \mapsto \sigma', R) \text{ such that $\sigma'$ is the lowercase representation of $\sigma$}\\
     \aab{upper}(R) &= cvt(\sigma \mapsto \sigma', R) \text{ such that $\sigma'$ is the uppercase representation of $\sigma$}\\
-    \aab{bit\_length}(R) &= |cvt(\sigma \mapsto \sigma', R)| \text{ such that $\sigma'$ is the bit string of $\sigma$} \\
-    \aab{length}(R) &= |R|
+    \aab{bit\_length}(R) &= \|cvt(\sigma \mapsto \sigma', R)\| \text{ such that $\sigma'$ is the bit string of $\sigma$} \\
+    \aab{length}(R) &= \|R\|
 \end{align}
 
 \begin{align}
-    N_1 \;\aab{+}\; N_2 &=
-        \mathcal{N} \left(
-            \begin{bmatrix}
-                1 \\
-                -1
-            \end{bmatrix}
-            \begin{bmatrix}
-               x
-            \end{bmatrix}
-            \leq
-            \begin{bmatrix}
-                \max(N_1) + \max(N_2) \\
-                -(\min(N_1) + \min(N_2))
-            \end{bmatrix}
-        \right) \\
-    N_1 \;\aab{\cdot}\; N_2 &=
-        \mathcal{N} \left(
-            \begin{bmatrix}
-                1 \\
-                -1
-            \end{bmatrix}
-            \begin{bmatrix}
-               x
-            \end{bmatrix}
-            \leq
-            \begin{bmatrix}
-                \max(N_1) \cdot \max(N_2) \\
-                -(\min(N_1) \cdot \min(N_2))
-            \end{bmatrix}
-        \right) \\
-    N_1 \;\aab{-}\; N_2 &=
-        \mathcal{N} \left(
-            \begin{bmatrix}
-                1 \\
-                -1
-            \end{bmatrix}
-            \begin{bmatrix}
-               x
-            \end{bmatrix}
-            \leq
-            \begin{bmatrix}
-                \max(N_1) - \min(N_2) \\
-                -(\min(N_1) - \max(N_2))
-            \end{bmatrix}
-        \right) \\
-    N_1 \;\aab{/}\; N_2 &=
-        \mathcal{N} \left(
-            \begin{bmatrix}
-                1 \\
-                -1
-            \end{bmatrix}
-            \begin{bmatrix}
-               x
-            \end{bmatrix}
-            \leq
-            \begin{bmatrix}
-                \max(N_1) / \min(N_2) \\
-                -(\min(N_1) / \max(N_2))
-            \end{bmatrix}
-        \right)
+    I_1 \;\aab{aop}\; I_2 &= m(\{i_1 \; aop \; i_2 \mid i_1 \in I_1 \land i_2 \in I_2\}) \\
+\end{align}
+
+\subsubsection{Abstract Semantics of Predicates}
+
+\begin{align}
+    \abspredsem{a_f}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absboolsem{a_f}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
+    \abspredsem{\neg \phi}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{\neg} \left( \abspredsem{\phi}(\rho_{\ab{d}}, \rho_{\ab{a}}) \right) \\
+    \abspredsem{\phi_1 \lor \phi_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \abspredsem{\phi_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ab{\lor} \abspredsem{\phi_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
+    \abspredsem{\phi_1 \land \phi_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \abspredsem{\phi_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ab{\land} \abspredsem{\phi_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
+    \abspredsem{\exists x \; \phi}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \underset{s \in \absexpsem{x}}{\ab{\bigvee}} \abspredsem{\phi[s/x]} \\
+    \abspredsem{\forall x \; \phi}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \underset{s \in \absexpsem{x}}{\ab{\bigwedge}} \abspredsem{\phi[s/x]}
 \end{align}
 
 \subsubsection{Abstract Semantics of SQL statements}
@@ -281,11 +193,17 @@ Let
 \begin{equation}
     \mathcal{C} : \mathbb{V}_a \cup \mathbb{V}_d \rightarrow \{ C_{X_1}(S_1), C_{X_2}(S_2), \dots, C_{X_n}(S_n) \}
 \end{equation}
+and
+\begin{align}
+    \abstable \downarrow_{\true} \phi &= \{ l \in \ab{t} \mid \{\{ \true \}\} = \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]} \} \\
+    \abstable \downarrow_{\false} \phi &= \{ l \in \ab{t} \mid \{\{ \false \}\} = \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]} \} \\
+    \abstable \downarrow_{\unknown} \phi &= \{ l \in \ab{t} \mid \{\{ \true \}\} \neq \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]} \land \{\{ \false \}\} \neq \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]}\} \\
+\end{align}
 
 \begin{align}
     \abssqlsem{\langle C_{insert}, \phi \rangle}(\rho_{\ab{d}}, \rho_{\ab{a}}) & =
     \abssqlsem{\langle insert(\mathbf{v}_d, \mathbf{e}), \phi \rangle}(\rho_{\ab{t}}, \rho_{\ab{a}})\\
-    & = (\rho_{\ab{t} \sqcup s}, \rho_{\ab{a}}) \\
+    & = (\rho_{\ab{t} \cup s}, \rho_{\ab{a}}) \\
     \text{where } target(C_{insert})        & = \ab{t}                                                                                                                                                 \\
     \mathbf{v}_d              & = \langle a_1, a_2, \dots, a_n \rangle                                                                                                        \\
                                                & = attr(\ab{t})                                                                                                                                           \\
@@ -293,24 +211,25 @@ Let
     s &= \{ (s_1/a_1, s_2/a_2, \dots, s_n/a_n) \mid (s_1, s_2, \dots, s_n) \in \bigtimes_{i = 1}^{n} \left( \absexpsem{e_i}(\rho_{\ab{d}}, \rho_{\ab{a}}) \into \lookupcl(a_i) \right) \}
 \end{align}
 
+
 \begin{align}
-    \abssem{C_{update}}(\env{\abstable}, \env{\absvars})
-                                              & = \abssem{\langle update(\absattrs, \absexps), \abspred \rangle} (\env{\abstable}, \env{\absvars}) \\
+    \abssqlsem{C_{update}}(\env{\abstable}, \env{\absvars})
+                                              & = \abssqlsem{\langle update(\absattrs, \absexps), \abspred \rangle} (\env{\abstable}, \env{\absvars}) \\
                                               & = (\env{\abstable'}, \env{\absvars})                                                                 \\
     \text{where } \env{\abstable'}(\absattr) & =
     \begin{cases}
-        \env{\abstable \downarrow_t \abspred}(\absattr) \sqcup \env{\abstable \downarrow_u \abspred}(\absattr) \sqcup \env{\abstable \downarrow_f \abspred}(\absattr) & \text{if } \absattr \notin \absattrs \\
-        \absexpsem{\absexp{i}}(\env{\abstable \downarrow_t \abspred}, \env{\absvars}) \sqcup
-        \left( \absexpsem{\absexp{i}}(\env{\abstable \downarrow_u \abspred}, \env{\absvars}) \sqcup \env{\abstable \downarrow_u \abspred}(\absattr) \right) \sqcup \env{\abstable \downarrow_f \abspred}(\absattr) \\
+        \env{\abstable \downarrow_{\true} \abspred}(\absattr) \cup \env{\abstable \downarrow_{\unknown} \abspred}(\absattr) \cup \env{\abstable \downarrow_{\false} \abspred}(\absattr) & \text{if } \absattr \notin \absattrs \\
+        \left( \absexpsem{\absexp{i}}(\env{\abstable \downarrow_{\true} \abspred}, \env{\absvars}) \cup
+        \absexpsem{\absexp{i}}(\env{\abstable \downarrow_{\unknown} \abspred}, \env{\absvars}) \cup \env{\abstable \downarrow_{\unknown} \abspred}(\absattr) \cup \env{\abstable \downarrow_{\false} \abspred}(\absattr) \right) \into \lookupcl(v_{d})\\
         \text{if $\absattr$ is the $i$th component of $\absattrs$ and $\absexp{i}$ is the $i$th componenet of $\absexps$} \\
     \end{cases}
 \end{align}
 
 \begin{align*}
-    \abssem{C_{delete}}(\env{\abstable}, \env{\absvars})
-    &= \abssem{\langle delete(\absattrs), \abspred \rangle} (\env{\abstable}, \env{\absvars}) \\
+    \abssqlsem{C_{delete}}(\env{\abstable}, \env{\absvars})
+    &= \abssqlsem{\langle delete(\absattrs), \abspred \rangle} (\env{\abstable}, \env{\absvars}) \\
     &= (\env{\abstable'}, \env{\absvars}) \\
-    \text{where } \env{\abstable'}(\absattr) &= \env{\abstable \downarrow_u \abspred}(\absattr) \sqcup \env{\abstable \downarrow_f \abspred}(\absattr)
+    \text{where } \env{\abstable'}(\absattr) &= \left( \env{\abstable \downarrow_{\unknown} \abspred}(\absattr) \cup \env{\abstable \downarrow_{\false} \abspred}(\absattr) \right) \into \lookupcl(v_d)
 \end{align*}
 
 \subsubsection{Abstract Semantics of Actions}
