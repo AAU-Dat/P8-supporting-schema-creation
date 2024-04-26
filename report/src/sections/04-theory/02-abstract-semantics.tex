@@ -48,10 +48,14 @@ This section will describe to abstract semantics of SQAAL.
 In genereal, this paper represents strings as a list of characters. 
 
 
-\begin{align}
-    S_1 \aop S_2 &= \{ s_1 \aaop s_2 \mid s_1 \in S_1, s_2 \in S_2 \} \\
+\begin{align}\label{eq:generalBOP}
+    S_1 \aop S_2 &= \{ s_1 \aaop s_2 \mid s_1 \in S_1, s_2 \in S_2 \} \\ \label{eq:generalUOP}
     \aop S &= \{\aaop s \mid s \in S \}
 \end{align}
+In \autoref{eq:generalBOP} and \autoref{eq:generalUOP} we see the how the general binary and unary operation works in SQAAL.
+We denote binary operations on sets with $\widehat{op}$, and $\aab{op}$ for binary operations on elements in those sets.
+
+
 
 \subsubsection{Abstract Semantics of Boolean expressions}
 
