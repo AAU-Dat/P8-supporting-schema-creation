@@ -47,16 +47,13 @@
 This section will describe to abstract semantics of SQAAL.
 In genereal, this paper represents strings as a list of characters. 
 
-
-\begin{align}\label{eq:generalBOP}
-    S_1 \aop S_2 &= \{ s_1 \aaop s_2 \mid s_1 \in S_1, s_2 \in S_2 \} \\ \label{eq:generalUOP}
 \begin{align}\label{eq:generalBOP}
     S_1 \aop S_2 &= \{ s_1 \aaop s_2 \mid s_1 \in S_1, s_2 \in S_2 \} \\ \label{eq:generalUOP}
     \aop S &= \{\aaop s \mid s \in S \}
 \end{align}
+q
 In \autoref{eq:generalBOP} and \autoref{eq:generalUOP} we see the how the general binary and unary operation works in SQAAL.
 We denote binary operations on sets with $\widehat{op}$, and $\aab{op}$ for binary operations on elements in those sets.
-
 
 In \autoref{eq:generalBOP} and \autoref{eq:generalUOP} we see the how the general binary and unary operation works in SQAAL.
 We denote binary operations on sets with $\widehat{op}$, and $\aab{op}$ for binary operations on elements in those sets.
@@ -122,8 +119,8 @@ For the comparison operators it evaluates the left and right side of the express
 
 
 
-\autoref{eq:aaabcomp}, \autoref{eq:aaabcomp2}, and \autoref{eq:aaabcomp3}describe the general description of how SQAAL handels comparison operations for regular expressions and ranges. Where the comparison operations work by looking at the entirety of the range or regular expressions and give back a set of true and/or false values.
-Since there can be cases where regular expression or ranges are identical, have some overlap or are completely different, the comparison operations can return multiple values.
+\autoref{eq:aaabcomp}, \autoref{eq:aaabcomp2}, and \autoref{eq:aaabcomp3} describe the general description of how SQAAL handels comparison operations for regular expressions and ranges. Where the comparison operations work by looking at the entirety of the range or regular expressions and give back a set of true and/or false values.
+Since there can be cases where regular expressions or ranges are identical, have some overlap or are completely different, the comparison operations can return multiple values.
 
 
 For regular expressions $R, R_1, R_2$, ranges over one variable $N, N_1, N_2$ and arbitrary values $X$:
