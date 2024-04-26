@@ -50,8 +50,14 @@ In genereal, this paper represents strings as a list of characters.
 
 \begin{align}\label{eq:generalBOP}
     S_1 \aop S_2 &= \{ s_1 \aaop s_2 \mid s_1 \in S_1, s_2 \in S_2 \} \\ \label{eq:generalUOP}
+\begin{align}\label{eq:generalBOP}
+    S_1 \aop S_2 &= \{ s_1 \aaop s_2 \mid s_1 \in S_1, s_2 \in S_2 \} \\ \label{eq:generalUOP}
     \aop S &= \{\aaop s \mid s \in S \}
 \end{align}
+In \autoref{eq:generalBOP} and \autoref{eq:generalUOP} we see the how the general binary and unary operation works in SQAAL.
+We denote binary operations on sets with $\widehat{op}$, and $\aab{op}$ for binary operations on elements in those sets.
+
+
 In \autoref{eq:generalBOP} and \autoref{eq:generalUOP} we see the how the general binary and unary operation works in SQAAL.
 We denote binary operations on sets with $\widehat{op}$, and $\aab{op}$ for binary operations on elements in those sets.
 
@@ -151,17 +157,24 @@ For regular expressions $R, R_1, R_2$, ranges over one variable $N, N_1, N_2$ an
 
 \subsubsection{Abstract Semantics of Expressions}
 
+Here we define the abstract semantics of expressions in SQAAL.
+The first rules guide the semantics of numbers, strings, and variables.
+We describe numbers as ranges, strings as regular expressions, and variables as values in the abstract environment.
+\autoref{eq:exp-lookup} describes how to look up a variable in the abstract environment, we check if the variable is in the domain of the database environment and if the attribute is in the attribute set of the table.
+\autoref{eq:unary-op} and \autoref{eq:binary-op} describe the semantics of unary and binary operations on expressions.
+
 \begin{align}
     \absexpsem{n}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \{ \{ [n, n] \} \}\\
     \absexpsem{k}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \{ R \} \text{ such that }\mathcal{L}(R) = \{ k \} \\
     \absexpsem{v_a}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=  \rho_{\ab{a}}(v_a) \\
-    \absexpsem{v_d}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=  \rho_{\ab{t}}(v_d) \text{ such that } \ab{t} \in dom(\ab{d}) \text{ and } v_d \in attr(\ab{t}) \\
-    \absexpsem{op \; e}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{op} \; (\absexpsem{e}(\rho_{\ab{d}}, \rho_{\ab{a}})) \\
-    \absexpsem{e_1 \; op \; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absexpsem{e}(\rho_{\ab{d}}, \rho_{\ab{a}}) \;\ab{op}\; \absexpsem{e}(\rho_{\ab{d}}, \rho_{\ab{a}})\\
+    \absexpsem{v_d}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=  \rho_{\ab{t}}(v_d) \text{ such that } \ab{t} \in dom(\ab{d}) \text{ and } v_d \in attr(\ab{t}) \\ \label{eq:exp-lookup}
+    \absexpsem{op \; e}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{op} \; (\absexpsem{e}(\rho_{\ab{d}}, \rho_{\ab{a}})) \\ \label{eq:unary-op}
+    \absexpsem{e_1 \; op \; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absexpsem{e}(\rho_{\ab{d}}, \rho_{\ab{a}}) \;\ab{op}\; \absexpsem{e}(\rho_{\ab{d}}, \rho_{\ab{a}})\\ \label{eq:binary-op}
 \end{align}
 
 We define the length of a regular expression $R$, $\|R\|$:
-
+These semantic rules describe how to calculate the length of a regular expression.
+The length of a regular expression is a range of integers, where the minimum is the length of the shortest string in the language of the regular expression, and the maximum is the length of the longest string in the language of the regular expression.
 \begin{align}
     \|R\| = \begin{cases}
         \{ [\|\min(R)\|, \|\max(R)\|] \} & \text{if $\|\max(R)\|$ is defined} \\
@@ -176,25 +189,32 @@ We define the length of a regular expression $R$, $\|R\|$:
     \text{where $\|s\|$ is the length of the word $s$}
 \end{align}
 
+these semantic rules describe how we do operations on regular expressions.
+\autoref{eq:complement} describes how to take the complement of a regular expression, we make an automata of the regular expression and take the complement of that automata, this is to be sure the regular expression only takes the alphabet of the original regular expression.
+
 \begin{align}
     cvt(op, R_1 \cup R_2) &= cvt(op, R_1) \cup cvt(op, R_2) \\
     cvt(op, R_1 \cap R_2) &= cvt(op, R_1) \cap cvt(op, R_2) \\
     cvt(op, R_1R_2) &= cvt(op, R_1) \; cvt(op, R_2) \\
     cvt(op, R) &= (cvt(op, R))^\star \\
-    cvt(op, \overline{R}) &= cvt(op, (\mathcal{R} \circ \mathcal{A}) (\overline{R})) \\
+    cvt(op, \overline{R}) &= cvt(op, (\mathcal{R} \circ \mathcal{A}) (\overline{R})) \\ \label{eq:complement}
     cvt(op, \sigma) &= op(\sigma)
 \end{align}
 
+\autoref{eq:concat} describes how to concatenate two regular expressions.
+
 \begin{align}
-    R_1 \;\aab{||}\; R_2 &= R_1R_2 \\
+    R_1 \;\aab{||}\; R_2 &= R_1R_2 \\ \label{eq:concat}
     \aab{lower}(R) &= cvt(\sigma \mapsto \sigma', R) \text{ such that $\sigma'$ is the lowercase representation of $\sigma$}\\
     \aab{upper}(R) &= cvt(\sigma \mapsto \sigma', R) \text{ such that $\sigma'$ is the uppercase representation of $\sigma$}\\
     \aab{bit\_length}(R) &= \|cvt(\sigma \mapsto \sigma', R)\| \text{ such that $\sigma'$ is the bit string of $\sigma$} \\
     \aab{length}(R) &= \|R\|
 \end{align}
 
+\autoref{eq:abstractBOP} describes how to do binary operations on integers.
+
 \begin{align}
-    I_1 \;\aab{aop}\; I_2 &= m(\{i_1 \; aop \; i_2 \mid i_1 \in I_1 \land i_2 \in I_2\}) \\
+    I_1 \;\aab{aop}\; I_2 &= m(\{i_1 \; aop \; i_2 \mid i_1 \in I_1 \land i_2 \in I_2\}) \\  \label{eq:abstractBOP}
 \end{align}
 
 \subsubsection{Abstract Semantics of Predicates}
