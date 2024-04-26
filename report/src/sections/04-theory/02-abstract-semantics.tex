@@ -244,6 +244,10 @@ Let $\ab{P}$ be a set of abstract environments $(\env{\abstable}, \env{\absvars}
     \abssem{C_{sql}}(\ab{P}) &= \{\abssqlsem{C_{sql}}(\env{\abstable}, \env{\absvars}) \mid (\env{\abstable}, \env{\absvars}) \in \ab{P} \}
 \end{align}
 
+\begin{restatable}{theorem}{csql}\label{thm:csql}
+    $S\llbracket C_{sql}\rrbracket(\widehat{P})$ is a monotone function in a complete lattice
+\end{restatable}
+
 % \begin{align*}
 %     E^\# \llbracket R_1 \texttt{||} R_2 \rrbracket                          \\
 %     = E^\# \llbracket R_1 \rrbracket \oplus  E^\# \llbracket R_2 \rrbracket \\
