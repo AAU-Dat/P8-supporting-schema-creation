@@ -45,66 +45,68 @@
 \subsection{Abstract Semantics}\label{subsec:abstract-semantics}
 \todo[inline]{Lars says: We should add a glossary for SQAAL}
 This section will describe to abstract semantics of SQAAL.
-In genereal, this paper represents strings as a list of characters. 
+% In general, this paper represents strings as a list of characters.
+
+In \autoref{eq:generalBOP} and \autoref{eq:generalUOP} we see the how the general binary and unary operation works in SQAAL.
+We denote binary operations on sets with $\widehat{op}$, and $\aab{op}$ for binary operations on elements in those sets.
 
 \begin{align}\label{eq:generalBOP}
     S_1 \aop S_2 &= \{ s_1 \aaop s_2 \mid s_1 \in S_1, s_2 \in S_2 \} \\ \label{eq:generalUOP}
     \aop S &= \{\aaop s \mid s \in S \}
 \end{align}
 
-In \autoref{eq:generalBOP} and \autoref{eq:generalUOP} we see the how the general binary and unary operation works in SQAAL.
-We denote binary operations on sets with $\widehat{op}$, and $\aab{op}$ for binary operations on elements in those sets.
-
-
 \subsubsection{Abstract Semantics of Boolean expressions}
-As described in~\autoref{subsec:abstract-semantics}, we will now define the general abstract semantics of boolean expressions.
-$\aab{bop}$ and $\aaab{bop}$ are used to represent boolean operations on sets and elements respectively.
-
+We now define the general abstract semantics of boolean expressions.
+$\aab{bop}$ is defined to be a special case of $\aaop$ as follows:
 \begin{align}
     B_1 \;\aab{bop}\; B_2 = \bigcup_{b_1 \in B_2, b_2 \in B_2} b_1 \;\aaab{bop}\; b_2
 \end{align}
+Where $\aaab{bop}$ is defined for $\land$, $\lor$ and $\neg$ in \autoref{tab:aaabland}, \autoref{tab:aaablor} and \autoref{tab:aaabneg} respectively.
 
-\autoref{eq:abstract-bool-semantics} shows the abstract semantics of boolean expressions, such as logical operators, comparisons, and negations.
-In general it works by evaluating a boolean value and its domain. for true and false values it returns a set of sets that contain either true or false. This is done due to the way that the abstract semantics is defined.
-This logic is then applied to each of the different boolean expressions, where binary boolean expressions evaluate the left and right side of the expression and then apply the operator to the result, and for unary expressions it applies the operator to the result of the expression.
-For the comparison operators it evaluates the left and right side of the expression as expressions (integers or other forms of expressions) and then applies the operator to the result, returning a boolean value.
+Equation \ref{eq:abstract-bool-semantics-start} through \ref{eq:abstract-bool-semantics-end} shows the abstract semantics of boolean expressions, such as logical operators and comparisons between expressions.
+Boolean expressions are evaluated recursively on in relation to the current state of the program.
+In general we don't know whether a comparison is between a single value or a list of values, thus we assume the former and take the prior as a special case that we can't distinguish.
+Therefore Boolean expressions over abstracts values evaluate to abstract lists of Boolean values.
 
-\begin{align}\label{eq:abstract-bool-semantics}
-    \absboolsem{\texttt{true}}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \{\{\true\}\} \\
+\begin{align}
+    \absboolsem{\texttt{true}}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \{\{\true\}\} \label{eq:abstract-bool-semantics-start} \\
     \absboolsem{\texttt{false}}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \{\{\false\}\} \\
     \absboolsem{b_1 \lor b_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absboolsem{b_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ab{\lor} \absboolsem{b_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
     \absboolsem{b_1 \land b_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absboolsem{b_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ab{\land} \absboolsem{b_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
     \absboolsem{\neg b}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{\neg} \absboolsem{b}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
     \absboolsem{e_1 \neq e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{\neg}(\absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \;\ab{=}\; \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}})) \\
-    \absboolsem{e_1 \;comp\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \;\ab{\comp}\; \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
+    \absboolsem{e_1 \;comp\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \;\ab{\comp}\; \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \label{eq:abstract-bool-semantics-end}
 \end{align}
 
 \begin{table}[H]
     \centering
+    \caption{test}
     \begin{tabular}{c|ccc}
-        $\aaab{\lor}$ & $\true$ & $\false$ & $\mnull$ \\
+        $\aaab{\land}$ & $\true$ & $\false$ & $\mnull$ \\
         \hline
         $\true$ & $\{\true\}$ & $\{\false\}$ & $\{\mnull\}$ \\
         $\false$ & $\{\false\}$ & $\{\false\}$ & $\{\false\}$ \\
         $\mnull$ & $\{\mnull\}$ & $\{\false\}$ & $\{\mnull\}$ \\
-    \end{tabular}
-    \label{tab:aaablor}
-\end{table}
-
-\begin{table}[H]
-    \centering
-    \begin{tabular}{c|ccc}
-        $\aaab{\land}$ & $\true$ & $\false$ & $\mnull$ \\
-        \hline
-        $\true$ & $\{\true\}$ & $\{\true\}$ & $\{\true\}$ \\
-        $\false$ & $\{\true\}$ & $\{\false\}$ & $\{\mnull\}$ \\
-        $\mnull$ & $\{\true\}$ & $\{\mnull\}$ & $\{\mnull\}$ \\
     \end{tabular}
     \label{tab:aaabland}
 \end{table}
 
 \begin{table}[H]
     \centering
+    \caption{test}
+    \begin{tabular}{c|ccc}
+        $\aaab{\lor}$ & $\true$ & $\false$ & $\mnull$ \\
+        \hline
+        $\true$ & $\{\true\}$ & $\{\true\}$ & $\{\true\}$ \\
+        $\false$ & $\{\true\}$ & $\{\false\}$ & $\{\mnull\}$ \\
+        $\mnull$ & $\{\true\}$ & $\{\mnull\}$ & $\{\mnull\}$ \\
+    \end{tabular}
+    \label{tab:aaablor}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{test}
     \begin{tabular}{c|ccc}
         $\aaab{\neg}$ & $\true$ & $\false$ & $\mnull$ \\
         \hline
@@ -113,37 +115,35 @@ For the comparison operators it evaluates the left and right side of the express
     \label{tab:aaabneg}
 \end{table}
 
-
-
-\autoref{eq:aaabcomp}, \autoref{eq:aaabcomp2}, and \autoref{eq:aaabcomp3} describe the general description of how SQAAL handels comparison operations for regular expressions and ranges. Where the comparison operations work by looking at the entirety of the range or regular expressions and give back a set of true and/or false values.
+Equation \ref{eq:aaabcomp} through \ref{eq:aaabcomp3} describe how SQAAL handles comparison operations for abstract strings (regular expressions) and numbers (union of interval).
+Where the comparison operations work by looking at the entirety of the range or regular expressions and give back a set of true and/or false values.
 Since there can be cases where regular expressions or ranges are identical, have some overlap or are completely different, the comparison operations can return multiple values.
 
 
-For regular expressions $R, R_1, R_2$, ranges over one variable $N, N_1, N_2$ and arbitrary values $X$:
+For ranges $I_1$ and $I_2$ and arbitrary values $X_1$ and $X_2$ (either a intervals or a regular expression):
 
 \begin{align} \label{eq:aaabcomp}
     X_1 \;\aab{=}\; X_2 &= \begin{cases}
         \begin{cases}
-        \{\true \} & \text{if } |X_1| = |X_2| = 1 \land X_1 = X_2 \\
         \{\false\} & \text{if } X_1 \cap X_2 = \emptyset \\
         \{\true, \false\} & \text{if } X_1 \cap X_2 \neq \emptyset
         \end{cases} & \text{if $X_1$ and $X_2$ is of the same type} \\
-        \text{undefined} & \text{otherwise} 
-    \end{cases} \\
+        \text{undefined} & \text{otherwise}
+    \end{cases}
 \end{align}
 
 \begin{align}\label{eq:aaabcomp2}
     I_1 \;\aab{<}\; I_2 &= \begin{cases}
-        \{\true\} & \text{if } \max(X_1) < \min(X_2) \\
-        \{\false\} & \text{if } \max(X_2) \leq \min (X_1) \\
+        \{\true\} & \text{if } \max(I_1) < \min(I_2) \\
+        \{\false\} & \text{if } \max(I_2) \leq \min (I_1) \\
         \{\true, \false\} & \text{otherwise}
     \end{cases}
 \end{align}
 
 \begin{align}\label{eq:aaabcomp3}
     I_1 \;\aab{\leq}\; I_2 &= \begin{cases}
-        \{\true\} & \text{if } \max(X_1) \leq \min(X_2) \\
-        \{\false\} & \text{if } \max(X_2) < \min (X_1) \\
+        \{\true\} & \text{if } \max(I_1) \leq \min(I_2) \\
+        \{\false\} & \text{if } \max(I_2) < \min (I_1) \\
         \{\true, \false\} & \text{otherwise}
     \end{cases}
 \end{align}
