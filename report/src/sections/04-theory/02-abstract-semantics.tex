@@ -63,7 +63,7 @@ $\aab{bop}$ is defined to be a special case of $\aaop$ as follows:
 \end{align}
 Where $\aaab{bop}$ is defined for $\land$, $\lor$ and $\neg$ in \autoref{tab:aaabland}, \autoref{tab:aaablor} and \autoref{tab:aaabneg} respectively.
 
-Equation \ref{eq:abstract-bool-semantics-start} through \ref{eq:abstract-bool-semantics-end} shows the abstract semantics of boolean expressions, such as logical operators and comparisons between expressions.
+Equation \ref{eq:abstract-bool-semantics-start} through \ref{eq:abstract-bool-semantics-end2} shows the abstract semantics of boolean expressions, such as logical operators and comparisons between expressions.
 Boolean expressions are evaluated recursively on in relation to the current state of the program.
 In general we don't know whether a comparison is between a single value or a list of values, thus we assume the former and take the prior as a special case that we can't distinguish.
 Therefore Boolean expressions over abstracts values evaluate to abstract lists of Boolean values.
@@ -74,8 +74,8 @@ Therefore Boolean expressions over abstracts values evaluate to abstract lists o
     \absboolsem{b_1 \lor b_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absboolsem{b_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ab{\lor} \absboolsem{b_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
     \absboolsem{b_1 \land b_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absboolsem{b_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ab{\land} \absboolsem{b_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
     \absboolsem{\neg b}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{\neg} \absboolsem{b}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
-    \absboolsem{e_1 \neq e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{\neg}(\absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \;\ab{=}\; \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}})) \\
-    \absboolsem{e_1 \;comp\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \;\ab{\comp}\; \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \label{eq:abstract-bool-semantics-end}
+    \absboolsem{e_1 \neq e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{\neg}(\absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \;\ab{=}\; \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}})) \label{eq:abstract-bool-semantics-end1} \\
+    \absboolsem{e_1 \;comp\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \;\ab{\comp}\; \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \label{eq:abstract-bool-semantics-end2}
 \end{align}
 
 \begin{table}[H]
@@ -151,75 +151,81 @@ For ranges $I_1$ and $I_2$ and arbitrary values $X_1$ and $X_2$ (either a interv
 \subsubsection{Abstract Semantics of Expressions}
 
 Here we define the abstract semantics of expressions in SQAAL.
-The first rules guide the semantics of numbers, strings, and variables.
-We describe numbers as ranges, strings as regular expressions, and variables as values in the abstract environment.
-\autoref{eq:exp-lookup} describes how to look up a variable in the abstract environment, we check if the variable is in the domain of the database environment and if the attribute is in the attribute set of the table.
-\autoref{eq:unary-op} and \autoref{eq:binary-op} describe the semantics of unary and binary operations on expressions.
 
-\begin{align}
-    \absexpsem{n}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \{ \{ [n, n] \} \}\\
-    \absexpsem{k}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \{ R \} \text{ such that }\mathcal{L}(R) = \{ k \} \\
-    \absexpsem{v_a}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=  \rho_{\ab{a}}(v_a) \\
+\autoref{sem:exp1} to \ref{sem:exp2} describe the semantics of constants.
+In \autoref{sem:exp3} to \ref{sem:exp4} we describe the semantics of variables.
+In the case of database variables in \autoref{sem:exp4}, we assume attribute names do not clash.
+\autoref{eq:exp-lookup} and \autoref{eq:unary-op} describe the semantics of unary and binary operations on expressions.
+
+\begin{align}\label{sem:exp1}
+    \absexpsem{n}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \{ \{ [n, n] \} \}\\\label{sem:exp2}
+    \absexpsem{k}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \{ R \} \text{ such that }\mathcal{L}(R) = \{ k \} \\ \label{sem:exp3}
+    \absexpsem{v_a}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=  \rho_{\ab{a}}(v_a) \\ \label{sem:exp4}
     \absexpsem{v_d}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=  \rho_{\ab{t}}(v_d) \text{ such that } \ab{t} \in dom(\ab{d}) \text{ and } v_d \in attr(\ab{t}) \\ \label{eq:exp-lookup}
     \absexpsem{op \; e}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{op} \; (\absexpsem{e}(\rho_{\ab{d}}, \rho_{\ab{a}})) \\ \label{eq:unary-op}
-    \absexpsem{e_1 \; op \; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absexpsem{e}(\rho_{\ab{d}}, \rho_{\ab{a}}) \;\ab{op}\; \absexpsem{e}(\rho_{\ab{d}}, \rho_{\ab{a}})\\ \label{eq:binary-op}
+    \absexpsem{e_1 \; op \; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \;\ab{op}\; \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}})
 \end{align}
 
+Before defining the abstract operations, $\aaop$, for expressions, we will define some auxiliary functions.
 We define the length of a regular expression $R$, $\|R\|$:
-These semantic rules describe how to calculate the length of a regular expression.
-The length of a regular expression is a range of integers, where the minimum is the length of the shortest string in the language of the regular expression, and the maximum is the length of the longest string in the language of the regular expression.
 \begin{align}
     \|R\| = \begin{cases}
         \{ [\|\min(R)\|, \|\max(R)\|] \} & \text{if $\|\max(R)\|$ is defined} \\
-        % todo uncomment this
-        % \{ \left[ \|\min(R)\|, +\infty \right) \} & \text{if $\|\max(R)\|$ is undefined}
+        \{ \left[ \|\min(R)\|, +\infty \right) \} & \text{if $\|\max(R)\|$ is undefined}
     \end{cases}
 \end{align}
 
-\begin{align}
-    \|\min(R)\| &= \min\{ \|s\| \mid s \in R \} \\
+\begin{align}\label{eq:r1}
+    \|\min(R)\| &= \min\{ \|s\| \mid s \in R \} \\ \label{eq:r2}
     \|\max(R)\| &= \max\{ \|s\| \mid s \in R \} \\
     \text{where $\|s\|$ is the length of the word $s$}
 \end{align}
 
-these semantic rules describe how we do operations on regular expressions.
-\autoref{eq:complement} describes how to take the complement of a regular expression, we make an automata of the regular expression and take the complement of that automata, this is to be sure the regular expression only takes the alphabet of the original regular expression.
+We can find $\min(R)$ in \autoref{eq:r1} from the initial state to any final state by the shortest path algorithm.
+Furthermore, we can find $\max(R)$ in \autoref{eq:r2} by ???\todo{How do we do this?}.
+
+Next, we define $cvt$ which is String conversion generalized to regular expressions, defined by recursing on the operands of union, intersection, concatenation and kleene star.
+In the base case, a single symbol is converted as defined by $op$. 
+In the case of the complement, seen in \autoref{eq:complement}, we convert $\overline{R}$ to its DFA equivalent by the usual construction, $\mathcal{A}:REG\rightarrow DFA$. \todo{reference to Sipser}
+This automaton is then converted back to a regular expression by the usual GNFA construction, $\mathcal{R}: DFA\rightarrow REG$, thus eliminating the complement. \todo{reference to Sipser}
 
 \begin{align}
     cvt(op, R_1 \cup R_2) &= cvt(op, R_1) \cup cvt(op, R_2) \\
     cvt(op, R_1 \cap R_2) &= cvt(op, R_1) \cap cvt(op, R_2) \\
     cvt(op, R_1R_2) &= cvt(op, R_1) \; cvt(op, R_2) \\
-    cvt(op, R) &= (cvt(op, R))^\star \\
+    cvt(op, R^\star) &= (cvt(op, R))^\star \\
     cvt(op, \overline{R}) &= cvt(op, (\mathcal{R} \circ \mathcal{A}) (\overline{R})) \\ \label{eq:complement}
     cvt(op, \sigma) &= op(\sigma)
 \end{align}
 
-\autoref{eq:concat} describes how to concatenate two regular expressions.
+\autoref{eq:concat} to \ref{eq:length} describe a subset of String operators present in PostgreSQL.
 
-\begin{align}
-    R_1 \;\aab{||}\; R_2 &= R_1R_2 \\ \label{eq:concat}
+\begin{align}\label{eq:concat}
+    R_1 \;\aab{||}\; R_2 &= R_1R_2 \\
     \aab{lower}(R) &= cvt(\sigma \mapsto \sigma', R) \text{ such that $\sigma'$ is the lowercase representation of $\sigma$}\\
     \aab{upper}(R) &= cvt(\sigma \mapsto \sigma', R) \text{ such that $\sigma'$ is the uppercase representation of $\sigma$}\\
-    \aab{bit\_length}(R) &= \|cvt(\sigma \mapsto \sigma', R)\| \text{ such that $\sigma'$ is the bit string of $\sigma$} \\
+    \aab{bit\_length}(R) &= \|cvt(\sigma \mapsto \sigma', R)\| \text{ such that $\sigma'$ is the bit string of $\sigma$} \\ \label{eq:length}
     \aab{length}(R) &= \|R\|
 \end{align}
 
-\autoref{eq:abstractBOP} describes how to do binary operations on integers.
+\autoref{eq:abstractBOP} describes how to do binary operations on numbers.
+The arithmetic operations, $aop$, are defined as the standard for intervals.
 
 \begin{align}
-    I_1 \;\aab{aop}\; I_2 &= m(\{i_1 \; aop \; i_2 \mid i_1 \in I_1 \land i_2 \in I_2\}) \\  \label{eq:abstractBOP}
+    I_1 \;\aab{aop}\; I_2 &= m(\{i_1 \; aop \; i_2 \mid i_1 \in I_1 \land i_2 \in I_2\})  \label{eq:abstractBOP}
 \end{align}
 
 \subsubsection{Abstract Semantics of Predicates}
-The base rule of all the predicates is defined in \autoref{eq:atomicformulas}, as this is the base case for all the other predicates, it takes an atomic formula $a_f$ and returns the boolean value of $a_f$.
+The base rule of all the predicates is defined in \autoref{eq:atomicformulas}, as this is the base case for all the other predicates.
+It takes atomic formulas, $a_f$, of the form corresponding to \autoref{eq:abstract-bool-semantics-end1} and \ref{eq:abstract-bool-semantics-end2}, and returns the boolean value of $a_f$.
 The other predicates all build on this base case with rules such as negation, disjunction and conjunction.
-\begin{align}
-    \abspredsem{a_f}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absboolsem{a_f}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\ \label{eq:atomicformulas}
+\begin{align}\label{eq:atomicformulas}
+    \abspredsem{a_f}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absboolsem{a_f}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
     \abspredsem{\neg \phi}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{\neg} \left( \abspredsem{\phi}(\rho_{\ab{d}}, \rho_{\ab{a}}) \right) \\
     \abspredsem{\phi_1 \lor \phi_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \abspredsem{\phi_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ab{\lor} \abspredsem{\phi_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
     \abspredsem{\phi_1 \land \phi_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \abspredsem{\phi_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ab{\land} \abspredsem{\phi_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
-    \abspredsem{\exists x \; \phi}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \underset{s \in \absexpsem{x}}{\ab{\bigvee}} \abspredsem{\phi[s/x]} \\
-    \abspredsem{\forall x \; \phi}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \underset{s \in \absexpsem{x}}{\ab{\bigwedge}} \abspredsem{\phi[s/x]}
+    \abspredsem{\exists x_i \; \phi}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \underset{s \in \absexpsem{x}}{\ab{\bigvee}} \abspredsem{\phi[s/x_i]} \\
+    \abspredsem{\forall x_i \; \phi}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \underset{s \in \absexpsem{x}}{\ab{\bigwedge}} \abspredsem{\phi[s/x_i]}
 \end{align}
 
 \subsubsection{Abstract Semantics of SQL statements}
@@ -228,11 +234,14 @@ Let
 \begin{equation}
     \mathcal{C} : \mathbb{V}_a \cup \mathbb{V}_d \rightarrow \{ C_{X_1}(S_1), C_{X_2}(S_2), \dots, C_{X_n}(S_n) \}
 \end{equation}
-and
+where $X_1,...,X_n$ are defined as in \autoref{def:coverlattice} and are provided by the user.
+Also $S_1,...,S_n$ are given by the type of $v_a$ and $v_d$.
+
+Let
 \begin{align}
-    \abstable \downarrow_{\true} \phi &= \{ l \in \ab{t} \mid \{\{ \true \}\} = \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]} \} \\
-    \abstable \downarrow_{\false} \phi &= \{ l \in \ab{t} \mid \{\{ \false \}\} = \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]} \} \\
-    \abstable \downarrow_{\unknown} \phi &= \{ l \in \ab{t} \mid \{\{ \true \}\} \neq \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]} \land \{\{ \false \}\} \neq \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]}\} \\
+    \abstable \downarrow_{\true}^{\mathbf{v}_d} \phi &= \{ l \in \ab{t} \mid \{\{ \true \}\} = \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]} \} \\
+    \abstable \downarrow_{\false}^{\mathbf{v}_d} \phi &= \{ l \in \ab{t} \mid \{\{ \false \}\} = \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]} \} \\
+    \abstable \downarrow_{\unknown}^{\mathbf{v}_d} \phi &= \{ l \in \ab{t} \mid \{\{ \true \}\} \neq \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]} \land \{\{ \false \}\} \neq \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]}\}
 \end{align}
 
 \begin{align}
