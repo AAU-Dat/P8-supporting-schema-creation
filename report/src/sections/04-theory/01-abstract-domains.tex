@@ -51,7 +51,7 @@ The resolve the issue presented above we introduce the notion of a cover lattice
     A finite non-empty subset $X \subseteq S$ of a lattice $(S, \subseteq, \cup, \cap)$ is called a collectively disjoint top-cover of $S$ whenever $\bigcup X = \top$ and $\bigcap X = \bot$.
 \end{definition}
 
-\begin{definition}
+\begin{definition}\label{def:coverlattice}
     Given a collectively disjoint top-cover $X$ of a lattice $(S, \subseteq, \cup, \cap)$.
     A cover lattice of $S$ in respect to $X$ denoted $\clattice{X}{S}$ is the minimum set where:
     \begin{itemize}
@@ -76,6 +76,10 @@ And the following lemmas immediately follow:
 \begin{lemma}
     If $X$ is a collectively disjoint top-cover of $(MILP^n, \subseteq, \cup, \cap)$ then $(\clattice{X}{MILP^n}, \subseteq, \cup, \cap)$ is a complete lattice.
 \end{lemma}
+
+\begin{definition}
+    We define $\cdot \into C_X(S):S\rightarrow C_X(S)$ to be the function mapping $s\in S$ to the least element in $C_X(S)$ containing it, that is $s \into C_X(S)=\bigsqcap\{s'\in C_X(S)|s\sqsubseteq s'\}\}$
+\end{definition}
 
 \begin{example}
     \autoref{fig:tikz-reg-partition} illustrates a simple lattice cover of the regular languages. The regular language $R$ is represented by the gray circle and its complement $\overline{R}$ is represented by the white circle. The union of the two regular language represent the entire regular language $\Sigma^*$ and their intersection is the empty set $\emptyset$.
