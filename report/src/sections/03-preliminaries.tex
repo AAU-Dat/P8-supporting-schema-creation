@@ -80,7 +80,22 @@ As a shorthand we take $x \sqcup y = \bigsqcup \{x, y\}$ and $x \sqcap y = \bigs
     For $\gamma : L_1 \rightarrow L_2$ where $L_1$ and $L_2$ are complete lattices there exist a function $\alpha : L_2 \rightarrow L_1$ such that $\alpha$ and $\gamma$ forms a Galois connection if $\gamma(\bigsqcap B) = \bigsqcap_{b \in B}\gamma(b)$ for every $B \subseteq L_1$.
 \end{theorem}
 
-\subsection{Regular languages}
+\subsection{Converting Code Program Graph}\label{subsection:converting-code-program-graph}
+This section will briefly cover how the program graph is created.
+Creating a program graph from the code is already a proven concept. Therefore, this paper will not delve into the details but inform the reader.
+The book used to show that the concept of creating a program graph from code is a proven concept is~\cite[see][chap 2.2]{nielson_formal_2019}.
+A program graph consists of a finite set of nodes, initial and final nodes, actions, and edges.
 
+These directed edges represent the program's flow, and the nodes represent its state. The edges' actions are the atomic operations that the program can perform. The initial node is the program's starting point, and the final node is the program's end.
 
+The program graph is created by parsing the code and creating nodes and edges that represent the flow of the code. This process, while it may sound complex, is actually quite straightforward. For instance, if the code is only an assignment of a variable, there will be a node for the initial state before the variable is assigned, a node for the final state after the variable is assigned, and an edge between them that represents the action of the assignment. This is written as the following equation:
+$edges(q_{\circ} \rightsquigarrow q_{\bullet})\llbracket x:=a \rrbracket = \{(q_{\circ}, x:=a, q_{\bullet})\}$
+$q_{\circ}$ is the initial node, $q_{\bullet}$ is the final node, and $x:=a$ is the assignment. This creates a set that represents the program graph, which can be seen in \autoref{fig:tikz-program-graph-assignment}. This is a simple example, and the program graph can be more complex depending on the code, but the concept is the same.
+Further examples can be found in~\cite[Figure 2.6]{nielson_formal_2019}.
 
+\begin{figure}[htb!]
+    \center
+    \input{figures/program-graph.tex}
+    \caption{An example that shows a program graph of an assignment}
+    \label{fig:tikz-program-graph-assignment}
+\end{figure}    
