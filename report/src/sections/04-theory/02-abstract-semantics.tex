@@ -47,12 +47,21 @@
 This section will describe to abstract semantics of SQAAL.
 % In general, this paper represents strings as a list of characters.
 
+We would like to distinguish between single values and lists of values, thus we define algebraic type:
+\begin{align}
+    \mathsf{Val} \; v ::= \mathsf{Single} \; v \mid \mathsf{List} \; \mathcal{P}(v)
+\end{align}
+
 In \autoref{eq:generalBOP} and \autoref{eq:generalUOP} we see the how the general binary and unary operation works in SQAAL.
 We denote binary operations on sets with $\widehat{op}$, and $\aab{op}$ for binary operations on elements in those sets.
 
 \begin{align}\label{eq:generalBOP}
-    S_1 \aop S_2 &= \{ s_1 \aaop s_2 \mid s_1 \in S_1, s_2 \in S_2 \} \\ \label{eq:generalUOP}
-    \aop S &= \{\aaop s \mid s \in S \}
+    \mathsf{Single} \; s_1 \aop \mathsf{Single} \; s_2 &= \mathsf{Single} \; (s_1 \aaop s_2) \\
+    \mathsf{Single} \; s \aop \mathsf{List} \; S &= \mathsf{List} \; \{ s \aaop s' \mid s' \in S \}  \\
+    \mathsf{List} \; S \aop \mathsf{Single} \; s &= \mathsf{List} \; \{ s' \aaop s \mid s' \in S \}  \\
+    \mathsf{List} \; S_1 \aop \mathsf{List} \; S_2 &= \mathsf{List} \; \{ s_1 \aaop s_2 \mid s_1 \in S_1, s_2 \in S_2 \} \\
+    \aop (\mathsf{Single} \; s) &= \mathsf{Single} \; (\aaop s) \\
+    \aop (\mathsf{List} \; S) &= \mathsf{List} \; \{ \aaop s \mid s \in S \}
 \end{align}
 
 \subsubsection{Abstract Semantics of Boolean expressions}
@@ -69,13 +78,19 @@ In general we don't know whether a comparison is between a single value or a lis
 Therefore Boolean expressions over abstracts values evaluate to abstract lists of Boolean values.
 
 \begin{align}
-    \absboolsem{\texttt{true}}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \{\{\true\}\} \label{eq:abstract-bool-semantics-start} \\
-    \absboolsem{\texttt{false}}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \{\{\false\}\} \\
+    \absboolsem{\texttt{true}}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \mathsf{Single} \; \{\true\} \label{eq:abstract-bool-semantics-start} \\
+    \absboolsem{\texttt{false}}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \mathsf{Single} \; \{\false\} \\
     \absboolsem{b_1 \lor b_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absboolsem{b_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ab{\lor} \absboolsem{b_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
     \absboolsem{b_1 \land b_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absboolsem{b_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ab{\land} \absboolsem{b_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
     \absboolsem{\neg b}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{\neg} \absboolsem{b}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
     \absboolsem{e_1 \neq e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{\neg}(\absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \;\ab{=}\; \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}})) \label{eq:abstract-bool-semantics-end1} \\
-    \absboolsem{e_1 \;comp\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \;\ab{\comp}\; \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \label{eq:abstract-bool-semantics-end2}
+    \absboolsem{e_1 \;comp\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=
+    \begin{cases}
+        \mathsf{List} \; \left(S' \cup \{\{null\}\} \right) & \text{if } E_1 = \mathsf{List} \; S_1 \land E_2 = \mathsf{List} \; S_2 \land E_1 \;\ab{\comp}\; E_2 = \mathsf{List} \; S'\\
+        E_1 \;\ab{\comp}\; E_2 & \text{otherwise}\\
+    \end{cases}\label{eq:abstract-bool-semantics-end2} \\
+    \text{where } & E_1 = \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
+    \text{and } & E_2 = \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}})
 \end{align}
 
 \begin{table}[H]
@@ -125,6 +140,7 @@ For ranges $I_1$ and $I_2$ and arbitrary values $X_1$ and $X_2$ (either a interv
 \begin{align} \label{eq:aaabcomp}
     X_1 \;\aab{=}\; X_2 &= \begin{cases}
         \begin{cases}
+        \{\true\} & \text{if } |X_1| = |X_2| = 1 \\
         \{\false\} & \text{if } X_1 \cap X_2 = \emptyset \\
         \{\true, \false\} & \text{if } X_1 \cap X_2 \neq \emptyset
         \end{cases} & \text{if $X_1$ and $X_2$ is of the same type} \\
@@ -158,31 +174,29 @@ In the case of database variables in \autoref{sem:exp4}, we assume attribute nam
 \autoref{eq:exp-lookup} and \autoref{eq:unary-op} describe the semantics of unary and binary operations on expressions.
 
 \begin{align}\label{sem:exp1}
-    \absexpsem{n}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \{ \{ [n, n] \} \}\\\label{sem:exp2}
-    \absexpsem{k}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \{ R \} \text{ such that }\mathcal{L}(R) = \{ k \} \\ \label{sem:exp3}
+    \absexpsem{n}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \mathsf{Single} \; \{ [n, n] \} \\\label{sem:exp2}
+    \absexpsem{k}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \mathsf{Single} \; R,  \text{ such that }\mathcal{L}(R) = \{ k \} \\ \label{sem:exp3}
     \absexpsem{v_a}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=  \rho_{\ab{a}}(v_a) \\ \label{sem:exp4}
     \absexpsem{v_d}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=  \rho_{\ab{t}}(v_d) \text{ such that } \ab{t} \in dom(\ab{d}) \text{ and } v_d \in attr(\ab{t}) \\ \label{eq:exp-lookup}
     \absexpsem{op \; e}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{op} \; (\absexpsem{e}(\rho_{\ab{d}}, \rho_{\ab{a}})) \\ \label{eq:unary-op}
-    \absexpsem{e_1 \; op \; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \;\ab{op}\; \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}})
+    \absexpsem{e_1 \;op\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=
+    \begin{cases}
+        \mathsf{List} \; \left(S' \cup \{\{null\}\} \right) & \text{if } E_1 = \mathsf{List} \; S_1 \land E_2 = \mathsf{List} \; S_2 \land E_1 \;\ab{op}\; E_2 = \mathsf{List} \; S'\\
+        E_1 \;\ab{op}\; E_2 & \text{otherwise}\\
+    \end{cases} \\
+    \text{where } & E_1 = \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
+    \text{and } & E_2 = \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}})
 \end{align}
 
 Before defining the abstract operations, $\aaop$, for expressions, we will define some auxiliary functions.
 We define the length of a regular expression $R$, $\|R\|$:
-\begin{align}
-    \|R\| = \begin{cases}
-        \{ [\|\min(R)\|, \|\max(R)\|] \} & \text{if $\|\max(R)\|$ is defined} \\
-        \{ \left[ \|\min(R)\|, +\infty \right) \} & \text{if $\|\max(R)\|$ is undefined}
-    \end{cases}
-\end{align}
-
 \begin{align}\label{eq:r1}
-    \|\min(R)\| &= \min\{ \|s\| \mid s \in R \} \\ \label{eq:r2}
-    \|\max(R)\| &= \max\{ \|s\| \mid s \in R \} \\
-    \text{where $\|s\|$ is the length of the word $s$}
+    \|R\| & = \{ \left[ \|\min(R)\|, +\infty \right) \} \\
+    \text{where } & \|\min(R)\| = \min\{ \|s\| \mid s \in R \} \\ \label{eq:r2}
+    \text{and } & \|s\| \text{ is the length of the word $s$}
 \end{align}
 
 We can find $\min(R)$ in \autoref{eq:r1} from the initial state to any final state by the shortest path algorithm.
-Furthermore, we can find $\max(R)$ in \autoref{eq:r2} by ???\todo{How do we do this?}.
 
 Next, we define $cvt$ which is String conversion generalized to regular expressions, defined by recursing on the operands of union, intersection, concatenation and kleene star.
 In the base case, a single symbol is converted as defined by $op$.
@@ -239,9 +253,9 @@ Also $S_1,...,S_n$ are given by the type of $v_a$ and $v_d$.
 
 Let
 \begin{align}
-    \abstable \downarrow_{\true} \phi &= \{ l \in \ab{t} \mid \{\{ \true \}\} = \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]} \text{ for } \mathbf{v}_d = var_d(\phi) \} \\
-    \abstable \downarrow_{\false} \phi &= \{ l \in \ab{t} \mid \{\{ \false \}\} = \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]} \text{ for } \mathbf{v}_d = var_d(\phi) \} \\
-    \abstable \downarrow_{\unknown} \phi &= \{ l \in \ab{t} \mid \{\{ \true \}\} \neq \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]} \land \{\{ \false \}\} \neq \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]} \text{ for } \mathbf{v}_d = var_d(\phi) \}
+    \abstable \downarrow_{\true} \phi &= \{ l \in \ab{t} \mid \mathsf{Single} \; \{ \true \} = \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]} \text{ for } \mathbf{v}_d = var_d(\phi) \} \\
+    \abstable \downarrow_{\false} \phi &= \{ l \in \ab{t} \mid \mathsf{Single} \; \{ \false \} = \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]} \text{ for } \mathbf{v}_d = var_d(\phi) \} \\
+    \abstable \downarrow_{\unknown} \phi &= \{ l \in \ab{t} \mid \mathsf{Single} \; \{ \true \} \neq \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]} \land \mathsf{Single} \; \{ \false \} \neq \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]} \text{ for } \mathbf{v}_d = var_d(\phi) \}
 \end{align}
 
 \begin{align}
