@@ -63,11 +63,10 @@ The SQL queries for the operations are shown in \autoref{lst:sql-queries} and \a
 \label{lst:sql-queries2}
 \end{listing}
 
-
-Now the database schema and the operations are defined, we need to define the behavior of the operations.
-The program that defines the behavior of the operations is shown in \autoref{lst:program}.
-The program first checks if there are 2 or more accounts in the database, if not, it inserts a new account, with the \texttt{Insert} operation.
-If there are more than two accounts, we try to transfer an amount from one account to another, that is the \texttt{Update} operation.
+Understanding the database schema and operations is crucial as it forms the foundation for defining the behavior of the operations.
+The program that defines the behaviour of the operations is shown in \autoref{lst:program}.
+The program first checks if there are two or more accounts in the database; if not, it inserts a new account with the \textttit{INSERT} operation.
+If there are more than two accounts, we try to transfer an amount from one account to another; that is the \textttit{UPDATE} operation
 
 \begin{listing}[htb!]
 \begin{minted}{text}
