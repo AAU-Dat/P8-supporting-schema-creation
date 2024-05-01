@@ -1,4 +1,4 @@
-\subsection{Overview for function definitions} \label{subsec:function-definitions}
+\subsection{Abstract Syntax} \label{subsec:function-definitions}
 
 \todo[inline]{Lars says: Write the tables in from the paper:Abstract interpretation of database query languages}
 \begin{center}
@@ -185,7 +185,7 @@ We can find $\min(R)$ in \autoref{eq:r1} from the initial state to any final sta
 Furthermore, we can find $\max(R)$ in \autoref{eq:r2} by ???\todo{How do we do this?}.
 
 Next, we define $cvt$ which is String conversion generalized to regular expressions, defined by recursing on the operands of union, intersection, concatenation and kleene star.
-In the base case, a single symbol is converted as defined by $op$. 
+In the base case, a single symbol is converted as defined by $op$.
 In the case of the complement, seen in \autoref{eq:complement}, we convert $\overline{R}$ to its DFA equivalent by the usual construction, $\mathcal{A}:REG\rightarrow DFA$. \todo{reference to Sipser}
 This automaton is then converted back to a regular expression by the usual GNFA construction, $\mathcal{R}: DFA\rightarrow REG$, thus eliminating the complement. \todo{reference to Sipser}
 
@@ -239,9 +239,14 @@ Also $S_1,...,S_n$ are given by the type of $v_a$ and $v_d$.
 
 Let
 \begin{align}
-    \abstable \downarrow_{\true}^{\mathbf{v}_d} \phi &= \{ l \in \ab{t} \mid \{\{ \true \}\} = \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]} \} \\
-    \abstable \downarrow_{\false}^{\mathbf{v}_d} \phi &= \{ l \in \ab{t} \mid \{\{ \false \}\} = \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]} \} \\
-    \abstable \downarrow_{\unknown}^{\mathbf{v}_d} \phi &= \{ l \in \ab{t} \mid \{\{ \true \}\} \neq \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]} \land \{\{ \false \}\} \neq \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]}\}
+    \abstable \downarrow_{\true} \phi &= \{ l \in \ab{t} \mid \{\{ \true \}\} = \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]} \text{ for } \mathbf{v}_d = var_d(\phi) \} \\
+    \abstable \downarrow_{\false} \phi &= \{ l \in \ab{t} \mid \{\{ \false \}\} = \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]} \text{ for } \mathbf{v}_d = var_d(\phi) \} \\
+    \abstable \downarrow_{\unknown} \phi &= \{ l \in \ab{t} \mid \{\{ \true \}\} \neq \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]} \land \{\{ \false \}\} \neq \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]} \text{ for } \mathbf{v}_d = var_d(\phi) \}
+\end{align}
+
+\begin{align}
+    \abssqlsem{\langle select(v_a), \phi \rangle}(\rho_{\ab{d}}, \rho_{\ab{a}})
+    &= (\rho_{\ab{d}}, \rho_{\ab{a}}[v_a \mapsto \abstable \downarrow_{\true} \phi \cup \abstable \downarrow_{\unknown} \phi])
 \end{align}
 
 \begin{align}
@@ -259,21 +264,20 @@ Let
 \begin{align}
     \abssqlsem{C_{update}}(\env{\abstable}, \env{\absvars})
                                               & = \abssqlsem{\langle update(\absattrs, \absexps), \abspred \rangle} (\env{\abstable}, \env{\absvars}) \\
-                                              & = (\env{\abstable'}, \env{\absvars})                                                                 \\
-    \text{where } \env{\abstable'}(\absattr) & =
-    \begin{cases}
-        \env{\abstable \downarrow_{\true} \abspred}(\absattr) \cup \env{\abstable \downarrow_{\unknown} \abspred}(\absattr) \cup \env{\abstable \downarrow_{\false} \abspred}(\absattr) & \text{if } \absattr \notin \absattrs \\
-        \left( \absexpsem{\absexp{i}}(\env{\abstable \downarrow_{\true} \abspred}, \env{\absvars}) \cup
-        \absexpsem{\absexp{i}}(\env{\abstable \downarrow_{\unknown} \abspred}, \env{\absvars}) \cup \env{\abstable \downarrow_{\unknown} \abspred}(\absattr) \cup \env{\abstable \downarrow_{\false} \abspred}(\absattr) \right) \into \lookupcl(v_{d})\\
-        \text{if $\absattr$ is the $i$th component of $\absattrs$ and $\absexp{i}$ is the $i$th componenet of $\absexps$} \\
-    \end{cases}
+                                              & = (\env{\ab{t}'}, \env{\absvars})
+\end{align}
+
+\begin{align}
+    \text{where } \abstable' = \ab{t} \downarrow_{\false} \phi
+    & \cup \left\{ l\left[ \mathbf{v}_d \mapsto \left( \absexpsem{\mathbf{e}}(\env{\abstable}, \env{\absvars}) \into \lookupcl(\mathbf{v}_d) \right) \sqcup l(\mathbf{v}_d) \right] \;\middle|\; l \in \ab{t} \downarrow_{\unknown} \phi \right\} \\
+    & \cup \left\{ l\left[ \mathbf{v}_d \mapsto \left( \absexpsem{\mathbf{e}}(\env{\abstable}, \env{\absvars}) \into \lookupcl(\mathbf{v}_d) \right) \right] \;\middle|\; l \in \ab{t} \downarrow_{\true} \phi \right\}
 \end{align}
 
 \begin{align*}
     \abssqlsem{C_{delete}}(\env{\abstable}, \env{\absvars})
     &= \abssqlsem{\langle delete(\absattrs), \abspred \rangle} (\env{\abstable}, \env{\absvars}) \\
     &= (\env{\abstable'}, \env{\absvars}) \\
-    \text{where } \env{\abstable'}(\absattr) &= \left( \env{\abstable \downarrow_{\unknown} \abspred}(\absattr) \cup \env{\abstable \downarrow_{\false} \abspred}(\absattr) \right) \into \lookupcl(v_d)
+    \text{where } \abstable' &= \abstable \downarrow_{\unknown} \phi \cup \abstable \downarrow_{\false} \phi
 \end{align*}
 
 \subsubsection{Abstract Semantics of Actions}
@@ -294,7 +298,7 @@ Let $\ab{P}$ be a set of abstract environments $(\env{\abstable}, \env{\absvars}
 \end{align}
 
 \begin{restatable}{theorem}{csql}\label{thm:csql}
-    $S\llbracket C_{sql}\rrbracket(\widehat{P})$ is a monotone function in a complete lattice
+    $\abssem{I}$ is a monotone function in a complete lattice.
 \end{restatable}
 
 % \begin{align*}
