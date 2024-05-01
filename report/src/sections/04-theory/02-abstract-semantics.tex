@@ -28,16 +28,9 @@
         $\tau ::=$ & $c \mid v_a \mid v_d \mid f_n(\tau_1, \tau_2, \dots, \tau_n)$, where $f_n$ is an $n$-any function. \\
         $a_f ::=$ & $R_n(\tau_1, \tau_2, \dots, \tau_n) \mid \tau_1 = \tau2$, where $R_n$ is an $n$-ary relation: $R_n(\tau_1, \tau_2, \dots, \tau_n) \in \{ \texttt{true}, \texttt{false}\}$ \\
         $\phi ::=$ & $a_f \mid \neg \phi_1 \mid \phi_1 \lor \phi_2 \mid \phi_1 \land \phi_2 \mid \forall \textbf{x}_i \phi \mid \exists \textbf{x}_i \phi$ \\
-        $g(\overrightarrow{e}) ::=$  & $\texttt{GROUP BY} \overrightarrow{e} \mid id$ \\
-        $r ::= $ & $\texttt{DISTINCT} \mid \texttt{ALL}$ \\
-        $s ::= $ & $\texttt{AVG} \mid \texttt{SUM} \mid \texttt{MAX} \mid \texttt{MIN} \mid \texttt{COUNT}$ \\
-        $h(e) ::= $ & $s \bigcirc r(e) \mid \texttt{DISTINCT}(e) \mid id$ \\
-        $h(*) ::= $ & $\texttt{COUNT(*)}$ \\
-        $\overrightarrow{h}(\overrightarrow{\textbf{x}}) ::= $ & $\langle h_1(\textbf{x}_1), \dots, h_n(\textbf{x}_n)\rangle$, where $\overrightarrow{h} = \langle \rangle$ \\
-        $f(\overrightarrow{e}) ::=$ & $\texttt{ORDER BY ACE}(\overrightarrow{e}) \mid \texttt{ORDER BY DESC}(\overrightarrow{e}) \mid id$ \\
-        $A_{sql} :: =$ & $select(v_a, f(\overrightarrow{e'}), r(\overrightarrow{h}(\overrightarrow{\textbf{x}})), \phi, g(\overrightarrow{e})) \mid update(\overrightarrow{v_d}, \overrightarrow{e}) \mid delete(\overrightarrow{v_d})$ \\
-        $C_{sql} ::=$ & $\langle A_{sql}, \phi \rangle \mid C_{sql}' \texttt{UNION} C_{sql}'' \mid C_{sql}' \texttt{INTERSECT} C_{sql}'' \mid C_{sql}' \texttt{MINUS} C_{sql}''$ \\
-        $I ::=$ & $skip \mid v_a := e \mid v_a := ? \mid C_{sql} \mid$ if $b$ then $I_1$ else $I_2$ $\mid$ while $b$ do $I$ $\mid$ $I_1; I_2$ \\
+        $A_{sql} :: =$ & $select(v_a) \mid update(v_d, e) \mid delete(v_d) \mid insert(v_d, e)$ \\
+        $C_{sql} ::=$ & $\langle A_{sql}, \phi \rangle $ \\
+        $I ::=$ & $skip \mid v_a := e \mid v_a := ? \mid C_{sql} $\\
     \end{tabular}
 \end{center}
 
