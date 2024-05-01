@@ -76,7 +76,7 @@ transF:
     transferAmount:=?
     formID:=R_ID
     toID:=R_ID
-    if(transferAmount>=0)
+    if(transferAmount>0)
         <select(fromB,id,DISTINCT(id(AccBalance)),true,id),toID=AccID>
         <select(toB,id,DISTINCT(id(AccBalance)),true,id),toID=AccID>
         <update(<AccBalance>,>fromB-transferAmount>),fromID=AccID>
@@ -154,11 +154,11 @@ The program is now ready to be analyzed, and the analysis will check if the prop
 
 The analysis of the program is shown in \autoref{lst:analysis}.
 Now that we have the whole state-space of the program, we can check if the properties are satisfied.
-Let us look at the properties in \autoref{lst:properties}.
-The first property is that the transfer amount is eventually greater than 0, this is satisfied in the state-space, as the program checks if the transfer amount is greater than 0, and if not, it does not perform the transfer.
+The first property is that the transfer amount is eventually greater than 0.
+This is satisfied in the state-space, as the program checks if the transfer amount is greater than 0, and if not, it does not perform the transfer.
 
 The second property is that the balance of the account from which the transfer is made is always greater than 0 after the transfer.
 However, the second property, which states that the balance of the account that the transfer is made from is always greater than 0 after the transfer, is not satisfied in the state-space.
 The program, unfortunately, does not check if the balance is greater than 0 after the transfer, only that the transfer amount is greater than 0.
-Therefore, this property is not satisfied.
+Therefore, the second property is not satisfied.
 This can be seen in the state-space, where the account balance is negative after the transfer.
