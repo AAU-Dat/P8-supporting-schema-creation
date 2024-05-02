@@ -246,25 +246,28 @@ Also $S_1,...,S_n$ are given by the type of $v_a$ and $v_d$.
 
 Let
 \begin{align}
-    \abstable \downarrow_{\true} \phi &= \{ l \in \ab{t} \mid \mathsf{Single} \; \{ \true \} = \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]} \text{ for } \mathbf{v}_d = var_d(\phi) \} \\
-    \abstable \downarrow_{\false} \phi &= \{ l \in \ab{t} \mid \mathsf{Single} \; \{ \false \} = \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]} \text{ for } \mathbf{v}_d = var_d(\phi) \} \\
-    \abstable \downarrow_{\unknown} \phi &= \{ l \in \ab{t} \mid \mathsf{Single} \; \{ \true \} \neq \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]} \land \mathsf{Single} \; \{ \false \} \neq \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]} \text{ for } \mathbf{v}_d = var_d(\phi) \}
+    \abstable \downarrow_{\true} \phi &= \{ l \in \ab{t} \mid \mathsf{Single} \; \{ \true \} = \abspredsem{\phi[(\mathsf{Single} \; (\pi_{\mathbf{v}_d}(l)))/\mathbf{v}_d]} \text{ for } \mathbf{v}_d = var_d(\phi) \} \\
+    \abstable \downarrow_{\false} \phi &= \{ l \in \ab{t} \mid \mathsf{Single} \; \{ \false \} = \abspredsem{\phi[(\mathsf{Single} \; (\pi_{\mathbf{v}_d}(l)))/\mathbf{v}_d]} \text{ for } \mathbf{v}_d = var_d(\phi) \} \\
+    \abstable \downarrow_{\unknown} \phi &= \{ l \in \ab{t} \mid \mathsf{Single} \; b = \abspredsem{\phi[(\mathsf{Single} \; (\pi_{\mathbf{v}_d}(l)))/\mathbf{v}_d]} \text{ such that } \true \in b \land 1 < |b|\\ &\text{ or }  \mathsf{List} \; B = \abspredsem{\phi[(\mathsf{Single} \; (\pi_{\mathbf{v}_d}(l)))/\mathbf{v}_d]} \text{ such that } \true \in b \land b \in B \text{ for } \mathbf{v}_d = var_d(\phi) \}
 \end{align}
 
 \begin{align}
     \abssqlsem{\langle select(v_a), \phi \rangle}(\rho_{\ab{d}}, \rho_{\ab{a}})
-    &= (\rho_{\ab{d}}, \rho_{\ab{a}}[v_a \mapsto \abstable \downarrow_{\true} \phi \cup \abstable \downarrow_{\unknown} \phi])
+    &= (\rho_{\ab{d}}, \rho_{\ab{a}}[v_a \mapsto \left( \mathsf{List} \left(\abstable \downarrow_{\true} \phi \cup \abstable \downarrow_{\unknown} \phi \right) \right) \into \lookupcl(v_a) ])
 \end{align}
 
 \begin{align}
     \abssqlsem{\langle C_{insert}, \phi \rangle}(\rho_{\ab{d}}, \rho_{\ab{a}}) & =
     \abssqlsem{\langle insert(\mathbf{v}_d, \mathbf{e}), \phi \rangle}(\rho_{\ab{t}}, \rho_{\ab{a}})\\
     & = (\rho_{\ab{t} \cup s}, \rho_{\ab{a}}) \\
-    \text{where } target(C_{insert})        & = \ab{t}                                                                                                                                                 \\
-    \mathbf{v}_d              & = \langle a_1, a_2, \dots, a_n \rangle                                                                                                        \\
-                                               & = attr(\ab{t})                                                                                                                                           \\
-    \mathbf{e} & = \langle e_1, e_2, \dots, e_n \rangle \\
-    s &= \{ (s_1/a_1, s_2/a_2, \dots, s_n/a_n) \mid (s_1, s_2, \dots, s_n) \in \bigtimes_{i = 1}^{n} \left( \absexpsem{e_i}(\rho_{\ab{d}}, \rho_{\ab{a}}) \into \lookupcl(a_i) \right) \}
+    \text{where }& s = \bigtimes_{i = 0}^{n} unwrap\left( \absexpsem{e_i}(\rho_{\ab{d}}, \rho_{\ab{a}}) \right) \into \lookupcl(v_i) \\
+    \text{and }& target(C_{insert}) = \ab{t}
+\end{align}
+
+\begin{align}
+    unwrap &: \mathsf{Val} \; a  \rightarrow \mathcal{P}(a) \\
+    unwrap &\;(\mathsf{Single} \; x) = \{x\} \\
+    unwrap &\;(\mathsf{List} \; x) = x
 \end{align}
 
 
@@ -276,8 +279,8 @@ Let
 
 \begin{align}
     \text{where } \abstable' = \ab{t} \downarrow_{\false} \phi
-    & \cup \left\{ l\left[ \mathbf{v}_d \mapsto \left( \absexpsem{\mathbf{e}}(\env{\abstable}, \env{\absvars}) \into \lookupcl(\mathbf{v}_d) \right) \sqcup l(\mathbf{v}_d) \right] \;\middle|\; l \in \ab{t} \downarrow_{\unknown} \phi \right\} \\
-    & \cup \left\{ l\left[ \mathbf{v}_d \mapsto \left( \absexpsem{\mathbf{e}}(\env{\abstable}, \env{\absvars}) \into \lookupcl(\mathbf{v}_d) \right) \right] \;\middle|\; l \in \ab{t} \downarrow_{\true} \phi \right\}
+    & \cup \left\{ l\left[ \mathbf{v}_d \mapsto \pi_{\mathbf{v}_d}(s) \sqcup \pi_{\mathbf{v}_d}(l) \right] \;\middle|\; l \in \ab{t} \downarrow_{\unknown} \phi \land s \in \bigtimes_{i = 0}^{n} unwrap\left( \absexpsem{e_i}(\rho_{\ab{d}}, \rho_{\ab{a}}) \right) \into \lookupcl(v_i)\right\} \\
+    & \cup \left\{ l\left[ \mathbf{v}_d \mapsto \pi_{\mathbf{v}_d}(s) \right] \;\middle|\; l \in \ab{t} \downarrow_{\true} \phi \land s \in \bigtimes_{i = 0}^{n} unwrap\left( \absexpsem{e_i}(\rho_{\ab{d}}, \rho_{\ab{a}}) \right) \into \lookupcl(v_i)\right\} \\
 \end{align}
 
 \begin{align*}
@@ -299,7 +302,7 @@ Let $\ab{P}$ be a set of abstract environments $(\env{\abstable}, \env{\absvars}
 \begin{align}
     \abssem{\texttt{skip}}(\ab{P}) &= \ab{P} \\
     \abssem{v_a := e}(\ab{P}) &= \{(\env{\abstable}, \env{\absvars}[v_a \mapsto s']) \mid (\env{\abstable}, \env{\absvars}) \in \ab{P} \land s = \absexpsem{e}(\env{\abstable}, \env{\absvars}) \land s' = s \into \lookupcl(v_a) \} \\
-    \abssem{v_a := \; ?}(\ab{P}) &= \{(\env{\abstable}, \env{\absvars}[v_a \mapsto \top]) \mid (\env{\abstable}, \env{\absvars}) \in \ab{P} \} \\
+    \abssem{v_a := \; ?}(\ab{P}) &= \{(\env{\abstable}, \env{\absvars}[v_a \mapsto \mathsf{Single} \; \top]) \mid (\env{\abstable}, \env{\absvars}) \in \ab{P} \} \\
     \abssem{b}(\ab{P}) &= \{ (\env{\abstable}, \env{\absvars}) \in \ab{P} \mid \true \in B \land B \in \absboolsem{b}(\env{\abstable}, \env{\absvars}) \} \\
     \abssem{C_{sql}}(\ab{P}) &= \{\abssqlsem{C_{sql}}(\env{\abstable}, \env{\absvars}) \mid (\env{\abstable}, \env{\absvars}) \in \ab{P} \}
 \end{align}
