@@ -21,10 +21,10 @@ Let $REG$ denote the set of regular languages. % and
 The lattice of $(REG, \subseteq, \cup, \cap)$ is a lattice but not a finite one, as the set of regular languages is transfinite and closed under finite union and intersection but not closed under transfinite union and intersection, which makes the lattice not complete.
 This is a problem: Essentially, we can not employ the Kleene fixed-point theorem (see \autoref{thm:kleene_finite}) to prove the termination of our analysis.
 
-\subsubsection{Abstract domain of numbers as disjunctions of intervals}\label{subsubsec:abstract_domains_numbers}
-We have chosen a finite disjunction of intervals to represent the abstract domain of the family of SQL number data types.
+\subsubsection{Abstract domain of numbers as unions of intervals}\label{subsubsec:abstract_domains_numbers}
+We have chosen a finite union of intervals to represent the abstract domain of the family of SQL number data types.
 We only consider Integers, but the domain can be extended to the Reals.
-We represent such disjunctions of intervals as a set of disjoint intervals; thus, for a set of intervals $\mathscr{I}$:
+We represent such unions of intervals as a set of disjoint intervals; thus, for a set of intervals $\mathscr{I}$:
 \begin{equation}
     n \in \gamma(\mathscr{I}) \iff \exists i \in \mathscr{I} : n \in \gamma(i)
 \end{equation}
@@ -33,7 +33,7 @@ and
     \mathscr{I} \sqsubseteq \mathscr{I}' \iff \forall i \in \mathscr{I} : \exists i' \in \mathscr{I}' : i \sqsubseteq i'
 \end{equation}
 where $\gamma(i)$ is the set of integers in the interval $i$ and $\sqsubseteq$ is the subset relation.
-We define the meet and join of disjunctions as follows:
+We define the meet and join of unions as follows:
 \begin{align}
     \mathscr{I} \sqcup \mathscr{I}' &= m(\mathscr{I} \cup \mathscr{I}') \\
     \text{where } m(\mathscr{I}) &= \begin{cases}
