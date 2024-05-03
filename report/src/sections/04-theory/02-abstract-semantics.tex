@@ -27,7 +27,8 @@
         $e ::=$ & $e_1 = e_2 \mid e_1 \geq \mid e_1 \leq e_2 \mid e_1 > e_2 \mid e_1 < e_2 \mid e_1 \neq e_2 \mid \neg b \mid b_1 \lor b_2 \mid b_1 \land b_2 \mid \texttt{true} \mid \texttt{flase}$ \\
         $\tau ::=$ & $c \mid v_a \mid v_d \mid f_n(\tau_1, \tau_2, \dots, \tau_n)$, where $f_n$ is an $n$-any function. \\
         $a_f ::=$ & $R_n(\tau_1, \tau_2, \dots, \tau_n) \mid \tau_1 = \tau2$, where $R_n$ is an $n$-ary relation: $R_n(\tau_1, \tau_2, \dots, \tau_n) \in \{ \texttt{true}, \texttt{false}\}$ \\
-        $\phi ::=$ & $a_f \mid \neg \phi_1 \mid \phi_1 \lor \phi_2 \mid \phi_1 \land \phi_2 \mid \forall \textbf{x}_i \phi \mid \exists \textbf{x}_i \phi$ \\
+        $\phi ::=$ & $a_f \mid \neg \phi_1 \mid \phi_1 \lor \phi_2 \mid \phi_1 \land \phi_2 \mid \forall x_n \phi \mid \exists x_n \phi$ \\
+        $x ::=$ & $v_d \mid v_a$ \\
         $A_{sql} :: =$ & $select(v_a) \mid update(v_d, e) \mid delete(v_d) \mid insert(v_d, e)$ \\
         $C_{sql} ::=$ & $\langle A_{sql}, \phi \rangle $ \\
         $I ::=$ & $skip \mid v_a := e \mid v_a := ? \mid C_{sql} $\\
@@ -42,7 +43,7 @@ This section will describe to abstract semantics of SQAAL.
 
 We would like to distinguish between single values and lists of values, thus we define algebraic type:
 \begin{align}
-    \mathsf{Val} \; v ::= \mathsf{Single} \; v \mid \mathsf{List} \; \mathcal{P}(v)
+    \mathsf{Val} \; a ::= \mathsf{Single} \; a \mid \mathsf{List} \; \mathcal{P}(a)
 \end{align}
 
 In \autoref{eq:generalBOP} and \autoref{eq:generalUOP} we see the how the general binary and unary operation works in SQAAL.
@@ -170,7 +171,7 @@ In the case of database variables in \autoref{sem:exp4}, we assume attribute nam
     \absexpsem{n}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \mathsf{Single} \; \{ [n, n] \} \\\label{sem:exp2}
     \absexpsem{k}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \mathsf{Single} \; R,  \text{ such that }\mathcal{L}(R) = \{ k \} \\ \label{sem:exp3}
     \absexpsem{v_a}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=  \rho_{\ab{a}}(v_a) \\ \label{sem:exp4}
-    \absexpsem{v_d}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=  \rho_{\ab{t}}(v_d) \text{ such that } \ab{t} \in dom(\ab{d}) \text{ and } v_d \in attr(\ab{t}) \\ \label{eq:exp-lookup}
+    \absexpsem{v_d}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=  \mathsf{List} \; \rho_{\ab{t}}(v_d) \text{ such that } \ab{t} \in dom(\ab{d}) \text{ and } v_d \in attr(\ab{t}) \\ \label{eq:exp-lookup}
     \absexpsem{op \; e}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{op} \; (\absexpsem{e}(\rho_{\ab{d}}, \rho_{\ab{a}})) \\ \label{eq:unary-op}
     \absexpsem{e_1 \;op\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=
     \begin{cases}
@@ -231,8 +232,8 @@ The other predicates all build on this base case with rules such as negation, di
     \abspredsem{\neg \phi}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{\neg} \left( \abspredsem{\phi}(\rho_{\ab{d}}, \rho_{\ab{a}}) \right) \\
     \abspredsem{\phi_1 \lor \phi_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \abspredsem{\phi_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ab{\lor} \abspredsem{\phi_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
     \abspredsem{\phi_1 \land \phi_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \abspredsem{\phi_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ab{\land} \abspredsem{\phi_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
-    \abspredsem{\exists x_i \; \phi}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \underset{s \in \absexpsem{x}}{\ab{\bigvee}} \abspredsem{\phi[s/x_i]} \\
-    \abspredsem{\forall x_i \; \phi}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \underset{s \in \absexpsem{x}}{\ab{\bigwedge}} \abspredsem{\phi[s/x_i]}
+    \abspredsem{\exists x_n \; \phi}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \underset{s \in \absexpsem{x}}{\ab{\bigvee}} \abspredsem{\phi[s/x_n]} \\
+    \abspredsem{\forall x_n \; \phi}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \underset{s \in \absexpsem{x}}{\ab{\bigwedge}} \abspredsem{\phi[s/x_n]}
 \end{align}
 
 \subsubsection{Abstract Semantics of SQL statements}
@@ -246,14 +247,14 @@ Also $S_1,...,S_n$ are given by the type of $v_a$ and $v_d$.
 
 Let
 \begin{align}
-    \abstable \downarrow_{\true} \phi &= \{ l \in \ab{t} \mid \mathsf{Single} \; \{ \true \} = \abspredsem{\phi[(\mathsf{Single} \; (\pi_{\mathbf{v}_d}(l)))/\mathbf{v}_d]} \text{ for } \mathbf{v}_d = var_d(\phi) \} \\
-    \abstable \downarrow_{\false} \phi &= \{ l \in \ab{t} \mid \mathsf{Single} \; \{ \false \} = \abspredsem{\phi[(\mathsf{Single} \; (\pi_{\mathbf{v}_d}(l)))/\mathbf{v}_d]} \text{ for } \mathbf{v}_d = var_d(\phi) \} \\
-    \abstable \downarrow_{\unknown} \phi &= \{ l \in \ab{t} \mid \mathsf{Single} \; b = \abspredsem{\phi[(\mathsf{Single} \; (\pi_{\mathbf{v}_d}(l)))/\mathbf{v}_d]} \text{ such that } \true \in b \land 1 < |b|\\ &\text{ or }  \mathsf{List} \; B = \abspredsem{\phi[(\mathsf{Single} \; (\pi_{\mathbf{v}_d}(l)))/\mathbf{v}_d]} \text{ such that } \true \in b \land b \in B \text{ for } \mathbf{v}_d = var_d(\phi) \}
+    \abstable \downarrow_{\true} \phi &= \{ l \in \ab{t} \mid \mathsf{Single} \; \{ \true \} = \abspredsem{\phi[(\mathsf{Single} \; (\pi_{\mathbf{v}_d}(l)))/\mathbf{v}_d]} \text{ for } \mathbf{v}_d = var_{\ab{t}}(\phi) \} \\
+    \abstable \downarrow_{\false} \phi &= \{ l \in \ab{t} \mid \mathsf{Single} \; \{ \false \} = \abspredsem{\phi[(\mathsf{Single} \; (\pi_{\mathbf{v}_d}(l)))/\mathbf{v}_d]} \text{ for } \mathbf{v}_d = var_{\ab{t}}(\phi) \} \\
+    \abstable \downarrow_{\unknown} \phi &= \{ l \in \ab{t} \mid \true \in b \in B = \abspredsem{\phi[(\mathsf{Single} \; (\pi_{\mathbf{v}_d}(l)))/\mathbf{v}_d]} \text{ for } \mathbf{v}_d = var_{\ab{t}}(\phi) \} \setminus \abstable \downarrow_{\true} \phi
 \end{align}
 
 \begin{align}
-    \abssqlsem{\langle select(v_a), \phi \rangle}(\rho_{\ab{d}}, \rho_{\ab{a}})
-    &= (\rho_{\ab{d}}, \rho_{\ab{a}}[v_a \mapsto \left( \mathsf{List} \left(\abstable \downarrow_{\true} \phi \cup \abstable \downarrow_{\unknown} \phi \right) \right) \into \lookupcl(v_a) ])
+    \abssqlsem{\langle select(v_a, \mathbf{v}_d), \phi \rangle}(\rho_{\ab{d}}, \rho_{\ab{a}})
+    &= (\rho_{\ab{d}}, \rho_{\ab{a}}[v_a \mapsto \mathsf{List} \left( \pi_{\mathbf{v}_d} \left(\abstable \downarrow_{\true} \phi \cup \abstable \downarrow_{\unknown} \phi \right) \right) \into \lookupcl(v_a) ])
 \end{align}
 
 \begin{align}
