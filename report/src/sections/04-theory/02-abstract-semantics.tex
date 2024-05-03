@@ -1,6 +1,11 @@
 \subsection{Abstract Syntax} \label{subsec:function-definitions}
+This section will introduce the syntactic sets and abstract syntax of SQAAL.
+The syntactic sets of SQAAL encompass the various elements and constructs that constitute the language's grammar. These sets define the valid combinations of symbols and keywords that form syntactically correct statements in SQAAL. They include components such as keywords, identifiers, operators, literals, and punctuation marks, each serving a specific role in expressing queries and analytical operations.
 
-\begin{center}
+This paper adopts a simplified version of the abstract syntax originally presented in~\cite{cortesi_abstract_2013}.
+Omitted parts within this simplified abstract syntax correspond to features or constructs that are not utilized or discussed in the context of the current application.
+\begin{figure}[htb!]
+     \center
     \begin{tabular}{l l}
     $n \in \mathbb{Z}$                          & Integers                                                   \\
     $k \in \mathbb{S}$                                  & Strings                                                    \\
@@ -17,22 +22,28 @@
     $C_{sql} \in \mathbb{C}_{sql}$              & SQL commands                                              \\
     $I \in \mathbb{I}$                          & Instructions/commands                                     \\
     \end{tabular}
-\end{center}
+    \caption{Syntatic Sets}
+    \label{tab:syntatic-sets}
+\end{figure}
 
-\begin{center}
+\begin{figure}[htb!]
+    \center
     \begin{tabular}{l l}
         $c ::=$ & $n \mid k$ \\
         $v ::=$ & $v_d \mid v_a$ \\
-        $e ::=$ & $c \mid v \mid ap_u e \mid e_1 op_b e_2$ , where $op_u$ and $op_b$ represent unary and binary arithmetic operations respectively. \\
-        $b ::=$ & $e_1 = e_2 \mid e_1 \geq \mid e_1 \leq e_2 \mid e_1 > e_2 \mid e_1 < e_2 \mid e_1 \neq e_2 \mid \neg b \mid b_1 \lor b_2 \mid b_1 \land b_2 \mid \texttt{true} \mid \texttt{flase}$ \\
-        $\tau ::=$ & $c \mid v_a \mid v_d \mid f_n(\tau_1, \tau_2, \dots, \tau_n)$, where $f_n$ is an $n$-any function. \\
-        $a_f ::=$ & $R_n(\tau_1, \tau_2, \dots, \tau_n) \mid \tau_1 = \tau2$, where $R_n$ is an $n$-ary relation: $R_n(\tau_1, \tau_2, \dots, \tau_n) \in \{ \texttt{true}, \texttt{false}\}$ \\
+        $e ::=$ & $c \mid v \mid op_u e \mid e_1 op_b e_2$ , where $op_u$ and $op_b$ represent unary and binary arithmetic operations respectively. \\
+        
+        $b ::=$ & $e_1 = e_2 \mid e_1 \leq e_2 \mid e_1 < e_2 \mid \neg b \mid b_1 \lor b_2 \mid b_1 \land b_2 \mid \texttt{true} \mid \texttt{false}$ \\
+
+        $a_f ::=$ & $e_1 = e_2 \mid e_1 \neq e_2 \mid e_1 \leq e_2 \mid e_1 < e_2$ \\
         $\phi ::=$ & $a_f \mid \neg \phi_1 \mid \phi_1 \lor \phi_2 \mid \phi_1 \land \phi_2 \mid \forall x_n \phi \mid \exists x_n \phi$ \\
         $A_{sql} :: =$ & $select(v_a) \mid update(v_d, e) \mid delete(v_d) \mid insert(v_d, e)$ \\
         $C_{sql} ::=$ & $\langle A_{sql}, \phi \rangle $ \\
         $I ::=$ & $skip \mid v_a := e \mid v_a := ? \mid C_{sql} $\\
     \end{tabular}
-\end{center}
+    \caption{Abstract Syntax}
+    \label{tab:abstract-syntax}
+\end{figure}
 
 
 \subsection{Abstract Semantics}\label{subsec:abstract-semantics}
@@ -294,11 +305,11 @@ Let
     \text{where } \abstable' &= \abstable \downarrow_{\unknown} \phi \cup \abstable \downarrow_{\false} \phi
 \end{align*}
 
-\subsubsection{Abstract Semantics of Actions}
-This section will cover the abstract semantics of actions in SQAAL.
-In general, the abstract semantics of actions are defined as a function that takes a set of abstract environments and returns an updated set of abstract environments.
-This means that when an action is taken, the abstract environment is updated to reflect the changes made by the action.
-An example of this could be with the skip action, where the abstract environment is not changed.
+\subsubsection{Abstract Semantics of Instructions}
+This section will cover the abstract semantics of Instructions in SQAAL.
+In general, the abstract semantics of instructions are defined as a function that takes a set of abstract environments and returns an updated set of abstract environments.
+This means that when an instruction is made, the abstract environment is updated to reflect the changes made by the instruction.
+An example of this could be with the skip instruction, where the abstract environment is not changed.
 
 
 Let $\ab{P}$ be a set of abstract environments $(\env{\abstable}, \env{\absvars})$.
