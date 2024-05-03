@@ -43,6 +43,13 @@ This intuitively models intersection and union of the underlying sets, that is $
 
 This representation of numbers has the same issue as regular expression mention in the prequel.
 
+\subsubsection{Single and List values}
+
+We would like to distinguish between single values and lists of values, thus we define algebraic type:
+\begin{align}
+    \mathsf{Val} \; A = \{ \mathsf{Single} \; a \mid a \in A \} \cup \{ \mathsf{List} \; A' \mid A' \subseteq A \}
+\end{align}
+
 \subsubsection{Cover lattice}
 
 The resolve the issue presented above we introduce the notion of a cover lattice, but first we need to define:
