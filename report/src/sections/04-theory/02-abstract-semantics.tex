@@ -32,7 +32,7 @@ Omitted parts within this simplified abstract syntax correspond to features or c
         $c ::=$ & $n \mid k$ \\
         $v ::=$ & $v_d \mid v_a$ \\
         $e ::=$ & $c \mid v \mid op_u e \mid e_1 op_b e_2$ , where $op_u$ and $op_b$ represent unary and binary arithmetic operations respectively. \\
-        
+
         $b ::=$ & $e_1 = e_2 \mid e_1 \leq e_2 \mid e_1 < e_2 \mid \neg b \mid b_1 \lor b_2 \mid b_1 \land b_2 \mid \texttt{true} \mid \texttt{false}$ \\
 
         $a_f ::=$ & $e_1 = e_2 \mid e_1 \neq e_2 \mid e_1 \leq e_2 \mid e_1 < e_2$ \\
@@ -51,7 +51,7 @@ This section will describe to abstract semantics of SQAAL.
 
 \autoref{eq:generalBOP} through \ref{eq:generalUOP}, show how operations unary and binary operators can be lifted to operate on the members of $\mathsf{Val} \; a$.
 \begin{align}
-    \mathsf{Single} \; s_1 \ap{op} \mathsf{Single} \; s_2 &= \mathsf{Single} \; (s_1 \op s_2) \label{eq:generalBOP} \\
+    \mathsf{List} \; s_1 \ap{op} \mathsf{Single} \; s_2 &= \mathsf{Single} \; (s_1 \op s_2) \label{eq:generalBOP} \\
     \mathsf{Single} \; s \ap{op} \mathsf{List} \; S &= \mathsf{List} \; \{ s \op s' \mid s' \in S \} \\
     \mathsf{List} \; S \ap{op} \mathsf{Single} \; s &= \mathsf{List} \; \{ s' \op s \mid s' \in S \}  \\
     \mathsf{List} \; S_1 \ap{op} \mathsf{List} \; S_2 &= \mathsf{List} \; \{ s_1 \op s_2 \mid s_1 \in S_1, s_2 \in S_2 \} \\
@@ -239,7 +239,7 @@ The arithmetic operations, $\aaab{aop}$, are defined as the standard for interva
 
 \subsubsection{Abstract Semantics of Predicates}
 The base rule of all the predicates is defined in \autoref{eq:atomicformulas}, as this is the base case for all the other predicates.
-It takes atomic formulas, $a_f$, of the form corresponding to \autoref{eq:abstract-bool-semantics-end1} and \ref{eq:abstract-bool-semantics-end2}, and returns the boolean value of $a_f$.
+It takes atomic formulas, $a_f$, of the form corresponding to \autoref{eq:abstract-bool-semantics-end2}, and returns the abstract truth value of $a_f$.
 The other predicates all build on this base case with rules such as negation, disjunction and conjunction.
 \begin{align}\label{eq:atomicformulas}
     \abspredsem{a_f}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absboolsem{a_f}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
@@ -256,14 +256,14 @@ Let
 \begin{equation}
     \mathcal{C} : \mathbb{V} \rightarrow \{ C_{X_1}(S_1), C_{X_2}(S_2), \dots, C_{X_n}(S_n) \}
 \end{equation}
-where $X_1,...,X_n$ are defined as in \autoref{def:coverlattice} and are provided by the user.
-Also $S_1,...,S_n$ are given by the type of $v_a$ and $v_d$.
+where $X_1,...,X_n$ are given as in \autoref{def:coverlattice} and are provided by the user.
+Also $S_1,...,S_n$ are given by the type of $v_a, v_d \in \mathbb{V}$.
 
 Let
 \begin{align}
-    \abstable \downarrow_{\true} \phi &= \{ l \in \ab{t} \mid \mathsf{Single} \; \{ \true \} = \abspredsem{\phi[(\mathsf{Single} \; (\pi_{\mathbf{v}_d}(l)))/\mathbf{v}_d]} \text{ for } \mathbf{v}_d = var_{\ab{t}}(\phi) \} \\
-    \abstable \downarrow_{\false} \phi &= \{ l \in \ab{t} \mid \mathsf{Single} \; \{ \false \} = \abspredsem{\phi[(\mathsf{Single} \; (\pi_{\mathbf{v}_d}(l)))/\mathbf{v}_d]} \text{ for } \mathbf{v}_d = var_{\ab{t}}(\phi) \} \\
-    \abstable \downarrow_{\unknown} \phi &= \{ l \in \ab{t} \mid \true \in b \in B = \abspredsem{\phi[(\mathsf{Single} \; (\pi_{\mathbf{v}_d}(l)))/\mathbf{v}_d]} \text{ for } \mathbf{v}_d = var_{\ab{t}}(\phi) \} \setminus \abstable \downarrow_{\true} \phi
+    \abstable \downarrow_{\true} \phi &= \{ l \in \ab{t} \mid \mathsf{Single} \; \{ \true \} = \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]} \text{ for } \mathbf{v}_d = var_{\ab{t}}(\phi) \} \\
+    \abstable \downarrow_{\false} \phi &= \{ l \in \ab{t} \mid \mathsf{Single} \; \{ \false \} = \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]} \text{ for } \mathbf{v}_d = var_{\ab{t}}(\phi) \} \\
+    \abstable \downarrow_{\unknown} \phi &= \{ l \in \ab{t} \mid \true \in b \in B = \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]} \text{ for } \mathbf{v}_d = var_{\ab{t}}(\phi) \} \setminus \abstable \downarrow_{\true} \phi
 \end{align}
 
 \begin{align}
@@ -275,16 +275,9 @@ Let
     \abssqlsem{\langle C_{insert}, \phi \rangle}(\rho_{\ab{d}}, \rho_{\ab{a}}) & =
     \abssqlsem{\langle insert(\mathbf{v}_d, \mathbf{e}), \phi \rangle}(\rho_{\ab{t}}, \rho_{\ab{a}})\\
     & = (\rho_{\ab{t} \cup s}, \rho_{\ab{a}}) \\
-    \text{where }& s = \bigtimes_{i = 0}^{n} unwrap\left( \absexpsem{e_i}(\rho_{\ab{d}}, \rho_{\ab{a}}) \right) \into \lookupcl(v_i) \\
+    \text{where }& s = \app{\bigtimes_{i = 0}^{n}} \absexpsem{e_i}(\rho_{\ab{d}}, \rho_{\ab{a}}) \into \lookupcl(v_i) \\
     \text{and }& target(C_{insert}) = \ab{t}
 \end{align}
-
-\begin{align}
-    unwrap &: \mathsf{Val} \; a  \rightarrow \mathcal{P}(a) \\
-    unwrap &\;(\mathsf{Single} \; x) = \{x\} \\
-    unwrap &\;(\mathsf{List} \; x) = x
-\end{align}
-
 
 \begin{align}
     \abssqlsem{C_{update}}(\env{\abstable}, \env{\absvars})
@@ -294,8 +287,8 @@ Let
 
 \begin{align}
     \text{where } \abstable' = \ab{t} \downarrow_{\false} \phi
-    & \cup \left\{ l\left[ \mathbf{v}_d \mapsto \pi_{\mathbf{v}_d}(s) \sqcup \pi_{\mathbf{v}_d}(l) \right] \;\middle|\; l \in \ab{t} \downarrow_{\unknown} \phi \land s \in \bigtimes_{i = 0}^{n} unwrap\left( \absexpsem{e_i}(\rho_{\ab{d}}, \rho_{\ab{a}}) \right) \into \lookupcl(v_i)\right\} \\
-    & \cup \left\{ l\left[ \mathbf{v}_d \mapsto \pi_{\mathbf{v}_d}(s) \right] \;\middle|\; l \in \ab{t} \downarrow_{\true} \phi \land s \in \bigtimes_{i = 0}^{n} unwrap\left( \absexpsem{e_i}(\rho_{\ab{d}}, \rho_{\ab{a}}) \right) \into \lookupcl(v_i)\right\} \\
+    & \cup \left\{ l\left[ \mathbf{v}_d \mapsto \pi_{\mathbf{v}_d}(s) \sqcup \pi_{\mathbf{v}_d}(l) \right] \;\middle|\; l \in \ab{t} \downarrow_{\unknown} \phi \land s \in \app{\bigtimes_{i = 0}^{n}} \absexpsem{e_i}(\rho_{\ab{d}}, \rho_{\ab{a}}) \into \lookupcl(v_i)\right\} \\
+    & \cup \left\{ l\left[ \mathbf{v}_d \mapsto \pi_{\mathbf{v}_d}(s) \right] \;\middle|\; l \in \ab{t} \downarrow_{\true} \phi \land s \in \app{\bigtimes_{i = 0}^{n}} \absexpsem{e_i}(\rho_{\ab{d}}, \rho_{\ab{a}}) \into \lookupcl(v_i)\right\} \\
 \end{align}
 
 \begin{align*}
