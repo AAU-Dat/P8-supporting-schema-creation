@@ -51,7 +51,7 @@ The resolve the issue presented above we introduce the notion of a cover lattice
     A finite non-empty subset $X \subseteq S$ of a lattice $(S, \subseteq, \cup, \cap)$ is called a collectively disjoint top-cover of $S$ whenever $\bigcup X = \top$ and $\bigcap X = \bot$.
 \end{definition}
 
-\begin{definition}
+\begin{definition}\label{def:coverlattice}
     Given a collectively disjoint top-cover $X$ of a lattice $(S, \subseteq, \cup, \cap)$.
     A cover lattice of $S$ in respect to $X$ denoted $\clattice{X}{S}$ is the minimum set where:
     \begin{itemize}
@@ -76,6 +76,29 @@ And the following lemmas immediately follow:
 \begin{lemma}
     If $X$ is a collectively disjoint top-cover of $(MILP^n, \subseteq, \cup, \cap)$ then $(\clattice{X}{MILP^n}, \subseteq, \cup, \cap)$ is a complete lattice.
 \end{lemma}
+
+\begin{definition}
+    We define $\cdot \into C_X(S):S\rightarrow C_X(S)$ to be the function mapping $s\in S$ to the least element in $C_X(S)$ containing it, that is $s \into C_X(S)=\bigsqcap\{s'\in C_X(S)|s\sqsubseteq s'\}$
+    \\
+
+    We define $\circ \into C_X(S):\mathcal{P}(S)\rightarrow \mathcal{P}(C_X(S))$ to be the function that maps the powerset of the lattice elements to the powerset of the cover lattice elements.
+    We use $H \into C_x (S) = \{h \into C_x (S) \mid h \in H\}$ to show the type of the function.
+\end{definition}
+
+\begin{definition}
+    We define $\circ \into C_\mathcal{X}(\mathcal{S}): \bigtimes_{i = 1}^{n} S_i \rightarrow \bigtimes_{i = 1}^{n} C_{X_i}(S_i)$ to be the function that takes a tuple and inserts each element of the tuple correctly into its given conver lattice.
+    We use $(h_1, h_2 \dots h_n)\into C_{\mathcal{X}}(\mathcal{S})=(h_1 \into C_{X_1}(S_1), h_2\into C_{x_2}(S_2), \dots, h_n \into C_{x_n}(S_n))$
+    $\mathcal{X}=(X_1, X_2, \dots, X_n)$
+    $\mathcal{S}=(S_1, S_2, \dots, S_n)$ to show the type of the function and what $\mathcal{X}$ and $\mathcal{S}$ are.
+\end{definition}
+
+\begin{definition}
+    We define $\circ \into C_x(S): \ Val$ $S \rightarrow Val$ $C_x(S)$ to be the function that takes some value and inserts it ito its cover lattice. \\
+    Depending on the form of the value (list or single element) we handle them diffently $Val \ a ::= Single \ a \mid \ List \ \mathcal{P}(a)$ \\
+    For single elements we use Single $Single \ h \into C_x(S) = Single(h\into C_x(S))$ where $x \in (Single \ x') \ iff \ x = x'$ \\
+    And for a list of elements, we use List $List \ H \into C_x(S)=List(H\into C_x(S))$ where$x \in (List \ X) \ iff \ x \in X$ \\
+\end{definition}
+
 
 \begin{example}
     \autoref{fig:tikz-reg-partition} illustrates a simple lattice cover of the regular languages. The regular language $R$ is represented by the gray circle and its complement $\overline{R}$ is represented by the white circle. The union of the two regular language represent the entire regular language $\Sigma^*$ and their intersection is the empty set $\emptyset$.
