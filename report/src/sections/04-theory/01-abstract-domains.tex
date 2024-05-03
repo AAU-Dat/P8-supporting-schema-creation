@@ -1,11 +1,16 @@
 \subsection{Abstract Domains}\label{subsec:abstract-domains}
 
-In the following sections we will describe the abstract domains of our value analysis.
+%Structure
+% - Regualar
+% - Intended for integers
+%- Cover lattice
+%- Val a
+%- Abstract tables
+In the following section we will describe the abstract domains of our value analysis.
 
 \subsubsection{Abstract domain of strings as regular expressions}\label{subsubsec:abstract_domains_strings}
-
-To represent the abstract domain of the family of SQL strings data types we have chosen regular expressions/languages.
-Regular expressions/languages are chosen, as opposed to more powerful representations, for the decidable nature of inclusion and equality between them.
+We have chosen regular expressions/languages to represent the abstract domain of the family of SQL string data types.
+Regular expressions/languages are chosen instead of more powerful representations because of their decidable nature of inclusion and equality.
 
 Let $REG$ denote the set of regular languages. % and
 % \begin{equation*}
@@ -13,65 +18,56 @@ Let $REG$ denote the set of regular languages. % and
 % \end{equation*}
 % In general we do not distinguish between regular expressions and their languages.
 
-The lattice of $(REG, \subseteq, \cup, \cap)$ is a lattice but not a complete one as the set of regular languages is transfinite and closed under finite union and intersection, but not closed under transfinite union and intersection.
-This is a problem: Essentially we can not employ Kleene fixed-point theorem (\autoref{thm:kleene_finite} or \autoref{thm:kleene_scott}) to prove termination of our analysis.
+The lattice of $(REG, \subseteq, \cup, \cap)$ is a lattice but not a finite one, as the set of regular languages is transfinite and closed under finite union and intersection but not closed under transfinite union and intersection, which makes the lattice not complete.
+This is a problem: Essentially, we can not employ the Kleene fixed-point theorem (see \autoref{thm:kleene_finite}) to prove the termination of our analysis.
 
 \subsubsection{Abstract domain of numbers as disjunctions of intervals}\label{subsubsec:abstract_domains_numbers}
-
-To represent the abstract domain of the family of SQL number data types we have chosen finite disjunction of intervals.
-We represent such disjunctions of intervals as a set of disjoint intervals thus for a set of intervals $I$:
+We have chosen a finite disjunction of intervals to represent the abstract domain of the family of SQL number data types.
+We only consider Integers, but the domain can be extended to the Reals.
+We represent such disjunctions of intervals as a set of disjoint intervals; thus, for a set of intervals $\mathscr{I}$:
 \begin{equation}
-    n \in \gamma(I) \iff \exists i \in I : n \in \gamma(i)
+    n \in \gamma(\mathscr{I}) \iff \exists i \in \mathscr{I} : n \in \gamma(i)
 \end{equation}
 and
 \begin{equation}
-    I \sqsubseteq I' \iff \forall i \in I : \exists i' \in I' : i \sqsubseteq i'
+    \mathscr{I} \sqsubseteq \mathscr{I}' \iff \forall i \in \mathscr{I} : \exists i' \in \mathscr{I}' : i \sqsubseteq i'
 \end{equation}
-
-Let $\mathbb{IR}$ be the set of such intervals in the domain of reals numbers and $\mathbb{IZ}$ for the domain of whole numbers, in general we take $\mathscr{I} \in \mathbb{IR}$ and $\mathsf{I} \in \mathbb{IZ}$, and when the distinction does not matter we just write $I$.
+where $\gamma(i)$ is the set of integers in the interval $i$ and $\sqsubseteq$ is the subset relation.
 We define the meet and join of disjunctions as follows:
 \begin{align}
-    I \sqcup I' &= m(I \cup I') \\
-    \text{where } m(I) &= \begin{cases}
-        m(\{ i \sqcup i' | i, i' \in I \land i \sqcap i' \neq \bot \} \cup \{ i \in I | \forall i' \in I : i \sqcap i' = \bot \}) & \text{if } \exists i, i' \in I: i \sqcap i' \neq \bot \\
-        I & \text{otherwise}
+    \mathscr{I} \sqcup \mathscr{I}' &= m(\mathscr{I} \cup \mathscr{I}') \\
+    \text{where } m(\mathscr{I}) &= \begin{cases}
+        m(\{ i \sqcup i' | i, i' \in \mathscr{I} \land i \sqcap i' \neq \bot \} \cup \{ i \in \mathscr{I} | \forall i' \in \mathscr{I} : i \sqcap i' = \bot \}) & \text{if } \exists i, i' \in \mathscr{I}: i \sqcap i' \neq \bot \\
+        \mathscr{I} & \text{otherwise}
     \end{cases} \\
-    I \sqcap I' &= \{i \sqcap i' \mid i \in I \land i' \in I'\}
+    \mathscr{I} \sqcap \mathscr{I}' &= \{i \sqcap i' \mid i \in \mathscr{I} \land i' \in \mathscr{I}'\}
 \end{align}
 
-This intuitively models intersection and union of the underlying sets, that is $\gamma(I \sqcup I') = \gamma(I) \cup \gamma(I')$ (analogous for $\sqcap$, $\cap$), and also $I \sqsubseteq I' \iff \gamma(I) \subseteq \gamma(I')$.
+This intuitively models intersection and union of the underlying sets, that is $\gamma(\mathscr{I} \sqcup \mathscr{I}') = \gamma(\mathscr{I}) \cup \gamma(\mathscr{I}')$ (analogous for $\sqcap$, $\cap$), and also $\mathscr{I} \sqsubseteq \mathscr{I}' \iff \gamma(\mathscr{I}) \subseteq \gamma(\mathscr{I}')$.
 
-This representation of numbers has the same issue as regular expression mention in the prequel.
-
-\subsubsection{Single and List values}
-
-We would like to distinguish between single values and lists of values, thus we define algebraic type:
-\begin{align}
-    \mathsf{Val} \; A = \{ \mathsf{Single} \; a \mid a \in A \} \cup \{ \mathsf{List} \; A' \mid A' \subseteq A \}
-\end{align}
-
+This representation of numbers has the same issue as regular expressions: it is not finite and thus not complete, which makes it impossible to use the Kleene fixed-point theorem (see \autoref{thm:kleene_finite}) to prove the termination of our analysis.
 \subsubsection{Cover lattice}
 
-The resolve the issue presented above we introduce the notion of a cover lattice, but first we need to define:
+The resolve the issue presented above we introduce the notion of a cover lattice, but first we need to define a collectively disjoint top-cover and a cover lattice.
 
 \begin{definition}
     A finite non-empty subset $X \subseteq S$ of a lattice $(S, \subseteq, \cup, \cap)$ is called a collectively disjoint top-cover of $S$ whenever $\bigcup X = \top$ and $\bigcap X = \bot$.
 \end{definition}
 
 \begin{definition}\label{def:coverlattice}
-    Given a collectively disjoint top-cover $X$ of a lattice $(S, \subseteq, \cup, \cap)$.
-    A cover lattice of $S$ in respect to $X$ denoted $\clattice{X}{S}$ is the minimum set where:
-    \begin{itemize}
-        \item $\forall x \in X: x \in \clattice{X}{S}$,
-        \item $\forall x, y \in \clattice{X}{S} : x \cup y \in \clattice{X}{S}$,
-        \item $\forall x, y \in \clattice{X}{S} : x \cap y \in \clattice{X}{S}$,
-    \end{itemize}
+Given a collectively disjoint top-cover $X$ of a lattice $(S, \subseteq, \cup, \cap)$.
+A cover lattice of $S$ in respect to $X$ denoted $\clattice{X}{S}$ is the minimum set where:
+\begin{itemize}
+    \item $\forall x \in X: x \in \clattice{X}{S}$,
+    \item $\forall x, y \in \clattice{X}{S} : x \cup y \in \clattice{X}{S}$,
+    \item $\forall x, y \in \clattice{X}{S} : x \cap y \in \clattice{X}{S}$,
+\end{itemize}
 \end{definition}
 
 This gives rise to the following theorem:
 
 \begin{restatable}{theorem}{partition}\label{thm:partition}
-    For a non-complete lattice $(S, \subseteq, \cup, \cap)$ and collectively disjoint top-cover $X$ of the cover lattice $(\clattice{X}{S}, \subseteq, \cup, \cap)$ is a finite and complete lattice.
+For a non-complete lattice $(S, \subseteq, \cup, \cap)$ and collectively disjoint top-cover $X$ of the cover lattice $(\clattice{X}{S}, \subseteq, \cup, \cap)$ is a finite and complete lattice.
 \end{restatable}
 
 And the following lemmas immediately follow:
@@ -93,7 +89,7 @@ And the following lemmas immediately follow:
 \end{definition}
 
 \begin{definition}
-    We define $\circ \into C_\mathcal{X}(\mathcal{S}): \bigtimes_{i = 1}^{n} S_i \rightarrow \bigtimes_{i = 1}^{n} C_{X_i}(S_i)$ to be the function that takes a tuple and inserts each element of the tuple correctly into its given conver lattice.
+    We define $\circ \into C_\mathcal{X}(\mathcal{S}): \bigtimes_{i = 1}^{n} S_i \rightarrow \bigtimes_{i = 1}^{n} C_{X_i}(S_i)$ to be the function that takes a tuple and inserts each element of the tuple correctly into its given cover lattice.
     We use $(h_1, h_2 \dots h_n)\into C_{\mathcal{X}}(\mathcal{S})=(h_1 \into C_{X_1}(S_1), h_2\into C_{x_2}(S_2), \dots, h_n \into C_{x_n}(S_n))$
     $\mathcal{X}=(X_1, X_2, \dots, X_n)$
     $\mathcal{S}=(S_1, S_2, \dots, S_n)$ to show the type of the function and what $\mathcal{X}$ and $\mathcal{S}$ are.
@@ -101,16 +97,19 @@ And the following lemmas immediately follow:
 
 \begin{definition}
     We define $\circ \into C_x(S): \ Val$ $S \rightarrow Val$ $C_x(S)$ to be the function that takes some value and inserts it ito its cover lattice. \\
-    Depending on the form of the value (list or single element) we handle them diffently $Val \ a ::= Single \ a \mid \ List \ \mathcal{P}(a)$ \\
+    Depending on the form of the value (list or single element) we handle them differently $Val \ a ::= Single \ a \mid \ List \ \mathcal{P}(a)$ \\
     For single elements we use Single $Single \ h \into C_x(S) = Single(h\into C_x(S))$ where $x \in (Single \ x') \ iff \ x = x'$ \\
     And for a list of elements, we use List $List \ H \into C_x(S)=List(H\into C_x(S))$ where$x \in (List \ X) \ iff \ x \in X$ \\
 \end{definition}
 
 
 \begin{example}
-    \autoref{fig:tikz-reg-partition} illustrates a simple lattice cover of the regular languages. The regular language $R$ is represented by the gray circle and its complement $\overline{R}$ is represented by the white circle. The union of the two regular language represent the entire regular language $\Sigma^*$ and their intersection is the empty set $\emptyset$.
+    \autoref{fig:tikz-reg-partition} illustrates a simple lattice cover of the regular languages.
+    The regular language $R$ is represented by the gray circle and its complement $\overline{R}$ is represented by the white circle.
+    The union of the two regular language represent the entire regular language $\Sigma^*$ and their intersection is the empty set $\emptyset$.
 
-    \autoref{fig:tikz-reg-partition-lattice} illustrates the cover lattice induced by the lattice cover. The top element $\top$ is the entire regular language $\Sigma^*$ and the bottom element $\bot$ is the empty set $\emptyset$.
+    \autoref{fig:tikz-reg-partition-lattice} illustrates the cover lattice induced by the lattice cover.
+    The top element $\top$ is the entire regular language $\Sigma^*$ and the bottom element $\bot$ is the empty set $\emptyset$.
 \end{example}
 
 % Tikzfigures
@@ -150,9 +149,16 @@ And the following lemmas immediately follow:
     \label{fig:tikz-reg-partition-lattice}
 \end{figure}
 
+\subsubsection{Single and List values}
+
+We would like to distinguish between single values and lists of values, thus we define algebraic type:
+\begin{align}
+    \mathsf{Val} \; A = \{ \mathsf{Single} \; a \mid a \in A \} \cup \{ \mathsf{List} \; A' \mid A' \subseteq A \}
+\end{align}
+
 \subsubsection{Abstract domain of tables}\label{subsubsec:abstract_domain_of_tables}
 
-In the following we consider a table $t$ as function from the domain of possible tuples in the table $\mathbb{T}$ to the codomain of natural numbers including $0$, $\mathbb{N}$:
+We consider a table $t$ as function from the domain of possible tuples in the table $\mathbb{T}$ to the codomain of natural numbers including $0$, $\mathbb{N}$:
 \begin{equation}
     t : \mathbb{T} \rightarrow \mathbb{N}.
 \end{equation}
@@ -180,5 +186,5 @@ In \autoref{tab:taxonomy_of_abstract_domain_of_tables} $\mathbb{T}^\#$ let denot
 \end{table}
 
 We will only consider abstract bags of abstract tuples, sets of abstract tuples and abstract tuples because of their finite nature.
-It should be clear that sets of abstract tuples to is just a special case of abstract bags of abstract tuples.
-Naturally these maps all form map lattices.
+It should be clear that sets of abstract tuples are just a special case of abstract bags of abstract tuples.
+Naturally, these maps all form map lattices.
