@@ -53,7 +53,6 @@ We define application of abstract unary operators and binary operators between a
     \aop = \ap{\aaop}
 \end{equation}
 , where $\aaop$ is defined for the respective types later on.
-
 Similarly we define:
 \begin{align}
     \mathsf{Single} \; s_1 \app{op} \mathsf{Single} \; s_2 &= \mathsf{List} \; (\{s_1\} \op \{s_2\}) \label{eq:generalBOP} \\
@@ -172,8 +171,7 @@ Here we define the abstract semantics of expressions in SQAAL.
 \autoref{sem:exp1} to \ref{sem:exp2} describe the semantics of constants.
 In \autoref{sem:exp3} to \ref{sem:exp4} we describe the semantics of variables.
 In the case of database variables in \autoref{sem:exp4}, we assume attribute names do not clash.
-\autoref{eq:exp-lookup} and \autoref{eq:unary-op} describe the semantics of unary and binary operations on expressions.
-
+\autoref{eq:unary-op} and \ref{eq:binary-op} describe the semantics of unary and binary operations on expressions, the justification of abstract binary operations is analogous to the one given for the semantics of comparison operators (\autoref{eq:abstract-bool-semantics-end2}).
 \begin{align}\label{sem:exp1}
     \absexpsem{n}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \mathsf{Single} \; \{ [n, n] \} \\\label{sem:exp2}
     \absexpsem{k}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \mathsf{Single} \; R,  \text{ such that }\mathcal{L}(R) = \{ k \} \\ \label{sem:exp3}
@@ -182,39 +180,38 @@ In the case of database variables in \autoref{sem:exp4}, we assume attribute nam
     \absexpsem{op \; e}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{op} \; (\absexpsem{e}(\rho_{\ab{d}}, \rho_{\ab{a}})) \\ \label{eq:unary-op}
     \absexpsem{e_1 \;op\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=
     \begin{cases}
-        \mathsf{List} \; \left(S' \cup \{\{null\}\} \right) & \text{if } E_1 = \mathsf{List} \; S_1 \land E_2 = \mathsf{List} \; S_2 \land E_1 \;\ab{op}\; E_2 = \mathsf{List} \; S'\\
+        \app{\{\{null\}\} \cup} E & \text{if } E_1 = \mathsf{List} \; S_1 \land E_2 = \mathsf{List} \; S_2 \land E_1 \;\ab{op}\; E_2 = E\\
         E_1 \;\ab{op}\; E_2 & \text{otherwise}\\
-    \end{cases} \\
+    \end{cases} \\ \label{eq:binary-op}
     \text{where } & E_1 = \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
     \text{and } & E_2 = \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}})
 \end{align}
 
 Before defining the abstract operations, $\aaop$, for expressions, we will define some auxiliary functions.
-We define the length of a regular expression $R$, $\|R\|$:
+We define the length of a regular expression $R$, $\|R\|$ as:
 \begin{align}\label{eq:r1}
     \|R\| & = \{ \left[ \|\min(R)\|, +\infty \right) \} \\
     \text{where } & \|\min(R)\| = \min\{ \|s\| \mid s \in R \} \\ \label{eq:r2}
     \text{and } & \|s\| \text{ is the length of the word $s$}
 \end{align}
+The former is obviously an overapproximation, the lenght of the shortest $\|\min(R)\|$ can be found by classical shortest path algrotihm on the automata of $R$, $\mathcal{A}(R)$, such algorithms have a time complexity $\Theta(E + V \log V)$, where $E$ is the number of edges in the automata and $V$ is the number of states.
+We deem this acceptable.
+If $R$ does not contain a term $R'^\star$, we are essentially forced to find the longest path, this can be shown to be NP-hard, therefore we always approximate the length to be unbounded in the positive direction.
 
-We can find $\min(R)$ in \autoref{eq:r1} from the initial state to any final state by the shortest path algorithm.
-
-Next, we define $cvt$, which is String conversion generalized to regular expressions, defined by recursing on the operands of union, intersection, concatenation and Kleene star.
+Next, we define $cvt$, which is abstact string conversion over regular expressions, defined by recursing on the operands of union, intersection, concatenation and Kleene star.
 In the base case, a single symbol is converted as defined by $op$.
-In the case of the complement, seen in \autoref{eq:complement}, we convert $\overline{R}$ to its DFA equivalent by the usual construction, $\mathcal{A}:REG\rightarrow DFA$, as shown in~\cite{sipserbook}.
-This automaton is then converted back to a regular expression by the usual GNFA construction, $\mathcal{R}: DFA\rightarrow REG$, thus eliminating the complement. \todo{reference to Sipser}
-
+In the case of the complement, seen in \autoref{eq:complement}, we convert $\overline{R}$ to its DFA equivalent by the usual construction, $\mathcal{A}:REG\rightarrow DFA$~\cite{sipserbook}.
+This automaton is then converted back to a regular expression by the usual GNFA construction, $\mathcal{R}: DFA\rightarrow REG$~\cite{sipserbook}, thus eliminating the complement.
 \begin{align}
     cvt(op, R_1 \cup R_2) &= cvt(op, R_1) \cup cvt(op, R_2) \\
     cvt(op, R_1 \cap R_2) &= cvt(op, R_1) \cap cvt(op, R_2) \\
     cvt(op, R_1R_2) &= cvt(op, R_1) \; cvt(op, R_2) \\
     cvt(op, R^\star) &= (cvt(op, R))^\star \\
-    cvt(op, \overline{R}) &= cvt(op, (\mathcal{R} \circ \mathcal{A}) (\overline{R})) \\ \label{eq:complement}
+    cvt(op, \overline{R}) &= cvt(op, (\mathcal{R} \circ \mathcal{A}) (\overline{R})) \label{eq:complement} \\
     cvt(op, \sigma) &= op(\sigma)
 \end{align}
 
-\autoref{eq:concat} to \ref{eq:length} describe a subset of String operators present in PostgreSQL.
-
+\autoref{eq:concat} to \ref{eq:length} describe a subset of String operators present in PostgreSQL abstractly.
 \begin{align}\label{eq:concat}
     R_1 \;\aab{||}\; R_2 &= R_1R_2 \\
     \aab{lower}(R) &= cvt(\sigma \mapsto \sigma', R) \text{ such that $\sigma'$ is the lowercase representation of $\sigma$}\\
@@ -224,10 +221,9 @@ This automaton is then converted back to a regular expression by the usual GNFA 
 \end{align}
 
 \autoref{eq:abstractBOP} describes how to do binary operations on numbers.
-The arithmetic operations, $aop$, are defined as the standard for intervals.
-
+The arithmetic operations, $\aaab{aop}$, are defined as the standard for intervals.
 \begin{align}
-    I_1 \;\aab{aop}\; I_2 &= m(\{i_1 \; aop \; i_2 \mid i_1 \in I_1 \land i_2 \in I_2\})  \label{eq:abstractBOP}
+    I_1 \;\aab{aop}\; I_2 &= m(\{i_1 \; \aaab{aop} \; i_2 \mid i_1 \in I_1 \land i_2 \in I_2\})  \label{eq:abstractBOP}
 \end{align}
 
 \subsubsection{Abstract Semantics of Predicates}
