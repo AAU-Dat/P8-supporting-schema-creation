@@ -231,15 +231,15 @@ The other predicates all build on this base case with rules such as negation, di
     \abspredsem{\neg \phi}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{\neg} \left( \abspredsem{\phi}(\rho_{\ab{d}}, \rho_{\ab{a}}) \right) \\
     \abspredsem{\phi_1 \lor \phi_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \abspredsem{\phi_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ab{\lor} \abspredsem{\phi_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
     \abspredsem{\phi_1 \land \phi_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \abspredsem{\phi_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ab{\land} \abspredsem{\phi_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
-    \abspredsem{\exists x_n \; \phi}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \underset{s \in \absexpsem{x}}{\ab{\bigvee}} \abspredsem{\phi[s/x_n]} \\
-    \abspredsem{\forall x_n \; \phi}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \underset{s \in \absexpsem{x}}{\ab{\bigwedge}} \abspredsem{\phi[s/x_n]}
+    \abspredsem{\exists v_n \; \phi}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \underset{s \in \absexpsem{x}}{\ab{\bigvee}} \abspredsem{\phi[s/v_n]} \\
+    \abspredsem{\forall v_n \; \phi}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \underset{s \in \absexpsem{x}}{\ab{\bigwedge}} \abspredsem{\phi[s/v_n]}
 \end{align}
 
 \subsubsection{Abstract Semantics of SQL statements}
 
 Let
 \begin{equation}
-    \mathcal{C} : \mathbb{V}_a \cup \mathbb{V}_d \rightarrow \{ C_{X_1}(S_1), C_{X_2}(S_2), \dots, C_{X_n}(S_n) \}
+    \mathcal{C} : \mathbb{V} \rightarrow \{ C_{X_1}(S_1), C_{X_2}(S_2), \dots, C_{X_n}(S_n) \}
 \end{equation}
 where $X_1,...,X_n$ are defined as in \autoref{def:coverlattice} and are provided by the user.
 Also $S_1,...,S_n$ are given by the type of $v_a$ and $v_d$.
