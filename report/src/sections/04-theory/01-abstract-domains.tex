@@ -92,6 +92,14 @@ And the following lemmas immediately follow:
     $\mathcal{S}=(S_1, S_2, \dots, S_n)$ to show the type of the function and what $\mathcal{X}$ and $\mathcal{S}$ are.
 \end{definition}
 
+\begin{definition}
+    We define $\circ \into C_x(S): \ Val$ $S \rightarrow Val$ $C_x(S)$ to be the function that takes some value and inserts it ito its cover lattice. \\
+    Depending on the form of the value (list or single element) we handle them diffently $Val \ a ::= Single \ a \mid \ List \ \mathcal{P}(a)$ \\
+    For single elements we use Single $Single \ h \into C_x(S) = Single(h\into C_x(S))$ where $x \in (Single \ x') \ iff \ x = x'$ \\
+    And for a list of elements, we use List $List \ H \into C_x(S)=List(H\into C_x(S))$ where$x \in (List \ X) \ iff \ x \in X$ \\
+\end{definition}
+
+
 \begin{example}
     \autoref{fig:tikz-reg-partition} illustrates a simple lattice cover of the regular languages. The regular language $R$ is represented by the gray circle and its complement $\overline{R}$ is represented by the white circle. The union of the two regular language represent the entire regular language $\Sigma^*$ and their intersection is the empty set $\emptyset$.
 
