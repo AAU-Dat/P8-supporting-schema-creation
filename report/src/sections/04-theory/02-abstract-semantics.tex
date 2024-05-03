@@ -1,34 +1,33 @@
 \subsection{Abstract Syntax} \label{subsec:function-definitions}
 
-\todo[inline]{Lars says: Write the tables in from the paper:Abstract interpretation of database query languages}
 \begin{center}
     \begin{tabular}{l l}
-        $n: \mathbb{Z}$                          & Integer                                                   \\
-        $k: \S$                                  & String                                                    \\
-        $c: \mathbb{C}$                          & Constants                                                 \\
-        $v_a: \mathbb{V}_a$                      & Application variables                                     \\
-        $v_d: \mathbb{V}_d$                      & Database variables (attributes) involved in SQL commands  \\
-        $v: \mathbb{V} \triangleq \mathbb{V}_d $ & Variables                                                 \\
-        $e: \mathbb{E}$                          & Arithmetic expressions                                    \\
-        $b: \mathbb{B}$                          & Boolean expressions                                       \\
-        $A_{sql}: \mathbb{A}_{sql}$              & Action part of SQL commands                               \\
-        $\tau: \mathbb{T}$                       & Terms                                                     \\
-        $a_f: \mathbb{A}_f$                      & Atomic formulas                                           \\
-        $\phi : \mathbb{W}$                      & Well-formed formulas (pre-condition part of SQL commands) \\
-        $C_{sql}: \mathbb{C}_{sql}$              & SQL commands                                              \\
-        $I: \mathbb{I}$                          & Instructions/commands                                     \\
+    $n \in \mathbb{Z}$                          & Integers                                                   \\
+    $k \in \mathbb{S}$                                  & Strings                                                    \\
+    $c \in \mathbb{C}$                          & Constants                                                 \\
+    $v_a \in \mathbb{V}_a$                      & Application variables                                     \\
+    $v_d \in \mathbb{V}_d$                      & Database variables (attributes) involved in SQL commands  \\
+    $v \in \mathbb{V}$ & Variables                                                 \\
+    $e \in \mathbb{E}$                          & Arithmetic expressions                                    \\
+    $b \in \mathbb{B}$                          & Boolean expressions                                       \\
+    $\tau \in \mathbb{T}$                       & Terms                                                     \\
+    $a_f \in \mathbb{A}_f$                      & Atomic formulas                                           \\
+    $\phi  \in \mathbb{W}$                      & Well-formed formulas (pre-condition part of SQL commands) \\
+    $A_{sql} \in \mathbb{A}_{sql}$              & Action part of SQL commands                               \\
+    $C_{sql} \in \mathbb{C}_{sql}$              & SQL commands                                              \\
+    $I \in \mathbb{I}$                          & Instructions/commands                                     \\
     \end{tabular}
 \end{center}
 
 \begin{center}
     \begin{tabular}{l l}
         $c ::=$ & $n \mid k$ \\
-        $e ::=$ & $c \mid v_d \mid v_a \mid ap_u e \mid e_1 op_b e_2$ , where $op_u$ and $op_b$ represent unary and binary arithmetic operations respectively. \\
-        $e ::=$ & $e_1 = e_2 \mid e_1 \geq \mid e_1 \leq e_2 \mid e_1 > e_2 \mid e_1 < e_2 \mid e_1 \neq e_2 \mid \neg b \mid b_1 \lor b_2 \mid b_1 \land b_2 \mid \texttt{true} \mid \texttt{flase}$ \\
+        $v ::=$ & $v_d \mid v_a$ \\
+        $e ::=$ & $c \mid v \mid ap_u e \mid e_1 op_b e_2$ , where $op_u$ and $op_b$ represent unary and binary arithmetic operations respectively. \\
+        $b ::=$ & $e_1 = e_2 \mid e_1 \geq \mid e_1 \leq e_2 \mid e_1 > e_2 \mid e_1 < e_2 \mid e_1 \neq e_2 \mid \neg b \mid b_1 \lor b_2 \mid b_1 \land b_2 \mid \texttt{true} \mid \texttt{flase}$ \\
         $\tau ::=$ & $c \mid v_a \mid v_d \mid f_n(\tau_1, \tau_2, \dots, \tau_n)$, where $f_n$ is an $n$-any function. \\
         $a_f ::=$ & $R_n(\tau_1, \tau_2, \dots, \tau_n) \mid \tau_1 = \tau2$, where $R_n$ is an $n$-ary relation: $R_n(\tau_1, \tau_2, \dots, \tau_n) \in \{ \texttt{true}, \texttt{false}\}$ \\
         $\phi ::=$ & $a_f \mid \neg \phi_1 \mid \phi_1 \lor \phi_2 \mid \phi_1 \land \phi_2 \mid \forall x_n \phi \mid \exists x_n \phi$ \\
-        $x ::=$ & $v_d \mid v_a$ \\
         $A_{sql} :: =$ & $select(v_a) \mid update(v_d, e) \mid delete(v_d) \mid insert(v_d, e)$ \\
         $C_{sql} ::=$ & $\langle A_{sql}, \phi \rangle $ \\
         $I ::=$ & $skip \mid v_a := e \mid v_a := ? \mid C_{sql} $\\
@@ -43,7 +42,7 @@ This section will describe to abstract semantics of SQAAL.
 
 We would like to distinguish between single values and lists of values, thus we define algebraic type:
 \begin{align}
-    \mathsf{Val} \; a ::= \mathsf{Single} \; a \mid \mathsf{List} \; \mathcal{P}(a)
+    \mathsf{Val} \; A = \{ \mathsf{Single} \; a \mid a \in A \} \cup \{ \mathsf{List} \; A' \mid A' \subseteq A \}
 \end{align}
 
 \autoref{eq:generalBOP} to \ref{eq:generalUOP}, we see how the general binary and unary operation works in SQAAL.
