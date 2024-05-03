@@ -228,7 +228,7 @@ The arithmetic operations, $\aaab{aop}$, are defined as the standard for interva
 
 \subsubsection{Abstract Semantics of Predicates}
 The base rule of all the predicates is defined in \autoref{eq:atomicformulas}, as this is the base case for all the other predicates.
-It takes atomic formulas, $a_f$, of the form corresponding to \autoref{eq:abstract-bool-semantics-end1} and \ref{eq:abstract-bool-semantics-end2}, and returns the boolean value of $a_f$.
+It takes atomic formulas, $a_f$, of the form corresponding to \autoref{eq:abstract-bool-semantics-end2}, and returns the abstract truth value of $a_f$.
 The other predicates all build on this base case with rules such as negation, disjunction and conjunction.
 \begin{align}\label{eq:atomicformulas}
     \abspredsem{a_f}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absboolsem{a_f}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
