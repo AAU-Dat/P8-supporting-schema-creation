@@ -46,16 +46,16 @@ We would like to distinguish between single values and lists of values, thus we 
     \mathsf{Val} \; a ::= \mathsf{Single} \; a \mid \mathsf{List} \; \mathcal{P}(a)
 \end{align}
 
-In \autoref{eq:generalBOP} and \autoref{eq:generalUOP} we see the how the general binary and unary operation works in SQAAL.
-We denote binary operations on sets with $\widehat{op}$, and $\aab{op}$ for binary operations on elements in those sets.
+\autoref{eq:generalBOP} to \ref{eq:generalUOP}, we see how the general binary and unary operation works in SQAAL.
+We denote binary operations on sets with $\widehat{op}$ and $\aab{op}$ for binary operations on elements in those sets.
 
-\begin{align}\label{eq:generalBOP}
-    \mathsf{Single} \; s_1 \aop \mathsf{Single} \; s_2 &= \mathsf{Single} \; (s_1 \aaop s_2) \\
-    \mathsf{Single} \; s \aop \mathsf{List} \; S &= \mathsf{List} \; \{ s \aaop s' \mid s' \in S \}  \\
+\begin{align}
+    \mathsf{Single} \; s_1 \aop \mathsf{Single} \; s_2 &= \mathsf{Single} \; (s_1 \aaop s_2) \label{eq:generalBOP} \\
+    \mathsf{Single} \; s \aop \mathsf{List} \; S &= \mathsf{List} \; \{ s \aaop s' \mid s' \in S \} \\
     \mathsf{List} \; S \aop \mathsf{Single} \; s &= \mathsf{List} \; \{ s' \aaop s \mid s' \in S \}  \\
     \mathsf{List} \; S_1 \aop \mathsf{List} \; S_2 &= \mathsf{List} \; \{ s_1 \aaop s_2 \mid s_1 \in S_1, s_2 \in S_2 \} \\
     \aop (\mathsf{Single} \; s) &= \mathsf{Single} \; (\aaop s) \\
-    \aop (\mathsf{List} \; S) &= \mathsf{List} \; \{ \aaop s \mid s \in S \}
+    \aop (\mathsf{List} \; S) &= \mathsf{List} \; \{ \aaop s \mid s \in S \} \label{eq:generalUOP}
 \end{align}
 
 \subsubsection{Abstract Semantics of Boolean expressions}
@@ -66,10 +66,10 @@ $\aab{bop}$ is defined to be a special case of $\aaop$ as follows:
 \end{align}
 Where $\aaab{bop}$ is defined for $\land$, $\lor$ and $\neg$ in \autoref{tab:aaabland}, \autoref{tab:aaablor} and \autoref{tab:aaabneg} respectively.
 
-Equation \ref{eq:abstract-bool-semantics-start} through \ref{eq:abstract-bool-semantics-end2} shows the abstract semantics of boolean expressions, such as logical operators and comparisons between expressions.
-Boolean expressions are evaluated recursively on in relation to the current state of the program.
-In general we don't know whether a comparison is between a single value or a list of values, thus we assume the former and take the prior as a special case that we can't distinguish.
-Therefore Boolean expressions over abstracts values evaluate to abstract lists of Boolean values.
+\autoref{eq:abstract-bool-semantics-start} through \ref{eq:abstract-bool-semantics-end2} show the abstract semantics of boolean expressions, such as logical operators and comparisons between expressions.
+In general, we do not know whether a comparison is between a single value or a list of values.
+Thus, we assume the former and take the prior as a special case that we cannot distinguish.
+Therefore, Boolean expressions over abstract values evaluate to abstract lists of Boolean values.
 
 \begin{align}
     \absboolsem{\texttt{true}}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \mathsf{Single} \; \{\true\} \label{eq:abstract-bool-semantics-start} \\
@@ -124,12 +124,12 @@ Therefore Boolean expressions over abstracts values evaluate to abstract lists o
     \label{tab:aaabneg}
 \end{table}
 
-Equation \ref{eq:aaabcomp} through \ref{eq:aaabcomp3} describe how SQAAL handles comparison operations for abstract strings (regular expressions) and numbers (union of interval).
-Where the comparison operations work by looking at the entirety of the range or regular expressions and give back a set of true and/or false values.
+\autoref{eq:aaabcomp} through \ref{eq:aaabcomp3} describe how SQAAL handles comparison operations for abstract strings (regular expressions) and numbers (union of interval).
+The comparison operations work by looking at the entirety of the range or regular expressions and giving back a set of true and/or false values.
 Since there can be cases where regular expressions or ranges are identical, have some overlap or are completely different, the comparison operations can return multiple values.
 
 
-For ranges $I_1$ and $I_2$ and arbitrary values $X_1$ and $X_2$ (either a intervals or a regular expression):
+For ranges $I_1$ and $I_2$ and arbitrary values $X_1$ and $X_2$ (either intervals or regular expressions):
 
 \begin{align} \label{eq:aaabcomp}
     X_1 \;\aab{=}\; X_2 &= \begin{cases}
@@ -192,9 +192,9 @@ We define the length of a regular expression $R$, $\|R\|$:
 
 We can find $\min(R)$ in \autoref{eq:r1} from the initial state to any final state by the shortest path algorithm.
 
-Next, we define $cvt$ which is String conversion generalized to regular expressions, defined by recursing on the operands of union, intersection, concatenation and kleene star.
+Next, we define $cvt$, which is String conversion generalized to regular expressions, defined by recursing on the operands of union, intersection, concatenation and Kleene star.
 In the base case, a single symbol is converted as defined by $op$.
-In the case of the complement, seen in \autoref{eq:complement}, we convert $\overline{R}$ to its DFA equivalent by the usual construction, $\mathcal{A}:REG\rightarrow DFA$. \todo{reference to Sipser}
+In the case of the complement, seen in \autoref{eq:complement}, we convert $\overline{R}$ to its DFA equivalent by the usual construction, $\mathcal{A}:REG\rightarrow DFA$, as shown in~\cite{sipserbook}.
 This automaton is then converted back to a regular expression by the usual GNFA construction, $\mathcal{R}: DFA\rightarrow REG$, thus eliminating the complement. \todo{reference to Sipser}
 
 \begin{align}
@@ -293,8 +293,8 @@ Let
 
 \subsubsection{Abstract Semantics of Actions}
 This section will cover the abstract semantics of actions in SQAAL.
-In general the abstract semantics of actions are defined as a function that takes a set of abstract environments and returns an updated set of abstract environments.
-Meaning that when an action is made, the abstract environment is updated to reflect the changes made by the action.
+In general, the abstract semantics of actions are defined as a function that takes a set of abstract environments and returns an updated set of abstract environments.
+This means that when an action is taken, the abstract environment is updated to reflect the changes made by the action.
 An example of this could be with the skip action, where the abstract environment is not changed.
 
 
