@@ -35,9 +35,9 @@ Omitted parts within this simplified abstract syntax correspond to features or c
 
         $b ::=$ & $e_1 = e_2 \mid e_1 \leq e_2 \mid e_1 < e_2 \mid \neg b \mid b_1 \lor b_2 \mid b_1 \land b_2 \mid \texttt{true} \mid \texttt{false}$ \\
 
-        $a_f ::=$ & $e_1 = e_2 \mid e_1 \neq e_2 \mid e_1 \leq e_2 \mid e_1 < e_2$ \\
-        $\phi ::=$ & $a_f \mid \neg \phi_1 \mid \phi_1 \lor \phi_2 \mid \phi_1 \land \phi_2 \mid \forall x_n \phi \mid \exists x_n \phi$ \\
-        $A_{sql} :: =$ & $select(v_a) \mid update(v_d, e) \mid delete(v_d) \mid insert(v_d, e)$ \\
+        $a_f ::=$ & $e_1 = e_2 \mid e_1 \leq e_2 \mid e_1 < e_2$ \\
+        $\phi ::=$ & $a_f \mid \neg \phi_1 \mid \phi_1 \lor \phi_2 \mid \phi_1 \land \phi_2 \mid \forall v_n \phi \mid \exists v_n \phi$ \\
+        $A_{sql} :: =$ & $select(v_a, \mathbf{v}_d) \mid update(\mathbf{v}_d, \mathbf{e}) \mid delete(\mathbf{v}_d) \mid insert(\mathbf{v}_d, \mathbf{e})$ \\
         $C_{sql} ::=$ & $\langle A_{sql}, \phi \rangle $ \\
         $I ::=$ & $skip \mid v_a := e \mid v_a := ? \mid C_{sql} $\\
     \end{tabular}
@@ -246,8 +246,8 @@ The other predicates all build on this base case with rules such as negation, di
     \abspredsem{\neg \phi}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{\neg} \left( \abspredsem{\phi}(\rho_{\ab{d}}, \rho_{\ab{a}}) \right) \\
     \abspredsem{\phi_1 \lor \phi_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \abspredsem{\phi_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ab{\lor} \abspredsem{\phi_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
     \abspredsem{\phi_1 \land \phi_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \abspredsem{\phi_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ab{\land} \abspredsem{\phi_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
-    \abspredsem{\exists v_n \; \phi}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \underset{s \in \absexpsem{x}}{\ab{\bigvee}} \abspredsem{\phi[s/v_n]} \\
-    \abspredsem{\forall v_n \; \phi}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \underset{s \in \absexpsem{x}}{\ab{\bigwedge}} \abspredsem{\phi[s/v_n]}
+    \abspredsem{\exists v_n \; \phi}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \underset{s \in \absexpsem{x}}{\ab{\bigvee}} \abspredsem{\phi[s/v_n]}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
+    \abspredsem{\forall v_n \; \phi}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \underset{s \in \absexpsem{x}}{\ab{\bigwedge}} \abspredsem{\phi[s/v_n]}(\rho_{\ab{d}}, \rho_{\ab{a}})
 \end{align}
 
 \subsubsection{Abstract Semantics of SQL statements}
@@ -261,9 +261,9 @@ Also $S_1,...,S_n$ are given by the type of $v_a, v_d \in \mathbb{V}$.
 
 Let
 \begin{align}
-    \abstable \downarrow_{\true} \phi &= \{ l \in \ab{t} \mid \mathsf{Single} \; \{ \true \} = \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]} \text{ for } \mathbf{v}_d = var_{\ab{t}}(\phi) \} \\
-    \abstable \downarrow_{\false} \phi &= \{ l \in \ab{t} \mid \mathsf{Single} \; \{ \false \} = \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]} \text{ for } \mathbf{v}_d = var_{\ab{t}}(\phi) \} \\
-    \abstable \downarrow_{\unknown} \phi &= \{ l \in \ab{t} \mid \true \in b \in B = \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]} \text{ for } \mathbf{v}_d = var_{\ab{t}}(\phi) \} \setminus \abstable \downarrow_{\true} \phi
+    \abstable \downarrow_{\true} \phi &= \{ l \in \ab{t} \mid \mathsf{Single} \; \{ \true \} = \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]}(\rho_{\ab{d}}, \rho_{\ab{a}}) \text{ for } \mathbf{v}_d = var_{\ab{t}}(\phi) \} \\
+    \abstable \downarrow_{\false} \phi &= \{ l \in \ab{t} \mid \mathsf{Single} \; \{ \false \} = \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]}(\rho_{\ab{d}}, \rho_{\ab{a}}) \text{ for } \mathbf{v}_d = var_{\ab{t}}(\phi) \} \\
+    \abstable \downarrow_{\unknown} \phi &= \{ l \in \ab{t} \mid \true \in b \in B = \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]}(\rho_{\ab{d}}, \rho_{\ab{a}}) \text{ for } \mathbf{v}_d = var_{\ab{t}}(\phi) \} \setminus \abstable \downarrow_{\true} \phi
 \end{align}
 
 \begin{align}
