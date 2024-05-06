@@ -24,6 +24,8 @@ This is a problem: Essentially, we can not employ the Kleene fixed-point theorem
 \subsubsection{Abstract domain of numbers as unions of intervals}\label{subsubsec:abstract_domains_numbers}
 We have chosen a finite union of intervals to represent the abstract domain of the family of SQL number data types.
 We only consider Integers, but the domain can be extended to the Reals.
+Let $\mathscr{Z}$ denote the set of union intervals.
+The lattice of $(\mathscr{Z}, \sqsubseteq, \sqcup, \sqcap)$ is a lattice but not a finite one, as the set of unions of intervals is transfinite and closed under finite union and intersection but not closed under transfinite union and intersection, which makes the lattice not complete.
 We represent such unions of intervals as a set of disjoint intervals; thus, for a set of intervals $\mathscr{I}$:
 \begin{equation}
     n \in \gamma(\mathscr{I}) \iff \exists i \in \mathscr{I} : n \in \gamma(i)
@@ -47,8 +49,7 @@ This intuitively models intersection and union of the underlying sets, that is $
 
 This representation of numbers has the same issue as regular expressions: it is not finite and thus not complete, which makes it impossible to use the Kleene fixed-point theorem (see \autoref{thm:kleene_finite}) to prove the termination of our analysis.
 \subsubsection{Cover lattice}
-
-The resolve the issue presented above we introduce the notion of a cover lattice, but first we need to define a collectively disjoint top-cover and a cover lattice.
+To resolve the issue presented above we introduce the notion of a cover lattice, but first we need to define a collectively disjoint top-cover and a cover lattice.
 
 \begin{definition}
     A finite non-empty subset $X \subseteq S$ of a lattice $(S, \subseteq, \cup, \cap)$ is called a collectively disjoint top-cover of $S$ whenever $\bigcup X = \top$ and $\bigcap X = \bot$.
@@ -64,10 +65,11 @@ A cover lattice of $S$ in respect to $X$ denoted $\clattice{X}{S}$ is the minimu
 \end{itemize}
 \end{definition}
 
+Now we can define the cover lattice of the regular languages and the integers.
 This gives rise to the following theorem:
 
 \begin{restatable}{theorem}{partition}\label{thm:partition}
-For a non-complete lattice $(S, \subseteq, \cup, \cap)$ and collectively disjoint top-cover $X$ of the cover lattice $(\clattice{X}{S}, \subseteq, \cup, \cap)$ is a finite and complete lattice.
+For a non-complete lattice $(S, \subseteq, \cup, \cap)$ and collectively disjoint top-cover $X$ of $S$, the cover lattice $(\clattice{X}{S}, \subseteq, \cup, \cap)$ is a finite and complete lattice.
 \end{restatable}
 
 And the following lemmas immediately follow:
@@ -77,14 +79,14 @@ And the following lemmas immediately follow:
 \end{lemma}
 
 \begin{lemma}
-    If $X$ is a collectively disjoint top-cover of $(MILP^n, \subseteq, \cup, \cap)$ then $(\clattice{X}{MILP^n}, \subseteq, \cup, \cap)$ is a complete lattice.
+    If $X$ is a collectively disjoint top-cover of $(\mathscr{Z}, \subseteq, \cup, \cap)$ then $(\clattice{X}{\mathscr{Z}}, \subseteq, \cup, \cap)$ is a complete lattice.
 \end{lemma}
 
 \begin{definition}
     We define $\cdot \into C_X(S):S\rightarrow C_X(S)$ to be the function mapping $s\in S$ to the least element in $C_X(S)$ containing it, that is $s \into C_X(S)=\bigsqcap\{s'\in C_X(S)|s\sqsubseteq s'\}$
     \\
 
-    We define $\circ \into C_X(S):\mathcal{P}(S)\rightarrow \mathcal{P}(C_X(S))$ to be the function that maps the powerset of the lattice elements to the powerset of the cover lattice elements.
+    We define $\cdot \into C_X(S):\mathcal{P}(S)\rightarrow \mathcal{P}(C_X(S))$ to be the function that maps the powerset of the lattice elements to the powerset of the cover lattice elements.
     We use $H \into C_x (S) = \{h \into C_x (S) \mid h \in H\}$ to show the type of the function.
 \end{definition}
 
@@ -116,15 +118,7 @@ And the following lemmas immediately follow:
 \begin{figure}
     \center
     \resizebox{7.5cm}{!}{
-        \begin{tikzpicture}
-            \filldraw[fill=white, draw=black] (2,2) circle (5cm);
-            \node [draw] at (5,2) {\Huge$\overline{R}$};
-            \filldraw[fill=gray!60, draw=black] (1,2) circle (2cm);
-            \node [draw] at (1,2) {\Huge R};
-            \node at (9.5, 2.5) {\huge $R \cup \overline{R} = \Sigma^*$};
-            \node at (9.5, 1.5) {\huge $R \cap \overline{R} = \emptyset$};
-        \end{tikzpicture}
-    }
+    \input{figures/reg_partition.tex}}
     \caption{Regular language partition}
     \label{fig:tikz-reg-partition}
 \end{figure}
@@ -133,18 +127,7 @@ And the following lemmas immediately follow:
 \begin{figure}[!htb]
     \center
     \resizebox{6.5cm}{!}{
-        \begin{tikzpicture}[scale = 0.5]
-            \usetikzlibrary{calc}
-            \node (a) [state] {\Huge$R \cup \overline{R} = \top = \Sigma^*$};
-            \node (b1) [state, shift={($(a.south)+(3cm, -2.5cm)$)}] {\Huge $R$};
-            \node (b2) [state, shift={($(a.south)+(-3cm, -2.5cm)$)}]{\Huge $\overline{R}$};
-            \node (c) [state, shift= {($(a.south) + (0cm, -5.5cm)$)}] {\Huge $R \cap \overline{R} = \bot = \emptyset$};
-            \draw (a) to (b1);
-            \draw (a) to (b2);
-            \draw (b1) to (c);
-            \draw (b2) to (c);
-        \end{tikzpicture}
-    }
+    \input{figures/reg_partition_lattice.tex}}
     \caption{Regular language partition as a lattice}
     \label{fig:tikz-reg-partition-lattice}
 \end{figure}
@@ -154,6 +137,22 @@ And the following lemmas immediately follow:
 We would like to distinguish between single values and lists of values, thus we define algebraic type:
 \begin{align}
     \mathsf{Val} \; A = \{ \mathsf{Single} \; a \mid a \in A \} \cup \{ \mathsf{List} \; A' \mid A' \subseteq A \}
+\end{align}
+We define the following operations on the algebraic type:
+\begin{align}
+    \mathsf{Single} \; s &\sqsubseteq \mathsf{List} \; S \quad
+    \text{iff} \; s \in S \\
+    \mathsf{Single} \; s_1 &\sqsubseteq \mathsf{Single} \; s_2 \quad
+    \text{iff} \; s_1 \sqsubseteq s_2 \\
+    \mathsf{List} \; S &\not\sqsubseteq \mathsf{Single} \; s\\
+    \mathsf{List} \; S_1 &\sqsubseteq \mathsf{List} \; S_2 \quad
+    \text{iff} \; \forall s_1 \in S_1, \; \exists s_2 \in S_2: \; s_1 \sqsubseteq s_2\\
+    \mathsf{Single} \; s \sqcup \mathsf{List} \; S &= \mathsf{List} \; (S\sqcup\left\{ s \right\})\\
+    \mathsf{Single} \; s_1 \sqcup \mathsf{Single} \; s_2 &= \mathsf{Single} \; (s \sqcup s )\\
+    \mathsf{List} \; S_1 \sqcup \mathsf{List} \; S_2 &= \mathsf{List} \; (S_1 \sqcup S_2)\\
+    \mathsf{Single} \; s \sqcap \mathsf{List} \; S &= \mathsf{Single} \; s\\
+    \mathsf{List} \; S_1 \sqcap \mathsf{List} \; S_2 &= \mathsf{List} \; (S_1 \sqcap S_2)\\
+    \mathsf{Single} \; s_1 \sqcap \mathsf{Single} \; s_2 &= \mathsf{Single} \; (s_1 \sqcap s_2)
 \end{align}
 
 \subsubsection{Abstract domain of tables}\label{subsubsec:abstract_domain_of_tables}
