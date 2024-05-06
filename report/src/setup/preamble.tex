@@ -17,11 +17,12 @@
 \usepackage{stmaryrd}
 \usepackage{mathabx}
 \usepackage{algpseudocode}
+\usepackage{listings}
 
 % Packages with options set
 \usepackage[hidelinks]{hyperref}
 \usepackage[textsize=small,obeyDraft]{todonotes}
-\usepackage[newfloat]{minted}
+\usepackage[newfloat, outputdir=../out]{minted}
 \usepackage[backend=biber,
     bibencoding=utf8,
     maxbibnames=20,
@@ -79,15 +80,20 @@
 \newcommand{\absexpsem}[1]{\widehat{\mathcal{E}}\llbracket #1 \rrbracket}
 \newcommand{\true}{t\!t}
 \newcommand{\false}{f\!\!f}
+\newcommand{\unknown}{?\!?}
 \newcommand{\ab}[1]{\widehat{#1}}
 \newcommand{\aab}[1]{\widetilde{#1}}
 \newcommand{\aaab}[1]{\widetilde{\widetilde{#1}}}
 \newcommand{\aop}{\;\ab{op}\;}
+\newcommand{\op}{\;op\;}
+\newcommand{\ap}[1]{\;\langle#1\rangle\;}
 \newcommand{\aaop}{\;\aab{op}\;}
 \newcommand{\mnull}{null}
 \newcommand{\abstable}{\ab{t}}
 \newcommand{\comp}{comp}
-\newcommand{\intoset}{\hookrightarrow}
-\newcommand{\into}{\overset{\sqcap}{\hookrightarrow}}
+\newcommand{\into}{\hookrightarrow}
 \newcommand{\lookupcl}{\mathcal{C}}
 \newcommand{\abssqlsem}[1]{\widehat{\mathcal{Q}}\llbracket #1 \rrbracket}
+\newcommand{\abspredsem}[1]{\widehat{\mathcal{P}}\llbracket #1 \rrbracket}
+\newcommand{\absatomsem}[1]{\widehat{\mathcal{T}}\llbracket #1 \rrbracket}
+\newcommand{\app}[1]{\;\llparenthesis#1\rrparenthesis\;}

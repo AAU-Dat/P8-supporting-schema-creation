@@ -1,95 +1,138 @@
-\subsection{Overview for function definitions} \label{subsec:function-definitions}
+\subsection{Abstract Syntax} \label{subsec:function-definitions}
+This section will introduce the syntactic sets and abstract syntax of SQAAL.
+The syntactic sets of SQAAL encompass the various elements and constructs that constitute the language's grammar. These sets define the valid combinations of symbols and keywords that form syntactically correct statements in SQAAL. They include components such as keywords, identifiers, operators, literals, and punctuation marks, each serving a specific role in expressing queries and analytical operations.
 
-\todo[inline]{Lars says: Write the tables in from the paper:Abstract interpretation of database query languages}
-\begin{center}
+This paper adopts a simplified version of the abstract syntax originally presented in~\cite{cortesi_abstract_2013}.
+Omitted parts within this simplified abstract syntax correspond to features or constructs that are not utilized or discussed in the context of the current application.
+\begin{figure}[htb!]
+     \center
     \begin{tabular}{l l}
-        $n: \mathbb{Z}$                          & Integer                                                   \\
-        $k: \S$                                  & String                                                    \\
-        $c: \mathbb{C}$                          & Constants                                                 \\
-        $v_a: \mathbb{V}_a$                      & Application variables                                     \\
-        $v_d: \mathbb{V}_d$                      & Database variables (attributes) involved in SQL commands  \\
-        $v: \mathbb{V} \triangleq \mathbb{V}_d $ & Variables                                                 \\
-        $e: \mathbb{E}$                          & Arithmetic expressions                                    \\
-        $b: \mathbb{B}$                          & Boolean expressions                                       \\
-        $A_{sql}: \mathbb{A}_{sql}$              & Action part of SQL commands                               \\
-        $\tau: \mathbb{T}$                       & Terms                                                     \\
-        $a_f: \mathbb{A}_f$                      & Atomic formulas                                           \\
-        $\phi : \mathbb{W}$                      & Well-formed formulas (pre-condition part of SQL commands) \\
-        $C_{sql}: \mathbb{C}_{sql}$              & SQL commands                                              \\
-        $I: \mathbb{I}$                          & Instructions/commands                                     \\
+    $n \in \mathbb{Z}$                          & Integers                                                   \\
+    $k \in \mathbb{S}$                                  & Strings                                                    \\
+    $c \in \mathbb{C}$                          & Constants                                                 \\
+    $v_a \in \mathbb{V}_a$                      & Application variables                                     \\
+    $v_d \in \mathbb{V}_d$                      & Database variables (attributes) involved in SQL commands  \\
+    $v \in \mathbb{V}$ & Variables                                                 \\
+    $e \in \mathbb{E}$                          & Arithmetic expressions                                    \\
+    $b \in \mathbb{B}$                          & Boolean expressions                                       \\
+    $\tau \in \mathbb{T}$                       & Terms                                                     \\
+    $a_f \in \mathbb{A}_f$                      & Atomic formulas                                           \\
+    $\phi  \in \mathbb{W}$                      & Well-formed formulas (pre-condition part of SQL commands) \\
+    $A_{sql} \in \mathbb{A}_{sql}$              & Action part of SQL commands                               \\
+    $C_{sql} \in \mathbb{C}_{sql}$              & SQL commands                                              \\
+    $I \in \mathbb{I}$                          & Instructions/commands                                     \\
     \end{tabular}
-\end{center}
+    \caption{Syntatic Sets}
+    \label{tab:syntatic-sets}
+\end{figure}
 
-\begin{center}
+\begin{figure}[htb!]
+    \center
     \begin{tabular}{l l}
         $c ::=$ & $n \mid k$ \\
-        $e ::=$ & $c \mid v_d \mid v_a \mid ap_u e \mid e_1 op_b e_2$ , where $op_u$ and $op_b$ represent unary and binary arithmetic operations respectively. \\
-        $e ::=$ & $e_1 = e_2 \mid e_1 \geq \mid e_1 \leq e_2 \mid e_1 > e_2 \mid e_1 < e_2 \mid e_1 \neq e_2 \mid \neg b \mid b_1 \lor b_2 \mid b_1 \land b_2 \mid \texttt{true} \mid \texttt{flase}$ \\
-        $\tau ::=$ & $c \mid v_a \mid v_d \mid f_n(\tau_1, \tau_2, \dots, \tau_n)$, where $f_n$ is an $n$-any function. \\
-        $a_f ::=$ & $R_n(\tau_1, \tau_2, \dots, \tau_n) \mid \tau_1 = \tau2$, where $R_n$ is an $n$-ary relation: $R_n(\tau_1, \tau_2, \dots, \tau_n) \in \{ \texttt{true}, \texttt{false}\}$ \\
-        $\phi ::=$ & $a_f \mid \neg \phi_1 \mid \phi_1 \lor \phi_2 \mid \phi_1 \land \phi_2 \mid \forall \textbf{x}_i \phi \mid \exists \textbf{x}_i \phi$ \\
-        $g(\overrightarrow{e}) ::=$  & $\texttt{GROUP BY} \overrightarrow{e} \mid id$ \\
-        $r ::= $ & $\texttt{DISTINCT} \mid \texttt{ALL}$ \\
-        $s ::= $ & $\texttt{AVG} \mid \texttt{SUM} \mid \texttt{MAX} \mid \texttt{MIN} \mid \texttt{COUNT}$ \\
-        $h(e) ::= $ & $s \bigcirc r(e) \mid \texttt{DISTINCT}(e) \mid id$ \\
-        $h(*) ::= $ & $\texttt{COUNT(*)}$ \\
-        $\overrightarrow{h}(\overrightarrow{\textbf{x}}) ::= $ & $\langle h_1(\textbf{x}_1), \dots, h_n(\textbf{x}_n)\rangle$, where $\overrightarrow{h} = \langle \rangle$ \\
-        $f(\overrightarrow{e}) ::=$ & $\texttt{ORDER BY ACE}(\overrightarrow{e}) \mid \texttt{ORDER BY DESC}(\overrightarrow{e}) \mid id$ \\
-        $A_{sql} :: =$ & $select(v_a, f(\overrightarrow{e'}), r(\overrightarrow{h}(\overrightarrow{\textbf{x}})), \phi, g(\overrightarrow{e})) \mid update(\overrightarrow{v_d}, \overrightarrow{e}) \mid delete(\overrightarrow{v_d})$ \\
-        $C_{sql} ::=$ & $\langle A_{sql}, \phi \rangle \mid C_{sql}' \texttt{UNION} C_{sql}'' \mid C_{sql}' \texttt{INTERSECT} C_{sql}'' \mid C_{sql}' \texttt{MINUS} C_{sql}''$ \\
-        $I ::=$ & $skip \mid v_a := e \mid v_a := ? \mid C_{sql} \mid$ if $b$ then $I_1$ else $I_2$ $\mid$ while $b$ do $I$ $\mid$ $I_1; I_2$ \\
+        $v ::=$ & $v_d \mid v_a$ \\
+        $e ::=$ & $c \mid v \mid op_u e \mid e_1 op_b e_2$ , where $op_u$ and $op_b$ represent unary and binary arithmetic operations respectively. \\
+
+        $b ::=$ & $e_1 = e_2 \mid e_1 \leq e_2 \mid e_1 < e_2 \mid \neg b \mid b_1 \lor b_2 \mid b_1 \land b_2 \mid \texttt{true} \mid \texttt{false}$ \\
+
+        $a_f ::=$ & $e_1 = e_2 \mid e_1 \leq e_2 \mid e_1 < e_2$ \\
+        $\phi ::=$ & $a_f \mid \neg \phi_1 \mid \phi_1 \lor \phi_2 \mid \phi_1 \land \phi_2 \mid \forall v_n \phi \mid \exists v_n \phi$ \\
+        $A_{sql} :: =$ & $select(v_a, \mathbf{v}_d) \mid update(\mathbf{v}_d, \mathbf{e}) \mid delete(\mathbf{v}_d) \mid insert(\mathbf{v}_d, \mathbf{e})$ \\
+        $C_{sql} ::=$ & $\langle A_{sql}, \phi \rangle $ \\
+        $I ::=$ & $skip \mid v_a := e \mid v_a := ? \mid C_{sql} $\\
     \end{tabular}
-\end{center}
+    \caption{Abstract Syntax}
+    \label{tab:abstract-syntax}
+\end{figure}
 
 
-\subsection{Abstract Semantics}
+\subsection{Abstract Semantics}\label{subsec:abstract-semantics}
+This section will describe to abstract semantics of SQAAL.
 
+\autoref{eq:generalBOP} through \ref{eq:generalUOP}, show how operations unary and binary operators can be lifted to operate on the members of $\mathsf{Val} \; a$.
 \begin{align}
-    S_1 \aop S_2 = \{ s_1 \aaop s_2 \mid s_1 \in S_1, s_2 \in S_2 \}
+    \mathsf{List} \; s_1 \ap{op} \mathsf{Single} \; s_2 &= \mathsf{Single} \; (s_1 \op s_2) \label{eq:generalBOP} \\
+    \mathsf{Single} \; s \ap{op} \mathsf{List} \; S &= \mathsf{List} \; \{ s \op s' \mid s' \in S \} \\
+    \mathsf{List} \; S \ap{op} \mathsf{Single} \; s &= \mathsf{List} \; \{ s' \op s \mid s' \in S \}  \\
+    \mathsf{List} \; S_1 \ap{op} \mathsf{List} \; S_2 &= \mathsf{List} \; \{ s_1 \op s_2 \mid s_1 \in S_1, s_2 \in S_2 \} \\
+    \ap{op} (\mathsf{Single} \; s) &= \mathsf{Single} \; (\op s) \\
+    \ap{op} (\mathsf{List} \; S) &= \mathsf{List} \; \{ \op s \mid s \in S \} \label{eq:generalUOP}
 \end{align}
 
-\subsubsection{Abstract Semantics of Boolean expressions}
+We define application of abstract unary operators and binary operators between abstract elements by
+\begin{equation}
+    \aop = \ap{\aaop}
+\end{equation}
+, where $\aaop$ is defined for the respective types later on.
+Similarly we define:
+\begin{align}
+    \mathsf{Single} \; s_1 \app{op} \mathsf{Single} \; s_2 &= \mathsf{List} \; (\{s_1\} \op \{s_2\}) \label{eq:generalBOP} \\
+    \mathsf{Single} \; s \app{op} \mathsf{List} \; S &= \mathsf{List} \; (\{ s \} \op S) \\
+    \mathsf{List} \; S \app{op} \mathsf{Single} \; s &= \mathsf{List} \; (S \op \{ s \})  \\
+    \mathsf{List} \; S_1 \app{op} \mathsf{List} \; S_2 &= \mathsf{List} \; (S_1 \op S_2) \\
+    \app{op} (\mathsf{Single} \; s) &= \mathsf{List} \; (\op \{ s \}) \\
+    \app{op} (\mathsf{List} \; S) &= \mathsf{List} \; (\op S ) \label{eq:generalUOP}
+\end{align}
+This will also be helpful later.
 
+\subsubsection{Abstract Semantics of Boolean expressions}
+We now define the general abstract semantics of boolean expressions.
+$\aab{bop}$ is defined to be a special case of $\aaop$ as follows:
 \begin{align}
     B_1 \;\aab{bop}\; B_2 = \bigcup_{b_1 \in B_2, b_2 \in B_2} b_1 \;\aaab{bop}\; b_2
 \end{align}
+Where $\aaab{bop}$ is defined for $\land$, $\lor$ and $\neg$ in \autoref{tab:aaabland}, \autoref{tab:aaablor} and \autoref{tab:aaabneg} respectively.
+
+\autoref{eq:abstract-bool-semantics-start} through \ref{eq:abstract-bool-semantics-end2} show the abstract semantics of boolean expressions, that is logical operators and comparisons between expressions.
+Definition \ref{eq:abstract-bool-semantics-start} through \ref{eq:abstract-bool-natural} are fairly natural, definition \ref{eq:abstract-bool-semantics-end2} however requires an explanation.
+In the otherwise case, when $e_1$ and $e_2$ do not both evaluate to lists, we proceed as as expected.
+In the case where both $e_1$ and $e_2$ both evaluate to list we take into account the fact that there might be more tuples in one or the other, therefore adding $null$ as on of the values that might be present in the result.
 
 \begin{align}
-    \absboolsem{\texttt{true}}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \{\{\true\}\} \\
-    \absboolsem{\texttt{false}}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \{\{\false\}\} \\
+    \absboolsem{\texttt{true}}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \mathsf{Single} \; \{\true\} \label{eq:abstract-bool-semantics-start} \\
+    \absboolsem{\texttt{false}}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \mathsf{Single} \; \{\false\} \\
     \absboolsem{b_1 \lor b_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absboolsem{b_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ab{\lor} \absboolsem{b_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
     \absboolsem{b_1 \land b_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absboolsem{b_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ab{\land} \absboolsem{b_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
-    \absboolsem{\neg b}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{\neg} \absboolsem{b}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
-    \absboolsem{e_1 \neq e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{\neg}(\absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \;\ab{=}\; \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}})) \\
-    \absboolsem{e_1 \;comp\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \;\ab{\comp}\; \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
+    \absboolsem{\neg b}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{\neg} \absboolsem{b}(\rho_{\ab{d}}, \rho_{\ab{a}}) \label{eq:abstract-bool-natural} \\
+    % \absboolsem{e_1 \neq e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{\neg}(\absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \;\ab{=}\; \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}})) \label{eq:abstract-bool-semantics-end1} \\
+    \absboolsem{e_1 \;comp\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=
+    \begin{cases}
+        \app{\{\{null\}\} \cup} E & \text{if } E_1 = \mathsf{List} \; S_1 \land E_2 = \mathsf{List} \; S_2 \land E_1 \;\ab{\comp}\; E_2 = E\\
+        E_1 \;\ab{\comp}\; E_2 & \text{otherwise}\\
+    \end{cases}\label{eq:abstract-bool-semantics-end2} \\
+    \text{where } & E_1 = \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
+    \text{and } & E_2 = \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}})
 \end{align}
 
 \begin{table}[H]
     \centering
+    \caption{test}
     \begin{tabular}{c|ccc}
-        $\aaab{\lor}$ & $\true$ & $\false$ & $\mnull$ \\
+        $\aaab{\land}$ & $\true$ & $\false$ & $\mnull$ \\
         \hline
         $\true$ & $\{\true\}$ & $\{\false\}$ & $\{\mnull\}$ \\
         $\false$ & $\{\false\}$ & $\{\false\}$ & $\{\false\}$ \\
         $\mnull$ & $\{\mnull\}$ & $\{\false\}$ & $\{\mnull\}$ \\
-    \end{tabular}
-    \label{tab:aaablor}
-\end{table}
-
-\begin{table}[H]
-    \centering
-    \begin{tabular}{c|ccc}
-        $\aaab{\land}$ & $\true$ & $\false$ & $\mnull$ \\
-        \hline
-        $\true$ & $\{\true\}$ & $\{\true\}$ & $\{\true\}$ \\
-        $\false$ & $\{\true\}$ & $\{\false\}$ & $\{\mnull\}$ \\
-        $\mnull$ & $\{\true\}$ & $\{\mnull\}$ & $\{\mnull\}$ \\
     \end{tabular}
     \label{tab:aaabland}
 \end{table}
 
 \begin{table}[H]
     \centering
+    \caption{test}
+    \begin{tabular}{c|ccc}
+        $\aaab{\lor}$ & $\true$ & $\false$ & $\mnull$ \\
+        \hline
+        $\true$ & $\{\true\}$ & $\{\true\}$ & $\{\true\}$ \\
+        $\false$ & $\{\true\}$ & $\{\false\}$ & $\{\mnull\}$ \\
+        $\mnull$ & $\{\true\}$ & $\{\mnull\}$ & $\{\mnull\}$ \\
+    \end{tabular}
+    \label{tab:aaablor}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{test}
     \begin{tabular}{c|ccc}
         $\aaab{\neg}$ & $\true$ & $\false$ & $\mnull$ \\
         \hline
@@ -98,232 +141,183 @@
     \label{tab:aaabneg}
 \end{table}
 
-For regular expressions $R, R_1, R_2$, linear inequalities over one variable $N, N_1, N_2$ and arbitrary values $X$:
 
-\begin{align}
-    R_1 \;\aab{=}\; R_2 &= \begin{cases}
-        \{\false\} & \text{if } R_1 \cap R_2 = \emptyset \\
-        \{\true, \false\} & \text{if } R_1 \cap R_2 \neq \emptyset \\
-    \end{cases} \\
-    N_1 \;\aab{=}\; N_2 &= \begin{cases}
-        \{\false\} & \text{if } N_1 \cap N_2 = \emptyset \\
-        \{\true, \false\} & \text{if } N_1 \cap N_2 \neq \emptyset \\
-    \end{cases} \\
-    N \;\aab{=}\; R &= \{\false\} \\
-    R \;\aab{=}\; N &= \{\false\} \\
+For abstract integers (union of intervals) $\mathscr{I}_1$ and $\mathscr{I}_2$ and arbitrary values $X_1$ and $X_2$ (either intervals or regular expressions) we define their abstract comparison in \autoref{eq:aaabcomp} through \ref{eq:aaabcomp3}.
+For abstract equality (\autoref{eq:aaabcomp}) we required that the two abstract values being compared are of the same type, either both are abstract integers or both are abstract strings lest the result is undefined.
+If the two abstract values only represent the same one value, equality can obviously only be true.
+In the case that values the two abstract values represent don't intersect, equality can only be false.
+Otherwise they overlap, and which case we are unsure whether the concrete values that can be derived are equal.
+\begin{align} \label{eq:aaabcomp}
+    X_1 \;\aab{=}\; X_2 &= \begin{cases}
+        \begin{cases}
+        \{\true\} & \text{if } |X_1| = |X_2| = 1 \land X_1 = X_2 \\
+        \{\false\} & \text{if } X_1 \cap X_2 = \emptyset \\
+        \{\true, \false\} & \text{otherwise }
+        \end{cases} & \text{if $X_1$ and $X_2$ is of the same type} \\
+        \text{undefined} & \text{otherwise}
+    \end{cases}
 \end{align}
-
-\begin{align}
-    R \;\aab{<}\; X &= \{\false\} \\
-    X \;\aab{<}\; R &= \{\false\} \\
-    N_1 \;\aab{<}\; N_2 &= \begin{cases}
-        \{\true\} & \text{if } \max(N_1) < \min(N_2) \\
-        \{\false\} & \text{if } \max(N_2) \leq min (N_1) \\
+$min(\mathscr{I})$ and $max(\mathscr{I})$ denotes the maximum and minimum value represented by $\mathscr{I}$, we argue that such values can easily be computed if $\mathscr{I}$ is kept in a canonical form within the actual implementation.
+With the former mentioned, \autoref{eq:aaabcomp2} and \ref{eq:aaabcomp3} should be self explanatory.
+To further clarify we only allow abstract integers to be compared in this way.
+\begin{align}\label{eq:aaabcomp2}
+    \mathscr{I}_1 \;\aab{<}\; \mathscr{I}_2 &= \begin{cases}
+        \{\true\} & \text{if } \max(\mathscr{I}_1) < \min(\mathscr{I}_2) \\
+        \{\false\} & \text{if } \max(\mathscr{I}_2) \leq \min (\mathscr{I}_1) \\
         \{\true, \false\} & \text{otherwise}
-    \end{cases} \\
+    \end{cases}
 \end{align}
-
-\begin{align}
-    R \;\aab{\leq}\; X &= \{\false\} \\
-    X \;\aab{\leq}\; R &= \{\false\} \\
-    N_1 \;\aab{\leq}\; N_2 &= \begin{cases}
-        \{\true\} & \text{if } \max(N_1) \leq \min(N_2) \\
-        \{\false\} & \text{if } \max(N_2) < min (N_1) \\
+\begin{align}\label{eq:aaabcomp3}
+    \mathscr{I}_1 \;\aab{\leq}\; \mathscr{I}_2 &= \begin{cases}
+        \{\true\} & \text{if } \max(\mathscr{I}_1) \leq \min(\mathscr{I}_2) \\
+        \{\false\} & \text{if } \max(\mathscr{I}_2) < \min (\mathscr{I}_1) \\
         \{\true, \false\} & \text{otherwise}
-    \end{cases} \\
+    \end{cases}
 \end{align}
 
 \subsubsection{Abstract Semantics of Expressions}
 
-\begin{align}
-    \absexpsem{n}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \left\{ \mathcal{N} \left(
-        \begin{bmatrix}
-            1 \\
-            -1
-        \end{bmatrix}
-        \begin{bmatrix}
-           x
-        \end{bmatrix}
-        \leq
-        \begin{bmatrix}
-            n \\
-            -n
-        \end{bmatrix}
-    \right) \right\} \\
-    \absexpsem{k}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \{ R \} \text{ such that }\mathcal{L}(R) \\
-    \absexpsem{v_a}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=  \rho_{\ab{a}}(v_a) \\
-    \absexpsem{v_d}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=  \rho_{\ab{t}}(v_d) \text{ such that } \ab{t} \in dom(\ab{d}) \text{ and } v_d \in attr(\ab{t}) \\
-    \absexpsem{op \; e}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{op} \; (\absexpsem{e}(\rho_{\ab{d}}, \rho_{\ab{a}})) \\
-    \absexpsem{e_1 \; op \; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absexpsem{e}(\rho_{\ab{d}}, \rho_{\ab{a}}) \;\ab{op}\; \absexpsem{e}(\rho_{\ab{d}}, \rho_{\ab{a}})\\
+Here we define the abstract semantics of expressions in SQAAL.
+
+\autoref{sem:exp1} to \ref{sem:exp2} describe the semantics of constants.
+In \autoref{sem:exp3} to \ref{sem:exp4} we describe the semantics of variables.
+In the case of database variables in \autoref{sem:exp4}, we assume attribute names do not clash.
+\autoref{eq:unary-op} and \ref{eq:binary-op} describe the semantics of unary and binary operations on expressions, the justification of abstract binary operations is analogous to the one given for the semantics of comparison operators (\autoref{eq:abstract-bool-semantics-end2}).
+\begin{align}\label{sem:exp1}
+    \absexpsem{n}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \mathsf{Single} \; \{ [n, n] \} \\\label{sem:exp2}
+    \absexpsem{k}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \mathsf{Single} \; R,  \text{ such that }\mathcal{L}(R) = \{ k \} \\ \label{sem:exp3}
+    \absexpsem{v_a}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=  \rho_{\ab{a}}(v_a) \\ \label{sem:exp4}
+    \absexpsem{v_d}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=  \mathsf{List} \; \rho_{\ab{t}}(v_d) \text{ such that } \ab{t} \in dom(\ab{d}) \text{ and } v_d \in attr(\ab{t}) \\ \label{eq:exp-lookup}
+    \absexpsem{op \; e}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{op} \; (\absexpsem{e}(\rho_{\ab{d}}, \rho_{\ab{a}})) \\ \label{eq:unary-op}
+    \absexpsem{e_1 \;op\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=
+    \begin{cases}
+        \app{\{\{null\}\} \cup} E & \text{if } E_1 = \mathsf{List} \; S_1 \land E_2 = \mathsf{List} \; S_2 \land E_1 \;\ab{op}\; E_2 = E\\
+        E_1 \;\ab{op}\; E_2 & \text{otherwise}\\
+    \end{cases} \\ \label{eq:binary-op}
+    \text{where } & E_1 = \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
+    \text{and } & E_2 = \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}})
 \end{align}
 
-We define the length of a regular expression $R$, $|R|$:
-
-\begin{align}
-    |R| = \begin{cases}
-        \mathcal{N} \left(
-            \begin{bmatrix}
-                1 \\
-                -1
-            \end{bmatrix}
-            \begin{bmatrix}
-               x
-            \end{bmatrix}
-            \leq
-            \begin{bmatrix}
-                |\max(R)| \\
-                -|\min(R)|
-            \end{bmatrix}
-        \right) & \text{if $\max(R)$ is defined} \\
-        \mathcal{N} \left(
-            \begin{bmatrix}
-                -1
-            \end{bmatrix}
-            \begin{bmatrix}
-               x
-            \end{bmatrix}
-            \leq
-            \begin{bmatrix}
-                -|\min(R)|
-            \end{bmatrix}
-        \right) & \text{if $\max(R)$ is undefined} \\
-    \end{cases}
+Before defining the abstract operations, $\aaop$, for expressions, we will define some auxiliary functions.
+We define the length of a regular expression $R$, $\|R\|$ as:
+\begin{align}\label{eq:r1}
+    \|R\| & = \{ \left[ \|\min(R)\|, +\infty \right) \} \\
+    \text{where } & \|\min(R)\| = \min\{ \|s\| \mid s \in R \} \\ \label{eq:r2}
+    \text{and } & \|s\| \text{ is the length of the word $s$}
 \end{align}
+The former is obviously an overapproximation, the lenght of the shortest $\|\min(R)\|$ can be found by classical shortest path algrotihm on the automata of $R$, $\mathcal{A}(R)$, such algorithms have a time complexity $\Theta(E + V \log V)$, where $E$ is the number of edges in the automata and $V$ is the number of states.
+We deem this acceptable.
+If $R$ does not contain a term $R'^\star$, we are essentially forced to find the longest path, this can be shown to be NP-hard, therefore we always approximate the length to be unbounded in the positive direction.
 
-\begin{align}
-    |\min(R)| &= \min\{ |s| \mid s \in R \} \\
-    |\max(R)| &= \max\{ |s| \mid s \in R \} \\
-    \text{where $|s|$ is the length of the word $s$}
-\end{align}
-
+Next, we define $cvt$, which is abstact string conversion over regular expressions, defined by recursing on the operands of union, intersection, concatenation and Kleene star.
+In the base case, a single symbol is converted as defined by $op$.
+In the case of the complement, seen in \autoref{eq:complement}, we convert $\overline{R}$ to its DFA equivalent by the usual construction, $\mathcal{A}:REG\rightarrow DFA$~\cite{sipserbook}.
+This automaton is then converted back to a regular expression by the usual GNFA construction, $\mathcal{R}: DFA\rightarrow REG$~\cite{sipserbook}, thus eliminating the complement.
 \begin{align}
     cvt(op, R_1 \cup R_2) &= cvt(op, R_1) \cup cvt(op, R_2) \\
     cvt(op, R_1 \cap R_2) &= cvt(op, R_1) \cap cvt(op, R_2) \\
     cvt(op, R_1R_2) &= cvt(op, R_1) \; cvt(op, R_2) \\
-    cvt(op, R) &= (cvt(op, R_1))^\star \\
+    cvt(op, R^\star) &= (cvt(op, R))^\star \\
+    cvt(op, \overline{R}) &= cvt(op, (\mathcal{R} \circ \mathcal{A}) (\overline{R})) \label{eq:complement} \\
     cvt(op, \sigma) &= op(\sigma)
 \end{align}
 
-\begin{align}
+\autoref{eq:concat} to \ref{eq:length} describe a subset of String operators present in PostgreSQL abstractly.
+\begin{align}\label{eq:concat}
     R_1 \;\aab{||}\; R_2 &= R_1R_2 \\
     \aab{lower}(R) &= cvt(\sigma \mapsto \sigma', R) \text{ such that $\sigma'$ is the lowercase representation of $\sigma$}\\
     \aab{upper}(R) &= cvt(\sigma \mapsto \sigma', R) \text{ such that $\sigma'$ is the uppercase representation of $\sigma$}\\
-    \aab{bit\_length}(R) &= |cvt(\sigma \mapsto \sigma', R)| \text{ such that $\sigma'$ is the bit string of $\sigma$} \\
-    \aab{length}(R) &= |R|
+    \aab{bit\_length}(R) &= \|cvt(\sigma \mapsto \sigma', R)\| \text{ such that $\sigma'$ is the bit string of $\sigma$} \\ \label{eq:length}
+    \aab{length}(R) &= \|R\|
 \end{align}
 
+\autoref{eq:abstractBOP} describes how to do binary operations on numbers.
+The arithmetic operations, $\aaab{aop}$, are defined as the standard for intervals.
 \begin{align}
-    N_1 \;\aab{+}\; N_2 &=
-        \mathcal{N} \left(
-            \begin{bmatrix}
-                1 \\
-                -1
-            \end{bmatrix}
-            \begin{bmatrix}
-               x
-            \end{bmatrix}
-            \leq
-            \begin{bmatrix}
-                \max(N_1) + \max(N_2) \\
-                -(\min(N_1) + \min(N_2))
-            \end{bmatrix}
-        \right) \\
-    N_1 \;\aab{\cdot}\; N_2 &=
-        \mathcal{N} \left(
-            \begin{bmatrix}
-                1 \\
-                -1
-            \end{bmatrix}
-            \begin{bmatrix}
-               x
-            \end{bmatrix}
-            \leq
-            \begin{bmatrix}
-                \max(N_1) \cdot \max(N_2) \\
-                -(\min(N_1) \cdot \min(N_2))
-            \end{bmatrix}
-        \right) \\
-    N_1 \;\aab{-}\; N_2 &=
-        \mathcal{N} \left(
-            \begin{bmatrix}
-                1 \\
-                -1
-            \end{bmatrix}
-            \begin{bmatrix}
-               x
-            \end{bmatrix}
-            \leq
-            \begin{bmatrix}
-                \max(N_1) - \min(N_2) \\
-                -(\min(N_1) - \max(N_2))
-            \end{bmatrix}
-        \right) \\
-    N_1 \;\aab{/}\; N_2 &=
-        \mathcal{N} \left(
-            \begin{bmatrix}
-                1 \\
-                -1
-            \end{bmatrix}
-            \begin{bmatrix}
-               x
-            \end{bmatrix}
-            \leq
-            \begin{bmatrix}
-                \max(N_1) / \min(N_2) \\
-                -(\min(N_1) / \max(N_2))
-            \end{bmatrix}
-        \right)
+    I_1 \;\aab{aop}\; I_2 &= m(\{i_1 \; \aaab{aop} \; i_2 \mid i_1 \in I_1 \land i_2 \in I_2\})  \label{eq:abstractBOP}
+\end{align}
+
+\subsubsection{Abstract Semantics of Predicates}
+The base rule of all the predicates is defined in \autoref{eq:atomicformulas}, as this is the base case for all the other predicates.
+It takes atomic formulas, $a_f$, of the form corresponding to \autoref{eq:abstract-bool-semantics-end2}, and returns the abstract truth value of $a_f$.
+The other predicates all build on this base case with rules such as negation, disjunction and conjunction.
+\begin{align}\label{eq:atomicformulas}
+    \abspredsem{a_f}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absboolsem{a_f}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
+    \abspredsem{\neg \phi}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{\neg} \left( \abspredsem{\phi}(\rho_{\ab{d}}, \rho_{\ab{a}}) \right) \\
+    \abspredsem{\phi_1 \lor \phi_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \abspredsem{\phi_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ab{\lor} \abspredsem{\phi_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
+    \abspredsem{\phi_1 \land \phi_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \abspredsem{\phi_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ab{\land} \abspredsem{\phi_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
+    \abspredsem{\exists v_n \; \phi}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \underset{s \in \absexpsem{x}}{\ab{\bigvee}} \abspredsem{\phi[s/v_n]}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
+    \abspredsem{\forall v_n \; \phi}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \underset{s \in \absexpsem{x}}{\ab{\bigwedge}} \abspredsem{\phi[s/v_n]}(\rho_{\ab{d}}, \rho_{\ab{a}})
 \end{align}
 
 \subsubsection{Abstract Semantics of SQL statements}
 
 Let
 \begin{equation}
-    \mathcal{C} : \mathbb{V}_a \cup \mathbb{V}_d \rightarrow \{ C_{X_1}(S_1), C_{X_2}(S_2), \dots, C_{X_n}(S_n) \}
+    \mathcal{C} : \mathbb{V} \rightarrow \{ C_{X_1}(S_1), C_{X_2}(S_2), \dots, C_{X_n}(S_n) \}
 \end{equation}
+where $X_1,...,X_n$ are given as in \autoref{def:coverlattice} and are provided by the user.
+Also $S_1,...,S_n$ are given by the type of $v_a, v_d \in \mathbb{V}$.
+
+Let
+\begin{align}
+    \abstable \downarrow_{\true} \phi &= \{ l \in \ab{t} \mid \mathsf{Single} \; \{ \true \} = \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]}(\rho_{\ab{d}}, \rho_{\ab{a}}) \text{ for } \mathbf{v}_d = var_{\ab{t}}(\phi) \} \\
+    \abstable \downarrow_{\false} \phi &= \{ l \in \ab{t} \mid \mathsf{Single} \; \{ \false \} = \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]}(\rho_{\ab{d}}, \rho_{\ab{a}}) \text{ for } \mathbf{v}_d = var_{\ab{t}}(\phi) \} \\
+    \abstable \downarrow_{\unknown} \phi &= \{ l \in \ab{t} \mid \true \in b \in B = \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]}(\rho_{\ab{d}}, \rho_{\ab{a}}) \text{ for } \mathbf{v}_d = var_{\ab{t}}(\phi) \} \setminus \abstable \downarrow_{\true} \phi
+\end{align}
+
+\begin{align}
+    \abssqlsem{\langle select(v_a, \mathbf{v}_d), \phi \rangle}(\rho_{\ab{d}}, \rho_{\ab{a}})
+    &= (\rho_{\ab{d}}, \rho_{\ab{a}}[v_a \mapsto \mathsf{List} \left( \pi_{\mathbf{v}_d} \left(\abstable \downarrow_{\true} \phi \cup \abstable \downarrow_{\unknown} \phi \right) \right) \into \lookupcl(v_a) ])
+\end{align}
 
 \begin{align}
     \abssqlsem{\langle C_{insert}, \phi \rangle}(\rho_{\ab{d}}, \rho_{\ab{a}}) & =
     \abssqlsem{\langle insert(\mathbf{v}_d, \mathbf{e}), \phi \rangle}(\rho_{\ab{t}}, \rho_{\ab{a}})\\
-    & = (\rho_{\ab{t} \sqcup s}, \rho_{\ab{a}}) \\
-    \text{where } target(C_{insert})        & = \ab{t}                                                                                                                                                 \\
-    \mathbf{v}_d              & = \langle a_1, a_2, \dots, a_n \rangle                                                                                                        \\
-                                               & = attr(\ab{t})                                                                                                                                           \\
-    \mathbf{e} & = \langle e_1, e_2, \dots, e_n \rangle \\
-    s &= \{ (s_1/a_1, s_2/a_2, \dots, s_n/a_n) \mid (s_1, s_2, \dots, s_n) \in \bigtimes_{i = 1}^{n} \left( \absexpsem{e_i}(\rho_{\ab{d}}, \rho_{\ab{a}}) \into \lookupcl(a_i) \right) \}
+    & = (\rho_{\ab{t} \cup s}, \rho_{\ab{a}}) \\
+    \text{where }& s = \app{\bigtimes_{i = 0}^{n}} \absexpsem{e_i}(\rho_{\ab{d}}, \rho_{\ab{a}}) \into \lookupcl(v_i) \\
+    \text{and }& target(C_{insert}) = \ab{t}
 \end{align}
 
 \begin{align}
-    \abssem{C_{update}}(\env{\abstable}, \env{\absvars})
-                                              & = \abssem{\langle update(\absattrs, \absexps), \abspred \rangle} (\env{\abstable}, \env{\absvars}) \\
-                                              & = (\env{\abstable'}, \env{\absvars})                                                                 \\
-    \text{where } \env{\abstable'}(\absattr) & =
-    \begin{cases}
-        \env{\abstable \downarrow_t \abspred}(\absattr) \sqcup \env{\abstable \downarrow_u \abspred}(\absattr) \sqcup \env{\abstable \downarrow_f \abspred}(\absattr) & \text{if } \absattr \notin \absattrs \\
-        \absexpsem{\absexp{i}}(\env{\abstable \downarrow_t \abspred}, \env{\absvars}) \sqcup
-        \left( \absexpsem{\absexp{i}}(\env{\abstable \downarrow_u \abspred}, \env{\absvars}) \sqcup \env{\abstable \downarrow_u \abspred}(\absattr) \right) \sqcup \env{\abstable \downarrow_f \abspred}(\absattr) \\
-        \text{if $\absattr$ is the $i$th component of $\absattrs$ and $\absexp{i}$ is the $i$th componenet of $\absexps$} \\
-    \end{cases}
+    \abssqlsem{C_{update}}(\env{\abstable}, \env{\absvars})
+                                              & = \abssqlsem{\langle update(\absattrs, \absexps), \abspred \rangle} (\env{\abstable}, \env{\absvars}) \\
+                                              & = (\env{\ab{t}'}, \env{\absvars})
+\end{align}
+
+\begin{align}
+    \text{where } \abstable' = \ab{t} \downarrow_{\false} \phi
+    & \cup \left\{ l\left[ \mathbf{v}_d \mapsto \pi_{\mathbf{v}_d}(s) \sqcup \pi_{\mathbf{v}_d}(l) \right] \;\middle|\; l \in \ab{t} \downarrow_{\unknown} \phi \land s \in \app{\bigtimes_{i = 0}^{n}} \absexpsem{e_i}(\rho_{\ab{d}}, \rho_{\ab{a}}) \into \lookupcl(v_i)\right\} \\
+    & \cup \left\{ l\left[ \mathbf{v}_d \mapsto \pi_{\mathbf{v}_d}(s) \right] \;\middle|\; l \in \ab{t} \downarrow_{\true} \phi \land s \in \app{\bigtimes_{i = 0}^{n}} \absexpsem{e_i}(\rho_{\ab{d}}, \rho_{\ab{a}}) \into \lookupcl(v_i)\right\} \\
 \end{align}
 
 \begin{align*}
-    \abssem{C_{delete}}(\env{\abstable}, \env{\absvars})
-    &= \abssem{\langle delete(\absattrs), \abspred \rangle} (\env{\abstable}, \env{\absvars}) \\
+    \abssqlsem{C_{delete}}(\env{\abstable}, \env{\absvars})
+    &= \abssqlsem{\langle delete(\absattrs), \abspred \rangle} (\env{\abstable}, \env{\absvars}) \\
     &= (\env{\abstable'}, \env{\absvars}) \\
-    \text{where } \env{\abstable'}(\absattr) &= \env{\abstable \downarrow_u \abspred}(\absattr) \sqcup \env{\abstable \downarrow_f \abspred}(\absattr)
+    \text{where } \abstable' &= \abstable \downarrow_{\unknown} \phi \cup \abstable \downarrow_{\false} \phi
 \end{align*}
 
-\subsubsection{Abstract Semantics of Actions}
+\subsubsection{Abstract Semantics of Instructions}
+This section will cover the abstract semantics of Instructions in SQAAL.
+In general, the abstract semantics of instructions are defined as a function that takes a set of abstract environments and returns an updated set of abstract environments.
+This means that when an instruction is made, the abstract environment is updated to reflect the changes made by the instruction.
+An example of this could be with the skip instruction, where the abstract environment is not changed.
+
 
 Let $\ab{P}$ be a set of abstract environments $(\env{\abstable}, \env{\absvars})$.
 
 \begin{align}
     \abssem{\texttt{skip}}(\ab{P}) &= \ab{P} \\
     \abssem{v_a := e}(\ab{P}) &= \{(\env{\abstable}, \env{\absvars}[v_a \mapsto s']) \mid (\env{\abstable}, \env{\absvars}) \in \ab{P} \land s = \absexpsem{e}(\env{\abstable}, \env{\absvars}) \land s' = s \into \lookupcl(v_a) \} \\
-    \abssem{v_a := \; ?}(\ab{P}) &= \{(\env{\abstable}, \env{\absvars}[v_a \mapsto \top]) \mid (\env{\abstable}, \env{\absvars}) \in \ab{P} \} \\
+    \abssem{v_a := \; ?}(\ab{P}) &= \{(\env{\abstable}, \env{\absvars}[v_a \mapsto \mathsf{Single} \; \top]) \mid (\env{\abstable}, \env{\absvars}) \in \ab{P} \} \\
     \abssem{b}(\ab{P}) &= \{ (\env{\abstable}, \env{\absvars}) \in \ab{P} \mid \true \in B \land B \in \absboolsem{b}(\env{\abstable}, \env{\absvars}) \} \\
     \abssem{C_{sql}}(\ab{P}) &= \{\abssqlsem{C_{sql}}(\env{\abstable}, \env{\absvars}) \mid (\env{\abstable}, \env{\absvars}) \in \ab{P} \}
 \end{align}
+
+\begin{restatable}{theorem}{csql}\label{thm:csql}
+    $\abssem{I}$ is a monotone function in a complete lattice.
+\end{restatable}
 
 % \begin{align*}
 %     E^\# \llbracket R_1 \texttt{||} R_2 \rrbracket                          \\
