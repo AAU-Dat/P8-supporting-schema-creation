@@ -2,93 +2,86 @@
 \label{sec:method}
 -Choosing have to divide the different datatypes into abstract representations
 -Creating the syntax for the abstract representations
---checking the soundness of the abstract representations
+-checking the soundness of the abstract representations
 -Creating the semantics for the abstract representations
 -implementing the abstract representations in kotlin
 -through CLI it takes a database in the form af SQL queries and returns the abstract representation of the database after a set of operations have been performed on it defined by the user
 
-
-\subsection{Example}\label{subsec:example}
+\subsection{Example}\label{subsec:example1}
 To illustrate the method, we will use a simple example.
 Consider a database with a single table, \texttt{account}, with two columns, \texttt{name} and \texttt{balance}.
 For the program to work, we need to define the table for the database, this is shown in \autoref{lst:database-schema}.
 
 
 \begin{listing}[htb!]
-\begin{minted}{SQL}
+    \begin{minted}{SQL}
     CREATE TABLE account (
     name VARCHAR(50),
     balance INT
     );
     \end{minted}
-\caption{SQL query for creating the table in the database}
-\label{lst:database-schema}
+    \caption{SQL query for creating the table in the database}
+    \label{lst:database-schema}
 \end{listing}
 
-
-The UML diagram of the database schema is shown in \autoref{fig:uml-account}.
-
-\begin{figure}[htb!]
-    \centering
-    \includegraphics[width=0.25\textwidth]{figures/account.png}
-    \caption{UML diagram of the abstract representation of the database schema}
-    \label{fig:uml-account}
-\end{figure}
 
 The database has two operations, \texttt{insert} and \texttt{update}.
-The \texttt{insert} operation inserts a new row into the table, i.e. a new user, and the \texttt{update} operation updates the balance of two accounts.
+The \texttt{insert} operation inserts a new row into the table, i.e.\ a new user, and the \texttt{update} operation updates the balance of two accounts.
 The SQL queries for the operations are shown in \autoref{lst:sql-queries} and \autoref{lst:sql-queries2}.
 
+
 \begin{listing}[htb!]
-\begin{minted}{SQL}
+    \begin{minted}{SQL}
     INSERT INTO account (name, balance)
     VALUES (RANDOM_NAME, RANDOM_AMOUNT);
-\end{minted}
-\label{lst:sql-queries}
-\caption{SQL query for the insert operation}
+    \end{minted}
+    \caption{SQL query for the insert operation}
+    \label{lst:sql-queries}
 \end{listing}
 
 
 \begin{listing}[htb!]
-\begin{minted}{SQL}
+    \begin{minted}{SQL}
     UPDATE account
     SET balance = CASE
     WHEN name = "name1" THEN balance - <amount_to_transfer>
-    WHEN name = name2 THEN balance + <amount_to_transfer>
+    WHEN name = "name2" THEN balance + <amount_to_transfer>
     ELSE balance
     END
     WHERE name IN (name1, name2);
-\end{minted}
-\caption{SQL query for the update operation}
-\label{lst:sql-queries2}
+    \end{minted}
+    \caption{SQL query for the update operation}
+    \label{lst:sql-queries2}
 \end{listing}
+
 
 Understanding the database schema and operations is crucial as it forms the foundation for defining the behavior of the operations.
 The program that defines the behaviour of the operations is shown in \autoref{lst:program}.
 The program first checks if there are two or more accounts in the database; if not, it inserts a new account with the \texttt{INSERT} operation.
 If there are more than two accounts, we try to transfer an amount from one account to another; that is the \texttt{UPDATE} operation
 
+
 \begin{listing}[htb!]
-\begin{minted}{text}
-transF||newuser
+    \begin{minted}{text}
+transF || newuser
 
 transF:
-    transferAmount:=?
-    formID:=R_ID
-    toID:=R_ID
-    if(transferAmount>0)
-        <select(fromB,id,DISTINCT(id(AccBalance)),true,id),toID=AccID>
-        <select(toB,id,DISTINCT(id(AccBalance)),true,id),toID=AccID>
-        <update(<AccBalance>,>fromB-transferAmount>),fromID=AccID>
-        <update(<AccBalance>,>toB-transferAmount>),toID=AccID>
+    transferAmount := ?
+    formID := R_ID
+    toID := R_ID
+    if(transferAmount > 0)
+        <select(fromB, id, DISTINCT(id(AccBalance)), true, id), toID = AccID>
+        <select(toB, id, DISTINCT(id(AccBalance)), true, id), toID = AccID>
+        <update(<AccBalance>, <fromB-transferAmount>), fromID = AccID>
+        <update(<AccBalance>, <toB-transferAmount>), toID = AccID>
 
 newuser:
-    B:=[0,+]
-    U:=?
-    <insert(U,B)> into (account)
-\end{minted}
-\caption{Program that defines the behavior of the operations}
-\label{lst:program}
+    B := [0, +]
+    U := ?
+    <insert(U, B)> into (account)
+    \end{minted}
+    \caption{Program that defines the behavior of the operations}
+    \label{lst:program}
 \end{listing}
 
 
@@ -97,26 +90,42 @@ We just need to define what the analysis should check for.
 This is defined by properties, which are defined by the LTL grammar on the attributes in the database.
 The properties we want to check on the database are shown in \autoref{lst:properties}.
 
+\begin{equation}
+    \lozenge (transferAmount > 0)
+    \label{eq:ltl-eventual-property}
+\end{equation}
+
+
+\begin{equation}
+    \square (fromB-TransferAmount > 0)
+    \label{eq:ltl-always-property}
+\end{equation}
+
+
 \begin{listing}[htb!]
     \begin{minted}{text}
-<>(transferAmount>0)
-[](fromB-TransferAmount>0)
-        \end{minted}
-\caption{Properties that the analysis check for}
-\label{lst:properties}
-    \end{listing}
+<>(transferAmount > 0)
+[](fromB-TransferAmount > 0)
+    \end{minted}
+    \caption{Properties that the analysis check for}
+    \label{lst:properties}
+\end{listing}
 
-After inserting all the information into the program, the program makes a graph of system, which is shown in \autoref{fig:-program_graph}.
+
+After inserting all the information into the program, the program makes a graph of system, which is shown in \autoref{fig:program-graph}.
+
 
 \begin{figure}[htb!]
     \centering
-    \includegraphics[width=0.5\textwidth]{figures/program_graph.png}
+    \includegraphics[width=0.8\columnwidth]{figures/program_graph}
     \caption{Program graph of the system}
-    \label{fig:-program_graph}
+    \label{fig:program-graph}
 \end{figure}
 \todo{Make the graph in tikz}
 
+
 The program is now ready to be analyzed, and the analysis will check if the properties are satisfied.
+
 
 \begin{listing}[htb!]
     \begin{minted}{text}
@@ -130,25 +139,25 @@ The program is now ready to be analyzed, and the analysis will check if the prop
 
     Iteration 3:
         todo: {newuser, newuser}
-        state-space: {{}, {user1(R, [0,+])}}
+        state-space: {{}, {user1(R, [0, +])}}
 
     Iteration 4:
         todo: {{newuser, newuser, transF}, {newuser, newuser, newuser}}
-        state-space: {{}, {user1(R, [0,+])}, {user1(R, [0,+]), user2(R, [0,+])}}
+        state-space: {{}, {user1(R, [0, +])}, {user1(R, [0, +]), user2(R, [0, +])}}
 
     Iteration 5:
         todo: {{newuser, newuser, newuser}, {newuser, newuser, transF, transF}}
-        state-space: {{}, {user1(R, [0,+])}, {user1(R, [0,+]), user2(R, [0,+])}, {user1(R, [-,0,+]), user2(R, [+])}}
+        state-space: {{}, {user1(R, [0, +])}, {user1(R, [0, +]), user2(R, [0, +])}, {user1(R, [-, 0, +]), user2(R, [+])}}
 
     Iteration 6:
         todo: {newuser, newuser, transF, transF}
-        state space: {{}, {user1(R, [0,+])}, {user1(R, [0,+]), user2(R, [0,+])}, {user1(R, [-,0,+]), user2(R, [+])}, {user1(R, [0,+]), user2(R, [0,+]), user3(R, [0,+])}}
+        state space: {{}, {user1(R, [0, +])}, {user1(R, [0, +]), user2(R, [0, +])}, {user1(R, [-, 0, +]), user2(R, [+])}, {user1(R, [0, +]), user2(R, [0, +]), user3(R, [0, +])}}
 
     STOP, no more states to explore
-        Final state-space: {{}, {user1(R, [0,+])}, {user1(R, [0,+]), user2(R, [0,+])}, {user1(R, [-,0,+]), user2(R, [+])}, {user1(R, [0,+]), user2(R, [0,+]), user3(R, [0,+])}, {user1(R, [+]), user2(R, [-,0,+])}}
+        Final state-space: {{}, {user1(R, [0, +])}, {user1(R, [0, +]), user2(R, [0, +])}, {user1(R, [-, 0, +]), user2(R, [+])}, {user1(R, [0, +]), user2(R, [0, +]), user3(R, [0, +])}, {user1(R, [+]), user2(R, [-, 0, +])}}
     \end{minted}
-\caption{Analysis of the example program}
-\label{lst:analysis}
+    \caption{Analysis of the example program}
+    \label{lst:analysis}
 \end{listing}
 
 
