@@ -1,9 +1,9 @@
-\begin{tikzpicture}[scale = 0.5]
+\begin{tikzpicture}
     \usetikzlibrary{calc}
-    \node (a) [state] {\Huge$R \cup \overline{R} = \top = \Sigma^*$};
-    \node (b1) [state, shift={($(a.south)+(3cm, -2.5cm)$)}] {\Huge $R$};
-    \node (b2) [state, shift={($(a.south)+(-3cm, -2.5cm)$)}]{\Huge $\overline{R}$};
-    \node (c) [state, shift= {($(a.south) + (0cm, -5.5cm)$)}] {\Huge $R \cap \overline{R} = \bot = \emptyset$};
+    \node (a) [state] {$R \cup \overline{R} = \top = \Sigma^*$};
+    \node (b1) [state, shift={($(a.south)+(1cm, -1cm)$)}] { $R$};
+    \node (b2) [state, shift={($(a.south)+(-1cm, -1cm)$)}]{ $\overline{R}$};
+    \node (c) [state, shift= {($(a.south) + (0cm, -2.5cm)$)}] { $R \cap \overline{R} = \bot = \emptyset$};
     \draw (a) to (b1);
     \draw (a) to (b2);
     \draw (b1) to (c);

@@ -30,12 +30,19 @@ We represent such unions of intervals as a set of disjoint intervals; thus, for 
 \begin{equation}
     n \in \gamma(\mathscr{I}) \iff \exists i \in \mathscr{I} : n \in \gamma(i)
 \end{equation}
+
+
 and
+
+
 \begin{equation}
     \mathscr{I} \sqsubseteq \mathscr{I}' \iff \forall i \in \mathscr{I} : \exists i' \in \mathscr{I}' : i \sqsubseteq i'
 \end{equation}
+
+
 where $\gamma(i)$ is the set of integers in the interval $i$ and $\sqsubseteq$ is the subset relation.
 We define the meet and join of unions as follows:
+
 \begin{align}
     \mathscr{I} \sqcup \mathscr{I}' &= m(\mathscr{I} \cup \mathscr{I}') \\
     \text{where } m(\mathscr{I}) &= \begin{cases}
@@ -117,8 +124,7 @@ And the following lemmas immediately follow:
 % Tikzfigures
 \begin{figure}
     \center
-    \resizebox{7.5cm}{!}{
-    \input{figures/reg_partition.tex}}
+    \input{figures/reg_partition}
     \caption{Regular language partition}
     \label{fig:tikz-reg-partition}
 \end{figure}
@@ -126,8 +132,7 @@ And the following lemmas immediately follow:
 
 \begin{figure}[!htb]
     \center
-    \resizebox{6.5cm}{!}{
-    \input{figures/reg_partition_lattice.tex}}
+    \input{figures/reg_partition_lattice}
     \caption{Regular language partition as a lattice}
     \label{fig:tikz-reg-partition-lattice}
 \end{figure}
