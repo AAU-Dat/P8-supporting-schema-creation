@@ -90,7 +90,7 @@ In the otherwise case, when $e_1$ and $e_2$ do not both evaluate to lists, we pr
 In the case where both $e_1$ and $e_2$ both evaluate to list we take into account the fact that there might be more tuples in one or the other, therefore adding $null$ as on of the values that might be present in the result.
 
 \begin{align}
-    \absboolsem{\cdot} &: \mathbb{B} \rightarrow \ab{\mathfrak{E}} \rightarrow \mathsf{Val} \; \{\true, \false, null\} \\
+    \absboolsem{\cdot} &: \mathbb{B} \rightarrow \ab{\mathfrak{E}} \rightarrow \mathsf{Val} \; \mathcal{P}(\{\true, \false, null\}) \\
     \absboolsem{\texttt{true}}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \mathsf{Single} \; \{\true\} \label{eq:abstract-bool-semantics-start} \\
     \absboolsem{\texttt{false}}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \mathsf{Single} \; \{\false\} \\
     \absboolsem{b_1 \lor b_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absboolsem{b_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ab{\lor} \absboolsem{b_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
