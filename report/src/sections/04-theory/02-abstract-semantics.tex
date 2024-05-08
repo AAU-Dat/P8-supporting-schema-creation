@@ -1,9 +1,11 @@
 \subsection{Abstract Syntax} \label{subsec:function-definitions}
 This section will introduce the syntactic sets and abstract syntax of SQAAL.
-The syntactic sets of SQAAL encompass the various elements and constructs that constitute the language's grammar. These sets define the valid combinations of symbols and keywords that form syntactically correct statements in SQAAL. They include components such as keywords, identifiers, operators, literals, and punctuation marks, each serving a specific role in expressing queries and analytical operations.
+The syntactic sets of SQAAL encompass the various elements and constructs that constitute the language's grammar.
+These sets define the valid combinations of symbols and keywords that form syntactically correct statements in SQAAL. They include components such as keywords, identifiers, operators, literals, and punctuation marks, each serving a specific role in expressing queries and analytical operations.
 
 This paper adopts a simplified version of the abstract syntax originally presented in~\cite{cortesi_abstract_2013}.
 Omitted parts within this simplified abstract syntax correspond to features or constructs that are not utilized or discussed in the context of the current application.
+The abstract syntax of SQAAL is defined in terms of the syntactic sets introduced in \autoref{tab:syntatic-sets}.
 \begin{figure}[htb!]
      \center
     \begin{tabular}{l l}
@@ -12,6 +14,7 @@ Omitted parts within this simplified abstract syntax correspond to features or c
     $c \in \mathbb{C}$                          & Constants                                                 \\
     $v_a \in \mathbb{V}_a$                      & Application variables                                     \\
     $v_d \in \mathbb{V}_d$                      & Database variables (attributes) involved in SQL commands  \\
+    $v_t \in \mathbb{V}_t$                    & Table variables (columns)    \\
     $v \in \mathbb{V}$ & Variables                                                 \\
     $e \in \mathbb{E}$                          & Arithmetic expressions                                    \\
     $b \in \mathbb{B}$                          & Boolean expressions                                       \\
@@ -26,18 +29,19 @@ Omitted parts within this simplified abstract syntax correspond to features or c
     \label{tab:syntatic-sets}
 \end{figure}
 
+The abstract syntax of SQAAL is presented in \autoref{tab:abstract-syntax}.
 \begin{figure}[htb!]
     \center
-    \begin{tabular}{l l}
+    \begin{tabular}{r l}
         $c ::=$ & $n \mid k$ \\
-        $v ::=$ & $v_d \mid v_a$ \\
+        $v ::=$ & $v_t \mid v_a$ \\
         $e ::=$ & $c \mid v \mid op_u\; e \mid \;e_1 op_b\; e_2$ for $op_u = \{-\}$ and $op_b = \{+, -, *, / \}$ \\
 
         $b ::=$ & $e_1 = e_2 \mid e_1 \leq e_2 \mid e_1 < e_2 \mid \neg b \mid b_1 \lor b_2 \mid b_1 \land b_2 \mid \texttt{true} \mid \texttt{false}$ \\
 
         $a_f ::=$ & $e_1 = e_2 \mid e_1 \leq e_2 \mid e_1 < e_2$ \\
         $\phi ::=$ & $a_f \mid \neg \phi_1 \mid \phi_1 \lor \phi_2 \mid \phi_1 \land \phi_2 \mid \forall v_n \phi \mid \exists v_n \phi$ \\
-        $A_{sql} :: =$ & $select(v_a, \mathbf{v}_d) \mid update(\mathbf{v}_d, \mathbf{e}) \mid delete(\mathbf{v}_d) \mid insert(\mathbf{v}_d, \mathbf{e})$ \\
+        $A_{sql} :: =$ & $select(v_a, v_d, \mathbf{v}_t) \mid update(v_d, \mathbf{v}_t, \mathbf{e}) \mid delete(v_d, \mathbf{v}_t) \mid insert(v_d, \mathbf{v}_t, \mathbf{e})$ \\
         $C_{sql} ::=$ & $\langle A_{sql}, \phi \rangle $ \\
         $I ::=$ & $skip \mid v_a := e \mid v_a := ? \mid C_{sql} $\\
     \end{tabular}
@@ -45,15 +49,17 @@ Omitted parts within this simplified abstract syntax correspond to features or c
     \label{tab:abstract-syntax}
 \end{figure}
 
-
 \subsection{Abstract Semantics}\label{subsec:abstract-semantics}
-This section will describe to abstract semantics of SQAAL.
+This section will describe the abstract semantics of SQAAL.
 
 \autoref{eq:generalBOP} through \ref{eq:generalUOP}, show the definition of abstract operations on members of $\mathsf{Val} \; A$.
+These operations are denoted by $\aop$, where $\aop$ is defined in \autoref{eq:operation}.
+These equations provide a systematic way to perform abstract operations on values within the lattice $\mathsf{Val} \ A$.
+The specific binary $\aaop$ are defined for the respective types later on, allowing for flexibility and customization based on the domain and requirements of the analysis.
 
 \begin{align}
-    \aop &: \mathsf{Val} \; A \rightarrow \mathsf{Val} \; B \rightarrow \mathsf{Val} \; C \\
-    \mathsf{List} \; s_1 \aop \mathsf{Single} \; s_2 &= \mathsf{Single} \; (s_1 \aaop s_2) \label{eq:generalBOP} \\
+    \aop &: \mathsf{Val} \; A \rightarrow \mathsf{Val} \; B \rightarrow \mathsf{Val} \; C \label{eq:operation} \\
+    \mathsf{Single} \; s_1 \aop \mathsf{Single} \; s_2 &= \mathsf{Single} \; (s_1 \aaop s_2) \label{eq:generalBOP} \\
     \mathsf{Single} \; s \aop \mathsf{List} \; S &= \mathsf{List} \; \{ s \aaop s' \mid s' \in S \} \\
     \mathsf{List} \; S \aop \mathsf{Single} \; s &= \mathsf{List} \; \{ s' \aaop s \mid s' \in S \}  \\
     \mathsf{List} \; S_1 \aop \mathsf{List} \; S_2 &= \mathsf{List} \; \{ s_1 \aaop s_2 \mid s_1 \in S_1, s_2 \in S_2 \} \\
@@ -61,9 +67,7 @@ This section will describe to abstract semantics of SQAAL.
     \aop (\mathsf{List} \; S) &= \mathsf{List} \; \{ \aaop s \mid s \in S \} \label{eq:generalUOP}
 \end{align}
 
-where $\aaop$ is defined for the respective types later on.
-
-Similarly we define:
+Similarly we define $\app{op}$, which is for operations of sets.
 \begin{align}
     \app{op} &: \mathsf{Val} \; A \rightarrow \mathsf{Val} \; B \rightarrow \mathsf{Val} \; C \\
     \mathsf{Single} \; s_1 \app{op} \mathsf{Single} \; s_2 &= \mathsf{List} \; (\{s_1\} \op \{s_2\}) \\
@@ -73,37 +77,36 @@ Similarly we define:
     \app{op} (\mathsf{Single} \; s) &= \mathsf{List} \; (\op \{ s \}) \\
     \app{op} (\mathsf{List} \; S) &= \mathsf{List} \; (\op S )
 \end{align}
-This will also be helpful later.
+This will also be helpful later, when we define the abstract semantics of SQL commands.
 
 \subsubsection{Abstract Semantics of Boolean expressions}
-We now define the general abstract semantics of boolean expressions.
-$\aab{bop}$ is defined to be a special case of $\aaop$ as follows:
+We define the general abstract semantics of Boolean expressions such that $\aab{bop}$ is a specialized instance of $\aaop$ in the following manner:
 \begin{align}
     \aab{bop} &: \mathcal{P}(\{\true, \false, null\}) \rightarrow \mathcal{P}(\{\true, \false, null\}) \rightarrow \mathcal{P}(\{\true, \false, null\})\\
     B_1 \;\aab{bop}\; B_2 &= \bigcup_{b_1 \in B_2, b_2 \in B_2} b_1 \;\aaab{bop}\; b_2
 \end{align}
 Where $\aaab{bop}$ is defined for $\land$, $\lor$ and $\neg$ in \autoref{tab:aaabland}, \autoref{tab:aaablor} and \autoref{tab:aaabneg} respectively.
 
-\autoref{eq:abstract-bool-semantics-start} through \ref{eq:abstract-bool-semantics-end2} show the abstract semantics of boolean expressions, that is logical operators and comparisons between expressions.
-Definition \ref{eq:abstract-bool-semantics-start} through \ref{eq:abstract-bool-natural} are fairly natural, definition \ref{eq:abstract-bool-semantics-end2} however requires an explanation.
-In the otherwise case, when $e_1$ and $e_2$ do not both evaluate to lists, we proceed as as expected.
-In the case where both $e_1$ and $e_2$ both evaluate to list we take into account the fact that there might be more tuples in one or the other, therefore adding $null$ as on of the values that might be present in the result.
+\autoref{eq:abstract-bool-semantics-start} through \ref{eq:abstract-bool-semantics-end} show the abstract semantics of Boolean expressions $(\absboolsem{})$ defined in \autoref{eq:bool-operation}, that is logical operators and comparisons between expressions.
+$\ab{\mathfrak{E}}$ describes the set of abstract states. $\absexpsem{exp}$ describes the abstract evaluation of an expression, $(\rho_{\ab{d}}, \rho_{\ab{a}})$ is an abstract state in the database.
+In \autoref{eq:abstract-bool-semantics-end}, we check if either of the two expressions are lists; if that is the case and they are the same type, we add $\{\{\texttt{false}\}\}$ to the result, as we are unsure if the two expressions are equal.
+Otherwise, we proceed as usual.
 
 \begin{align}
-    \absboolsem{\cdot} &: \mathbb{B} \rightarrow \ab{\mathfrak{E}} \rightarrow \mathsf{Val} \; \mathcal{P}(\{\true, \false, null\}) \\
+    \absboolsem{\cdot} &: \mathbb{B} \rightarrow \ab{\mathfrak{E}} \rightarrow \mathsf{Val} \; \mathcal{P}(\{\true, \false, null\}) \label{eq:bool-operation} \\
     \absboolsem{\texttt{true}}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \mathsf{Single} \; \{\true\} \label{eq:abstract-bool-semantics-start} \\
     \absboolsem{\texttt{false}}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \mathsf{Single} \; \{\false\} \\
     \absboolsem{b_1 \lor b_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absboolsem{b_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ab{\lor} \absboolsem{b_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
     \absboolsem{b_1 \land b_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absboolsem{b_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ab{\land} \absboolsem{b_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
-    \absboolsem{\neg b}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{\neg} \absboolsem{b}(\rho_{\ab{d}}, \rho_{\ab{a}}) \label{eq:abstract-bool-natural} \\
+    \absboolsem{\neg b}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{\neg} \absboolsem{b}(\rho_{\ab{d}}, \rho_{\ab{a}})  \\
     % \absboolsem{e_1 \neq e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{\neg}(\absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \;\ab{=}\; \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}})) \label{eq:abstract-bool-semantics-end1} \\
-    \absboolsem{e_1 \;comp\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=
-    \begin{cases}
-        \app{\{\{null\}\} \cup} E & \text{if } E_1 = \mathsf{List} \; S_1 \land E_2 = \mathsf{List} \; S_2 \land E_1 \;\ab{\comp}\; E_2 = E\\
+    \absboolsem{e_1 \;comp\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=  \begin{cases}
+        \app{\{\{\texttt{false}\}\} \cup} E & \text{if } (E_1 = \mathsf{List} \; S_1 \lor E_2 = \mathsf{List} \; S_2) \land E_1 \;\ab{\comp}\; E_2 = E\\
         E_1 \;\ab{\comp}\; E_2 & \text{otherwise}\\
-    \end{cases}\label{eq:abstract-bool-semantics-end2} \\
-    \text{where } & E_1 = \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
-    \text{and } & E_2 = \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}})
+    \end{cases}\label{eq:abstract-bool-semantics-end} \\
+    \text{where } E_1 &= \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \nonumber \\
+    \text{and }  E_2 &= \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}})  \nonumber
+    %\absboolsem{e_1 \;comp\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= E_1 \;\ab{\comp}\; E_2 \quad \text{where }  E_1 = \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ \text{and } E_2 = \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \label{eq:abstract-bool-semantics-end}
 \end{align}
 
 \begin{table}[H]
@@ -143,12 +146,13 @@ In the case where both $e_1$ and $e_2$ both evaluate to list we take into accoun
     \label{tab:aaabneg}
 \end{table}
 
+\subsubsection{Comparison of Abstract Integers and Strings}\label{subsubsec:abstract-comparison}
+For abstract integers (union of intervals) $\mathscr{I}_1$ and $\mathscr{I}_2$ and arbitrary values $X_1$ and $X_2$ (either intervals or regular expressions), we define their abstract comparison in \autoref{eq:aaabcomp}s through \ref{eq:aaabcomp3}.
+For abstract equality (\autoref{eq:aaabcomp}), we require that the two abstract values being compared be of the same type: abstract integers or abstract strings, lest the result be undefined.
+If the two abstract values only represent the same value, equality can only be true.
+If the values the two abstract values represent do not intersect, equality can only be false.
+Otherwise, they overlap; in this case, we are unsure whether the concrete values that can be derived are equal.
 
-For abstract integers (union of intervals) $\mathscr{I}_1$ and $\mathscr{I}_2$ and arbitrary values $X_1$ and $X_2$ (either intervals or regular expressions) we define their abstract comparison in \autoref{eq:aaabcomp} through \ref{eq:aaabcomp3}.
-For abstract equality (\autoref{eq:aaabcomp}) we required that the two abstract values being compared are of the same type, either both are abstract integers or both are abstract strings lest the result is undefined.
-If the two abstract values only represent the same one value, equality can obviously only be true.
-In the case that values the two abstract values represent don't intersect, equality can only be false.
-Otherwise they overlap, and which case we are unsure whether the concrete values that can be derived are equal.
 \begin{align} \label{eq:aaabcomp}
     X_1 \;\aab{=}\; X_2 &= \begin{cases}
         \begin{cases}
@@ -159,9 +163,11 @@ Otherwise they overlap, and which case we are unsure whether the concrete values
         \text{undefined} & \text{otherwise}
     \end{cases}
 \end{align}
+
 $min(\mathscr{I})$ and $max(\mathscr{I})$ denotes the maximum and minimum value represented by $\mathscr{I}$, we argue that such values can easily be computed if $\mathscr{I}$ is kept in a canonical form within the actual implementation.
-With the former mentioned, \autoref{eq:aaabcomp2} and \ref{eq:aaabcomp3} should be self explanatory.
-To further clarify we only allow abstract integers to be compared in this way.
+With the former mentioned, \autoref{eq:aaabcomp2} and \ref{eq:aaabcomp3} should be self-explanatory.
+To clarify, we only allow abstract integers to be compared this way.
+
 \begin{align}\label{eq:aaabcomp2}
     \mathscr{I}_1 \;\aab{<}\; \mathscr{I}_2 &= \begin{cases}
         \{\true\} & \text{if } \max(\mathscr{I}_1) < \min(\mathscr{I}_2) \\
@@ -181,26 +187,27 @@ To further clarify we only allow abstract integers to be compared in this way.
 
 Here we define the abstract semantics of expressions in SQAAL.
 
-\autoref{sem:exp1} to \ref{sem:exp2} describe the semantics of constants.
-In \autoref{sem:exp3} to \ref{sem:exp4} we describe the semantics of variables.
+\autoref{sem:exp1} and \ref{sem:exp2} describe the semantics of constants.
+In \autoref{sem:exp3} and \ref{sem:exp4} we describe the semantics of variables.
 In the case of database variables in \autoref{sem:exp4}, we assume attribute names do not clash.
 \autoref{eq:unary-op} and \ref{eq:binary-op} describe the semantics of unary and binary operations on expressions, the justification of abstract binary operations is analogous to the one given for the semantics of comparison operators (\autoref{eq:abstract-bool-semantics-end2}).
-\begin{align}\label{sem:exp1}
+\begin{align}
     \absexpsem{\cdot} &: \mathbb{E} \rightarrow \ab{\mathfrak{E}} \rightarrow \mathsf{Val} \; \mathbf{REG} \cup \mathsf{Val} \; \mathbf{INT}\\
-    \absexpsem{n}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \mathsf{Single} \; \{ [n, n] \} \\\label{sem:exp2}
-    \absexpsem{k}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \mathsf{Single} \; R,  \text{ such that }\mathcal{L}(R) = \{ k \} \\ \label{sem:exp3}
-    \absexpsem{v_a}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=  \rho_{\ab{a}}(v_a) \\ \label{sem:exp4}
-    \absexpsem{v_d}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=  \mathsf{List} \; \rho_{\ab{t}}(v_d) \text{ such that } \ab{t} \in dom(\ab{d}) \text{ and } v_d \in attr(\ab{t}) \\ \label{eq:exp-lookup}
-    \absexpsem{op_u \; e}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{op_u} \; (\absexpsem{e}(\rho_{\ab{d}}, \rho_{\ab{a}})) \\ \label{eq:unary-op}
-    \absexpsem{e_1 \;op_b\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=
-    \begin{cases}
-        \app{\{\{null\}\} \cup} E & \text{if } E_1 = \mathsf{List} \; S_1 \land E_2 = \mathsf{List} \; S_2 \land E_1 \;\ab{op_b}\; E_2 = E\\
-        E_1 \;\ab{op_b}\; E_2 & \text{otherwise}\\
-    \end{cases} \\ \label{eq:binary-op}
-    \text{where } & E_1 = \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
-    \text{and } & E_2 = \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}})
+    \absexpsem{n}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \mathsf{Single} \; \{ [n, n] \} \label{sem:exp1} \\
+    \absexpsem{k}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \mathsf{Single} \; R,  \text{ such that }\mathcal{L}(R) = \{ k \} \label{sem:exp2} \\
+    \absexpsem{v_a}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=  \rho_{\ab{a}}(v_a) \label{sem:exp3} \\
+    \absexpsem{v_d}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=  \mathsf{List} \; \rho_{\ab{t}}(v_d) \text{ such that } \ab{t} \in dom(\ab{d}) \text{ and } v_d \in attr(\ab{t}) \label{sem:exp4} \\
+    \absexpsem{op_u \; e}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{op_u} \; (\absexpsem{e}(\rho_{\ab{d}}, \rho_{\ab{a}})) \label{eq:unary-op} \\
+    %\absboolsem{e_1 \;comp\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= E_1 \;\ab{\comp}\; E_2 \\ \text{where }  E_1 = \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ \text{and } E_2 = \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}})
+    %\absexpsem{e_1 \;op_b\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=
+    %\begin{cases}
+    %    \app{\{\{null\}\} \cup} E & \text{if } E_1 = \mathsf{List} \; S_1 \land E_2 = \mathsf{List} \; S_2 \land E_1 \;\ab{op_b}\; E_2 = E\\
+        %E_1 \;\ab{op_b}\; E_2 & \text{otherwise}\\
+    %\end{cases} \\ \label{eq:binary-op}
+    %\text{where } E_1 &= \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \nonumber \\
+    %\text{and } E_2 &= \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \nonumber
 \end{align}
-
+\todo{add the missing rule (outcommented)}
 Before defining the abstract operations, $\aaop$, for expressions, we will define some auxiliary functions.
 We define the length of a regular expression $R$, $\|R\|$ as:
 \begin{align}\label{eq:r1}
