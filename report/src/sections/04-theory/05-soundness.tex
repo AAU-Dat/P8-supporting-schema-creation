@@ -2,7 +2,7 @@
 
 In this subsection we give an informal argument of soundness for the specification of our analysis.
 A formal proof would be far too long and should ideally be verified with a formal proof management system.
-Further the specification of the language that we are basing our analysis on \cite{halder_abstract_2012} is not entirely formal and in some cases ambiguities arise, as such a entirely formal proof can only be done if the specification of the language is completely formalized.
+Further the specification of the language that we are basing our analysis on~\cite{halder_abstract_2012} is not entirely formal and in some cases ambiguities arise, as such a entirely formal proof can only be done if the specification of the language is completely formalized.
 
 In the 'proofs' in this section we allow ourselves to substitute terms $s \into \lookupcl(v)$ with $s$, the justification is that $s \into \lookupcl(v)$ will only ever overestimate $s$, that is $s \sqsubseteq s \into \lookupcl(v)$.
 
@@ -23,7 +23,7 @@ In the 'proofs' in this section we allow ourselves to substitute terms $s \into 
     $\absboolsem{\texttt{true}}$ and $\absboolsem{\texttt{false}}$ are clearly sound.
     In the case of $\absboolsem{b_1 \; bop_b \; b_2}$ and $\absboolsem{bop_u \; b}$ we take all possible abstract truth values $b_1$, $b_2$ and $b$ might evaluate to and do the operation on all combinations, for each such pairs (or values in the case of $b$) we derive all possible abstract truth values.
     Therefore $\absboolsem{b_1 \; bop_b \; b_2}$ and $\absboolsem{bop_u \; b}$ are sound.
-    In the case of $\absboolsem{e_1 \; comp \; e_2}$ due to ambiguity in how lists of values are handled the predicate of if-then-else statements due to \cite{halder_abstract_2012}, we graciously overestimate when $b_1$ or $b_2$ evaluates to list types adding $\{\true, \false\}$ to the possible result, essentially allowing all behavior in Boolean instructions under these conditions.
+    In the case of $\absboolsem{e_1 \; comp \; e_2}$ due to ambiguity in how lists of values are handled the predicate of if-then-else statements due to~\cite{halder_abstract_2012}, we graciously overestimate when $b_1$ or $b_2$ evaluates to list types adding $\{\true, \false\}$ to the possible result, essentially allowing all behavior in Boolean instructions under these conditions.
     Otherwise we compare the values as expected taking care to overestimate the respective comparison operations, due to brevity we won't go into the respective operations.
     The soundness of $\absboolsem{\cdot}$ of course depends on $\absexpsem{\cdot}$ as each Boolean expression has leafs corresponding to some expression in $\mathbb{E}$.
 \end{proof}
