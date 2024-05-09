@@ -101,8 +101,8 @@ Otherwise, we proceed as usual.
     \absboolsem{\neg b}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{\neg} \absboolsem{b}(\rho_{\ab{d}}, \rho_{\ab{a}})  \\
     % \absboolsem{e_1 \neq e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{\neg}(\absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \;\ab{=}\; \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}})) \label{eq:abstract-bool-semantics-end1} \\
     \absboolsem{e_1 \;comp\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=  \begin{cases}
-        \app{\{\{\texttt{false}\}\} \cup} E & \text{if } (E_1 = \mathsf{List} \; S_1 \lor E_2 = \mathsf{List} \; S_2) \land E_1 \;\ab{\comp}\; E_2 = E\\
-        E_1 \;\ab{\comp}\; E_2 & \text{otherwise}\\
+        \app{\{\{\texttt{false,true}\}\} \cup} E & \text{if } (E_1 = \mathsf{List} \; S_1 \lor E_2 = \mathsf{List} \; S_2) \land E_1 \;\ab{\comp}\; E_2 = E\\
+        E_1 \;\ab{\comp}\; E_2 & \text{otherwise}
     \end{cases}\label{eq:abstract-bool-semantics-end} \\
     \text{where } E_1 &= \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \nonumber \\
     \text{and }  E_2 &= \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}})  \nonumber
@@ -246,16 +246,16 @@ This automaton is then converted back to a regular expression by the usual GNFA 
 The arithmetic operations, $\aaab{aop}$, are defined as follows for intervals.
 \begin{align}\label{eq:abstractBOP}
     \bigcup \mathcal{I} \;\aab{aop}\; \bigcup \mathcal{I}' &= \bigcup_{\mathscr{I}\in \mathcal{I}, \mathscr{I}'\in \mathcal{I}'}\mathscr{I}\aaab{aop}\mathscr{I}'\\
-    \text{where } \mathcal{I}&=\{\mathscr{I}_1,\dots,\mathscr{I}_n\}\\
-    \text{and } \mathcal{I}'&=\{\mathscr{I}'_1,\dots,\mathscr{I}'_n\}
+    \text{where } \mathcal{I}&=\{\mathscr{I}_1,\dots,\mathscr{I}_n\}\nonumber\\
+    \text{and } \mathcal{I}'&=\{\mathscr{I}'_1,\dots,\mathscr{I}'_n\}\nonumber
 \end{align}
 
 \subsubsection{Abstract Semantics of Predicates}
 The base rule of all the predicates is defined in \autoref{eq:atomicformulas}, as this is the base case for all the other predicates.
 It takes atomic formulas, $a_f$, of the form corresponding to \autoref{eq:abstract-bool-semantics-end2}, and returns the abstract truth value of $a_f$.
 The other predicates all build on this base case with rules such as negation, disjunction and conjunction.
-\begin{align}\label{eq:atomicformulas}
-    \abspredsem{\cdot} &: \mathbb{W} \rightarrow \ab{\mathfrak{E}} \rightarrow \mathsf{Val} \; \{\true, \false, \mnull\} \\
+\begin{align}
+    \abspredsem{\cdot} &: \mathbb{W} \rightarrow \ab{\mathfrak{E}} \rightarrow \mathsf{Val} \; \{\true, \false, \mnull\} \\ \label{eq:atomicformulas}
     \abspredsem{a_f}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absboolsem{a_f}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
     \abspredsem{\neg \phi}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{\neg} \left( \abspredsem{\phi}(\rho_{\ab{d}}, \rho_{\ab{a}}) \right) \\
     \abspredsem{\phi_1 \lor \phi_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \abspredsem{\phi_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ab{\lor} \abspredsem{\phi_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
