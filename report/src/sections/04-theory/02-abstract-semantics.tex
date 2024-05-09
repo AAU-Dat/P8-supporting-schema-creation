@@ -215,7 +215,8 @@ We define the length of a regular expression $R$, $\|R\|$ as:
     \text{where } & \|\min(R)\| = \min\{ \|s\| \mid s \in R \} \\ \label{eq:r2}
     \text{and } & \|s\| \text{ is the length of the word $s$}
 \end{align}
-The former is obviously an overapproximation, the lenght of the shortest $\|\min(R)\|$ can be found by classical shortest path algrotihm on the automata of $R$, $\mathcal{A}(R)$, such algorithms have a time complexity $\Theta(E + V \log V)$, where $E$ is the number of edges in the automata and $V$ is the number of states.
+The former is obviously an over-approximation, the length of the shortest $\|\min(R)\|$ can be found by classical shortest path algorithm on the automata of $R$, $\mathcal{A}(R)$.
+Such algorithms have a time complexity $\Theta(E + V \log V)$, where $E$ is the number of edges in the automata and $V$ is the number of states.
 We deem this acceptable.
 If $R$ does not contain a term $R'^\star$, we are essentially forced to find the longest path, this can be shown to be NP-hard, therefore we always approximate the length to be unbounded in the positive direction.
 
@@ -232,7 +233,7 @@ This automaton is then converted back to a regular expression by the usual GNFA 
     cvt(op, \sigma) &= op(\sigma)
 \end{align}
 
-\autoref{eq:concat} to \ref{eq:length} describe a subset of String operators present in PostgreSQL abstractly.
+\autoref{eq:concat} to \ref{eq:length} describes a subset of String operators, present in PostgreSQL, abstractly.
 \begin{align}\label{eq:concat}
     R_1 \;\aab{||}\; R_2 &= R_1R_2 \\
     \aab{lower}(R) &= cvt(\sigma \mapsto \sigma', R) \text{ such that $\sigma'$ is the lowercase representation of $\sigma$}\\
@@ -242,9 +243,11 @@ This automaton is then converted back to a regular expression by the usual GNFA 
 \end{align}
 
 \autoref{eq:abstractBOP} describes how to do binary operations on numbers.
-The arithmetic operations, $\aaab{aop}$, are defined as the standard for intervals.
-\begin{align}
-    I_1 \;\aab{aop}\; I_2 &= m(\{i_1 \; \aaab{aop} \; i_2 \mid i_1 \in I_1 \land i_2 \in I_2\})  \label{eq:abstractBOP}
+The arithmetic operations, $\aaab{aop}$, are defined as follows for intervals.
+\begin{align}\label{eq:abstractBOP}
+    \bigcup \mathcal{I} \;\aab{aop}\; \bigcup \mathcal{I}' &= \bigcup_{\mathscr{I}\in \mathcal{I}, \mathscr{I}'\in \mathcal{I}'}\mathscr{I}\aaab{aop}\mathscr{I}'\\
+    \text{where } \mathcal{I}&=\{\mathscr{I}_1,\dots,\mathscr{I}_n\}\\
+    \text{and } \mathcal{I}'&=\{\mathscr{I}'_1,\dots,\mathscr{I}'_n\}
 \end{align}
 
 \subsubsection{Abstract Semantics of Predicates}
