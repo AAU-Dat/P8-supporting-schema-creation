@@ -50,10 +50,10 @@ This representation of numbers $(\mathscr{I}, \subseteq, \cup, \cap)$ has the sa
 When we consider the abstract domain of strings and numbers, we need to consider both single values and lists of values.
 We would like to distinguish between single values and lists of values, thus we define algebraic type:
 \begin{align}
-    \mathsf{Val} \; A = \{ \mathsf{Single} \; a \mid a \in A \} \cup \{ \mathsf{List} \; A' \mid A' \subseteq A \}
+    \mathsf{Val} \; A = \{ \mathsf{Single} \; a \mid a \in A \} \cup \{ \mathsf{List} \; A' \mid A' \subseteq A \} \cup \{ \perp \}
 \end{align}
 where $A$ is the underlying set of values.
-We can define the lattice, $(\mathsf{Val} \; A, \subseteq, \cup, \cap)$, we define the following operations on the algebraic type for the lattice:
+We can define the lattice, $(\mathsf{Val} \; A, \subseteq, \cup, \cap)$, we first define the relation of the lattice:
 \begin{align}
     \mathsf{Single} \; s &\sqsubseteq \mathsf{List} \; S \quad
     \text{iff} \; s \in S \\
@@ -62,13 +62,19 @@ We can define the lattice, $(\mathsf{Val} \; A, \subseteq, \cup, \cap)$, we defi
     \mathsf{List} \; S &\not\sqsubseteq \mathsf{Single} \; s\\
     \mathsf{List} \; S_1 &\sqsubseteq \mathsf{List} \; S_2 \quad
     \text{iff} \; \forall s_1 \in S_1, \; \exists s_2 \in S_2: \; s_1 \sqsubseteq s_2\\
+\end{align}
+
+We can define the joins and meets of the lattice as follows:
+\begin{align}
     \mathsf{Single} \; s \sqcup \mathsf{List} \; S &= \mathsf{List} \; (S\sqcup\left\{ s \right\})\\
     \mathsf{Single} \; s_1 \sqcup \mathsf{Single} \; s_2 &= \mathsf{Single} \; (s \sqcup s )\\
     \mathsf{List} \; S_1 \sqcup \mathsf{List} \; S_2 &= \mathsf{List} \; (S_1 \sqcup S_2)\\
     \mathsf{Single} \; s \sqcap \mathsf{List} \; S &= \mathsf{Single} \; s\\
     \mathsf{List} \; S_1 \sqcap \mathsf{List} \; S_2 &= \mathsf{List} \; (S_1 \sqcap S_2)\\
-    \mathsf{Single} \; s_1 \sqcap \mathsf{Single} \; s_2 &= \mathsf{Single} \; (s_1 \sqcap s_2)
+    \mathsf{Single} \; s_1 \sqcap \mathsf{Single} \; s_2 &= \mathsf{Single} \; (s_1 \sqcap s_2)\\
+    \mathsf{List} \ \emptyset \sqcap \mathsf{Single} \ s &= \ \perp
 \end{align}
+We see that if a list is empty and we look for the meet with a single value, it is equivalent to $\perp$.
 As the lattice $(\mathsf{Val} \; A, \subseteq, \cup, \cap)$ is finite, we can use the Kleene fixed-point theorem (see \autoref{thm:kleene_finite}) to prove the termination of our analysis.
 
 \subsubsection{Cover lattice}
