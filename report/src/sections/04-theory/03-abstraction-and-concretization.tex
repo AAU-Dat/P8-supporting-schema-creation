@@ -1,56 +1,47 @@
 \subsection{Abstraction and Concretization}\label{subsec:abstraction-and-concretization}
 
-\todo[inline]{Casper says:
-    $\concrete_1$ describes the correspondence between regular expressions and the strings that they represent, naturally they represent their respective language.
-    The corresponding function for linear inequalities is missing, but should go here ones done.
-}
-
 \begin{align}
-    \concrete_1 &: \clattice{\mathcal{R}}{REG} \rightarrow 2^{\Sigma^\star} \\
-    \concrete_1(R) &= \mathcal{L}(R)
+    \concrete_1 &: \mathcal{P}(\ab{\mathfrak{E}}) \rightarrow \mathcal{P}(\mathfrak{E}) \\
+    \concrete_1(\ab{P}) &= \left\{ (\rho_{d}, \rho_{a}) \in \mathfrak{E} \middle| \exists (\rho_{\ab{d}}, \rho_{\ab{a}}) \in \ab{P} : (\rho_{d}, \rho_{a}) \in \concrete_2(\rho_{\ab{d}}, \rho_{\ab{a}})\right\}
 \end{align}
 
-\todo[inline]{Casper says:
-    $\concrete_2$ describes the correspondence between a tuple $e^\# \in \mathbb{T}^\#$, where $\mathbb{T}$ is the domain of some table and $\mathbb{T}^\#$ is it's abstract counterpart.
-    An abstract tuple is thus mapped to the product of it's parts.
-}
-
 \begin{align}
-    \concrete_2 &: \mathbb{T}^\# \rightarrow 2^\mathbb{T} \\
-    \concrete_2 (e_1^\#, e_2^\#, \dots, e_n^\#) &= \concrete_1(e_1^\#) \times \concrete_1(e_2^\#) \times \dots \times \concrete_1(e_n^\#)
+    \concrete_2 &: \ab{\mathfrak{E}} \rightarrow \mathcal{P}(\mathfrak{E}) \\
+    \concrete_2(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \concrete_{3d}(\rho_{\ab{d}}) \times \concrete_{3a}(\rho_{\ab{a}})
 \end{align}
 
-\todo[inline]{Casper says:
-    An abstract table $t \in (\mathbb{T}^\# \rightarrow \mathbb{N}^\#)$ is mapped to it's corresponding table.
-    As an example the very simple table $t^\#(a^\star b) = [1, 5]$, $t^\#(\overline{a^\star b}) = [0, 0]$, $t^\#(\top) = [1, 5]$,  $t^\#(\bot) = ?$, the concretisation $\concrete_3(t^\#) = T$, would contain $t$ where $t("aab") = 5$ and $t(s) = 0$ for all other strings $s$, but not $t'$ where $t'("aab") = 5$, $t("b") = 1$ and $t(s) = 0$ for all other strings $s$.
-
-}
-
 \begin{align}
-    \concrete_3 &: (\mathbb{T}^\# \rightarrow \mathbb{N}^\#) \rightarrow 2^{(\mathbb{T} \rightarrow \mathbb{N})} \\
-    \concrete_3 (t^\#) &= \left\{ t \in (\mathbb{T} \rightarrow \mathbb{N}) \left|\; \forall e^\# \in \mathbb{T}^\# : \left( \sum_{e \in \concrete_2(e^\#)} t(e) \right) \in \concrete_2(t^\#(e^\#))\right. \right\}
+    \concrete_{3d} &: \ab{\mathfrak{E}_d} \rightarrow \mathcal{P}(\mathfrak{E}_d) \\
+    \concrete_{3d}(\rho_{\ab{d}}) &= \left\{ \rho_{a} \in \mathfrak{E}_d \middle| \forall v_d \in \mathbb{V}_d : \rho_d(v_d) \in \concrete_{4d}(\rho_{\ab{d}}(v_d)) \right\}
 \end{align}
 
-\todo[inline]{Casper says:
-    Same as $\concrete_2$, but on a table to table basis.
-}
-
 \begin{align}
-    \concrete_4 &: \bigtimes_{i = 1}^{n} (\mathbb{T}^\#_i \rightarrow \mathbb{N}^\#_i) \rightarrow 2^{\bigtimes_{i = 1}^{n} (\mathbb{T}_i \rightarrow \mathbb{N}_i)} \\
-    \concrete_4(d^\#) &= \concrete_4(t_1^\#, t_2^\#, \dots, t_n^\#) \\
-                    &= \concrete_3(t_1^\#) \times \concrete_3(t_2^\#) \times \dots \times \concrete_3(t_n^\#)
+    \concrete_{3a} &: \ab{\mathfrak{E}_a} \rightarrow \mathcal{P}(\mathfrak{E}_a) \\
+    \concrete_{3a}(\rho_{\ab{a}}) &= \left\{ \rho_{a} \in \mathfrak{E}_a \middle| \forall v_a \in \mathbb{V}_a : \rho_a(v_a) \in \concrete_{4a}(\rho_{\ab{a}}(v_a)) \right\}
 \end{align}
 
-\todo[inline]{Casper says:
-    As $\env{t}$ is a function that maps an attribute to it's corresponding row in a table concretizing it corresponds to concretizing the underlying table.
-    Analogously $\env{d}$ is a function that maps table names to their respective tables, so again we concertize the all the underlying tables.
-}
-
 \begin{align}
-    \concrete_5(\env{t^\#}) &= \{ \env{t} \mid t \in \concrete_3(t^\#) \} \\
-    \concrete_5(\env{d^\#}) &= \{ \env{d} \mid d \in \concrete_4(d^\#) \}
+    \concrete_{4d} &: \mathcal{P}\left(\bigtimes_{i = 1}^{n}C_{X_i}(S_i)\right) \rightarrow \mathcal{M}\left(\bigtimes_{i = 1}^n Z_i\right) \\
+    \concrete_{4d}(\ab{t}) &= \left\{ t \in \mathcal{M}\left(\bigtimes_{i = 1}^n Z_i\right) \middle|\forall e \in t : \exists \ab{e} \in \ab{t} : e \in \concrete_5(\ab{e}) \right\}
 \end{align}
 
-\begin{restatable}{theorem}{galois}\label{thm:galios}
-    There exist an $\aabstract_5$ such that $\aabstract_5$ and $\concrete_5$ form a Galois connection.
-\end{restatable}
+\begin{align}
+    \concrete_{4a} &: \mathsf{Val} \; \left(C_{X}(S)\right) \rightarrow \mathcal{P}(Z \cup Z^\star) \\
+    \concrete_{4a}(\mathsf{Single} \; \ab{s}) &= \concrete_6(\ab{s}) \\
+    \concrete_{4a}(\mathsf{List} \; \ab{S'}) &= \bigcup_{n \in \mathbb{N}}\left\{s_1, s_2, \dots, s_n \in Z^n \middle| \forall i \in \{1, 2, \dots, n\} : \exists \ab{s} \in \ab{S'} : s_i \in \concrete_6(\ab{s}) \right\}
+\end{align}
+
+\begin{align}
+    \concrete_5 &: \bigtimes_{i = 1}^{n}C_{X_i}(S_i) \rightarrow \mathcal{P}\left(\bigtimes_{i = 1}^n Z_i \right) \\
+    \concrete_5(\ab{e_1}, \ab{e_2}, \dots, \ab{e_n}) &= \concrete_6(\ab{e_1}) \times \concrete_6(\ab{e_2}) \times \dots \times \concrete_6(\ab{e_n})
+\end{align}
+
+\begin{align}
+    \concrete_6 &: C_{\mathcal{R}}(\mathbf{REG}) \rightarrow \mathcal{P}(\mathbf{STR}) \\
+    \concrete_6(R) &= \mathcal{L}(R)
+\end{align}
+
+\begin{align}
+    \concrete_6 &: C_{\mathcal{\mathcal{I}}}(\mathbf{INT}) \rightarrow \mathcal{P}(\mathbf{NUM}) \\
+    \concrete_6(\mathscr{I}) &= \mathcal{L}(\mathscr{I})
+\end{align}
