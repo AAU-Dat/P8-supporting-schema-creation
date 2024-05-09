@@ -1,0 +1,128 @@
+\subsection{Soundness}\label{subsec:soundness}
+
+In this subsection we give an informal argument of soundness for the specification of our analysis.
+A formal proof would be far too long and should ideally be verified with a formal proof management system.
+Further the specification of the language that we are basing our analysis on~\cite{halder_abstract_2012} is not entirely formal and in some cases ambiguities arise, as such a entirely formal proof can only be done if the specification of the language is completely formalized.
+
+In the 'proofs' in this section we allow ourselves to substitute terms $s \into \lookupcl(v)$ with $s$, the justification is that $s \into \lookupcl(v)$ will only ever overestimate $s$, that is $s \sqsubseteq s \into \lookupcl(v)$.
+
+\begin{conjecture}\label{thm:sound-exp}
+    $\absexpsem{\cdot}$ is sound.
+\end{conjecture}
+\begin{proof}
+    \pfsketch\
+    The soundness of $\absexpsem{\cdot}$ relies on the fact that each $\aab{op_u}$ and $\aab{op_b}$ are overestimations of their respective operations and the fact that the operation is done between each element in the case where a list type is suspected.
+    For the sake of brevity we leave out the proof of the respective operations.
+\end{proof}
+
+\begin{conjecture}\label{thm:sound-bool}
+    $\absboolsem{\cdot}$ is sound.
+\end{conjecture}
+\begin{proof}
+    \pfsketch\
+    $\absboolsem{\texttt{true}}$ and $\absboolsem{\texttt{false}}$ are clearly sound.
+    In the case of $\absboolsem{b_1 \; bop_b \; b_2}$ and $\absboolsem{bop_u \; b}$ we take all possible abstract truth values $b_1$, $b_2$ and $b$ might evaluate to and do the operation on all combinations, for each such pairs (or values in the case of $b$) we derive all possible abstract truth values.
+    Therefore $\absboolsem{b_1 \; bop_b \; b_2}$ and $\absboolsem{bop_u \; b}$ are sound.
+    In the case of $\absboolsem{e_1 \; comp \; e_2}$ due to ambiguity in how lists of values are handled the predicate of if-then-else statements due to~\cite{halder_abstract_2012}, we graciously overestimate when $b_1$ or $b_2$ evaluates to list types adding $\{\true, \false\}$ to the possible result, essentially allowing all behavior in Boolean instructions under these conditions.
+    Otherwise we compare the values as expected taking care to overestimate the respective comparison operations, due to brevity we won't go into the respective operations.
+    The soundness of $\absboolsem{\cdot}$ of course depends on $\absexpsem{\cdot}$ as each Boolean expression has leafs corresponding to some expression in $\mathbb{E}$.
+\end{proof}
+
+\begin{conjecture}\label{thm:sound-exp}
+    $\abspredsem{\cdot}$ is sound.
+\end{conjecture}
+\begin{proof}
+    \pfsketch\
+    $\abspredsem{\cdot}$ is in essence just a extension of $\absboolsem{\cdot}$ that includes quantifiers, therefore we essentially only need to prove soundness of those.
+    Both quantifiers are turned into repeated application of either abstract conjunction and abstract disjunction over the elements being quantified, soundness then follows from the fact that abstract conjunction and disjunction are over approximations.
+\end{proof}
+
+\begin{conjecture}\label{thm:sound-skip}
+    $\abssem{\texttt{skip}}$ is sound.
+\end{conjecture}
+\begin{proof}
+    \pf\ Assume $\rho \in \concrete_1(\ab{P})$, then $\sem{\texttt{skip}}(\rho) = \rho$ and $\abssem{\texttt{skip}}(\ab{P}) = \ab{P}$ and therefore $\sem{\texttt{skip}}(\rho) \in \concrete_1(\abssem{\texttt{skip}}(\ab{P}))$.
+\end{proof}
+
+\begin{conjecture}\label{thm:sound-assign}
+    $\abssem{v_a := e}$ is sound for all $v_a \in \mathbb{V}_a$ and $e \in \mathbb{E}$.
+\end{conjecture}
+\begin{proof}
+    \pf\
+    Assume $(\env{d}, \env{a}) \in \concrete_1(\ab{P})$ then in $\sem{v_a := e}(\env{d}, \env{a})$ $v_a$ is assigned to $\expsem{e}(\env{d}, \env{a})$. Because $\expsem{e}(\env{d}, \env{a}) \in \concrete_{4a}(s) = \concrete_{4a}(\absexpsem{e}(\env{\ab{d}}, \env{\ab{a}}))$ for $(\env{\ab{d}}, \env{\ab{a}}) \in \ab{P}$ where $(\env{d}, \env{a}) \in \concrete_2(\env{\ab{d}}, \env{\ab{a}})$ then $\sem{v_a := e}(\env{d}, \env{a}) \in \concrete_2(\env{\ab{d}}, \env{\ab{a}}[v_a \mapsto s])$, therefore also $\sem{v_a := e}(\env{d}, \env{a})\in \concrete_1(\abssem{v_a := e}(\ab{P}))$.
+\end{proof}
+
+\begin{conjecture}\label{thm:sound-random}
+    $\abssem{v_a := ?}$ is sound for all $v_a \in \mathbb{V}_a$.
+\end{conjecture}
+\begin{proof}
+    \pf\
+    Assume $(\env{d}, \env{a}) \in \concrete_1(\ab{P})$ then $\sem{v_a := ?}(\env{d}, \env{a}) = (\env{d}', \env{a}')$ maps $v_a$ to some non-deterministically chosen value.
+    For $(\env{d}, \env{a}) \in \gamma_2(\env{\ab{d}}, \env{\ab{a}})$ where $(\env{\ab{d}}, \env{\ab{a}}) \in \ab{P}$, it should be evident that $(\env{d}', \env{a}') \in \gamma_2(\env{\ab{d}}, \env{\ab{a}}[v_a \mapsto \mathsf{Single}\;\top])$ and therefore $\sem{v_a := ?}(\env{d}, \env{a}) \in \concrete_1(\abssem{v_a := ?}(\ab{P}))$.
+\end{proof}
+
+\begin{conjecture}\label{thm:sound-boolsem}
+    $\abssem{b}$ is sound for all $b \in \mathbb{B}$.
+\end{conjecture}
+\begin{proof}
+    \pf\
+    Assume $(\env{d}, \env{a}) \in \concrete_1(\ab{P})$ and $\boolsem{b}(\env{d}, \env{a}) = \true$ then $\sem{b}(\env{d}, \env{a}) = (\env{d}, \env{a})$.
+    Because $\boolsem{b}(\env{d}, \env{a}) \in \concrete_{4a}(\absboolsem{b}(\env{\ab{d}}, \env{\ab{a}}))$ for $(\env{d}, \env{a}) \in \concrete_2(\env{\ab{d}}, \env{\ab{a}})$ where $(\env{\ab{d}}, \env{\ab{a}}) \in \ab{P}$ then $(\env{\ab{d}}, \env{\ab{a}})$ must be in $\abssem{b}(\ab{P})$ because $\absboolsem{b}(\env{\ab{d}}, \env{\ab{a}})$ must contain $B$ such that $B$ contains $\true$, because of the initial assumption.
+\end{proof}
+
+\begin{conjecture}\label{thm:sound-select}
+    $\abssqlsem{\langle select(v_a, \mathbf{v}_d), \phi \rangle}$ is sound.
+\end{conjecture}
+\begin{proof}
+    \pfsketch\
+    Soundness of $\abssqlsem{\langle select(v_a, \mathbf{v}_d), \phi \rangle}$ relies on the fact that we overestimate and select abstract tuples where we know the predicate $\phi$ is true, and also those where we are unsure.
+    This selection is based on the abstract semantics of $\abspredsem{\phi}$, therefore if $\abspredsem{\phi}$ is sound so is $\abssqlsem{\langle select(v_a, \mathbf{v}_d), \phi \rangle}$.
+\end{proof}
+
+\begin{conjecture}\label{thm:sound-insert}
+    $\abssqlsem{\langle insert(\mathbf{v}_d, \mathbf{e}), \phi \rangle}$ is sound.
+\end{conjecture}
+\begin{proof}
+    \pfsketch\
+    Soundness of $\abssqlsem{\langle insert(\mathbf{v}_d, \mathbf{e}), \phi \rangle}$ relies on the fact that we take all possible combinations of the abstract input of the select statement.
+    Therefore as the evaluation of the input is based on $\absexpsem{\cdot}$ and because $\absexpsem{\cdot}$ is sound, $\abssqlsem{\langle insert(\mathbf{v}_d, \mathbf{e}), \phi \rangle}$ is sound.
+\end{proof}
+
+\begin{conjecture}\label{thm:sound-update}
+    $\abssqlsem{\langle update(\absattrs, \absexps), \abspred \rangle}$ is sound .
+\end{conjecture}
+\begin{proof}
+    \pfsketch\
+    Essentially $\abssqlsem{\langle update(\absattrs, \absexps), \abspred \rangle}$ is sound because:
+    \begin{itemize}
+        \item We do not update all the abstract tuples where we are sure the predicate evaluates to false;
+        \item for all tuples where we are unsure whether or not the predicate is true we take the join of the incoming and current values being updated, effectively updating the values to both in an abstract sense;
+        \item in the case where we are sure the predicate is true for the tuple is updated.
+    \end{itemize}
+    The soundness of the prequel relies on the fact that both that $\absexpsem{\cdot}$ is sound and that $\abspredsem{\cdot}$ is sound, which they are.
+\end{proof}
+
+\begin{conjecture}\label{thm:sound-update}
+    $\abssqlsem{\langle delete(\absattrs), \abspred \rangle}$ is sound.
+\end{conjecture}
+\begin{proof}
+    \pfsketch\
+    The soundness of $\abssqlsem{\langle delete(\absattrs), \abspred \rangle}$ stems from the fact the only remove abstract tuples where we are absolutely sure that the predicate evaluates to true.
+    The soundness of $\abssqlsem{\langle delete(\absattrs), \abspred \rangle}$ thus relies on the fact that $\abspredsem{\cdot}$ is a sound approximation.
+\end{proof}
+
+\begin{conjecture}\label{thm:sound-sql}
+    $\abssem{C_{sql}}$ is sound for all $C_{sql} \in \mathbb{C}_{sql}$.
+\end{conjecture}
+\begin{proof}
+    \pf\
+    This follows from the fact that $\abssqlsem{C_{sql}}$ is sound for all $C_{sql}$.
+\end{proof}
+
+\begin{conjecture}
+    $\abssem{I}$ is sound, for all $I \in \mathbb{I}$.
+\end{conjecture}
+\begin{proof}
+    \pf\
+    This immediately follows from \autoref{thm:sound-skip}, \ref{thm:sound-assign}, \ref{thm:sound-random}, \ref{thm:sound-boolsem} and \ref{thm:sound-sql}.
+\end{proof}
