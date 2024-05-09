@@ -95,7 +95,7 @@ In the 'proofs' in this section we allow ourselves to substitute terms $s \into 
     \pfsketch\
     Essentially $\abssqlsem{\langle update(\absattrs, \absexps), \abspred \rangle}$ is sound because:
     \begin{itemize}
-        \item We don't update all the abstract tuples where we are sure the predicate evaluates to false;
+        \item We do not update all the abstract tuples where we are sure the predicate evaluates to false;
         \item for all tuples where we are unsure whether or not the predicate is true we take the join of the incoming and current values being updated, effectively updating the values to both in an abstract sense;
         \item in the case where we are sure the predicate is true for the tuple is updated.
     \end{itemize}
@@ -103,7 +103,7 @@ In the 'proofs' in this section we allow ourselves to substitute terms $s \into 
 \end{proof}
 
 \begin{conjecture}\label{thm:sound-update}
-    $\abssqlsem{\langle delete(\absattrs), \abspred \rangle}$ is sound .
+    $\abssqlsem{\langle delete(\absattrs), \abspred \rangle}$ is sound.
 \end{conjecture}
 \begin{proof}
     \pfsketch\
@@ -126,4 +126,3 @@ In the 'proofs' in this section we allow ourselves to substitute terms $s \into 
     \pf\
     This immediately follows from \autoref{thm:sound-skip}, \ref{thm:sound-assign}, \ref{thm:sound-random}, \ref{thm:sound-boolsem} and \ref{thm:sound-sql}.
 \end{proof}
-
