@@ -303,7 +303,7 @@ In particular, we start with a tuple with all entries equal to null $\lambda\_.\
     \text{and }& \ab{t}=\rho_{\ab{d}}(v_d)
 \end{align}
 
-In the case of an \textit{update} command, we evaluate the expressions as for inserts.
+In the case of an \textit{update} command, we evaluate the expressions as for \textit{insert}.
 In the case of the abstract tuples that definitely satisfy the predicate, we update them, and in the case we are unsure, we update them to the join of its current value and the incoming value.
 \begin{align}
     \abssqlsem{\langle update(v_d, \mathbf{v}_t, \mathbf{e}), \abspred \rangle} (\env{\ab{d}}, \env{\absvars}) &= (\env{\ab{d}}[v_d\mapsto \ab{t'}], \env{\absvars})
