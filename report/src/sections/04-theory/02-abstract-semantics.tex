@@ -101,8 +101,8 @@ Otherwise, we proceed as usual.
     \absboolsem{\neg b}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{\neg} \absboolsem{b}(\rho_{\ab{d}}, \rho_{\ab{a}})  \\
     % \absboolsem{e_1 \neq e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{\neg}(\absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \;\ab{=}\; \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}})) \label{eq:abstract-bool-semantics-end1} \\
     \absboolsem{e_1 \;comp\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=  \begin{cases}
-        \app{\{\{\texttt{false}\}\} \cup} E & \text{if } (E_1 = \mathsf{List} \; S_1 \lor E_2 = \mathsf{List} \; S_2) \land E_1 \;\ab{\comp}\; E_2 = E\\
-        E_1 \;\ab{\comp}\; E_2 & \text{otherwise}\\
+        \app{\{\{\texttt{false,true}\}\} \cup} E & \text{if } (E_1 = \mathsf{List} \; S_1 \lor E_2 = \mathsf{List} \; S_2) \land E_1 \;\ab{\comp}\; E_2 = E\\
+        E_1 \;\ab{\comp}\; E_2 & \text{otherwise}
     \end{cases}\label{eq:abstract-bool-semantics-end} \\
     \text{where } E_1 &= \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \nonumber \\
     \text{and }  E_2 &= \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}})  \nonumber
@@ -196,7 +196,7 @@ In the case of database variables in \autoref{sem:exp4}, we assume attribute nam
     \absexpsem{n}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \mathsf{Single} \; \{ [n, n] \} \label{sem:exp1} \\
     \absexpsem{k}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \mathsf{Single} \; R,  \text{ such that }\mathcal{L}(R) = \{ k \} \label{sem:exp2} \\
     \absexpsem{v_a}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=  \rho_{\ab{a}}(v_a) \label{sem:exp3} \\
-    \absexpsem{v_d}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=  \mathsf{List} \; \rho_{\ab{t}}(v_d) \text{ such that } \ab{t} \in dom(\ab{d}) \text{ and } v_d \in attr(\ab{t}) \label{sem:exp4} \\
+    \absexpsem{v_t}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=  \mathsf{List} \; \pi_{v_t}(\rho_d(v_d)) \text{ such that } v_t \in attr(v_d) \label{sem:exp4} \\
     \absexpsem{op_u \; e}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{op_u} \; (\absexpsem{e}(\rho_{\ab{d}}, \rho_{\ab{a}})) \label{eq:unary-op} \\
     %\absboolsem{e_1 \;comp\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= E_1 \;\ab{\comp}\; E_2 \\ \text{where }  E_1 = \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ \text{and } E_2 = \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}})
     %\absexpsem{e_1 \;op_b\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=
@@ -215,7 +215,8 @@ We define the length of a regular expression $R$, $\|R\|$ as:
     \text{where } & \|\min(R)\| = \min\{ \|s\| \mid s \in R \} \\ \label{eq:r2}
     \text{and } & \|s\| \text{ is the length of the word $s$}
 \end{align}
-The former is obviously an overapproximation, the lenght of the shortest $\|\min(R)\|$ can be found by classical shortest path algrotihm on the automata of $R$, $\mathcal{A}(R)$, such algorithms have a time complexity $\Theta(E + V \log V)$, where $E$ is the number of edges in the automata and $V$ is the number of states.
+The former is obviously an over-approximation, the length of the shortest $\|\min(R)\|$ can be found by classical shortest path algorithm on the automata of $R$, $\mathcal{A}(R)$.
+Such algorithms have a time complexity $\Theta(E + V \log V)$, where $E$ is the number of edges in the automata and $V$ is the number of states.
 We deem this acceptable.
 If $R$ does not contain a term $R'^\star$, we are essentially forced to find the longest path, this can be shown to be NP-hard, therefore we always approximate the length to be unbounded in the positive direction.
 
@@ -232,7 +233,7 @@ This automaton is then converted back to a regular expression by the usual GNFA 
     cvt(op, \sigma) &= op(\sigma)
 \end{align}
 
-\autoref{eq:concat} to \ref{eq:length} describe a subset of String operators present in PostgreSQL abstractly.
+\autoref{eq:concat} to \ref{eq:length} describes a subset of String operators, present in PostgreSQL, abstractly.
 \begin{align}\label{eq:concat}
     R_1 \;\aab{||}\; R_2 &= R_1R_2 \\
     \aab{lower}(R) &= cvt(\sigma \mapsto \sigma', R) \text{ such that $\sigma'$ is the lowercase representation of $\sigma$}\\
@@ -242,17 +243,19 @@ This automaton is then converted back to a regular expression by the usual GNFA 
 \end{align}
 
 \autoref{eq:abstractBOP} describes how to do binary operations on numbers.
-The arithmetic operations, $\aaab{aop}$, are defined as the standard for intervals.
-\begin{align}
-    I_1 \;\aab{aop}\; I_2 &= m(\{i_1 \; \aaab{aop} \; i_2 \mid i_1 \in I_1 \land i_2 \in I_2\})  \label{eq:abstractBOP}
+The arithmetic operations, $\aaab{aop}$, are defined as follows for intervals.
+\begin{align}\label{eq:abstractBOP}
+    \bigcup \mathcal{I} \;\aab{aop}\; \bigcup \mathcal{I}' &= \bigcup_{\mathscr{I}\in \mathcal{I}, \mathscr{I}'\in \mathcal{I}'}\mathscr{I}\aaab{aop}\mathscr{I}'\\
+    \text{where } \mathcal{I}&=\{\mathscr{I}_1,\dots,\mathscr{I}_n\}\nonumber\\
+    \text{and } \mathcal{I}'&=\{\mathscr{I}'_1,\dots,\mathscr{I}'_n\}\nonumber
 \end{align}
 
 \subsubsection{Abstract Semantics of Predicates}
 The base rule of all the predicates is defined in \autoref{eq:atomicformulas}, as this is the base case for all the other predicates.
-It takes atomic formulas, $a_f$, of the form corresponding to \autoref{eq:abstract-bool-semantics-end2}, and returns the abstract truth value of $a_f$.
+It takes atomic formulas, $a_f$, and returns the abstract truth value of $a_f$.
 The other predicates all build on this base case with rules such as negation, disjunction and conjunction.
-\begin{align}\label{eq:atomicformulas}
-    \abspredsem{\cdot} &: \mathbb{W} \rightarrow \ab{\mathfrak{E}} \rightarrow \mathsf{Val} \; \{\true, \false, \mnull\} \\
+\begin{align}
+    \abspredsem{\cdot} &: \mathbb{W} \rightarrow \ab{\mathfrak{E}} \rightarrow \mathsf{Val} \; \{\true, \false, \mnull\} \\ \label{eq:atomicformulas}
     \abspredsem{a_f}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absboolsem{a_f}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
     \abspredsem{\neg \phi}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{\neg} \left( \abspredsem{\phi}(\rho_{\ab{d}}, \rho_{\ab{a}}) \right) \\
     \abspredsem{\phi_1 \lor \phi_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \abspredsem{\phi_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ab{\lor} \abspredsem{\phi_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
@@ -271,7 +274,7 @@ where $X_1, X_2 \dots ,X_n$ are given as in \autoref{def:coverlattice} and are p
 Also $S_1, S_2, \dots S_n$ are given by the type of $v_a, v_d \in \mathbb{V}$.
 
 First we define $var_{\ab{t}}(\phi)$ to be the vector of database variables in table $\ab{t}$ appearing in $\phi$, ordered by the way they appear in the schema of $\ab{t}$.
-Next we define $\abstable \downarrow_{\true} \phi, \abstable \downarrow_{\false} \phi$ and  $\abstable \downarrow_{\unknown} \phi$ to be the set of tuples in $\ab{t}$ where $\phi$ is definitly true, definitly false and where we are unsure respectivly, formally:
+Next we define $\abstable \downarrow_{\true} \phi, \abstable \downarrow_{\false} \phi$ and  $\abstable \downarrow_{\unknown} \phi$ to be the set of tuples in $\ab{t}$ where $\phi$ is definitely true, definitely false and where we are unsure respectively, formally:
 \begin{align}
     \abstable \downarrow_{\true} \phi &= \{ l \in \ab{t} \mid \mathsf{Single} \; \{ \true \} = \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]}(\rho_{\ab{d}}, \rho_{\ab{a}}) \text{ for } \mathbf{v}_d = var_{\ab{t}}(\phi) \} \\
     \abstable \downarrow_{\false} \phi &= \{ l \in \ab{t} \mid \mathsf{Single} \; \{ \false \} = \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]}(\rho_{\ab{d}}, \rho_{\ab{a}}) \text{ for } \mathbf{v}_d = var_{\ab{t}}(\phi) \} \\
@@ -287,9 +290,9 @@ The domain and codomain of the analysis functions for SQL statements is as follo
 Each of the analysis functions for SQL statements require some explanation, therefore we will present each of them carefully in the sequel.
 In general, for the sake of clarity, we assume $target(C_{sql}) = \ab{t}$, and further we express the update only in terms of the local effect on the table that is the target of the operation $\ab{t}$.
 
-The abstract select, takes all values in the table where we are sure or maybe sure that the predicate evaluates to true for the current state, wraps them in a $\mathsf{List}$ 'label' and inserts this in lattice of the respective variable and assigns the variable to this value.
+The abstract select, takes all values in the table where we are definitely sure or maybe sure that the predicate evaluates to true for the current state, wraps them in a $\mathsf{List}$ 'label' and inserts this in the lattice of the respective variable and assigns the variable to this value.
 \begin{align}
-    \abssqlsem{\langle select(v_a, \mathbf{v}_d), \phi \rangle}(\rho_{\ab{d}}, \rho_{\ab{a}})
+    \abssqlsem{\langle select(v_a, v_d, \mathbf{v}_t), \phi \rangle}(\rho_{\ab{d}}, \rho_{\ab{a}})
     &= (\rho_{\ab{d}}, \rho_{\ab{a}}[v_a \mapsto \mathsf{List} \left( \pi_{\mathbf{v}_d} \left(\abstable \downarrow_{\true} \phi \cup \abstable \downarrow_{\unknown} \phi \right) \right) \into \lookupcl(v_a) ])
 \end{align}
 
@@ -299,7 +302,7 @@ These respective values are inserted into the lattice of the colloumn they corre
 At last we turn the values into actual abstract tuples in the table, here we find it helpfull to view a tuple as a function $attr(\ab{t}) \rightarrow \lookupcl(v_1) \cup \lookupcl(v_2) \cup \dots \cup \lookupcl(v_n)$ where $attr(\ab{t}) = \{v_1, v_2, \dots, v_n\}$.
 In particular we start with a tuple with all entries equal to null $\lambda\_.\mnull$, then for each of the evaluations of the expressions we update the tuples to take those values in the correct places.
 \begin{align}
-    \abssqlsem{\langle insert(\mathbf{v}_d, \mathbf{e}), \phi \rangle}(\rho_{\ab{t}}, \rho_{\ab{a}}) & = (\rho_{\ab{t} \cup s}, \rho_{\ab{a}}) \\
+    \abssqlsem{\langle insert(v_d, \mathbf{v}_t, \mathbf{e}), \phi \rangle}(\rho_{\ab{t}}, \rho_{\ab{a}}) & = (\rho_{\ab{t} \cup s}, \rho_{\ab{a}}) \\
     \text{where }& \mathsf{List} \; S = \app{\bigtimes_{i = 0}^{n}} \absexpsem{e_i}(\rho_{\ab{d}}, \rho_{\ab{a}}) \into \lookupcl(v_i) \\
     \text{and }& s = \left\{ (\lambda\_.\mnull)[\mathbf{v}_d \mapsto \mathbf{s}] \;\middle|\; \mathbf{s} \in S\right\}
 \end{align}
@@ -308,7 +311,7 @@ In the case of an update command, we evaluate the expressions as for inserts.
 In case of the abstract tuples that definitely satisfy the predicate we update them, and in the case we are unsure we update them to the join of its current value and the incoming value.
 \begin{align}
     \abssqlsem{C_{update}}(\env{\abstable}, \env{\absvars})
-                                              & = \abssqlsem{\langle update(\absattrs, \absexps), \abspred \rangle} (\env{\abstable}, \env{\absvars}) \\
+                                              & = \abssqlsem{\langle update(v_d, \mathbf{v}_t, \mathbf{e}), \abspred \rangle} (\env{\abstable}, \env{\absvars}) \\
                                               & = (\env{\ab{t}'}, \env{\absvars})
 \end{align}
 \begin{align}
@@ -320,7 +323,7 @@ In case of the abstract tuples that definitely satisfy the predicate we update t
 In the case of delete we remove all tuples where we are definitely sure that they should be removed.
 \begin{align*}
     \abssqlsem{C_{delete}}(\env{\abstable}, \env{\absvars})
-    &= \abssqlsem{\langle delete(\absattrs), \abspred \rangle} (\env{\abstable}, \env{\absvars}) \\
+    &= \abssqlsem{\langle delete(v_d, \mathbf{v}_t), \abspred \rangle} (\env{\abstable}, \env{\absvars}) \\
     &= (\env{\abstable'}, \env{\absvars}) \\
     \text{where } \abstable' &= \abstable \downarrow_{\unknown} \phi \cup \abstable \downarrow_{\false} \phi
 \end{align*}
