@@ -283,7 +283,7 @@ The domain and codomain of the analysis functions for SQL statements is as follo
 Each of the analysis functions for SQL statements requires some explanation.
 Therefore, we will present each of them carefully in the sequel.
 
-The abstract select, takes all values in the table where we are definitely sure or maybe sure that the predicate evaluates to true for the current state.
+The abstract \textit{select}, takes all values in the table where we are definitely sure or maybe sure that the predicate evaluates to true for the current state.
 Then it wraps them in a $\mathsf{List}$ 'label' and inserts this in the lattice of the respective variable before assigning the variable to this value.
 \begin{align}
     \abssqlsem{\langle select(v_a, v_d, \mathbf{v}_t), \phi \rangle}(\rho_{\ab{d}}, \rho_{\ab{a}})
@@ -291,7 +291,7 @@ Then it wraps them in a $\mathsf{List}$ 'label' and inserts this in the lattice 
     \text{where } \ab{t}&=\rho_{\ab{d}}(v_d)
 \end{align}
 
-For insert, we evaluate each expression in $\mathbf{e}$, and take the product of them as the set of abstract tuples to be inserted.
+For \textit{insert}, we evaluate each expression in $\mathbf{e}$, and take the product of them as the set of abstract tuples to be inserted.
 We take the product as each expression might evaluate to a $\mathsf{list}$ type.
 These respective values are inserted into the lattice of the column they correspond to.
 At last, we turn the values into actual abstract tuples in the table, here we find it helpful to view a tuple as a function $attr(\ab{t}) \rightarrow \lookupcl(v_1) \cup \lookupcl(v_2) \cup \dots \cup \lookupcl(v_n)$ where $attr(\ab{t}) = \{v_1, v_2, \dots, v_n\}$.
@@ -303,9 +303,7 @@ In particular, we start with a tuple with all entries equal to null $\lambda\_.\
     \text{and }& \ab{t}=\rho_{\ab{d}}(v_d)
 \end{align}
 
-% Changes until here!
-
-In the case of an update command, we evaluate the expressions as for inserts.
+In the case of an \textit{update} command, we evaluate the expressions as for inserts.
 In the case of the abstract tuples that definitely satisfy the predicate, we update them, and in the case we are unsure, we update them to the join of its current value and the incoming value.
 \begin{align}
     \abssqlsem{\langle update(v_d, \mathbf{v}_t, \mathbf{e}), \abspred \rangle} (\env{\ab{d}}, \env{\absvars}) &= (\env{\ab{d}}[v_d\mapsto \ab{t'}], \env{\absvars})
@@ -316,7 +314,7 @@ In the case of the abstract tuples that definitely satisfy the predicate, we upd
     & \cup \left\{ l\left[ \mathbf{v}_t \mapsto \pi_{\mathbf{v}_t}(s) \right] \;\middle|\; l \in \ab{t} \downarrow_{\true} \phi \land s \in \app{\bigtimes_{i = 0}^{n}} \absexpsem{e_i}(\rho_{\ab{d}}, \rho_{\ab{a}}) \into \lookupcl(v_i)\right\}
 \end{align}
 
-In the case of delete we remove all tuples where we are definitely sure that they should be removed.
+In the case of \textit{delete}, we remove all tuples where we are definitely sure that they should be removed.
 \begin{align*}
     \abssqlsem{\langle delete(v_d, \mathbf{v}_t), \abspred \rangle} (\env{\ab{d}}, \env{\absvars}) &= (\env{\ab{d}}[v_d\mapsto \ab{t'}], \env{\absvars}) \\
     \text{where } \ab{t}&=\rho_{\ab{d}}(v_d)\\
