@@ -187,10 +187,11 @@ To clarify, we only allow abstract integers to be compared this way.
 
 Here we define the abstract semantics of expressions in SQAAL.
 
-\autoref{sem:exp1} and \ref{sem:exp2} describe the semantics of constants.
-In \autoref{sem:exp3} and \ref{sem:exp4} we describe the semantics of variables.
+\autoref{sem:exp1} and ~\ref{sem:exp2} describe the semantics of constants.
+In \autoref{sem:exp3} and ~\ref{sem:exp4} we describe the semantics of variables.
 In the case of database variables in \autoref{sem:exp4}, we assume attribute names do not clash.
-\autoref{eq:unary-op} and \ref{eq:binary-op} describe the semantics of unary and binary operations on expressions, the justification of abstract binary operations is analogous to the one given for the semantics of comparison operators (\autoref{eq:abstract-bool-semantics-end2}).
+\autoref{eq:unary-op} and ~\ref{eq:binary-op} describe the semantics of unary and binary operations on expressions.
+The justification of abstract binary operations is analogous to the one given for the semantics of comparison operators (\autoref{eq:abstract-bool-semantics-end}).
 \begin{align}
     \absexpsem{\cdot} &: \mathbb{E} \rightarrow \ab{\mathfrak{E}} \rightarrow \mathsf{Val} \; \mathbf{REG} \cup \mathsf{Val} \; \mathbf{INT}\\
     \absexpsem{n}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \mathsf{Single} \; \{ [n, n] \} \label{sem:exp1} \\
@@ -198,16 +199,8 @@ In the case of database variables in \autoref{sem:exp4}, we assume attribute nam
     \absexpsem{v_a}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=  \rho_{\ab{a}}(v_a) \label{sem:exp3} \\
     \absexpsem{v_t}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=  \mathsf{List} \; \pi_{v_t}(\rho_d(v_d)) \text{ such that } v_t \in attr(v_d) \label{sem:exp4} \\
     \absexpsem{op_u \; e}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{op_u} \; (\absexpsem{e}(\rho_{\ab{d}}, \rho_{\ab{a}})) \label{eq:unary-op} \\
-    %\absboolsem{e_1 \;comp\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= E_1 \;\ab{\comp}\; E_2 \\ \text{where }  E_1 = \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ \text{and } E_2 = \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}})
-    %\absexpsem{e_1 \;op_b\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=
-    %\begin{cases}
-    %    \app{\{\{null\}\} \cup} E & \text{if } E_1 = \mathsf{List} \; S_1 \land E_2 = \mathsf{List} \; S_2 \land E_1 \;\ab{op_b}\; E_2 = E\\
-        %E_1 \;\ab{op_b}\; E_2 & \text{otherwise}\\
-    %\end{cases} \\ \label{eq:binary-op}
-    %\text{where } E_1 &= \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \nonumber \\
-    %\text{and } E_2 &= \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \nonumber
+    \absexpsem{e_1 \;op_b\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \;\ab{op_b}\; \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \label{eq:binary-op}
 \end{align}
-\todo{add the missing rule (outcommented)}
 Before defining the abstract operations, $\aaop$, for expressions, we will define some auxiliary functions.
 We define the length of a regular expression $R$, $\|R\|$ as:
 \begin{align}\label{eq:r1}
@@ -276,9 +269,9 @@ Also $S_1, S_2, \dots S_n$ are given by the type of $v_a, v_d \in \mathbb{V}$.
 First we define $var_{\ab{t}}(\phi)$ to be the vector of database variables in table $\ab{t}$ appearing in $\phi$, ordered by the way they appear in the schema of $\ab{t}$.
 Next we define $\abstable \downarrow_{\true} \phi, \abstable \downarrow_{\false} \phi$ and  $\abstable \downarrow_{\unknown} \phi$ to be the set of tuples in $\ab{t}$ where $\phi$ is definitely true, definitely false and where we are unsure respectively, formally:
 \begin{align}
-    \abstable \downarrow_{\true} \phi &= \{ l \in \ab{t} \mid \mathsf{Single} \; \{ \true \} = \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]}(\rho_{\ab{d}}, \rho_{\ab{a}}) \text{ for } \mathbf{v}_d = var_{\ab{t}}(\phi) \} \\
-    \abstable \downarrow_{\false} \phi &= \{ l \in \ab{t} \mid \mathsf{Single} \; \{ \false \} = \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]}(\rho_{\ab{d}}, \rho_{\ab{a}}) \text{ for } \mathbf{v}_d = var_{\ab{t}}(\phi) \} \\
-    \abstable \downarrow_{\unknown} \phi &= \{ l \in \ab{t} \mid \true \in b \land b \in \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]}(\rho_{\ab{d}}, \rho_{\ab{a}}) \text{ for } \mathbf{v}_d = var_{\ab{t}}(\phi) \} \setminus \abstable \downarrow_{\true} \phi
+    \abstable \downarrow_{\true}^{(\rho_{\ab{d}}, \rho_{\ab{a}})} \phi &= \{ l \in \ab{t} \mid \mathsf{Single} \; \{ \true \} = \abspredsem{\phi[\pi_{\mathbf{v}_t}(l)/\mathbf{v}_t]}(\rho_{\ab{d}}, \rho_{\ab{a}}) \text{ for } \mathbf{v}_t = var_{\ab{t}}(\phi) \} \\
+    \abstable \downarrow_{\false}^{(\rho_{\ab{d}}, \rho_{\ab{a}})} \phi &= \{ l \in \ab{t} \mid \mathsf{Single} \; \{ \false \} = \abspredsem{\phi[\pi_{\mathbf{v}_t}(l)/\mathbf{v}_t]}(\rho_{\ab{d}}, \rho_{\ab{a}}) \text{ for } \mathbf{v}_t = var_{\ab{t}}(\phi) \} \\
+    \abstable \downarrow_{\unknown}^{(\rho_{\ab{d}}, \rho_{\ab{a}})} \phi &= \{ l \in \ab{t} \mid \true \in b \land b \in \abspredsem{\phi[\pi_{\mathbf{v}_t}(l)/\mathbf{v}_t]}(\rho_{\ab{d}}, \rho_{\ab{a}}) \text{ for } \mathbf{v}_t = var_{\ab{t}}(\phi) \} \setminus \abstable \downarrow_{\true}^{(\rho_{\ab{d}}, \rho_{\ab{a}})} \phi
 \end{align}
 
 The domain and codomain of the analysis functions for SQL statements is as follows:
@@ -287,45 +280,45 @@ The domain and codomain of the analysis functions for SQL statements is as follo
     \abssqlsem{\cdot} : \mathbb{C}_{sql} \rightarrow \ab{\mathfrak{E}} \rightarrow \ab{\mathfrak{E}}
 \end{equation}
 
-Each of the analysis functions for SQL statements require some explanation, therefore we will present each of them carefully in the sequel.
-In general, for the sake of clarity, we assume $target(C_{sql}) = \ab{t}$, and further we express the update only in terms of the local effect on the table that is the target of the operation $\ab{t}$.
+Each of the analysis functions for SQL statements requires some explanation.
+Therefore, we will present each of them carefully in the sequel.
 
-The abstract select, takes all values in the table where we are definitely sure or maybe sure that the predicate evaluates to true for the current state, wraps them in a $\mathsf{List}$ 'label' and inserts this in the lattice of the respective variable and assigns the variable to this value.
+The abstract \textit{select}, takes all values in the table where we are definitely sure or maybe sure that the predicate evaluates to true for the current state.
+Then it wraps them in a $\mathsf{List}$ 'label' and inserts this in the lattice of the respective variable before assigning the variable to this value.
 \begin{align}
     \abssqlsem{\langle select(v_a, v_d, \mathbf{v}_t), \phi \rangle}(\rho_{\ab{d}}, \rho_{\ab{a}})
-    &= (\rho_{\ab{d}}, \rho_{\ab{a}}[v_a \mapsto \mathsf{List} \left( \pi_{\mathbf{v}_d} \left(\abstable \downarrow_{\true} \phi \cup \abstable \downarrow_{\unknown} \phi \right) \right) \into \lookupcl(v_a) ])
+    &= (\rho_{\ab{d}}, \rho_{\ab{a}}[v_a \mapsto \mathsf{List} \left( \pi_{\mathbf{v}_t} \left(\abstable \downarrow_{\true} \phi \cup \abstable \downarrow_{\unknown} \phi \right) \right) \into \lookupcl(v_a) ])\\
+    \text{where } \ab{t}&=\rho_{\ab{d}}(v_d)
 \end{align}
 
-For insert we evaluate each expression in $\mathbf{e}$, and take the product of them as the set of abstract tuples to be inserted.
+For \textit{insert}, we evaluate each expression in $\mathbf{e}$, and take the product of them as the set of abstract tuples to be inserted.
 We take the product as each expression might evaluate to a $\mathsf{list}$ type.
-These respective values are inserted into the lattice of the colloumn they correspond to.
-At last we turn the values into actual abstract tuples in the table, here we find it helpfull to view a tuple as a function $attr(\ab{t}) \rightarrow \lookupcl(v_1) \cup \lookupcl(v_2) \cup \dots \cup \lookupcl(v_n)$ where $attr(\ab{t}) = \{v_1, v_2, \dots, v_n\}$.
-In particular we start with a tuple with all entries equal to null $\lambda\_.\mnull$, then for each of the evaluations of the expressions we update the tuples to take those values in the correct places.
+These respective values are inserted into the lattice of the column they correspond to.
+At last, we turn the values into actual abstract tuples in the table, here we find it helpful to view a tuple as a function $attr(\ab{t}) \rightarrow \lookupcl(v_1) \cup \lookupcl(v_2) \cup \dots \cup \lookupcl(v_n)$ where $attr(\ab{t}) = \{v_1, v_2, \dots, v_n\}$.
+In particular, we start with a tuple with all entries equal to null $\lambda\_.\mnull$, then for each of the evaluations of the expressions we update the tuples to take those values in the correct places.
 \begin{align}
-    \abssqlsem{\langle insert(v_d, \mathbf{v}_t, \mathbf{e}), \phi \rangle}(\rho_{\ab{t}}, \rho_{\ab{a}}) & = (\rho_{\ab{t} \cup s}, \rho_{\ab{a}}) \\
+    \abssqlsem{\langle insert(v_d, \mathbf{v}_t, \mathbf{e}), \phi \rangle}(\rho_{\ab{d}}, \rho_{\ab{a}}) & = (\rho_{\ab{d}}[v_d\mapsto \ab{t}\cup s], \rho_{\ab{a}}) \\
     \text{where }& \mathsf{List} \; S = \app{\bigtimes_{i = 0}^{n}} \absexpsem{e_i}(\rho_{\ab{d}}, \rho_{\ab{a}}) \into \lookupcl(v_i) \\
-    \text{and }& s = \left\{ (\lambda\_.\mnull)[\mathbf{v}_d \mapsto \mathbf{s}] \;\middle|\; \mathbf{s} \in S\right\}
+    \text{and }& s = \left\{ (\lambda\_.\mnull)[\mathbf{v}_t \mapsto \mathbf{s}] \;\middle|\; \mathbf{s} \in S\right\} \\
+    \text{and }& \ab{t}=\rho_{\ab{d}}(v_d)
 \end{align}
 
-In the case of an update command, we evaluate the expressions as for inserts.
-In case of the abstract tuples that definitely satisfy the predicate we update them, and in the case we are unsure we update them to the join of its current value and the incoming value.
+In the case of an \textit{update} command, we evaluate the expressions as for \textit{insert}.
+In the case of the abstract tuples that definitely satisfy the predicate, we update them, and in the case we are unsure, we update them to the join of its current value and the incoming value.
 \begin{align}
-    \abssqlsem{C_{update}}(\env{\abstable}, \env{\absvars})
-                                              & = \abssqlsem{\langle update(v_d, \mathbf{v}_t, \mathbf{e}), \abspred \rangle} (\env{\abstable}, \env{\absvars}) \\
-                                              & = (\env{\ab{t}'}, \env{\absvars})
+    \abssqlsem{\langle update(v_d, \mathbf{v}_t, \mathbf{e}), \abspred \rangle} (\env{\ab{d}}, \env{\absvars}) &= (\env{\ab{d}}[v_d\mapsto \ab{t'}], \env{\absvars})
 \end{align}
 \begin{align}
-    \text{where } \abstable' = \ab{t} \downarrow_{\false} \phi
-    & \cup \left\{ l\left[ \mathbf{v}_d \mapsto \pi_{\mathbf{v}_d}(s) \sqcup \pi_{\mathbf{v}_d}(l) \right] \;\middle|\; l \in \ab{t} \downarrow_{\unknown} \phi \land s \in \app{\bigtimes_{i = 0}^{n}} \absexpsem{e_i}(\rho_{\ab{d}}, \rho_{\ab{a}}) \into \lookupcl(v_i)\right\} \\
-    & \cup \left\{ l\left[ \mathbf{v}_d \mapsto \pi_{\mathbf{v}_d}(s) \right] \;\middle|\; l \in \ab{t} \downarrow_{\true} \phi \land s \in \app{\bigtimes_{i = 0}^{n}} \absexpsem{e_i}(\rho_{\ab{d}}, \rho_{\ab{a}}) \into \lookupcl(v_i)\right\}
+    \text{where } \ab{t}=\rho_{\ab{d}}(v_d)\\
+    \text{and }\abstable' = \ab{t} \downarrow_{\false} \phi &\cup \left\{ l\left[ \mathbf{v}_t \mapsto \pi_{\mathbf{v}_t}(s) \sqcup \pi_{\mathbf{v}_t}(l) \right] \;\middle|\; l \in \ab{t} \downarrow_{\unknown} \phi \land s \in \app{\bigtimes_{i = 0}^{n}} \absexpsem{e_i}(\rho_{\ab{d}}, \rho_{\ab{a}}) \into \lookupcl(v_i)\right\} \\
+    & \cup \left\{ l\left[ \mathbf{v}_t \mapsto \pi_{\mathbf{v}_t}(s) \right] \;\middle|\; l \in \ab{t} \downarrow_{\true} \phi \land s \in \app{\bigtimes_{i = 0}^{n}} \absexpsem{e_i}(\rho_{\ab{d}}, \rho_{\ab{a}}) \into \lookupcl(v_i)\right\}
 \end{align}
 
-In the case of delete we remove all tuples where we are definitely sure that they should be removed.
+In the case of \textit{delete}, we remove all tuples where we are definitely sure that they should be removed.
 \begin{align*}
-    \abssqlsem{C_{delete}}(\env{\abstable}, \env{\absvars})
-    &= \abssqlsem{\langle delete(v_d, \mathbf{v}_t), \abspred \rangle} (\env{\abstable}, \env{\absvars}) \\
-    &= (\env{\abstable'}, \env{\absvars}) \\
-    \text{where } \abstable' &= \abstable \downarrow_{\unknown} \phi \cup \abstable \downarrow_{\false} \phi
+    \abssqlsem{\langle delete(v_d, \mathbf{v}_t), \abspred \rangle} (\env{\ab{d}}, \env{\absvars}) &= (\env{\ab{d}}[v_d\mapsto \ab{t'}], \env{\absvars}) \\
+    \text{where } \ab{t}&=\rho_{\ab{d}}(v_d)\\
+    \text{and }\abstable' &= \abstable \downarrow_{\unknown} \phi \cup \abstable \downarrow_{\false} \phi
 \end{align*}
 
 \subsubsection{Abstract Semantics of Instructions}
@@ -335,18 +328,20 @@ This means that when an instruction is made, the abstract environment is updated
 An example of this could be with the skip instruction, where the abstract environment is not changed.
 
 
-Let $\ab{P}$ be a set of abstract environments $(\env{\abstable}, \env{\absvars})$.
+Let $\ab{P}$ be a set of abstract environments $(\env{\ab{d}}, \env{\absvars})$.
 
 \begin{align}
     \abssem{\cdot} &: \mathbb{I} \rightarrow \mathcal{P}(\ab{\mathfrak{E}}) \rightarrow \mathcal{P}(\ab{\mathfrak{E}}) \\
     \abssem{\texttt{skip}}(\ab{P}) &= \ab{P} \\
-    \abssem{v_a := e}(\ab{P}) &= \{(\env{\abstable}, \env{\absvars}[v_a \mapsto s']) \mid (\env{\abstable}, \env{\absvars}) \in \ab{P} \land s = \absexpsem{e}(\env{\abstable}, \env{\absvars}) \land s' = s \into \lookupcl(v_a) \} \\
-    \abssem{v_a := \; ?}(\ab{P}) &= \{(\env{\abstable}, \env{\absvars}[v_a \mapsto \mathsf{Single} \; \top]) \mid (\env{\abstable}, \env{\absvars}) \in \ab{P} \} \\
-    \abssem{b}(\ab{P}) &= \{ (\env{\abstable}, \env{\absvars}) \in \ab{P} \mid \true \in B \land B \in \absboolsem{b}(\env{\abstable}, \env{\absvars}) \} \\
-    \abssem{C_{sql}}(\ab{P}) &= \{\abssqlsem{C_{sql}}(\env{\abstable}, \env{\absvars}) \mid (\env{\abstable}, \env{\absvars}) \in \ab{P} \}
+    \abssem{v_a := e}(\ab{P}) &= \{(\env{\ab{d}}, \env{\absvars}[v_a \mapsto s']) \mid (\env{\ab{d}}, \env{\absvars}) \in \ab{P} \land s = \absexpsem{e}(\env{\ab{d}}, \env{\absvars}) \land s' = s \into \lookupcl(v_a) \} \\
+    \abssem{v_a := \; ?}(\ab{P}) &= \{(\env{\ab{d}}, \env{\absvars}[v_a \mapsto \mathsf{Single} \; \top]) \mid (\env{\ab{d}}, \env{\absvars}) \in \ab{P} \} \\
+    \abssem{b}(\ab{P}) &= \{ (\env{\ab{d}}, \env{\absvars}) \in \ab{P} \mid \true \in B \land B \in \absboolsem{b}(\env{\ab{d}}, \env{\absvars}) \} \\
+    \abssem{C_{sql}}(\ab{P}) &= \{\abssqlsem{C_{sql}}(\env{\ab{d}}, \env{\absvars}) \mid (\env{\ab{d}}, \env{\absvars}) \in \ab{P} \}
 \end{align}
 
-As a last note on the abstract semantics, we know $(\mathcal{P}(\ab{\mathfrak{E}}), \subseteq, \cup, \cap)$ is a finite and complete lattice, and therefore if $\abssem{I}$ is monotone our analysis will be deciable, therefore we prove the following theorem:
+As a last note on the abstract semantics, we know $(\mathcal{P}(\ab{\mathfrak{E}}), \subseteq, \cup, \cap)$ is a finite and complete lattice.
+Therefore, if $\abssem{I}$ is monotone, our analysis will be decidable.
+Hence, we prove the following theorem:
 \begin{restatable}{theorem}{csql}\label{thm:csql}
     $\abssem{I}$ is a monotone function in a finite and complete lattice.
 \end{restatable}
