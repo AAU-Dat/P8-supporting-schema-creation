@@ -106,16 +106,6 @@ We overload this notation to work on sets of values in particular for $S' \subse
 %     We use $(h_1, h_2 \dots h_n)\into C_{\mathcal{X}}(\mathcal{S})=(h_1 \into C_{X_1}(S_1), h_2\into C_{X_2}(S_2), \dots, h_n \into C_{X_n}(S_n))$, where $\mathcal{X}=(X_1, X_2, \dots, X_n)$ and $\mathcal{S}=(S_1, S_2, \dots, S_n)$ to show how a tuples elements are inserted into the cover lattice what $\mathcal{X}$ and $\mathcal{S}$ are.
 % \end{definition}
 
-Now we can define the functions that map the values to the cover lattice.
-
-\begin{definition}
-    We define $\cdot \into C_X(S): \ \mathsf{Val} \ S \rightarrow \mathsf{Val} \ C_X(S)$ to be the function that takes some value and inserts it into its cover lattice. \\
-    For single elements we use $(\mathsf{Single} \ h) \into C_X(S) = \mathsf{Single}(h\into C_X(S)) \\$
-    we say $x \in (\mathsf{Single} \ x') \ \text{iff} \ x = x'.$ \\
-    And for a list of elements, we use $(\mathsf{List} \ H) \into C_X(S)=\mathsf{List}(H\into C_X(S))\\$
-    we say $x \in (\mathsf{List} \ X) \ \text{iff} \ x \in X.$
-\end{definition}
-
 \begin{example}
     \autoref{fig:tikz-reg-partition} illustrates a simple lattice cover of the regular languages.
     The regular language $R$ is represented by the gray circle and its complement $\overline{R}$ is represented by the white circle.
@@ -154,11 +144,12 @@ Where $S_i$ either is $\regexs$ or $\uints$ and $Z_i$ is correspondingly $\strs$
 
 \subsubsection{Single and List values}
 When we consider the abstract domain of strings and numbers, we need to consider both single values and lists of values.
-We would like to distinguish between single values and lists of values, thus we define:
+We would like to distinguish between single values and lists of values, thus for some set $S$ we define the set $\mathsf{Val} \; S$ inductively as:
 \begin{align}
-    \mathsf{Val} \; A = \{ \mathsf{Single} \; a \mid a \in A \} \cup \{ \mathsf{List} \; A' \mid A' \subseteq A \} \cup \{ \perp \}
+    \inference{}{\bot \in \mathsf{Val} \; S} \quad
+    \inference{s \in S}{\mathsf{Single} \; s \in \mathsf{Val} \; S} \quad
+    \inference{S' \subseteq S}{\mathsf{List} \; S' \in \mathsf{Val} \; S} \quad
 \end{align}
-where $A$ is the underlying set of values.
 We can define the lattice, $(\mathsf{Val} \; A, \subseteq, \cup, \cap)$, we first define the relation of the lattice:
 \begin{align}
     \mathsf{Single} \; s &\sqsubseteq \mathsf{List} \; S \quad
@@ -169,6 +160,12 @@ We can define the lattice, $(\mathsf{Val} \; A, \subseteq, \cup, \cap)$, we firs
     \mathsf{List} \; S_1 &\sqsubseteq \mathsf{List} \; S_2 \quad
     \text{iff} \; \forall s_1 \in S_1, \; \exists s_2 \in S_2: \; s_1 \sqsubseteq s_2\\
 \end{align}
+
+    We define $\cdot \into C_X(S): \ \mathsf{Val} \ S \rightarrow \mathsf{Val} \ C_X(S)$ to be the function that takes some value and inserts it into its cover lattice. \\
+    For single elements we use $(\mathsf{Single} \ h) \into C_X(S) = \mathsf{Single}(h\into C_X(S)) \\$
+    we say $x \in (\mathsf{Single} \ x') \ \text{iff} \ x = x'.$ \\
+    And for a list of elements, we use $(\mathsf{List} \ H) \into C_X(S)=\mathsf{List}(H\into C_X(S))\\$
+    we say $x \in (\mathsf{List} \ X) \ \text{iff} \ x \in X.$
 
 We can define the joins and meets of the lattice as follows:
 \begin{align}
