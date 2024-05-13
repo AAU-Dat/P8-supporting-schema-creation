@@ -305,7 +305,7 @@ In particular we start with a tuple with all entries equal to null $\lambda\_.\m
 \begin{align}
     \abssqlsem{\langle insert(v_d, \mathbf{v}_t, \mathbf{e}), \phi \rangle}(\rho_{\ab{d}}, \rho_{\ab{a}}) & = (\rho_{\ab{d}}[v_d\mapsto \ab{t}\cup s], \rho_{\ab{a}}) \\
     \text{where }& \mathsf{List} \; S = \app{\bigtimes_{i = 0}^{n}} \absexpsem{e_i}(\rho_{\ab{d}}, \rho_{\ab{a}}) \into \lookupcl(v_i) \\
-    \text{and }& s = \left\{ (\lambda\_.\mnull)[\mathbf{v}_d \mapsto \mathbf{s}] \;\middle|\; \mathbf{s} \in S\right\} \\
+    \text{and }& s = \left\{ (\lambda\_.\mnull)[\mathbf{v}_t \mapsto \mathbf{s}] \;\middle|\; \mathbf{s} \in S\right\} \\
     \text{and }& \ab{t}=\rho_{\ab{d}}(v_d)
 \end{align}
 
