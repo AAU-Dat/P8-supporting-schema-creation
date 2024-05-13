@@ -187,10 +187,11 @@ To clarify, we only allow abstract integers to be compared this way.
 
 Here we define the abstract semantics of expressions in SQAAL.
 
-\autoref{sem:exp1} and \ref{sem:exp2} describe the semantics of constants.
-In \autoref{sem:exp3} and \ref{sem:exp4} we describe the semantics of variables.
+\autoref{sem:exp1} and ~\ref{sem:exp2} describe the semantics of constants.
+In \autoref{sem:exp3} and ~\ref{sem:exp4} we describe the semantics of variables.
 In the case of database variables in \autoref{sem:exp4}, we assume attribute names do not clash.
-\autoref{eq:unary-op} and \ref{eq:binary-op} describe the semantics of unary and binary operations on expressions, the justification of abstract binary operations is analogous to the one given for the semantics of comparison operators (\autoref{eq:abstract-bool-semantics-end2}).
+\autoref{eq:unary-op} and ~\ref{eq:binary-op} describe the semantics of unary and binary operations on expressions.
+The justification of abstract binary operations is analogous to the one given for the semantics of comparison operators (\autoref{eq:abstract-bool-semantics-end}).
 \begin{align}
     \absexpsem{\cdot} &: \mathbb{E} \rightarrow \ab{\mathfrak{E}} \rightarrow \mathsf{Val} \; \mathbf{REG} \cup \mathsf{Val} \; \mathbf{INT}\\
     \absexpsem{n}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \mathsf{Single} \; \{ [n, n] \} \label{sem:exp1} \\
@@ -198,14 +199,7 @@ In the case of database variables in \autoref{sem:exp4}, we assume attribute nam
     \absexpsem{v_a}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=  \rho_{\ab{a}}(v_a) \label{sem:exp3} \\
     \absexpsem{v_t}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=  \mathsf{List} \; \pi_{v_t}(\rho_d(v_d)) \text{ such that } v_t \in attr(v_d) \label{sem:exp4} \\
     \absexpsem{op_u \; e}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{op_u} \; (\absexpsem{e}(\rho_{\ab{d}}, \rho_{\ab{a}})) \label{eq:unary-op} \\
-    %\absboolsem{e_1 \;comp\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= E_1 \;\ab{\comp}\; E_2 \\ \text{where }  E_1 = \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ \text{and } E_2 = \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}})
-    %\absexpsem{e_1 \;op_b\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=
-    %\begin{cases}
-    %    \app{\{\{null\}\} \cup} E & \text{if } E_1 = \mathsf{List} \; S_1 \land E_2 = \mathsf{List} \; S_2 \land E_1 \;\ab{op_b}\; E_2 = E\\
-        %E_1 \;\ab{op_b}\; E_2 & \text{otherwise}\\
-    %\end{cases} \\ \label{eq:binary-op}
-    %\text{where } E_1 &= \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \nonumber \\
-    %\text{and } E_2 &= \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \nonumber
+    \absexpsem{e_1 \;op_b\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \;\ab{op_b}\; \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \label{eq:binary-op}
 \end{align}
 \todo{add the missing rule (outcommented)}
 Before defining the abstract operations, $\aaop$, for expressions, we will define some auxiliary functions.
