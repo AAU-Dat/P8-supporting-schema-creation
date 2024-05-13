@@ -1,0 +1,14 @@
+\section{Future Works}\label{sec:future-works}
+This sections presents some ideas for future works that could be pursued to extend the results of this paper.
+Some of the areas explored in this paper could be further developed.
+One of these areas is the use of abstract interpretation in regard to numbers.
+Numbers can come in a few different type when dealing with databases.
+As of the current implementation, the abstract interpretation is limited to integers, therefore one of the improvements that could be made is to extend the abstract interpretation to support floating point numbers.
+The extension of the abstract interpretation to support floating point numbers would allow for a more precise analysis of the database queries.
+One of the obstacles to this extension is the fact that floating point numbers are represented in a different ways in different programming languages, which makes it difficult to create a general abstract interpretation for floating point numbers.
+
+Another area that could be further developed is the precision of the semantic in som cases.
+The current set of semantics are very similar to the ones fund in the original paper by Halder and Cortesi~\cite{halder_abstract_2012}, and they are not very precise.
+This could then lead to a more precise analysis of the database area and more accurate results when judging the abstract interpretation of the database.
+
+Currently, this paper only shows the theoretical approach to this problem therefore one of the future works could be to implement the abstract semantics in a program that could be used to analyze a database system and check for some requested properties.
