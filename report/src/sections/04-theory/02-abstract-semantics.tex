@@ -302,10 +302,13 @@ These respective values are inserted into the lattice of the colloumn they corre
 At last we turn the values into actual abstract tuples in the table, here we find it helpfull to view a tuple as a function $attr(\ab{t}) \rightarrow \lookupcl(v_1) \cup \lookupcl(v_2) \cup \dots \cup \lookupcl(v_n)$ where $attr(\ab{t}) = \{v_1, v_2, \dots, v_n\}$.
 In particular we start with a tuple with all entries equal to null $\lambda\_.\mnull$, then for each of the evaluations of the expressions we update the tuples to take those values in the correct places.
 \begin{align}
-    \abssqlsem{\langle insert(v_d, \mathbf{v}_t, \mathbf{e}), \phi \rangle}(\rho_{\ab{t}}, \rho_{\ab{a}}) & = (\rho_{\ab{t} \cup s}, \rho_{\ab{a}}) \\
+    \abssqlsem{\langle insert(v_d, \mathbf{v}_t, \mathbf{e}), \phi \rangle}(\rho_{\ab{d}}, \rho_{\ab{a}}) & = (\rho_{\ab{d}}[v_d\mapsto t'\cup s], \rho_{\ab{a}}) \\
     \text{where }& \mathsf{List} \; S = \app{\bigtimes_{i = 0}^{n}} \absexpsem{e_i}(\rho_{\ab{d}}, \rho_{\ab{a}}) \into \lookupcl(v_i) \\
-    \text{and }& s = \left\{ (\lambda\_.\mnull)[\mathbf{v}_d \mapsto \mathbf{s}] \;\middle|\; \mathbf{s} \in S\right\}
+    \text{and }& s = \left\{ (\lambda\_.\mnull)[\mathbf{v}_d \mapsto \mathbf{s}] \;\middle|\; \mathbf{s} \in S\right\} \\
+    \text{and }& t'=\rho_{\ab{d}}(v_d)
 \end{align}
+
+% Changes until here!
 
 In the case of an update command, we evaluate the expressions as for inserts.
 In case of the abstract tuples that definitely satisfy the predicate we update them, and in the case we are unsure we update them to the join of its current value and the incoming value.
