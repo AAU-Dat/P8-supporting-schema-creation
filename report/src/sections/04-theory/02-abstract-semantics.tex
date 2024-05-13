@@ -276,9 +276,9 @@ Also $S_1, S_2, \dots S_n$ are given by the type of $v_a, v_d \in \mathbb{V}$.
 First we define $var_{\ab{t}}(\phi)$ to be the vector of database variables in table $\ab{t}$ appearing in $\phi$, ordered by the way they appear in the schema of $\ab{t}$.
 Next we define $\abstable \downarrow_{\true} \phi, \abstable \downarrow_{\false} \phi$ and  $\abstable \downarrow_{\unknown} \phi$ to be the set of tuples in $\ab{t}$ where $\phi$ is definitely true, definitely false and where we are unsure respectively, formally:
 \begin{align}
-    \abstable \downarrow_{\true} \phi &= \{ l \in \ab{t} \mid \mathsf{Single} \; \{ \true \} = \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]}(\rho_{\ab{d}}, \rho_{\ab{a}}) \text{ for } \mathbf{v}_d = var_{\ab{t}}(\phi) \} \\
-    \abstable \downarrow_{\false} \phi &= \{ l \in \ab{t} \mid \mathsf{Single} \; \{ \false \} = \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]}(\rho_{\ab{d}}, \rho_{\ab{a}}) \text{ for } \mathbf{v}_d = var_{\ab{t}}(\phi) \} \\
-    \abstable \downarrow_{\unknown} \phi &= \{ l \in \ab{t} \mid \true \in b \land b \in \abspredsem{\phi[\pi_{\mathbf{v}_d}(l)/\mathbf{v}_d]}(\rho_{\ab{d}}, \rho_{\ab{a}}) \text{ for } \mathbf{v}_d = var_{\ab{t}}(\phi) \} \setminus \abstable \downarrow_{\true} \phi
+    \abstable \downarrow_{\true}^{(\rho_{\ab{d}}, \rho_{\ab{a}})} \phi &= \{ l \in \ab{t} \mid \mathsf{Single} \; \{ \true \} = \abspredsem{\phi[\pi_{\mathbf{v}_t}(l)/\mathbf{v}_t]}(\rho_{\ab{d}}, \rho_{\ab{a}}) \text{ for } \mathbf{v}_t = var_{\ab{t}}(\phi) \} \\
+    \abstable \downarrow_{\false}^{(\rho_{\ab{d}}, \rho_{\ab{a}})} \phi &= \{ l \in \ab{t} \mid \mathsf{Single} \; \{ \false \} = \abspredsem{\phi[\pi_{\mathbf{v}_t}(l)/\mathbf{v}_t]}(\rho_{\ab{d}}, \rho_{\ab{a}}) \text{ for } \mathbf{v}_t = var_{\ab{t}}(\phi) \} \\
+    \abstable \downarrow_{\unknown}^{(\rho_{\ab{d}}, \rho_{\ab{a}})} \phi &= \{ l \in \ab{t} \mid \true \in b \land b \in \abspredsem{\phi[\pi_{\mathbf{v}_t}(l)/\mathbf{v}_t]}(\rho_{\ab{d}}, \rho_{\ab{a}}) \text{ for } \mathbf{v}_t = var_{\ab{t}}(\phi) \} \setminus \abstable \downarrow_{\true}^{(\rho_{\ab{d}}, \rho_{\ab{a}})} \phi
 \end{align}
 
 The domain and codomain of the analysis functions for SQL statements is as follows:
@@ -293,7 +293,8 @@ In general, for the sake of clarity, we assume $target(C_{sql}) = \ab{t}$, and f
 The abstract select, takes all values in the table where we are definitely sure or maybe sure that the predicate evaluates to true for the current state, wraps them in a $\mathsf{List}$ 'label' and inserts this in the lattice of the respective variable and assigns the variable to this value.
 \begin{align}
     \abssqlsem{\langle select(v_a, v_d, \mathbf{v}_t), \phi \rangle}(\rho_{\ab{d}}, \rho_{\ab{a}})
-    &= (\rho_{\ab{d}}, \rho_{\ab{a}}[v_a \mapsto \mathsf{List} \left( \pi_{\mathbf{v}_d} \left(\abstable \downarrow_{\true} \phi \cup \abstable \downarrow_{\unknown} \phi \right) \right) \into \lookupcl(v_a) ])
+    &= (\rho_{\ab{d}}, \rho_{\ab{a}}[v_a \mapsto \mathsf{List} \left( \pi_{\mathbf{v}_t} \left(\abstable \downarrow_{\true} \phi \cup \abstable \downarrow_{\unknown} \phi \right) \right) \into \lookupcl(v_a) ])\\
+    \text{where } \ab{t}&=\rho_{\ab{d}}(v_d)
 \end{align}
 
 For insert we evaluate each expression in $\mathbf{e}$, and take the product of them as the set of abstract tuples to be inserted.
@@ -302,10 +303,10 @@ These respective values are inserted into the lattice of the colloumn they corre
 At last we turn the values into actual abstract tuples in the table, here we find it helpfull to view a tuple as a function $attr(\ab{t}) \rightarrow \lookupcl(v_1) \cup \lookupcl(v_2) \cup \dots \cup \lookupcl(v_n)$ where $attr(\ab{t}) = \{v_1, v_2, \dots, v_n\}$.
 In particular we start with a tuple with all entries equal to null $\lambda\_.\mnull$, then for each of the evaluations of the expressions we update the tuples to take those values in the correct places.
 \begin{align}
-    \abssqlsem{\langle insert(v_d, \mathbf{v}_t, \mathbf{e}), \phi \rangle}(\rho_{\ab{d}}, \rho_{\ab{a}}) & = (\rho_{\ab{d}}[v_d\mapsto t'\cup s], \rho_{\ab{a}}) \\
+    \abssqlsem{\langle insert(v_d, \mathbf{v}_t, \mathbf{e}), \phi \rangle}(\rho_{\ab{d}}, \rho_{\ab{a}}) & = (\rho_{\ab{d}}[v_d\mapsto \ab{t}\cup s], \rho_{\ab{a}}) \\
     \text{where }& \mathsf{List} \; S = \app{\bigtimes_{i = 0}^{n}} \absexpsem{e_i}(\rho_{\ab{d}}, \rho_{\ab{a}}) \into \lookupcl(v_i) \\
     \text{and }& s = \left\{ (\lambda\_.\mnull)[\mathbf{v}_d \mapsto \mathbf{s}] \;\middle|\; \mathbf{s} \in S\right\} \\
-    \text{and }& t'=\rho_{\ab{d}}(v_d)
+    \text{and }& \ab{t}=\rho_{\ab{d}}(v_d)
 \end{align}
 
 % Changes until here!
@@ -313,22 +314,19 @@ In particular we start with a tuple with all entries equal to null $\lambda\_.\m
 In the case of an update command, we evaluate the expressions as for inserts.
 In case of the abstract tuples that definitely satisfy the predicate we update them, and in the case we are unsure we update them to the join of its current value and the incoming value.
 \begin{align}
-    \abssqlsem{C_{update}}(\env{\abstable}, \env{\absvars})
-                                              & = \abssqlsem{\langle update(v_d, \mathbf{v}_t, \mathbf{e}), \abspred \rangle} (\env{\abstable}, \env{\absvars}) \\
-                                              & = (\env{\ab{t}'}, \env{\absvars})
+    \abssqlsem{\langle update(v_d, \mathbf{v}_t, \mathbf{e}), \abspred \rangle} (\env{\ab{d}}, \env{\absvars}) &= (\env{\ab{d}}[v_d\mapsto \ab{t'}], \env{\absvars})
 \end{align}
 \begin{align}
-    \text{where } \abstable' = \ab{t} \downarrow_{\false} \phi
-    & \cup \left\{ l\left[ \mathbf{v}_d \mapsto \pi_{\mathbf{v}_d}(s) \sqcup \pi_{\mathbf{v}_d}(l) \right] \;\middle|\; l \in \ab{t} \downarrow_{\unknown} \phi \land s \in \app{\bigtimes_{i = 0}^{n}} \absexpsem{e_i}(\rho_{\ab{d}}, \rho_{\ab{a}}) \into \lookupcl(v_i)\right\} \\
-    & \cup \left\{ l\left[ \mathbf{v}_d \mapsto \pi_{\mathbf{v}_d}(s) \right] \;\middle|\; l \in \ab{t} \downarrow_{\true} \phi \land s \in \app{\bigtimes_{i = 0}^{n}} \absexpsem{e_i}(\rho_{\ab{d}}, \rho_{\ab{a}}) \into \lookupcl(v_i)\right\}
+    \text{where } \ab{t}=\rho_{\ab{d}}(v_d)\\
+    \text{and }\abstable' = \ab{t} \downarrow_{\false} \phi &\cup \left\{ l\left[ \mathbf{v}_t \mapsto \pi_{\mathbf{v}_t}(s) \sqcup \pi_{\mathbf{v}_t}(l) \right] \;\middle|\; l \in \ab{t} \downarrow_{\unknown} \phi \land s \in \app{\bigtimes_{i = 0}^{n}} \absexpsem{e_i}(\rho_{\ab{d}}, \rho_{\ab{a}}) \into \lookupcl(v_i)\right\} \\
+    & \cup \left\{ l\left[ \mathbf{v}_t \mapsto \pi_{\mathbf{v}_t}(s) \right] \;\middle|\; l \in \ab{t} \downarrow_{\true} \phi \land s \in \app{\bigtimes_{i = 0}^{n}} \absexpsem{e_i}(\rho_{\ab{d}}, \rho_{\ab{a}}) \into \lookupcl(v_i)\right\}
 \end{align}
 
 In the case of delete we remove all tuples where we are definitely sure that they should be removed.
 \begin{align*}
-    \abssqlsem{C_{delete}}(\env{\abstable}, \env{\absvars})
-    &= \abssqlsem{\langle delete(v_d, \mathbf{v}_t), \abspred \rangle} (\env{\abstable}, \env{\absvars}) \\
-    &= (\env{\abstable'}, \env{\absvars}) \\
-    \text{where } \abstable' &= \abstable \downarrow_{\unknown} \phi \cup \abstable \downarrow_{\false} \phi
+    \abssqlsem{\langle delete(v_d, \mathbf{v}_t), \abspred \rangle} (\env{\ab{d}}, \env{\absvars}) &= (\env{\ab{d}}[v_d\mapsto \ab{t'}], \env{\absvars}) \\
+    \text{where } \ab{t}&=\rho_{\ab{d}}(v_d)\\
+    \text{and }\abstable' &= \abstable \downarrow_{\unknown} \phi \cup \abstable \downarrow_{\false} \phi
 \end{align*}
 
 \subsubsection{Abstract Semantics of Instructions}
