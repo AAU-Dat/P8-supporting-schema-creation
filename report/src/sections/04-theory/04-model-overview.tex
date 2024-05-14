@@ -41,13 +41,13 @@ This allows us to do model checking
 \begin{algorithm}[htb!]
     \begin{codebox}
         \Procname{$\proc{Analysis}(G,S)$}
-        \li $todo := G.initial\_state$
-        \li $state\_space := \emptyset$
+        \li $todo \coloneqq G.initial\_state$
+        \li $state\_space \coloneqq \emptyset$
         \li \While{$todo \neq \emptyset$}
         \li \Do
-        $(s,\rho_d,\rho_a):=pop(todo)$
+        $(s,\rho_d,\rho_a) \coloneqq pop(todo)$
         \li \For{$\xrightarrow[]{\text{i}}s'\in s$}
-        \li \Do $(\rho'_d,\rho'_a):=\widehat{\mathcal{S}}\llbracket i\rrbracket(\rho_d,\rho_a)$
+        \li \Do $(\rho'_d,\rho'_a) \coloneqq \widehat{\mathcal{S}}\llbracket i\rrbracket(\rho_d,\rho_a)$
         \li \If{$(s',\rho'_d,\rho'_a)$ \textbf{not in} $state\_space$}
         \li \Do $Insert(s',\rho'_d,\rho'_a,todo)$
         \End
@@ -72,9 +72,10 @@ For this, we will be using Linear Temporal Logic to determine whether a property
 \begin{algorithm}[htb!]
     \begin{codebox}
         \Procname{$\proc{Check}(ass, P)$}
-        \li Model check on state space/transition system with LTL properties
+        \li Model check on state space/transition system
+        \zi with LTL properties
         \li // Dismiss the following for now
-        \li $failed\_prop := []$
+        \li $failed\_prop \coloneqq []$
         \li \For{$p$ \textbf{in} $P$}
         \li \Do \For{$s$ \textbf{in} ass$$}
         \li \Do \If{$p$ \textbf{not holds in} $s$}
