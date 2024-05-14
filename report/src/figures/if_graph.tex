@@ -1,0 +1,12 @@
+\begin{tikzpicture}
+    \tikzstyle{arrow} = [thick,->,>=stealth]
+    \node [circle, draw] (start) at (0,0){};
+    \node [circle, draw, fill=black] (end) at (0,-2.3){};
+    \node (a) [cloud,  cloud puffs=9.4, minimum width=1cm, draw, right=2cm of start, shift={($(start.south)+(0.2,-1cm)$)}] {S};
+    \node (b) [cloud,  cloud puffs=9.4, minimum width=1cm, draw, left=2cm of start, shift={($(start.south)+(-0.2,-1cm)$)}] {S};
+
+    \draw[arrow, ->] (start) to node[below,scale=.7,xshift=6, yshift=10] {$\neg b$} (a);
+    \draw[arrow, ->] (start) to node[below,scale=.7,xshift=-4, yshift=10] {$b$} (b);
+    \draw[arrow, ->] (a) to node[below,scale=.7] {} (end);
+    \draw[arrow, ->] (b) to node[below,scale=.7] {} (end);
+\end{tikzpicture}
