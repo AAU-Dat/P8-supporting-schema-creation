@@ -32,6 +32,7 @@
     url=false
 ]{biblatex}
 \usepackage[acronym]{glossaries}
+\usepackage[inference]{semantic}
 
 % Package setup
 \setlength{\marginparwidth}{2cm} % todonotes width
@@ -67,6 +68,7 @@
 \tikzstyle{circle} = [ellipse, minimum width=1cm, minimum height=0.5cm, text centered, draw=black, fill=white!30]
 
 \newcommand{\abssem}[1]{\ab{\mathcal{S}} \llbracket #1 \rrbracket}
+\newcommand{\sem}[1]{\mathcal{S} \llbracket #1 \rrbracket}
 \newcommand{\env}[1]{\rho_{#1}}
 \newcommand{\abstablep}{t'^{\#}}
 \newcommand{\absvars}{\ab{a}}
@@ -80,7 +82,9 @@
 \newcommand{\aabstract}{\alpha}
 \DeclareMathOperator{\map}{map}
 \newcommand{\absboolsem}[1]{\widehat{\mathcal{B}}\llbracket #1 \rrbracket}
+\newcommand{\boolsem}[1]{\mathcal{B}\llbracket #1 \rrbracket}
 \newcommand{\absexpsem}[1]{\widehat{\mathcal{E}}\llbracket #1 \rrbracket}
+\newcommand{\expsem}[1]{\mathcal{E}\llbracket #1 \rrbracket}
 \newcommand{\true}{t\!t}
 \newcommand{\false}{f\!\!f}
 \newcommand{\unknown}{?\!?}
@@ -97,7 +101,7 @@
 \newcommand{\into}{\hookrightarrow}
 \newcommand{\lookupcl}{\mathcal{C}}
 \newcommand{\abssqlsem}[1]{\widehat{\mathcal{Q}}\llbracket #1 \rrbracket}
-\newcommand{\abspredsem}[1]{\widehat{\mathcal{P}}\llbracket #1 \rrbracket}
+\newcommand{\abspredsem}[1]{\widehat{\mathcal{W}}\llbracket #1 \rrbracket}
 \newcommand{\absatomsem}[1]{\widehat{\mathcal{T}}\llbracket #1 \rrbracket}
 \newcommand{\app}[1]{\;\llparenthesis#1\rrparenthesis\;}
 
