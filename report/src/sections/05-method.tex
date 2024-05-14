@@ -14,10 +14,10 @@ For the program to work, we need to define the table for the database, this is s
 
 
 \begin{listing}[htb!]
-    \begin{minted}{SQL}
+    \begin{minted}{sql}
     CREATE TABLE account (
-    name VARCHAR(50),
-    balance INT
+        name    TEXT,
+        balance INT
     );
     \end{minted}
     \caption{SQL query for creating the table in the database}
@@ -31,9 +31,9 @@ The SQL queries for the operations are shown in \autoref{lst:sql-queries} and \a
 
 
 \begin{listing}[htb!]
-    \begin{minted}{SQL}
-    INSERT INTO account (name, balance)
-    VALUES (RANDOM_NAME, RANDOM_AMOUNT);
+    \begin{minted}{sql}
+        INSERT INTO account (name, balance)
+        VALUES (RANDOM_NAME, RANDOM_AMOUNT);
     \end{minted}
     \caption{SQL query for the insert operation}
     \label{lst:sql-queries}
@@ -62,7 +62,7 @@ If there are more than two accounts, we try to transfer an amount from one accou
 
 
 \begin{listing}[htb!]
-    \begin{minted}{text}
+    \begin{minted}{bash}
 transF || newuser
 
 transF:
@@ -103,7 +103,7 @@ The properties we want to check on the database are shown in \autoref{lst:proper
 
 
 \begin{listing}[htb!]
-    \begin{minted}{text}
+    \begin{minted}{bash}
 <>(transferAmount > 0)
 [](fromB-TransferAmount > 0)
     \end{minted}
@@ -128,7 +128,7 @@ The program is now ready to be analyzed, and the analysis will check if the prop
 
 
 \begin{listing}[htb!]
-    \begin{minted}{text}
+    \begin{minted}{bash}
     Iteration 1:
         todo: {Initial state}
         state-space: {}

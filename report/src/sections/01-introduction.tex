@@ -12,11 +12,41 @@ One such technique is value analysis, which focuses on the behavior of a program
 Value analysis can be approached from various angles, including the consideration of meta-information like information flow or taint analysis.
 While these approaches offer valuable insights into the behavior of a program, they often require detailed knowledge of the program's internal workings and are not always applicable to all types of software systems.
 
-The top
 
 \subsection{Example}\label{subsec:example}
-Describe the motivation by example.
-Show the contributions through a second example that runs through how we used the
+One problem with Halder and Cortesi is that the analysis they propose may not terminate.
+To illustrate, consider the database schema \autoref{lst:motivate-sql} with the program in \autoref{lst:motivate-program}
+
+
+\begin{listing}
+    \begin{minted}{sql}
+        CREATE TABLE account (
+            name    TEXT,
+            balance INT
+        );
+    \end{minted}
+    \caption{A simple schema representing an account.}
+    \label{lst:motivate-sql}
+\end{listing}
+
+
+\begin{listing}
+    \begin{minted}{bash}
+        while true do
+            insert(account, (name, balance), ("name", 1))
+    \end{minted}
+    \caption{A tiny program with nonterminating analysis.}
+    \label{lst:motivate-program}
+\end{listing}
+
+
+Because the database context would continually change under Cortesi and Halder, the analysis would not terminate.
+However, this doesn't have to be the case.
+Extending the analysis to consider abstract tuples, not just abstract values, it is possible to have the analysis terminate for the program in \autoref{lst:motivate-program}.
+
+Show the contributions through a second example that runs through how we used the updated semantics.
+
+\subsection{Contributions}\label{subsec:contributions}
 
 \subsection{Related Work}\label{subsec:related-work}
 

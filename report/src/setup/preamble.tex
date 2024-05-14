@@ -3,6 +3,8 @@
 
 % Packages
 \RequirePackage{clrscode4e}
+%\usepackage{stix2}
+\usepackage[scaled=0.8]{FiraMono}
 \usepackage{amsmath}
 % \usepackage{amsthm} \\ the proof environment clashes with the one in pf2.
 \usepackage{amssymb}
@@ -17,7 +19,6 @@
 \usepackage{stmaryrd}
 \usepackage{mathabx}
 \usepackage{algpseudocode}
-\usepackage{listings}
 
 % Packages with options set
 \usepackage[hidelinks]{hyperref}
@@ -35,6 +36,7 @@
 % Package setup
 \setlength{\marginparwidth}{2cm} % todonotes width
 \setminted{linenos, autogobble, breaklines, fontsize=\footnotesize, style=friendly, xleftmargin=1em, numbersep=5pt}
+\usemintedstyle[bash]{emacs}
 \addbibresource{bib/main.bib}
 
 % Other setup and options
@@ -43,9 +45,10 @@
 \declaretheorem{definition}
 \declaretheorem{example}
 \declaretheorem{conjecture}
-\newfloat{algorithm}{htb!}{lop}
-\floatname{algorithm}{Algorithm}
-\newcommand{\algorithmautorefname}{Algorithm}
+\DeclareFloatingEnvironment[name=Algorithm, placement=htb!]{algorithm}
+%\newfloat{algorithm}{htb!}{lop}
+%\floatname{algorithm}{Algorithm}
+%\newcommand{\algorithmautorefname}{Algorithm}
 
 \makeatletter
 \providecommand{\bigsqcap}{%
@@ -97,3 +100,8 @@
 \newcommand{\abspredsem}[1]{\widehat{\mathcal{P}}\llbracket #1 \rrbracket}
 \newcommand{\absatomsem}[1]{\widehat{\mathcal{T}}\llbracket #1 \rrbracket}
 \newcommand{\app}[1]{\;\llparenthesis#1\rrparenthesis\;}
+
+\floatplacement{listing}{htb!}
+\floatplacement{table}{htb!}
+\floatplacement{figure}{htb!}
+\floatplacement{algorithm}{htb!}
