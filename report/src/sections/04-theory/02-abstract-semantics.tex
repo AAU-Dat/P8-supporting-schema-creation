@@ -82,7 +82,12 @@ This will also be helpful later, when we define the abstract semantics of SQL co
 \subsubsection{Abstract Semantics of Boolean expressions}
 We define the general abstract semantics of Boolean expressions such that $\aab{bop}$ is a specialized instance of $\aaop$ in the following manner:
 \begin{align}
-    \aab{bop} &: \mathcal{P}(\{\true, \false, null\}) \rightarrow \mathcal{P}(\{\true, \false, null\}) \rightarrow \mathcal{P}(\{\true, \false, null\})\\
+    \begin{split}
+        \aab{bop} : \mathcal{P}(\{\true, \false, null\}) &\rightarrow \mathcal{P}(\{\true, \false, null\}) \\
+        &\rightarrow \mathcal{P}(\{\true, \false, null\})
+    \end{split}
+\end{align}
+\begin{align}
     B_1 \;\aab{bop}\; B_2 &= \bigcup_{b_1 \in B_2, b_2 \in B_2} b_1 \;\aaab{bop}\; b_2
 \end{align}
 Where $\aaab{bop}$ is defined for $\land$, $\lor$ and $\neg$ in \autoref{tab:aaabland}, \autoref{tab:aaablor} and \autoref{tab:aaabneg} respectively.
@@ -193,11 +198,16 @@ In the case of database variables in \autoref{sem:exp4}, we assume attribute nam
 \autoref{eq:unary-op} and ~\ref{eq:binary-op} describe the semantics of unary and binary operations on expressions.
 The justification of abstract binary operations is analogous to the one given for the semantics of comparison operators (\autoref{eq:abstract-bool-semantics-end}).
 \begin{align}
-    \absexpsem{\cdot} &: \mathbb{E} \rightarrow \ab{\mathfrak{E}} \rightarrow \mathsf{Val} \; \mathbf{REG} \cup \mathsf{Val} \; \mathbf{INT}\\
+    \absexpsem{\cdot} : \mathbb{E} \rightarrow \ab{\mathfrak{E}} \rightarrow \mathsf{Val} \; \mathbf{REG} \cup \mathsf{Val} \; \mathbf{INT}
+\end{align}
+\begin{align}
     \absexpsem{n}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \mathsf{Single} \; \{ [n, n] \} \label{sem:exp1} \\
     \absexpsem{k}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \mathsf{Single} \; R,  \text{ such that }\mathcal{L}(R) = \{ k \} \label{sem:exp2} \\
     \absexpsem{v_a}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=  \rho_{\ab{a}}(v_a) \label{sem:exp3} \\
-    \absexpsem{v_t}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=  \mathsf{List} \; \pi_{v_t}(\rho_d(v_d)) \text{ such that } v_t \in attr(v_d) \label{sem:exp4} \\
+    \begin{split}
+        \absexpsem{v_t}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=  \mathsf{List} \; \pi_{v_t}(\rho_d(v_d)) \\
+        &\text{ such that } v_t \in attr(v_d) \label{sem:exp4}
+    \end{split} \\
     \absexpsem{op_u \; e}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{op_u} \; (\absexpsem{e}(\rho_{\ab{d}}, \rho_{\ab{a}})) \label{eq:unary-op} \\
     \absexpsem{e_1 \;op_b\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \;\ab{op_b}\; \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \label{eq:binary-op}
 \end{align}
