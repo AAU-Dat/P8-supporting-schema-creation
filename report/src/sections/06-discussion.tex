@@ -22,6 +22,7 @@ This section will discuss the results of the analysis and the implications of th
 Through out the paper, it was originally planned to have a working experiment with the system. However, due to time constraints and the complexity of the research it was deemed neccesary to move the experiment to future work.
 Due to this there are no actual results to discuss, however it is still possible to discuss the implications of the results that could have been found.
 
+\todo[inline]{Lars Says: I think you should discuss the implications of the results that could have been found.}
 
 \subsection{Problems in the work}
 Through the process of this paper, many issues occured with the analysis of the system. Such as defining the mathematics used and which paper to use as a foundation for the analysis. Unfortunately the paper~\cite{halder_abstract_2012} chosen was not the best choice, as it proved to be hard to understand due to the way the authors made it harder to understand than needed. Moreover the mathematics used made it so the implementation of the system would not terminate. 
@@ -29,4 +30,8 @@ An example of the lacking mathematics would be running a check on a program wher
 This meant that a lot of time was spent on fixing the mathematics used in the paper, rather than focusing on the implementation of the system.
 
 Moreover the choice of SQL as the language for the implementation was not the best choice, as it has many implementation features that are different, platform to platform. Therefore it might have been better to use a more abstract language, as realtional algebra, to implement the system.
-Especially since we only defined a subset of the operations in PostgreSQL, 
+Especially since we only defined a subset of the operations in PostgreSQL, it is not possible to check all programs that could be written in SQL.
+
+\subsection{Limitations of the work}
+The semantics for the language is not well defined, making the soundness proof a little bit shaky. An example of this would be the boolean expressions, as they are not defined how they interact with lists or other boolean expressions. This is also the case for the type system, as there is no actual type system, so we assume that a variable has a type without formally defining it.
+A better definition of the semantics and a type system would have made the soundness proof more solid, and aided in convincing the reader that the system is sound.
