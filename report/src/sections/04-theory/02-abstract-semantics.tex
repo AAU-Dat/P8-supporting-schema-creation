@@ -8,7 +8,7 @@ Omitted parts within this simplified abstract syntax correspond to features or c
 The abstract syntax of SQAAL is defined in terms of the syntactic sets introduced in \autoref{tab:syntatic-sets}.
 \begin{figure}[htb!]
      \center
-    \begin{tabular}{l l}
+    \begin{tabular}{r p{0.65\columnwidth }}
     $n \in \mathbb{Z}$                          & Integers                                                   \\
     $k \in \mathbb{S}$                                  & Strings                                                    \\
     $c \in \mathbb{C}$                          & Constants                                                 \\
@@ -32,7 +32,7 @@ The abstract syntax of SQAAL is defined in terms of the syntactic sets introduce
 The abstract syntax of SQAAL is presented in \autoref{tab:abstract-syntax}.
 \begin{figure}[htb!]
     \center
-    \begin{tabular}{r l}
+    \begin{tabular}{r p{0.65\columnwidth}}
         $c ::=$ & $n \mid k$ \\
         $v ::=$ & $v_t \mid v_a$ \\
         $e ::=$ & $c \mid v \mid op_u\; e \mid \;e_1 op_b\; e_2$ for $op_u = \{-\}$ and $op_b = \{+, -, *, / \}$ \\

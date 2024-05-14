@@ -14,11 +14,13 @@ This is a problem: Essentially, we can not employ the Kleene fixed-point theorem
 \subsubsection{Abstract domain of numbers as unions of intervals}\label{subsubsec:abstract_domains_numbers}
 We have chosen a finite union of intervals to represent the abstract domain of the family of SQL number data types.
 We only consider Integers, but the domain can be extended to the Reals.
-We define union of intervals as follows:
+We define union of intervals as follows blabla:
 Let $\mathbf{INT}$ denote the set of union intervals; $\mathbf{INT}$ is inductively defined as:
 \[
     \inference{\mathscr{I} \text{ is an interval}}{\mathscr{I} \in \mathbf{INT}} \quad
-    \inference{\mathscr{I}_1 \in \textbf{INT} & \mathscr{I}_2 \in \textbf{INT}}{\mathscr{I}_1 \cup  \mathscr{I}_2 \in \mathbf{INT}} \quad
+    \inference{\mathscr{I}_1 \in \textbf{INT} & \mathscr{I}_2 \in \textbf{INT}}{\mathscr{I}_1 \cup  \mathscr{I}_2 \in \mathbf{INT}}
+\]
+\[
     \inference{\mathscr{I}_1 \in \textbf{INT} & \mathscr{I}_2 \in \textbf{INT}}{\mathscr{I}_1 \cap  \mathscr{I}_2 \in \mathbf{INT}}
 \]
 %We represent the unions of intervals as a set of disjoint intervals; thus, for a set of intervals $\mathscr{I}$:
@@ -95,11 +97,13 @@ First, we need to define a collectively disjoint top-cover and a cover lattice.
 Given a collectively top-cover $X$ of a lattice $(S, \subseteq, \cup, \cap)$.
 A cover lattice of $S$ in respect to $X$ denoted $\clattice{X}{S}$ is the minimum set where,
 For $X$ and $S$:
-\begin{align}
+\[
     \inference{x \in X}{x \in C_X(S)} \quad
-    \inference{x_1 \in C_X(S) & x_2 \in C_X(S)}{x_1 \cup  x_2 \in C_X(S)} \quad
+    \inference{x_1 \in C_X(S) & x_2 \in C_X(S)}{x_1 \cup  x_2 \in C_X(S)}
+\]
+\[
     \inference{x_1 \in C_X(S) & x_2 \in C_X(S)}{x_1 \cap  x_2 \in C_X(S)}
-\end{align}
+\]
 \end{definition}
 
 Now we can define the cover lattice of the regular languages and the integers.
