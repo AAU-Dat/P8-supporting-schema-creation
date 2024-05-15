@@ -102,18 +102,41 @@ Further examples can be found in~\cite[Figure 2.6]{nielson_formal_2019}.
     \label{fig:tikz-program-graph-assignment}
 \end{figure}
 
-We later describe the abstract syntax; there will be no control structures, like if-statements and loops.
+We later describe the abstract syntax; \autoref{tab:abstract-syntax-instructions} describes the instructions the abstract syntax will contain.
+There is no control structure in the abstract syntax, like if-statements and loops or sequences of instructions.
 This is because the abstract syntax is simplified to make understanding the theory behind abstract interpretation easier.
-if-statements and loops are still used as boolean expressions in edges, used like guards in the program graph.
-In \autoref{fig:tikz-program-graph-loop} and \autoref{fig:tikz-program-graph-if}, we see examples of how a loop and an if-statement are represented in a program graph.
-We say $b$ is some Boolean expression, where $S$ is a set of states done in the control structure.
-In the abstract syntax, we will not have formulated sequences of $I_0, I_1, I_2, \dots, I_n$ as in the program graph, but rather as a set of states $S$, where we at the end go back to the initial state, this is shown in \autoref{fig:tikz-composition-graph}.
-\begin{figure}[htb!]
+This is all handled in the program graph, where the control structure is represented as edges in the program graph.
+
+\begin{figure}
     \center
-    \input{figures/loop_graph}
-    \caption{An example that shows a program graph of a loop}
-    \label{fig:tikz-program-graph-loop}
+    \begin{tabular}{r l}
+        $I ::=$ & $skip \mid v_a := e \mid v_a := ? \mid C_{sql} \mid b$
+    \end{tabular}
+    \caption{Abstract Syntax for Instructions}
+    \label{tab:abstract-syntax-instructions}
 \end{figure}
+
+If-statements and loops are still used as boolean expressions in edges, used like guards in the program graph.
+We can make equations for the edges of the program graph, where $b$ is a Boolean expression, and $S$ is a set of states done in the control structure.
+
+$edges(q_{\circ} \rightsquigarrow q_{\bullet})\llbracket \text{if } b \text{ then } S_1 \text{ else } S_2 \rrbracket = \text{let } q_{cond}$ be a new node.
+\begin{align}
+S_{cond} &= edges(q_\circ \rightsquigarrow q_{cond})\llbracket b \rrbracket \\
+S_{true} &= edges(q_{cond} \rightsquigarrow q_{\bullet})\llbracket S_1 \rrbracket \\
+    S_{false} &= edges(q_{cond} \rightsquigarrow q_{\bullet})\llbracket S_2 \rrbracket \\
+    &\text{in } S_{cond} \cup S_{true} \cup S_{false}
+\end{align}
+
+$edges(q_{\circ} \rightsquigarrow q_{\bullet})\llbracket \text{while } b \text{ do } I\rrbracket= \text{let } q_{cond}$ be a new node,
+\begin{align}
+    S_{cond} &= edges(q_\circ \rightsquigarrow q_{cond}) \llbracket b \rrbracket \\
+    S_{body}&=edges(q_{cond} \rightsquigarrow q_{body})\llbracket I \rrbracket \\
+    S_{loop} &= edges(q_{body} \rightsquigarrow \q_{cond})\llbracket\text{true}\rrbracket \\
+    S_{exit} &= edges(q_{cond} \rightsquigarrow q_{\bullet})\llbracket\text{false}\rrbracket \\
+    &\text{in } S_{cond} \cup S_{body} \cup S_{loop} \cup S_{exit}
+\end{align}
+
+In \autoref{fig:tikz-program-graph-loop} and \autoref{fig:tikz-program-graph-if}, we see examples of how a loop and an if-statement are represented in a program graph.
 
 \begin{figure}[htb!]
     \center
@@ -121,6 +144,23 @@ In the abstract syntax, we will not have formulated sequences of $I_0, I_1, I_2,
     \caption{An example that shows a program graph of an if-statement}
     \label{fig:tikz-program-graph-if}
 \end{figure}
+
+\begin{figure}[htb!]
+    \center
+    \input{figures/loop_graph}
+    \caption{An example that shows a program graph of a loop}
+    \label{fig:tikz-program-graph-loop}
+\end{figure}
+
+In the abstract syntax, we will not have formulated sequences of $I_0, I_1, I_2, \dots, I_n$ as in the program graph, but rather as a set of states $S$, where we at the end go back to the initial state, this is shown in \autoref{fig:tikz-composition-graph}.
+
+We can make equations for the edges of the composition graph, where $I_1$ and $I_2$ are instructions.
+$edges(q_{\circ} \rightsquigarrow q_{\bullet})\llbracket I_1 ; I_2 \rrbracket = \text{let q be a new node}$
+\begin{align}
+S_1 &= edges(q_{\circ} \rightsquigarrow q)\llbracket I_1 \rrbracket\\
+S_2 &= edges(q \rightsquigarrow q_{\bullet})\llbracket I_2 \rrbracket, \\
+&\text{ in } S_1 \cup S_2
+\end{align}
 
 \begin{figure}
     \center
