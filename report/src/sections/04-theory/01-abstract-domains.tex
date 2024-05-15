@@ -2,97 +2,52 @@
 
 In the following section we will describe the abstract domains of our value analysis.
 
-\subsubsection{Abstract domain of strings as regular expressions}\label{subsubsec:abstract_domains_strings}
+\subsubsection{Abstract domain strings as regular expressions}\label{subsubsec:abstract_domains_strings}
 We have chosen regular expressions/languages to represent the abstract domain of the family of SQL string data types.
-Regular expressions/languages are chosen instead of more powerful representations because of their decidable nature of inclusion and equality.
-We define regular expressions as follows:
+Regular expressions/languages are chosen instead of more powerful representations because of the decidable nature of inclusion and equality between them.
 
-Let $REG$ denote the set of regular languages.
-The lattice of $(REG, \subseteq, \cup, \cap)$ is a lattice but not a finite one, as the set of regular languages is transfinite and closed under finite union and intersection but not closed under transfinite union and intersection, which makes the lattice incomplete.
-This is a problem: Essentially, we can not employ the Kleene fixed-point theorem (see \autoref{thm:kleene_finite}) to prove the termination of our analysis.
+Let $\regexs$ denote the set of regular expressions, for elements of $\regex \in \regexs$ we denote the language of $\regex$ as $\lang(\regex)$.
+In general we will not distinguish between $R$ and $\lang(\regex)$ when it simplifies matters.
+The lattice of $(\regexs, \subseteq, \cup, \cap)$ is a lattice but not a finite one, this is a problem: Essentially, we want the state-space our analysis to be finite, such that we can employ the Kleene fixed-point theorem (see \autoref{thm:kleene_finite}) to prove the termination of our analysis.
+If the state-space is built from infinite parts the state-space itself will be infinite.
+We will 'fix' this problem later in \autoref{sec:cover-lattice}.
 
-\subsubsection{Abstract domain of numbers as unions of intervals}\label{subsubsec:abstract_domains_numbers}
-We have chosen a finite union of intervals to represent the abstract domain of the family of SQL number data types.
-We only consider Integers, but the domain can be extended to the Reals.
-We define union of intervals as follows:
-Let $\mathbf{INT}$ denote the set of union intervals; $\mathbf{INT}$ is inductively defined as:
+\subsubsection{Abstract integers as union intervals}\label{subsubsec:abstract_domains_numbers} We have chosen a finite union and intersection of intervals to represent the abstract domain of the family of SQL number data types.
+We call them union of intervals as all such objects can be written as a union of intervals.
+We only consider integers, but we imagine that the domain can be easily extended to the reals.
+Let $\mathbf{INT}$ be the set of union intervals, that is inductively defined as:
 \[
-    \inference{\mathscr{I} \text{ is an interval}}{\mathscr{I} \in \mathbf{INT}} \quad
+    \inference{i \text{ is an interval}}{i \in \mathbf{INT}} \quad
     \inference{\mathscr{I}_1 \in \textbf{INT} & \mathscr{I}_2 \in \textbf{INT}}{\mathscr{I}_1 \cup  \mathscr{I}_2 \in \mathbf{INT}} \quad
     \inference{\mathscr{I}_1 \in \textbf{INT} & \mathscr{I}_2 \in \textbf{INT}}{\mathscr{I}_1 \cap  \mathscr{I}_2 \in \mathbf{INT}}
 \]
-%We represent the unions of intervals as a set of disjoint intervals; thus, for a set of intervals $\mathscr{I}$:
-%\begin{equation}
-%    n \in \gamma(\mathscr{I}) \iff \exists i \in \mathscr{I} : n \in \gamma(i)
-%\end{equation}
 
+For integers we will only consider $[a, b], [a, +\infty)$ and $(-\infty, b]$ where $a, b \in \mathbb{Z}$ as valid intervals.
 
-%and
-
-
-%\begin{equation}
-%    \mathscr{I} \sqsubseteq \mathscr{I}' \iff \forall i \in \mathscr{I} : \exists i' \in \mathscr{I}' : i \sqsubseteq i'
-%\end{equation}
-
-
-%where $\gamma(i)$ is the set of integers in the interval $i$ and $\sqsubseteq$ is the subset relation.
-%
-%We define the meet and join of unions as follows:
-%\begin{align}
-%    \mathscr{I} \sqcup \mathscr{I}' &= m(\mathscr{I} \cup \mathscr{I}') \\
-%    \text{where } m(\mathscr{I}) &= \begin{cases}
-%        m(\{ i \sqcup i' | i, i' \in \mathscr{I} \land i \sqcap i' \neq \bot \} \cup \{ i \in \mathscr{I} | \forall i' \in \mathscr{I} : i \sqcap i' = \bot \}) & \text{if } \exists i, i' \in \mathscr{I}: i \sqcap i' \neq \bot \\
-%        \mathscr{I} & \text{otherwise}
-%    \end{cases} \\
-%    \mathscr{I} \sqcap \mathscr{I}' &= \{i \sqcap i' \mid i \in \mathscr{I} \land i' \in \mathscr{I}'\}
-%\end{align}
-
-%The lattice of $(\mathbf{INT}, \sqsubseteq, \sqcup, \sqcap)$ is a lattice but not a finite one, as the set of unions of intervals is transfinite and closed under finite union and intersection but not closed under transfinite union and intersection, which makes the lattice incomplete.
-%This intuitively models intersection and union of the underlying sets, that is $\gamma(\mathscr{I} \sqcup \mathscr{I}') = \gamma(\mathscr{I}) \cup \gamma(\mathscr{I}')$ (analogous for $\sqcap$, $\cap$), and also $\mathscr{I} \sqsubseteq \mathscr{I}' \iff \gamma(\mathscr{I}) \subseteq \gamma(\mathscr{I}')$.
-
-This representation of numbers $(\mathscr{I}, \subseteq, \cup, \cap)$ has the same issue as regular expressions: it is not finite and thus incomplete, making it impossible to use the Kleene fixed-point theorem (see \autoref{thm:kleene_finite}) to prove the termination of our analysis.
-
-\subsubsection{Single and List values}
-When we consider the abstract domain of strings and numbers, we need to consider both single values and lists of values.
-We would like to distinguish between single values and lists of values, thus we define algebraic type:
+This abstract representation of numbers $(\uints, \subseteq, \cup, \cap)$ has the same issue as regular expressions: It is not finite.
+We define the language of union intervals as follows:
 \begin{align}
-    \mathsf{Val} \; A = \{ \mathsf{Single} \; a \mid a \in A \} \cup \{ \mathsf{List} \; A' \mid A' \subseteq A \} \cup \{ \perp \}
+    \lang(\uint_1 \cup \uint_2) &= \lang(\uint_1) \cup \lang(\uint_2) \\
+    \lang(\uint_1 \cap \uint_2) &= \lang(\uint_1) \cap \lang(\uint_2) \\
+    \lang([a, b]) &= \left\{ z \in \mathbb{Z} \middle| a \leq z \leq b \right\} \\
+    \lang([a, +\infty]) &= \left\{ z \in \mathbb{Z} \middle| a \leq z \right\} \\
+    \lang([-\infty, b]) &= \left\{ z \in \mathbb{Z} \middle| z \leq b \right\}
 \end{align}
-where $A$ is the underlying set of values.
-We can define the lattice, $(\mathsf{Val} \; A, \subseteq, \cup, \cap)$, we first define the relation of the lattice:
-\begin{align}
-    \mathsf{Single} \; s &\sqsubseteq \mathsf{List} \; S \quad
-    \text{iff} \; s \in S \\
-    \mathsf{Single} \; s_1 &\sqsubseteq \mathsf{Single} \; s_2 \quad
-    \text{iff} \; s_1 \sqsubseteq s_2 \\
-    \mathsf{List} \; S &\not\sqsubseteq \mathsf{Single} \; s\\
-    \mathsf{List} \; S_1 &\sqsubseteq \mathsf{List} \; S_2 \quad
-    \text{iff} \; \forall s_1 \in S_1, \; \exists s_2 \in S_2: \; s_1 \sqsubseteq s_2\\
-\end{align}
+As in the prequel we generally don't distinguish between an union interval $\uint$ and it's language $\mathcal{L}(\uint)$ when it simplifies matters.
 
-We can define the joins and meets of the lattice as follows:
-\begin{align}
-    \mathsf{Single} \; s \sqcup \mathsf{List} \; S &= \mathsf{List} \; (S\sqcup\left\{ s \right\})\\
-    \mathsf{Single} \; s_1 \sqcup \mathsf{Single} \; s_2 &= \mathsf{Single} \; (s \sqcup s )\\
-    \mathsf{List} \; S_1 \sqcup \mathsf{List} \; S_2 &= \mathsf{List} \; (S_1 \sqcup S_2)\\
-    \mathsf{Single} \; s \sqcap \mathsf{List} \; S &= \mathsf{Single} \; s\\
-    \mathsf{List} \; S_1 \sqcap \mathsf{List} \; S_2 &= \mathsf{List} \; (S_1 \sqcap S_2)\\
-    \mathsf{Single} \; s_1 \sqcap \mathsf{Single} \; s_2 &= \mathsf{Single} \; (s_1 \sqcap s_2)\\
-    \mathsf{List} \ \emptyset \sqcap \mathsf{Single} \ s &= \ \perp
-\end{align}
-We see that if a list is empty and we look for the meet with a single value, it is equivalent to $\perp$.
-As the lattice $(\mathsf{Val} \; A, \subseteq, \cup, \cap)$ is finite, we can use the Kleene fixed-point theorem (see \autoref{thm:kleene_finite}) to prove the termination of our analysis.
+This abstract domain is most likely not a new development, the title of \cite{li2010abstract} suggest a similar construct, but we have been unable to get a hold of their paper.
 
-\subsubsection{Cover lattice}
+\subsubsection{Cover lattices}\label{sec:cover-lattice}
 To resolve the issues presented above, we introduce the notion of a cover lattice.
-First, we need to define a collectively disjoint top-cover and a cover lattice.
+As above the idea presented here is probably not novel.
+Before we can define a cover lattice, we need to define the notion of a top-cover.
 
 \begin{definition}
     A finite non-empty subset $X \subseteq S$ of a lattice $(S, \subseteq, \cup, \cap)$ is called a collectively top-cover of $S$ whenever $\bigcup X = \top$.
 \end{definition}
 
 \begin{definition}\label{def:coverlattice}
-Given a collectively top-cover $X$ of a lattice $(S, \subseteq, \cup, \cap)$.
+Given a top-cover $X$ of a lattice $(S, \subseteq, \cup, \cap)$.
 A cover lattice of $S$ in respect to $X$ denoted $\clattice{X}{S}$ is the minimum set where,
 For $X$ and $S$:
 \begin{align}
@@ -102,47 +57,65 @@ For $X$ and $S$:
 \end{align}
 \end{definition}
 
-Now we can define the cover lattice of the regular languages and the integers.
-This gives rise to the following theorem:
+As a note when we use the notation $C_X(S)$ we always assume that $X$ is a top cover of $S$.
+The notion of a cover lattices gives rise to the following theorem:
 
 \begin{restatable}{theorem}{partition}\label{thm:partition}
-For a non-complete lattice $(S, \subseteq, \cup, \cap)$ and collectively top-cover $X$ of $S$, the cover lattice $(\clattice{X}{S}, \subseteq, \cup, \cap)$ is a finite and complete lattice.
+For a non-complete lattice $(S, \subseteq, \cup, \cap)$ and top-cover $X$ of $S$, the cover lattice $(\clattice{X}{S}, \subseteq, \cup, \cap)$ is a finite and complete lattice.
 \end{restatable}
 
-And the following lemmas immediately follow:
+And the following corollary's immediately follow:
 
-\begin{lemma}
-    If $\mathcal{R}$ is a collectively top-cover of $(REG, \subseteq, \cup, \cap)$ then $(\clattice{\mathcal{R}}{REG}, \subseteq, \cup, \cap)$ is a complete lattice.
-\end{lemma}
+\begin{corollary}
+    If $\mathcal{R}$ is a top-cover of $(\regexs, \subseteq, \cup, \cap)$ then $(\clattice{\mathcal{R}}{\regexs}, \subseteq, \cup, \cap)$ is a finite and complete lattice.
+\end{corollary}
 
-\begin{lemma}
-    If $X$ is a collectively top-cover of $(\mathscr{I}, \subseteq, \cup, \cap)$ then $(\clattice{X}{\mathscr{I}}, \subseteq, \cup, \cap)$ is a complete lattice.
-\end{lemma}
+\begin{corollary}
+    If $\mathcal{I}$ is a top-cover of $(\uints, \subseteq, \cup, \cap)$ then $(\clattice{\mathcal{I}}{\uints}, \subseteq, \cup, \cap)$ is a finite and complete lattice.
+\end{corollary}
 
-Now we can define the functions that map the elements of the lattices to the cover lattice.
+We now define the function that maps an elements in a lattice to the most precise element in a corresponding cover lattice:
+\begin{align}
+    \cdot \into C_X(S) &: S\rightarrow C_X(S) \\
+    s \into C_X(S) &= \bigcap\{s' \in C_X(S)|s \subseteq s'\}
+\end{align}
+We overload this notation to work on sets of values in particular for $S' \subseteq S$ we define:
+\begin{align}
+    \cdot \into C_X(S) &: \mathcal{P}(S) \rightarrow \mathcal{P}(C_X(S)) \\
+    S' \into C_X (S) &= \{s \into C_X(S) \mid s \in S'\}
+\end{align}
 
-\begin{definition}
-    We define $\cdot \into C_X(S):S\rightarrow C_X(S)$ to be the function mapping $s\in S$ to the least element in $C_X(S)$ containing it, that is $s \into C_X(S)=\bigsqcap\{s'\in C_X(S)|s\sqsubseteq s'\}$
-    \\
+To make this notion useful we assume that some mapping from application variables and table attributes to cover lattices is given by the user by some mechanism:
+\begin{equation}\label{eq:lookupcl}
+    \lookupcl : \mathbb{V}_t \cup \mathbb{V}_a \rightarrow \{ C_{X_1}(S_1), C_{X_2}(S_2), \dots, C_{X_n}(S_n) \}
+\end{equation}
+Where for all $1 \leq i \leq n$ either $S_i = \regexs$ with some $X_i = \mathcal{R} \subset \regexs$ or $S_i = \uints$ with some $X_i = \mathcal{I} \subset \uints$.
+Further we define the following helper function:
+\begin{align}
+    c(C_{\mathcal{R}}(\regexs)) &= \strs \\
+    c(C_{\mathcal{I}}(\uints)) &= \nums
+\end{align}
+Where $\strs$ are the set of all strings and $\nums$ the set of all integers.
 
-    We define $\cdot \into C_X(S):\mathcal{P}(S)\rightarrow \mathcal{P}(C_X(S))$ to be the function that maps the powerset$(\mathcal{P})$ of the lattice elements to the powerset of the cover lattice elements$(C_X (S))$.
-    We use $H \into C_X (S) = \{h \into C_X (S) \mid h \in H\}$ to show how a set of elements$(H)$ is mapped to the cover lattice.
-\end{definition}
+Now we are able to express the concretisation for regular expressions and union intervals.
+\begin{align}
+    \concrete^v_6 &: \lookupcl(v) \rightarrow \cc(\lookupcl(v)) \\
+    \concrete^v_6(X) &= \mathcal{L}(X)
+\end{align}
 
-\begin{definition}
-    We define $\cdot \into C_\mathcal{X}(\mathcal{S}): \bigtimes_{i = 1}^{n} S_i \rightarrow \bigtimes_{i = 1}^{n} C_{X_i}(S_i)$ to be the function that takes a tuple and inserts each element of the tuple correctly into its given cover lattice.
-    We use $(h_1, h_2 \dots h_n)\into C_{\mathcal{X}}(\mathcal{S})=(h_1 \into C_{X_1}(S_1), h_2\into C_{X_2}(S_2), \dots, h_n \into C_{X_n}(S_n))$, where $\mathcal{X}=(X_1, X_2, \dots, X_n)$ and $\mathcal{S}=(S_1, S_2, \dots, S_n)$ to show how a tuples elements are inserted into the cover lattice what $\mathcal{X}$ and $\mathcal{S}$ are.
-\end{definition}
+% \begin{definition}
+%     We define $\cdot \into C_X(S):S\rightarrow C_X(S)$ to be the function mapping $s\in S$ to the least element in $C_X(S)$ containing it, that is $s \into C_X(S)=\bigsqcap\{s'\in C_X(S)|s\sqsubseteq s'\}$
+%     \\
+%
+%     We define $\cdot \into C_X(S):\mathcal{P}(S)\rightarrow \mathcal{P}(C_X(S))$ to be the function that maps the powerset$(\mathcal{P})$ of the lattice elements to the powerset of the cover lattice elements$(C_X (S))$.
+%     We use $H \into C_X (S) = \{h \into C_X (S) \mid h \in H\}$ to show how a set of elements$(H)$ is mapped to the cover lattice.
+% \end{definition}
 
-Now we can define the functions that map the values to the cover lattice.
-
-\begin{definition}
-    We define $\cdot \into C_X(S): \ \mathsf{Val} \ S \rightarrow \mathsf{Val} \ C_X(S)$ to be the function that takes some value and inserts it into its cover lattice. \\
-    For single elements we use $(\mathsf{Single} \ h) \into C_X(S) = \mathsf{Single}(h\into C_X(S)) \\$
-    we say $x \in (\mathsf{Single} \ x') \ \text{iff} \ x = x'.$ \\
-    And for a list of elements, we use $(\mathsf{List} \ H) \into C_X(S)=\mathsf{List}(H\into C_X(S))\\$
-    we say $x \in (\mathsf{List} \ X) \ \text{iff} \ x \in X.$
-\end{definition}
+% todo I don't think the definition below is ever used, uncomment it if you find a case
+% \begin{definition}
+%     We define $\cdot \into C_\mathcal{X}(\mathcal{S}): \bigtimes_{i = 1}^{n} S_i \rightarrow \bigtimes_{i = 1}^{n} C_{X_i}(S_i)$ to be the function that takes a tuple and inserts each element of the tuple correctly into its given cover lattice.
+%     We use $(h_1, h_2 \dots h_n)\into C_{\mathcal{X}}(\mathcal{S})=(h_1 \into C_{X_1}(S_1), h_2\into C_{X_2}(S_2), \dots, h_n \into C_{X_n}(S_n))$, where $\mathcal{X}=(X_1, X_2, \dots, X_n)$ and $\mathcal{S}=(S_1, S_2, \dots, S_n)$ to show how a tuples elements are inserted into the cover lattice what $\mathcal{X}$ and $\mathcal{S}$ are.
+% \end{definition}
 
 \begin{example}
     \autoref{fig:tikz-reg-partition} illustrates a simple lattice cover of the regular languages.
@@ -168,36 +141,134 @@ Now we can define the functions that map the values to the cover lattice.
     \label{fig:tikz-reg-partition-lattice}
 \end{figure}
 
-\subsubsection{Abstract domain of tables}\label{subsubsec:abstract_domain_of_tables}
+\subsubsection{Abstract tuples}\label{subsubsec:abstract-tuples}
 
-We consider a table $t$ as function from the domain of possible tuples in the table $\mathbb{T}$ to the codomain of natural numbers including $0$, $\mathbb{N}$:
+We define abstract tuples as the product cover-lattices of $\regexs$ and $\uints$ intertwined depending on the schema of the table.
+The concretisation function is defined as follows:
+\begin{align}
+    \concrete^{v_1, v_2, \dots, v_n}_5 &: \bigtimes_{i = 1}^{n}(\lookupcl(v_i)) \rightarrow \mathcal{P}\left(\bigtimes_{i = 1}^n \cc(\lookupcl(v_i)) \right) \\
+    \concrete^{v_1, v_2, \dots, v_n}_5(\ab{e_1}, \ab{e_2}, \dots, \ab{e_n}) &= \concrete^{v_1}_6(\ab{e_1}) \times \concrete^{v_2}_6(\ab{e_2}) \times \dots \times \concrete^{v_n}_6(\ab{e_n})
+\end{align}
+
+\subsubsection{Abstract application variable values}
+In the concrete semantics defined by \cite{halder_abstract_2012}, application variables can be assigned to either singleton or lists of values.
+As much as we can we would like to distinguish between these two cases, therefore we introduce the set $\mathsf{Val} \; S$ of list and singleton values inductively defined as:
+\begin{align}
+    \inference{}{\bot \in \mathsf{Val} \; S} \quad
+    \inference{s \in S}{\mathsf{Single} \; s \in \mathsf{Val} \; S} \quad
+    \inference{S' \subseteq S}{\mathsf{List} \; S' \in \mathsf{Val} \; S} \quad
+\end{align}
+% todo this should be uncommented if we wan't to fix the galios connection.
+% We define the partial order $\sqsubseteq$ of the lattice $(\mathsf{Val} \; A, \sqsubseteq, \sqcup, \sqcap)$ as follows:
+% \begin{align}
+%     \mathsf{List} \; S_1 &\sqsubseteq \mathsf{List} \; S_2 \iff \forall s_1 \in S_1, \; \exists s_2 \in S_2: \; s_1 \sqsubseteq s_2 \\
+%     \mathsf{Single} \; s_1 &\sqsubseteq \mathsf{Single} \; s_2 \iff s_1 \sqsubseteq s_2 \\
+%     \mathsf{Single} \; s &\sqsubseteq \mathsf{List} \; S \iff s \in S \\
+%     \mathsf{List} \; S &\not\sqsubseteq \mathsf{Single} \; s
+% \end{align}
+% The join and meet $\sqcup$ and $\sqcap$ respectively is defined as follows here:
+% \begin{align}
+%     \mathsf{Single} \; s \sqcup \mathsf{List} \; S &= \mathsf{List} \; (S\sqcup\left\{ s \right\})\\
+%     \mathsf{Single} \; s_1 \sqcup \mathsf{Single} \; s_2 &= \mathsf{Single} \; (s \sqcup s )\\
+%     \mathsf{List} \; S_1 \sqcup \mathsf{List} \; S_2 &= \mathsf{List} \; (S_1 \sqcup S_2)\\
+%     \mathsf{Single} \; s \sqcap \mathsf{List} \; S &= \mathsf{Single} \; s\\
+%     \mathsf{List} \; S_1 \sqcap \mathsf{List} \; S_2 &= \mathsf{List} \; (S_1 \sqcap S_2)\\
+%     \mathsf{Single} \; s_1 \sqcap \mathsf{Single} \; s_2 &= \mathsf{Single} \; (s_1 \sqcap s_2)\\
+%     \mathsf{List} \ \emptyset \sqcap \mathsf{Single} \ s &= \ \perp
+% \end{align}
+
+It will be helpful to further overload the $\into$ operator for this type of values, therefore we define
+\begin{align}
+    \cdot \into C_X(S) &: \mathsf{Val} \; S \rightarrow \mathsf{Val} \; C_X(S) \\
+    (\mathsf{Single} \; s) \into C_X(S) &= \mathsf{Single} \; (s \into C_X(S)) \\
+    (\mathsf{List} \; S') \into C_X(S) &= \mathsf{List} \; (S' \into C_X(S))
+\end{align}
+And the following notation will also be helpful later:
+\begin{align}
+    s \in (\mathsf{Single} \; s') \iff s = s' \\
+    s \in (\mathsf{List} \; S) \ \iff \ s \in S.
+\end{align}
+
+We define the concretisation of application variable values as:
+\begin{align}
+    \concrete^v_{4a} &: \mathsf{Val} \; \lookupcl(v) \rightarrow \mathcal{P}(\cc(\lookupcl(v))) \cup\mathcal{P}((\cc(\lookupcl(v)))^\star) \\
+    \concrete^v_{4a}(\mathsf{Single} \; \ab{s}) &= \concrete_6(\ab{s}) \\
+    \concrete^v_{4a}(\mathsf{List} \; \ab{S'}) &= \bigcup_{n \in \mathbb{N}}\left\{s_1, s_2, \dots, s_n \in (\cc(\lookupcl(v)))^n \middle| \forall i \in \{1, 2, \dots, n\} : \exists \ab{s} \in \ab{S'} : s_i \in \concrete^v_6(\ab{s}) \right\}
+\end{align}
+
+
+\subsubsection{Abstract tables}\label{subsubsec:abstract_domain_of_tables}
+
+We consider a concrete table $t$ as function from the domain of possible tuples in the table $\mathbf{TUP}$ to the codomain of natural numbers including $0$, $\mathbf{NAT}$:
 \begin{equation}
-    t : \mathbb{T} \rightarrow \mathbb{N}.
+    t : \mathbf{TUP} \rightarrow \mathbf{NAT}.
 \end{equation}
 The function $t$ describes the number of a given tuple in a table.
-We can then consider abstraction over the table $t$ by abstracting either the domain or codomain.
+We can then consider abstracting over a table $t$ by abstracting either the domain or codomain.
 This gives rise to a taxonomy of abstract domains of tables shown in \autoref{tab:taxonomy_of_abstract_domain_of_tables}.
-In \autoref{tab:taxonomy_of_abstract_domain_of_tables}, $\mathbb{T}^\#$ denotes an abstract domain of the set of possible tuples $\mathbb{T}$, such that it forms a finite lattice $(\mathbb{T}^\#, \sqsubseteq, \sqcap, \sqcup)$ (and analogous for $\mathbb{N}$).
+In \autoref{tab:taxonomy_of_abstract_domain_of_tables}, $\ab{\mathbf{TUP}}$ denotes an abstract domain of the set of possible tuples $\mathbf{TUP}$ (and analogous for $\mathbf{NAT}$).
 
 
 \begin{table}
     \caption{Taxonomy of abstract domains of tables}
     \centering
-    \begin{tabular}{c|l|c}
-    Name & Function & Supported \\
+    \begin{tabular}{c|l}
+    Classification & Function \\
     \hline
     \hline
-        Bag of tuples & $\mathbb{T} \rightarrow \mathbb{N}$ & \\
-        Abstract bag of tuples & $\mathbb{T} \rightarrow \mathbb{N}^\#$ & \\
-        Set of tuples & $\mathbb{T} \rightarrow 2$ & \\
-        Bag of abstract tuples & $\mathbb{T}^\# \rightarrow \mathbb{N}$ & \\
-        Abstract bag of abstract tuples & $\mathbb{T}^\# \rightarrow \mathbb{N}^\#$ & \checkmark \\
-        Set of abstract tuples & $\mathbb{T}^\# \rightarrow \{0, some\}$ & \checkmark \\
-        Abstract tuple & $\{\cdot\} \rightarrow \mathbb{T}^\#$ & \checkmark \\
+        Bag of tuples & $\mathbf{TUP} \rightarrow \mathbf{NAT}$ \\
+        Abstract bag of tuples & $\mathbf{TUP} \rightarrow \ab{\mathbf{NAT}}$ \\
+        Bag of abstract tuples & $\ab{\mathbf{TUP}} \rightarrow \mathbf{NAT}$ \\
+        Abstract bag of abstract tuples & $\ab{\mathbf{TUP}} \rightarrow \ab{\mathbf{NAT}}$ \\
     \end{tabular}
     \label{tab:taxonomy_of_abstract_domain_of_tables}
 \end{table}
 
-We will only consider abstract bags of abstract tuples, sets of abstract tuples and abstract tuples because of their finite nature.
-It should be clear that sets of abstract tuples are just a special case of abstract bags of abstract tuples.
-Naturally, these maps all form map lattices.
+One would classify \cite{halder_abstract_2012}'s work as using bags of abstract tuples, and in this work, as previously mentioned, we will use abstract bags of abstract tuples.
+In this work in particular we consider $\ab{\mathbf{TUP}}$ as given by the map $\lookupcl$ and $\ab{\mathbf{NAT}} = \{0, \leq0\}$
+We admit that this notion is a bit vague and informal, but displays the intuition.
+
+Formalizing the prequel, we consider $\ab{t} : \ab{\mathbf{TUP}} \rightarrow \ab{\mathbf{NAT}}$ to be represented as a single set $\ab{t'}$ instead, that is $\ab{t}({e}) = 0 \iff e \notin \ab{t'}$ and  $\ab{t}({e}) = (\leq 0) \iff e \in \ab{t'}$.
+Further as the form of an abstract table is given by the schema and the mapping $\lookupcl$ the final formalization for some table with name $v_d$ is then $\ab{t} \in \mathcal{P}\left(\bigtimes_{i = 1}^{n}\lookupcl(v_i)\right)$ for $attr(v_d) = (v_1, v_2, \dots, v_n)$.
+
+We define the concretisation of a table, where $attr(v_d) = (v_1, v_2, \dots, v_n)$ $\mathcal{M}$ is the bag power set as:
+\begin{align}
+    \concrete^{v_d}_{4d} &: \mathcal{P}\left(\bigtimes_{i = 1}^{n}\lookupcl(v_i)\right) \rightarrow \mathcal{M}\left(\bigtimes_{i = 1}^n \cc(\lookupcl(v_i))\right) \\
+    \concrete^{v_d}_{4d}(\ab{t}) &= \left\{ t \in \mathcal{M}\left(\bigtimes_{i = 1}^n \cc(\lookupcl(v_i))\right) \middle|\forall e \in t : \exists \ab{e} \in \ab{t} : e \in \concrete^{attr(v_d)}_5(\ab{e}) \right\}
+\end{align}
+
+\subsubsection{Abstract environments}
+
+We define an abstract environment $\rho_{\ab{a}} \in \ab{\mathfrak{E}_a}$ mapping application variable names $v_a \in \mathbb{V}_a$ to abstract values, and $\rho_{\ab{d}} \in \ab{\mathfrak{E}_d}$ mapping table names $v_d \in \mathbb{V}_d$ to abstract tables.
+That is give the previously mentioned map in \autoref{eq:lookupcl} we define:
+\begin{align}
+    \ab{\mathfrak{E}_a} &= \mathbb{V}_a \rightarrow \bigcup \{ C_{X_1}(S_1), C_{X_2}(S_2), \dots, C_{X_n}(S_n) \} \\
+    \ab{\mathfrak{E}_d} &= \mathbb{V}_d \rightarrow \bigcup_{v_d \in \mathbb{V}_d} \mathcal{P}\left(\bigtimes_{v_t \in attr(v_d)}\lookupcl(v_t)\right) \\
+    \ab{\mathfrak{E}} &= \ab{\mathfrak{E}_a} \times \ab{\mathfrak{E}_d}
+\end{align}
+And the concrete counter parts:
+\begin{align}
+    \mathfrak{E}_a &= \mathbb{V}_a \rightarrow \nums \cup \strs \\
+    \mathfrak{E}_d &= \mathbb{V}_d \rightarrow \bigcup_{v_d \in \mathbb{V}_d} \mathcal{P}\left(\bigtimes_{v_t \in attr(v_d)}\cc(\lookupcl(v_t))\right) \\
+    \mathfrak{E} &= \mathfrak{E}_a \times \mathfrak{E}_d
+\end{align}
+
+And we define the concretisation functions for environments as:
+\begin{align}
+    \concrete_2 &: \ab{\mathfrak{E}} \rightarrow \mathcal{P}(\mathfrak{E}) \\
+    \concrete_2(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \concrete_{3d}(\rho_{\ab{d}}) \times \concrete_{3a}(\rho_{\ab{a}})
+\end{align}
+\begin{align}
+    \concrete_{3d} &: \ab{\mathfrak{E}_d} \rightarrow \mathcal{P}(\mathfrak{E}_d) \\
+    \concrete_{3d}(\rho_{\ab{d}}) &= \left\{ \rho_{a} \in \mathfrak{E}_d \middle| \forall v_d \in \mathbb{V}_d : \rho_d(v_d) \in \concrete^{v_d}_{4d}(\rho_{\ab{d}}(v_d)) \right\}
+\end{align}
+\begin{align}
+    \concrete_{3a} &: \ab{\mathfrak{E}_a} \rightarrow \mathcal{P}(\mathfrak{E}_a) \\
+    \concrete_{3a}(\rho_{\ab{a}}) &= \left\{ \rho_{a} \in \mathfrak{E}_a \middle| \forall v_a \in \mathbb{V}_a : \rho_a(v_a) \in \concrete^{v_a}_{4a}(\rho_{\ab{a}}(v_a)) \right\}
+\end{align}
+And in the same vain we define a concretisation function for sets of environments as:
+\begin{align}
+    \concrete_1 &: \mathcal{P}(\ab{\mathfrak{E}}) \rightarrow \mathcal{P}(\mathfrak{E}) \\
+    \concrete_1(\ab{P}) &= \left\{ (\rho_{d}, \rho_{a}) \in \mathfrak{E} \middle| \exists (\rho_{\ab{d}}, \rho_{\ab{a}}) \in \ab{P} : (\rho_{d}, \rho_{a}) \in \concrete_2(\rho_{\ab{d}}, \rho_{\ab{a}})\right\}
+\end{align}
+
