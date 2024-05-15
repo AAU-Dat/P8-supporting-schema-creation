@@ -23,7 +23,7 @@
 % Packages with options set
 \usepackage[hidelinks]{hyperref}
 \usepackage[textsize=small,obeyDraft]{todonotes}
-\usepackage[newfloat, outputdir=../out]{minted}
+\usepackage[newfloat, outputdir=./out]{minted}
 \usepackage[backend=biber,
     bibencoding=utf8,
     maxbibnames=20,
@@ -31,7 +31,6 @@
     citestyle=numeric-comp,
     url=false
 ]{biblatex}
-\usepackage[acronym]{glossaries}
 \usepackage[inference]{semantic}
 \usepackage{mathtools}
 
@@ -44,6 +43,7 @@
 % Other setup and options
 \declaretheorem{theorem}
 \declaretheorem{lemma}
+\declaretheorem{corollary}
 \declaretheorem{definition}
 \declaretheorem{example}
 \declaretheorem{conjecture}
@@ -62,8 +62,6 @@
   \rotatebox[origin=c]{180}{$\m@th#1#2$}%
 }
 \makeatother
-
-\makeglossaries
 
 \tikzstyle{state} = [rectangle, minimum width=1cm, minimum height=1cm, text centered, draw=black, fill=white!30]
 \tikzstyle{circle} = [ellipse, minimum width=1cm, minimum height=0.5cm, text centered, draw=black, fill=white!30]
@@ -105,7 +103,14 @@
 \newcommand{\abspredsem}[1]{\widehat{\mathcal{W}}\llbracket #1 \rrbracket}
 \newcommand{\absatomsem}[1]{\widehat{\mathcal{T}}\llbracket #1 \rrbracket}
 \newcommand{\app}[1]{\;\llparenthesis#1\rrparenthesis\;}
-
+\newcommand{\regexs}{\mathbf{REG}}
+\newcommand{\regex}{R}
+\newcommand{\lang}{\mathcal{L}}
+\newcommand{\uints}{\mathbf{INT}}
+\newcommand{\uint}{\mathscr{I}}
+\newcommand{\strs}{\mathbf{STR}}
+\newcommand{\nums}{\mathbf{NUM}}
+\newcommand{\cc}{c}
 \floatplacement{listing}{htb!}
 \floatplacement{table}{htb!}
 \floatplacement{figure}{htb!}
