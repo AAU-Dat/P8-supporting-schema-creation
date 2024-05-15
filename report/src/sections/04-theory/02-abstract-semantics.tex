@@ -60,15 +60,13 @@ Otherwise, we proceed as usual.
     \absboolsem{e_1 \;comp\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=  \begin{cases}
         \app{\{\{\texttt{false,true}\}\} \cup} E \quad \quad \text{if } w\\
         E_1 \;\ab{\comp}\; E_2 \quad \quad \quad \quad \text{otherwise}
-    \end{cases}\label{eq:abstract-bool-semantics-end}
-\end{align}
-\begin{align}
+    \end{cases} \nonumber \\
     \begin{split}
-        \text{where } w&=(E_1 = \mathsf{List} \; S_1 \lor E_2 = \mathsf{List} \; S_2) \\
-        \land E_1 &\;\ab{\comp}\; E_2 = E \nonumber
+        \text{where } w&=(E_1 = \mathsf{List} \; S_1 \lor E_2 = \mathsf{List} \; S_2) \nonumber\\
+        &\land E_1 \;\ab{\comp}\; E_2 = E \nonumber
     \end{split} \\
     \text{and } E_1 &= \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \nonumber \\
-    \text{and }  E_2 &= \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}})  \nonumber
+    \text{and }  E_2 &= \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \label{eq:abstract-bool-semantics-end}
     %\absboolsem{e_1 \;comp\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= E_1 \;\ab{\comp}\; E_2 \quad \text{where }  E_1 = \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ \text{and } E_2 = \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \label{eq:abstract-bool-semantics-end}
 \end{align}
 
@@ -116,17 +114,18 @@ If the two abstract values only represent the same value, equality can only be t
 If the values the two abstract values represent do not intersect, equality can only be false.
 Otherwise, they overlap; in this case, we are unsure whether the concrete values that can be derived are equal.
 
-\begin{align} \label{eq:aaabcomp}
+\begin{align} \nonumber
     X_1 \;\aab{=}\; X_2 &= \begin{cases}
         \begin{cases}
-        \{\true\} & \text{if } w\\
+        \{\true\} & \text{if } a\\
         \{\false\} & \text{if } X_1 \cap X_2 = \emptyset \\
         \{\true, \false\} & \text{otherwise }
-        \end{cases} & \text{if $q$} \\
+        \end{cases} & \text{if $b$} \\
         \text{undefined} & \text{otherwise}
     \end{cases}\\
-    \text{where } w&=|X_1| = |X_2| = 1 \land X_1 = X_2 \nonumber\\
-    \text{and } q&=X_1 \text{ and } X_2 \text{ is of the same type}
+    \text{where } a&=|X_1| = |X_2| = 1 \land X_1 = X_2 \nonumber\\
+    \text{and } b&=X_1 \text{ and } X_2 \text{ is of the same type}
+    \label{eq:aaabcomp}
 \end{align}
 
 $min(\mathscr{I})$ and $max(\mathscr{I})$ denotes the maximum and minimum value represented by $\mathscr{I}$, we argue that such values can easily be computed if $\mathscr{I}$ is kept in a canonical form within the actual implementation.
@@ -198,28 +197,28 @@ This automaton is then converted back to a regular expression by the usual GNFA 
 
 \autoref{eq:concat} to \ref{eq:length} describes a subset of String operators, present in PostgreSQL, abstractly.
 \begin{align}\label{eq:concat}
-    R_1 \;\aab{||}\; R_2 &= R_1R_2 \\
+    &R_1 \;\aab{||}\; R_2 = R_1R_2 \\
     \begin{split}
-        \aab{lower}(R) &= cvt(\sigma \mapsto \sigma', R) \\
-        \text{such } &\text{that } \sigma' \text{ is the lowercase representation of } \sigma
+        &\aab{lower}(R) = cvt(\sigma \mapsto \sigma', R) \\
+        & \quad \quad \text{such } \text{that } \sigma' \text{ is the lowercase representation of } \sigma
     \end{split}\\
     \begin{split}
-        \aab{upper}(R) &= cvt(\sigma \mapsto \sigma', R) \\
-        \text{such } &\text{that $\sigma'$ is the uppercase representation of $\sigma$}
+        & \aab{upper}(R) = cvt(\sigma \mapsto \sigma', R) \\
+        & \quad \quad \text{such } \text{that $\sigma'$ is the uppercase representation of $\sigma$}
     \end{split}\\
     \begin{split}
-        \aab{bit\_length}(R) &= \|cvt(\sigma \mapsto \sigma', R)\| \\
-        \text{such } &\text{that $\sigma'$ is the bit string of $\sigma$}
+        &\aab{bit\_length}(R) = \|cvt(\sigma \mapsto \sigma', R)\| \\
+        & \quad \quad \text{such } \text{that $\sigma'$ is the bit string of $\sigma$}
     \end{split} \\ \label{eq:length}
-    \aab{length}(R) &= \|R\|
+    &\aab{length}(R) = \|R\|
 \end{align}
 
 \autoref{eq:abstractBOP} describes how to do binary operations on numbers.
 The arithmetic operations, $\aaab{aop}$, are defined as follows for intervals.
 \begin{align}\label{eq:abstractBOP}
-    \bigcup \mathcal{I} \;\aab{aop}\; \bigcup \mathcal{I}' &= \bigcup_{\mathscr{I}\in \mathcal{I}, \mathscr{I}'\in \mathcal{I}'}\mathscr{I}\aaab{aop}\mathscr{I}'\\
+    \bigcup \mathcal{I} \;\aab{aop}\; \bigcup \mathcal{I}' &= \bigcup_{\mathscr{I}\in \mathcal{I}, \mathscr{I}'\in \mathcal{I}'}\mathscr{I}\aaab{aop}\mathscr{I}'\nonumber\\
     \text{where } \mathcal{I}&=\{\mathscr{I}_1,\dots,\mathscr{I}_n\}\nonumber\\
-    \text{and } \mathcal{I}'&=\{\mathscr{I}'_1,\dots,\mathscr{I}'_n\}\nonumber
+    \text{and } \mathcal{I}'&=\{\mathscr{I}'_1,\dots,\mathscr{I}'_n\}
 \end{align}
 
 \subsubsection{Abstract Semantics of Predicates}
@@ -267,12 +266,12 @@ Therefore, we will present each of them carefully in the sequel.
 The abstract \textit{select}, takes all values in the table where we are definitely sure or maybe sure that the predicate evaluates to true for the current state.
 Then it wraps them in a $\mathsf{List}$ 'label' and inserts this in the lattice of the respective variable before assigning the variable to this value.
 \begin{align}
-\begin{split}
-    \abssqlsem{\langle select(v_a, v_d, \mathbf{v}_t), \phi \rangle}\biggl(\rho_{\ab{d}}, \rho_{\ab{a}})
-    &= (\rho_{\ab{d}}, \rho_{\ab{a}}[v_a \mapsto \\
-    \mathsf{List} \Bigl( \pi_{\mathbf{v}_t} \bigl(\abstable \downarrow_{\true}^{(\env{\ab{d}}, \env{\absvars})} \phi \cup \abstable &\downarrow_{\unknown}^{(\env{\ab{d}}, \env{\absvars})} \phi \bigr) \Bigr) \into \lookupcl(v_a) ]\biggr)
+\begin{split} \nonumber
+    \abssqlsem{\langle select&(v_a, v_d, \mathbf{v}_t), \phi \rangle}\biggl(\rho_{\ab{d}}, \rho_{\ab{a}})
+    = (\rho_{\ab{d}}, \rho_{\ab{a}}[v_a \mapsto \\
+    &\mathsf{List} \Bigl( \pi_{\mathbf{v}_t} \bigl(\abstable \downarrow_{\true}^{(\env{\ab{d}}, \env{\absvars})} \phi \cup \abstable \downarrow_{\unknown}^{(\env{\ab{d}}, \env{\absvars})} \phi \bigr) \Bigr) \into \lookupcl(v_a) ]\biggr)
 \end{split}\\
-    \text{where } \ab{t}&=\rho_{\ab{d}}(v_d)
+    &\text{where } \ab{t}=\rho_{\ab{d}}(v_d)
 \end{align}
 
 For \textit{insert}, we evaluate each expression in $\mathbf{e}$, and take the product of them as the set of abstract tuples to be inserted.
@@ -281,38 +280,34 @@ These respective values are inserted into the lattice of the column they corresp
 At last, we turn the values into actual abstract tuples in the table, here we find it helpful to view a tuple as a function $attr(\ab{t}) \rightarrow \lookupcl(v_1) \cup \lookupcl(v_2) \cup \dots \cup \lookupcl(v_n)$ where $attr(\ab{t}) = \{v_1, v_2, \dots, v_n\}$.
 In particular, we start with a tuple with all entries equal to null $\lambda\_.\mnull$, then for each of the evaluations of the expressions we update the tuples to take those values in the correct places.
 \begin{align}
-    \abssqlsem{\langle insert(v_d, \mathbf{v}_t, &\mathbf{e}), \phi \rangle}(\rho_{\ab{d}}, \rho_{\ab{a}}) = (\rho_{\ab{d}}[v_d\mapsto \ab{t}\cup s], \rho_{\ab{a}}) \\
-    \text{where } \mathsf{List} \; S &= \app{\bigtimes_{i = 0}^{n}} \absexpsem{e_i}(\rho_{\ab{d}}, \rho_{\ab{a}}) \into \lookupcl(v_i) \\
-    \text{and } s &= \left\{ (\lambda\_.\mnull)[\mathbf{v}_t \mapsto \mathbf{s}] \;\middle|\; \mathbf{s} \in S\right\} \\
+    \abssqlsem{\langle insert(v_d, \mathbf{v}_t, &\mathbf{e}), \phi \rangle}(\rho_{\ab{d}}, \rho_{\ab{a}}) = (\rho_{\ab{d}}[v_d\mapsto \ab{t}\cup s], \rho_{\ab{a}}) \nonumber \\
+    \text{where } \mathsf{List} \; S &= \app{\bigtimes_{i = 0}^{n}} \absexpsem{e_i}(\rho_{\ab{d}}, \rho_{\ab{a}}) \into \lookupcl(v_i) \nonumber\\
+    \text{and } s &= \left\{ (\lambda\_.\mnull)[\mathbf{v}_t \mapsto \mathbf{s}] \;\middle|\; \mathbf{s} \in S\right\} \nonumber\\
     \text{and } \ab{t}&=\rho_{\ab{d}}(v_d)
 \end{align}
 
 In the case of an \textit{update} command, we evaluate the expressions as for \textit{insert}.
 In the case of the abstract tuples that definitely satisfy the predicate, we update them, and in the case we are unsure, we update them to the join of its current value and the incoming value.
 \begin{align}
-    \abssqlsem{\langle update(v_d, \mathbf{v}_t, \mathbf{e}), \abspred \rangle} (\env{\ab{d}}, \env{\absvars}) = &(\env{\ab{d}}[v_d\mapsto \ab{t'}], \env{\absvars})
-\end{align}
-\begin{align}
-    \text{where } \ab{t}=\rho_{\ab{d}}(v_d) \nonumber
-\end{align}
-\begin{align} \nonumber
-    \text{and }\abstable' &= \ab{t} \downarrow_{\false}^{(\env{\ab{d}}, \env{\absvars})} \phi \\
+    \abssqlsem{\langle upd&ate(v_d, \mathbf{v}_t, \mathbf{e}), \abspred \rangle} (\env{\ab{d}}, \env{\absvars}) = (\env{\ab{d}}[v_d\mapsto \ab{t'}], \env{\absvars})\nonumber\\
+    &\text{where } \ab{t}=\rho_{\ab{d}}(v_d) \nonumber\\
+    &\text{and }\abstable' = \ab{t} \downarrow_{\false}^{(\env{\ab{d}}, \env{\absvars})} \phi \nonumber\\
     \begin{split}
          &\cup \biggl\{ l\Bigl[ \mathbf{v}_t \mapsto \pi_{\mathbf{v}_t}(s) \sqcup \pi_{\mathbf{v}_t}(l) \Bigr] \;\Big|\;\\
          &l \in \ab{t} \downarrow_{\unknown}^{(\env{\ab{d}}, \env{\absvars})} \phi \land s \in \app{\bigtimes_{i = 0}^{n}} \absexpsem{e_i}(\rho_{\ab{d}}, \rho_{\ab{a}}) \into \lookupcl(v_i)\biggr\} \nonumber
     \end{split} \\
     \begin{split}
         &\cup \biggl\{ l\Bigl[ \mathbf{v}_t \mapsto \pi_{\mathbf{v}_t}(s) \Bigr] \;\Big|\;\\
-        &l \in \ab{t} \downarrow_{\true}^{(\env{\ab{d}}, \env{\absvars})} \phi \land s \in \app{\bigtimes_{i = 0}^{n}} \absexpsem{e_i}(\rho_{\ab{d}}, \rho_{\ab{a}}) \into \lookupcl(v_i)\biggr\} \nonumber
+        &l \in \ab{t} \downarrow_{\true}^{(\env{\ab{d}}, \env{\absvars})} \phi \land s \in \app{\bigtimes_{i = 0}^{n}} \absexpsem{e_i}(\rho_{\ab{d}}, \rho_{\ab{a}}) \into \lookupcl(v_i)\biggr\}
     \end{split}
 \end{align}
 
 In the case of \textit{delete}, we remove all tuples where we are definitely sure that they should be removed.
-\begin{align*}
-    \abssqlsem{\langle delete(v_d, \mathbf{v}_t), \abspred \rangle} (\env{\ab{d}}, \env{\absvars}) &= (\env{\ab{d}}[v_d\mapsto \ab{t'}], \env{\absvars}) \\
-    \text{where } \ab{t}&=\rho_{\ab{d}}(v_d)\\
-    \text{and }\abstable' &= \abstable \downarrow_{\unknown}^{(\env{\ab{d}}, \env{\absvars})} \phi \cup \abstable \downarrow_{\false}^{(\env{\ab{d}}, \env{\absvars})} \phi
-\end{align*}
+\begin{align}
+    \abssqlsem{\langle delete&(v_d, \mathbf{v}_t), \abspred \rangle} (\env{\ab{d}}, \env{\absvars}) = (\env{\ab{d}}[v_d\mapsto \ab{t'}], \env{\absvars}) \nonumber\\
+    &\text{where } \ab{t}=\rho_{\ab{d}}(v_d) \nonumber\\
+    &\text{and }\abstable' = \abstable \downarrow_{\unknown}^{(\env{\ab{d}}, \env{\absvars})} \phi \cup \abstable \downarrow_{\false}^{(\env{\ab{d}}, \env{\absvars})} \phi
+\end{align}
 
 \subsubsection{Abstract Semantics of Instructions}
 This section will cover the abstract semantics of Instructions in SQAAL.
