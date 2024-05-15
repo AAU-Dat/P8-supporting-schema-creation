@@ -1,53 +1,3 @@
-\subsection{Abstract Syntax} \label{subsec:function-definitions}
-This section will introduce the syntactic sets and abstract syntax of SQAAL.
-The syntactic sets of SQAAL encompass the various elements and constructs that constitute the language's grammar.
-These sets define the valid combinations of symbols and keywords that form syntactically correct statements in SQAAL. They include components such as keywords, identifiers, operators, literals, and punctuation marks, each serving a specific role in expressing queries and analytical operations.
-
-This paper adopts a simplified version of the abstract syntax originally presented in~\cite{cortesi_abstract_2013}.
-Omitted parts within this simplified abstract syntax correspond to features or constructs that are not utilized or discussed in the context of the current application.
-The abstract syntax of SQAAL is defined in terms of the syntactic sets introduced in \autoref{tab:syntatic-sets}.
-\begin{figure}[htb!]
-     \center
-    \begin{tabular}{l l}
-    $n \in \mathbb{Z}$                          & Integers                                                   \\
-    $k \in \mathbb{S}$                                  & Strings                                                    \\
-    $c \in \mathbb{C}$                          & Constants                                                 \\
-    $v_a \in \mathbb{V}_a$                      & Application variables                                     \\
-    $v_d \in \mathbb{V}_d$                      & Database variables (attributes) involved in SQL commands  \\
-    $v_t \in \mathbb{V}_t$                    & Table variables (columns)    \\
-    $v \in \mathbb{V}$ & Variables                                                 \\
-    $e \in \mathbb{E}$                          & Arithmetic expressions                                    \\
-    $b \in \mathbb{B}$                          & Boolean expressions                                       \\
-    $\tau \in \mathbb{T}$                       & Terms                                                     \\
-    $a_f \in \mathbb{A}_f$                      & Atomic formulas                                           \\
-    $\phi  \in \mathbb{W}$                      & Well-formed formulas (pre-condition part of SQL commands) \\
-    $A_{sql} \in \mathbb{A}_{sql}$              & Action part of SQL commands                               \\
-    $C_{sql} \in \mathbb{C}_{sql}$              & SQL commands                                              \\
-    $I \in \mathbb{I}$                          & Instructions/commands                                     \\
-    \end{tabular}
-    \caption{Syntatic Sets}
-    \label{tab:syntatic-sets}
-\end{figure}
-
-The abstract syntax of SQAAL is presented in \autoref{tab:abstract-syntax}.
-\begin{figure}[htb!]
-    \center
-    \begin{tabular}{r l}
-        $c ::=$ & $n \mid k$ \\
-        $v ::=$ & $v_t \mid v_a$ \\
-        $e ::=$ & $c \mid v \mid op_u\; e \mid \;e_1 op_b\; e_2$ for $op_u = \{-\}$ and $op_b = \{+, -, *, / \}$ \\
-
-        $b ::=$ & $e_1 = e_2 \mid e_1 \leq e_2 \mid e_1 < e_2 \mid \neg b \mid b_1 \lor b_2 \mid b_1 \land b_2 \mid \texttt{true} \mid \texttt{false}$ \\
-
-        $a_f ::=$ & $e_1 = e_2 \mid e_1 \leq e_2 \mid e_1 < e_2$ \\
-        $\phi ::=$ & $a_f \mid \neg \phi_1 \mid \phi_1 \lor \phi_2 \mid \phi_1 \land \phi_2 \mid \forall v_n \phi \mid \exists v_n \phi$ \\
-        $A_{sql} :: =$ & $select(v_a, v_d, \mathbf{v}_t) \mid update(v_d, \mathbf{v}_t, \mathbf{e}) \mid delete(v_d, \mathbf{v}_t) \mid insert(v_d, \mathbf{v}_t, \mathbf{e})$ \\
-        $C_{sql} ::=$ & $\langle A_{sql}, \phi \rangle $ \\
-        $I ::=$ & $skip \mid v_a := e \mid v_a := ? \mid C_{sql} $\\
-    \end{tabular}
-    \caption{Abstract Syntax}
-    \label{tab:abstract-syntax}
-\end{figure}
 
 \subsection{Abstract Semantics}\label{subsec:abstract-semantics}
 This section will describe the abstract semantics of SQAAL.
@@ -93,7 +43,6 @@ In \autoref{eq:abstract-bool-semantics-end}, we check if either of the two expre
 Otherwise, we proceed as usual.
 
 \begin{align}
-    \absboolsem{\cdot} &: \mathbb{B} \rightarrow \ab{\mathfrak{E}} \rightarrow \mathsf{Val} \; \mathcal{P}(\{\true, \false, null\}) \label{eq:bool-operation} \\
     \absboolsem{\texttt{true}}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \mathsf{Single} \; \{\true\} \label{eq:abstract-bool-semantics-start} \\
     \absboolsem{\texttt{false}}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \mathsf{Single} \; \{\false\} \\
     \absboolsem{b_1 \lor b_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absboolsem{b_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ab{\lor} \absboolsem{b_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
