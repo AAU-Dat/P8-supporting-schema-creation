@@ -3,6 +3,8 @@
 
 % Packages
 \RequirePackage{clrscode4e}
+%\usepackage{stix2}
+\usepackage[scaled=0.8]{FiraMono}
 \usepackage{amsmath}
 % \usepackage{amsthm} \\ the proof environment clashes with the one in pf2.
 \usepackage{amssymb}
@@ -17,12 +19,11 @@
 \usepackage{stmaryrd}
 \usepackage{mathabx}
 \usepackage{algpseudocode}
-\usepackage{listings}
 
 % Packages with options set
 \usepackage[hidelinks]{hyperref}
 \usepackage[textsize=small,obeyDraft]{todonotes}
-\usepackage[newfloat, outputdir=../out]{minted}
+\usepackage[newfloat, outputdir=./out]{minted}
 \usepackage[backend=biber,
     bibencoding=utf8,
     maxbibnames=20,
@@ -30,23 +31,26 @@
     citestyle=numeric-comp,
     url=false
 ]{biblatex}
-\usepackage[acronym]{glossaries}
 \usepackage[inference]{semantic}
+\usepackage{mathtools}
 
 % Package setup
 \setlength{\marginparwidth}{2cm} % todonotes width
 \setminted{linenos, autogobble, breaklines, fontsize=\footnotesize, style=friendly, xleftmargin=1em, numbersep=5pt}
+\usemintedstyle[bash]{emacs}
 \addbibresource{bib/main.bib}
 
 % Other setup and options
 \declaretheorem{theorem}
 \declaretheorem{lemma}
+\declaretheorem{corollary}
 \declaretheorem{definition}
 \declaretheorem{example}
 \declaretheorem{conjecture}
-\newfloat{algorithm}{htb!}{lop}
-\floatname{algorithm}{Algorithm}
-\newcommand{\algorithmautorefname}{Algorithm}
+\DeclareFloatingEnvironment[name=Algorithm, placement=htb!]{algorithm}
+%\newfloat{algorithm}{htb!}{lop}
+%\floatname{algorithm}{Algorithm}
+%\newcommand{\algorithmautorefname}{Algorithm}
 
 \makeatletter
 \providecommand{\bigsqcap}{%
@@ -59,10 +63,8 @@
 }
 \makeatother
 
-\makeglossaries
-
-\tikzstyle{state} = [rectangle, minimum width=1.5cm, minimum height=1cm, text centered, draw=black, fill=white!30]
-\tikzstyle{circle} = [ellipse, minimum width=1.5cm, minimum height=0.5cm, text centered, draw=black, fill=white!30]
+\tikzstyle{state} = [rectangle, minimum width=1cm, minimum height=1cm, text centered, draw=black, fill=white!30]
+\tikzstyle{circle} = [ellipse, minimum width=1cm, minimum height=0.5cm, text centered, draw=black, fill=white!30]
 
 \newcommand{\abssem}[1]{\ab{\mathcal{S}} \llbracket #1 \rrbracket}
 \newcommand{\sem}[1]{\mathcal{S} \llbracket #1 \rrbracket}
@@ -101,3 +103,15 @@
 \newcommand{\abspredsem}[1]{\widehat{\mathcal{W}}\llbracket #1 \rrbracket}
 \newcommand{\absatomsem}[1]{\widehat{\mathcal{T}}\llbracket #1 \rrbracket}
 \newcommand{\app}[1]{\;\llparenthesis#1\rrparenthesis\;}
+\newcommand{\regexs}{\mathbf{REG}}
+\newcommand{\regex}{R}
+\newcommand{\lang}{\mathcal{L}}
+\newcommand{\uints}{\mathbf{INT}}
+\newcommand{\uint}{\mathscr{I}}
+\newcommand{\strs}{\mathbf{STR}}
+\newcommand{\nums}{\mathbf{NUM}}
+\newcommand{\cc}{c}
+\floatplacement{listing}{htb!}
+\floatplacement{table}{htb!}
+\floatplacement{figure}{htb!}
+\floatplacement{algorithm}{htb!}
