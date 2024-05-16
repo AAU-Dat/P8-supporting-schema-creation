@@ -6,6 +6,7 @@
 -Creating the semantics for the abstract representations
 -implementing the abstract representations in kotlin
 -through CLI it takes a database in the form af SQL queries and returns the abstract representation of the database after a set of operations have been performed on it defined by the user
+\todo{Clean this up}
 
 \subsection{Example}\label{subsec:example}
 To illustrate the method, we will use a simple example.
@@ -114,40 +115,42 @@ The properties we want to check on the database are shown in \autoref{lst:proper
 
 After inserting all the information into the program, the program makes a graph of system, which is shown in \autoref{fig:program-graph}.
 
+\begin{figure}
+    \centering
+    \begin{tikzpicture} [scale=0.5]
+        \usetikzlibrary{arrows}
+        \usetikzlibrary {shapes.geometric}
+        \node (endState) [ellipse, draw, minimum size=1.5em] at (0,0) { }; \node (c1) [ellipse, draw, minimum size=1.5em] at (3,3) { };
+        \node (c2) [ellipse, draw, minimum size=1.5em] at (6,6) { };
+        \node (a5)[ellipse, draw, minimum size=1.5em] at (-3,3) { };
+        \node (a4) [ellipse, draw, minimum size=1.5em] at (-3,6) { };
+        \node (a3) [ellipse, draw, minimum size=1.5em] at (0,9) { };
+        \node (a2) [ellipse, draw, minimum size=1.5em] at (0,12) { };
+        \node (a1) [ellipse, draw, minimum size=1.5em] at (0,15) { };
+        \node (b2) [ellipse, draw, minimum size=1.5em] at (-6,12) { };
+        \node (b1) [ellipse, draw, minimum size=1.5em] at (-3,15) { };
+        \node (startState) [ellipse, draw=green, fill=green!25, minimum size=1.5em] at (0,18) { };
 
-\begin{tikzpicture} [scale=0.5]
-    \usetikzlibrary{arrows}
-    \usetikzlibrary {shapes.geometric} 
-    \node (endState) [ellipse, draw, minimum size=1.5em] at (0,0) { }; \node (c1) [ellipse, draw, minimum size=1.5em] at (3,3) { };
-    \node (c2) [ellipse, draw, minimum size=1.5em] at (6,6) { };
-    \node (a5)[ellipse, draw, minimum size=1.5em] at (-3,3) { };
-    \node (a4) [ellipse, draw, minimum size=1.5em] at (-3,6) { };
-    \node (a3) [ellipse, draw, minimum size=1.5em] at (0,9) { };
-    \node (a2) [ellipse, draw, minimum size=1.5em] at (0,12) { };
-    \node (a1) [ellipse, draw, minimum size=1.5em] at (0,15) { };
-    \node (b2) [ellipse, draw, minimum size=1.5em] at (-6,12) { };
-    \node (b1) [ellipse, draw, minimum size=1.5em] at (-3,15) { };
-    \node (startState) [ellipse, draw=green, fill=green!25, minimum size=1.5em] at (0,18) { };
-    
-    
-    
-    \draw [->, very thick]  (-3,20) to (startState);
-    \draw [->, very thick] (startState) to node[midway, left=0.25em, font=\footnotesize] {b:= +} (b1);
-    \draw [->, very thick] (b1) to node[midway, right=0.25em] {u:= ?} (b2);
-    \draw [->, very thick] (b2) to [out=90, in=180] node[midway, above=1em] {I(b, u)}  (startState);
-    \draw [->, very thick] (startState) to node[midway, left=0em, yshift=-1em, font=\footnotesize] {ta:= ?} (a1);
-    \draw [->, very thick] (a1) to node[midway, left=0.25em, xshift=0.5em] {to:= ?} (a2);
-    \draw [->, very thick] (a2) to node[midway, left=0.25em] {form:= ?} (a3);
-    \draw [->, very thick] (a3) to [out=50, in=320] node[midway, right, xshift=-2em, yshift=-5.5em, font=\footnotesize] {-(ta $>$ 0)} (startState);
-    \draw [->, very thick] (a3) to node[midway, left=0.25em] {ta $>$ 0} (a4);
-    \draw [->, very thick] (a4) to node[midway, left=0.25em] {select1} (a5);
-    \draw [->, very thick] (a5) to node[midway, left=0.25em] {select2} (endState);
-    \draw [->, very thick] (endState) to [out=70, in=340] node[midway, below left=3em, yshift=-4em] {-(fb - ta $>$ 0)} (startState);
-    \draw [->, very thick] (endState) to node[midway, right=0.25em] {fb - ta $>$ 0} (c1);
-    \draw [->, very thick] (c1) to node[midway, right=0.25em] {update 1} (c2);
-    \draw [->, very thick] (c2) to [out=90, in=360] node[midway, right=0.25em] {update 2} (startState);
-\end{tikzpicture}
-\todo{Make the graph in tikz}
+
+        \draw [->, very thick]  (-3,20) to (startState);
+        \draw [->, very thick] (startState) to node[midway, left=0.25em] {b:= +} (b1);
+        \draw [->, very thick] (b1) to node[midway, right=0.25em] {u:= ?} (b2);
+        \draw [->, very thick] (b2) to [out=90, in=180] node[midway, above=1em] {I(b, u)}  (startState);
+        \draw [->, very thick] (startState) to node[midway, left=0em, yshift=-1em] {ta:= ?} (a1);
+        \draw [->, very thick] (a1) to node[midway, left=0.25em, xshift=0.5em] {to:= ?} (a2);
+        \draw [->, very thick] (a2) to node[midway, left=0.25em] {form:= ?} (a3);
+        \draw [->, very thick] (a3) to [out=50, in=320] node[midway, right, xshift=-2em, yshift=-5.5em] {-(ta $>$ 0)} (startState);
+        \draw [->, very thick] (a3) to node[midway, left=0.25em] {ta $>$ 0} (a4);
+        \draw [->, very thick] (a4) to node[midway, left=0.25em] {select1} (a5);
+        \draw [->, very thick] (a5) to node[midway, left=0.25em] {select2} (endState);
+        \draw [->, very thick] (endState) to [out=70, in=340] node[midway, below left=3em, yshift=-4em] {-(fb - ta $>$ 0)} (startState);
+        \draw [->, very thick] (endState) to node[midway, right=0.25em] {fb - ta $>$ 0} (c1);
+        \draw [->, very thick] (c1) to node[midway, right=0.25em] {update 1} (c2);
+        \draw [->, very thick] (c2) to [out=90, in=360] node[midway, right=0.25em] {update 2} (startState);
+    \end{tikzpicture}
+    \caption{Program graph for \autoref{lst:program}.}
+    \label{fig:programgraph}
+\end{figure}
 
 
 The program is now ready to be analyzed, and the analysis will check if the properties are satisfied.

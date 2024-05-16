@@ -33,7 +33,7 @@ To illustrate, consider the database schema \autoref{lst:motivate-sql} with the 
 \begin{listing}
     \begin{minted}{bash}
         while true do
-            insert(account, (name, balance), ("name", 1))
+            insert((name, balance), ("name", 1))
     \end{minted}
     \caption{A tiny program with nonterminating analysis.}
     \label{lst:motivate-program}
@@ -48,6 +48,16 @@ Show the contributions through a second example that runs through how we used th
 
 \subsection{Contributions}\label{subsec:contributions}
 
+Use Halder concretely for abstract interpretation
+
+Improve on the levels of abstraction, i.e., add not just abstract values but also abstract tuples
+
+Describe an implementable algorithm for performing static analysis targeting specific properties, given a program and database.
+
+Prove soundness for the analysis.
+
+Describe the properties we wish to check using LTL-like encodings, i.e., phrases like \emph{always, eventually,} and \emph{never}, to describe undesirable database states.
+
 \subsection{Related Work}\label{subsec:related-work}
 
 We use this database-program description together with Linear Temporal Logic (LTL) for describing temporal properties that is interesting with respect to the evolution of the database over time
@@ -56,3 +66,14 @@ We use this database-program description together with Linear Temporal Logic (LT
 Give an overview of the sections to follow
 
 
+The Theory section of this paper will cover the theoretical framework for analyzing an abstract interpretation of a database and application.
+This includes the following:
+
+\begin{itemize}
+    \item The Abstract Domains, where the different domains of our model, such as strings and integers, will be explained.
+    \item The Abstract Syntax and Semantics, where the abstract syntax is described and the abstract semantics is explained.
+    \item Abstraction and Concretization describe how the abstractions relate to their concrete counterparts.
+    \item Finally, the Model Overview will show the system model used in the paper.
+\end{itemize}
+
+Through this, we establish the theoretical framework for analyzing an abstract interpretation of a database and application.

@@ -54,20 +54,37 @@ Otherwise, we proceed as usual.
     \absboolsem{\texttt{false}}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \mathsf{Single} \; \{\false\} \\
     \absboolsem{b_1 \lor b_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absboolsem{b_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ab{\lor} \absboolsem{b_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
     \absboolsem{b_1 \land b_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absboolsem{b_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ab{\land} \absboolsem{b_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
-    \absboolsem{\neg b}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{\neg} \absboolsem{b}(\rho_{\ab{d}}, \rho_{\ab{a}})  \\
+    \absboolsem{\neg b}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{\neg} \absboolsem{b}(\rho_{\ab{d}}, \rho_{\ab{a}})
     % \absboolsem{e_1 \neq e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{\neg}(\absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \;\ab{=}\; \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}})) \label{eq:abstract-bool-semantics-end1} \\
-    \absboolsem{e_1 \;comp\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=  \begin{cases}
-        \app{\{\{\texttt{false,true}\}\} \cup} E \quad \quad \text{if } w\\
-        E_1 \;\ab{\comp}\; E_2 \quad \quad \quad \quad \text{otherwise}
-    \end{cases} \nonumber \\
-    \begin{split}
-        \text{where } w&=(E_1 = \mathsf{List} \; S_1 \lor E_2 = \mathsf{List} \; S_2) \nonumber\\
-        &\land E_1 \;\ab{\comp}\; E_2 = E \nonumber
-    \end{split} \\
-    \text{and } E_1 &= \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \nonumber \\
-    \text{and }  E_2 &= \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \label{eq:abstract-bool-semantics-end}
+%    \absboolsem{e_1 \;comp\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=  \begin{cases}
+%        \app{\{\{\texttt{false,true}\}\} \cup} E \quad \quad \text{if } w\\
+%        E_1 \;\ab{\comp}\; E_2 \quad \quad \quad \quad \text{otherwise}
+%    \end{cases} \nonumber \\
+%    \begin{split}
+%        \text{where } w&=(E_1 = \mathsf{List} \; S_1 \lor E_2 = \mathsf{List} \; S_2) \nonumber\\
+%        &\land E_1 \;\ab{\comp}\; E_2 = E \nonumber
+%    \end{split} \\
+%    \text{and } E_1 &= \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \nonumber \\
+%    \text{and }  E_2 &= \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \label{eq:abstract-bool-semantics-end}
     %\absboolsem{e_1 \;comp\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= E_1 \;\ab{\comp}\; E_2 \quad \text{where }  E_1 = \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ \text{and } E_2 = \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \label{eq:abstract-bool-semantics-end}
 \end{align}
+
+
+
+\begin{multline}
+    \absboolsem{e_1 \;comp\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) = \\
+    \begin{cases}
+        \app{\{\{\texttt{false,true}\}\} \cup} E \quad \quad \text{if } w \\
+        E_1 \;\ab{\comp}\; E_2 \quad \quad \quad \quad \text{otherwise}
+    \end{cases} \\
+    \begin{split}
+        \text{where } w&=(E_1 = \mathsf{List} \; S_1 \lor E_2 = \mathsf{List} \; S_2) \\
+        &\land E_1 \;\ab{\comp}\; E_2 = E \\
+        \text{and } E_1 &= \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}})  \\
+        \text{and }  E_2 &= \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}})
+    \end{split}
+\end{multline}
+
 
 \begin{table}[H]
     \centering

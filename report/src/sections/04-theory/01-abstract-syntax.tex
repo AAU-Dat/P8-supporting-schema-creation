@@ -15,7 +15,7 @@ Certain constructs have been modified to enhance clarity, most notably:
 The abstract syntax of SQAAL is defined in terms of the syntactic sets introduced in \autoref{tab:syntatic-sets}.
 \begin{figure}[htb!]
      \center
-    \begin{tabular}{r p{0.65\columnwidth }}
+    \begin{tabular}{r p{0.6\columnwidth }}
     $n \in \mathbb{Z}$                          & Integers                                                   \\
     $k \in \mathbb{S}$                                  & Strings                                                    \\
     $c \in \mathbb{C}$                          & Constants                                                 \\
@@ -41,18 +41,18 @@ For simplicity's sake we assume that $\mathbb{V}_a$, $\mathbb{V}_d$ and $\mathbb
 
 \begin{figure}[htb!]
     \center
-    \begin{tabular}{r p{0.65\columnwidth }}
-        $c ::=$ & $n \mid k \mid R \mid \mathscr{I}$ \\
-        $v ::=$ & $v_t \mid v_a$ \\
-        $e ::=$ & $c \mid v \mid op_u\; e \mid \;e_1 op_b\; e_2$ for $op_u = \{-, lower, upper, bit\_lenght, lenght\}$ and $op_b = \{+, -, *, /, ||\}$ \\
+    \begin{tabular}{r p{0.65\columnwidth}}
+        $c \Coloneqq$ & $n \mid k$ \\
+        $v \Coloneqq$ & $v_t \mid v_a$ \\
+        $e \Coloneqq$ & $c \mid v \mid op_u\; e \mid \;e_1 op_b\; e_2$ for $op_u = \{-, lower, upper, bit\_lenght lenght\}$ and $op_b = \{+, -, *, /, ||\}$ \\
 
-        $b ::=$ & $e_1 = e_2 \mid e_1 \leq e_2 \mid e_1 < e_2 \mid \neg b \mid b_1 \lor b_2 \mid b_1 \land b_2 \mid \texttt{true} \mid \texttt{false}$ \\
+        $b \Coloneqq$ & $e_1 = e_2 \mid e_1 \leq e_2 \mid e_1 < e_2 \mid \neg b \mid b_1 \lor b_2 \mid b_1 \land b_2 \mid \texttt{true} \mid \texttt{false}$ \\
 
-        $a_f ::=$ & $e_1 = e_2 \mid e_1 \leq e_2 \mid e_1 < e_2$ \\
-        $\phi ::=$ & $a_f \mid \neg \phi_1 \mid \phi_1 \lor \phi_2 \mid \phi_1 \land \phi_2 \mid \forall v_n \phi \mid \exists v_n \phi$ \\
-        $A_{sql} :: =$ & $select(v_a, v_d, \mathbf{v}_t) \mid update(v_d, \mathbf{v}_t, \mathbf{e}) \mid delete(v_d) \mid insert(v_d, \mathbf{v}_t, \mathbf{e})$ \\
-        $C_{sql} ::=$ & $\langle A_{sql}, \phi \rangle $ \\
-        $I ::=$ & $skip \mid v_a := e \mid C_{sql} \mid b$ \\
+        $a_f \Coloneqq$ & $e_1 = e_2 \mid e_1 \leq e_2 \mid e_1 < e_2$ \\
+        $\phi \Coloneqq$ & $a_f \mid \neg \phi_1 \mid \phi_1 \lor \phi_2 \mid \phi_1 \land \phi_2 \mid \forall v_n \phi \mid \exists v_n \phi$ \\
+        $A_{sql} \Coloneqq$ & $select(v_a, v_d, \mathbf{v}_t) \mid update(v_d, \mathbf{v}_t, \mathbf{e}) \mid delete(v_d) \mid insert(v_d, \mathbf{v}_t, \mathbf{e})$ \\
+        $C_{sql} \Coloneqq$ & $\langle A_{sql}, \phi \rangle $ \\
+        $I \Coloneqq$ & $skip \mid v_a \coloneqq e \mid v_a \coloneqq ? \mid C_{sql} \mid b$ \\
     \end{tabular}
     \caption{Abstract Syntax}
     \label{tab:abstract-syntax}
