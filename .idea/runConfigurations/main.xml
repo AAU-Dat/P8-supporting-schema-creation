@@ -4,7 +4,7 @@
       <compiler>PDFLATEX</compiler>
       <compiler-path />
       <sumatra-path />
-      <pdf-viewer>BUILT-IN-PDF-VIEWER</pdf-viewer>
+      <pdf-viewer>SUMATRA</pdf-viewer>
       <viewer-command />
       <compiler-arguments>-shell-escape</compiler-arguments>
       <envs />
@@ -17,6 +17,7 @@
       <latex-distribution>TEXLIVE</latex-distribution>
       <has-been-run>true</has-been-run>
       <bib-run-config>[BibTeX.main bibliography]</bib-run-config>
+      <makeindex-run-config>[]</makeindex-run-config>
     </texify>
     <method v="2" />
   </configuration>

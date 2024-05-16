@@ -5,6 +5,6 @@
     \node [circle, draw, fill=black, below=of a] (end) {};
 
     \draw[arrow, ->] ([shift={(0.0,0.045)}]a.east) to[bend right] node[below,scale=.7] {} (start);
-    \draw[arrow, ->] (start) -- node[right,scale=.70,xshift=-15]{b} (a);
-    \draw[arrow, ->] (start) to[bend right=55] node[right,scale=.70,xshift=-20]{$\neg b$} (end);
+    \draw[arrow, ->] (start) -- node[right,xshift=-15]{$b$} (a);
+    \draw[arrow, ->] (start) to[bend right=55] node[right,xshift=-20]{$\neg b$} (end);
 \end{tikzpicture}
