@@ -41,10 +41,10 @@ For simplicity's sake we assume that $\mathbb{V}_a$, $\mathbb{V}_d$ and $\mathbb
 
 \begin{figure}[htb!]
     \center
-    \begin{tabular}{r p{0.65\columnwidth}}
-        $c ::=$ & $n \mid k$ \\
+    \begin{tabular}{r p{0.65\columnwidth }}
+        $c ::=$ & $n \mid k \mid R \mid \mathscr{I}$ \\
         $v ::=$ & $v_t \mid v_a$ \\
-        $e ::=$ & $c \mid v \mid op_u\; e \mid \;e_1 op_b\; e_2$ for $op_u = \{-, lower, upper, bit\_lenght lenght\}$ and $op_b = \{+, -, *, /, ||\}$ \\
+        $e ::=$ & $c \mid v \mid op_u\; e \mid \;e_1 op_b\; e_2$ for $op_u = \{-, lower, upper, bit\_lenght, lenght\}$ and $op_b = \{+, -, *, /, ||\}$ \\
 
         $b ::=$ & $e_1 = e_2 \mid e_1 \leq e_2 \mid e_1 < e_2 \mid \neg b \mid b_1 \lor b_2 \mid b_1 \land b_2 \mid \texttt{true} \mid \texttt{false}$ \\
 
@@ -52,7 +52,7 @@ For simplicity's sake we assume that $\mathbb{V}_a$, $\mathbb{V}_d$ and $\mathbb
         $\phi ::=$ & $a_f \mid \neg \phi_1 \mid \phi_1 \lor \phi_2 \mid \phi_1 \land \phi_2 \mid \forall v_n \phi \mid \exists v_n \phi$ \\
         $A_{sql} :: =$ & $select(v_a, v_d, \mathbf{v}_t) \mid update(v_d, \mathbf{v}_t, \mathbf{e}) \mid delete(v_d) \mid insert(v_d, \mathbf{v}_t, \mathbf{e})$ \\
         $C_{sql} ::=$ & $\langle A_{sql}, \phi \rangle $ \\
-        $I ::=$ & $skip \mid v_a := e \mid v_a := ? \mid C_{sql} \mid b$ \\
+        $I ::=$ & $skip \mid v_a := e \mid C_{sql} \mid b$ \\
     \end{tabular}
     \caption{Abstract Syntax}
     \label{tab:abstract-syntax}
