@@ -1,0 +1,10 @@
+\begin{tikzpicture}
+    \tikzstyle{arrow} = [thick,->,>=stealth]
+    \node (a) [cloud,  cloud puffs=9.4, minimum width=1cm, draw] {$I$};
+    \node [circle, draw, above=of a] (start) {};
+    \node [circle, draw, fill=black, below=of a] (end) {};
+
+    \draw[arrow, ->] ([shift={(0.0,0.045)}]a.east) to[bend right] node[below,scale=.7] {} (start);
+    \draw[arrow, ->] (start) -- node[right,scale=.70,xshift=-15]{b} (a);
+    \draw[arrow, ->] (start) to[bend right=55] node[right,scale=.70,xshift=-20]{$\neg b$} (end);
+\end{tikzpicture}

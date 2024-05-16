@@ -56,11 +56,13 @@ As a shorthand we take $x \sqcup y = \bigsqcup \{x, y\}$ and $x \sqcap y = \bigs
         L_1 \times L_2 \times \dots L_n = \{(x_1, x_2, \dots x_n) \mid x_i \in L_i\}
     \end{equation*}
     where the order $\sqsubseteq$ is defined componentwise:
-    \begin{equation*}
-        (x_1, x_2, \dots, x_n) \sqsubseteq (x_1', x_2', \dots, x_n')
+    \begin{align*}
+        \begin{split}
+        (x_1, x_2, \dots, x_n) &\sqsubseteq (x_1', x_2', \dots, x_n') \\
         \iff
-        \forall i = 1, 2, \dots n : x_i \sqsubseteq x_i'.
-    \end{equation*}
+        \forall i &= 1, 2, \dots n : x_i \sqsubseteq x_i'
+        \end{split}
+    \end{align*}
 \end{theorem}
 
 \begin{theorem}
@@ -90,7 +92,7 @@ A program graph consists of a finite set of nodes, initial and final nodes, acti
 
 These directed edges represent the program's flow, and the nodes represent its state. The edges' actions are the atomic operations that the program can perform. The initial node is the program's starting point, and the final node is the program's end.
 
-The program graph is created by parsing the code and creating nodes and edges that represent the flow of the code. This process, while it may sound complex, is actually quite straightforward. For instance, if the code is only an assignment of a variable, there will be a node for the initial state before the variable is assigned, a node for the final state after the variable is assigned, and an edge between them that represents the action of the assignment. This is written as the following equation:
+The program graph is created by parsing the code and creating nodes and edges that represent the flow of the code. This process, while it may sound complex, is relatively straightforward. For instance, if the code is only an assignment of a variable, there will be a node for the initial state before the variable is assigned, a node for the final state after the variable is assigned, and an edge between them that represents the action of the assignment. This is written as the following equation:
 $edges(q_{\circ} \rightsquigarrow q_{\bullet})\llbracket x:=a \rrbracket = \{(q_{\circ}, x:=a, q_{\bullet})\}$
 $q_{\circ}$ is the initial node, $q_{\bullet}$ is the final node, and $x:=a$ is the assignment. This creates a set that represents the program graph, which can be seen in \autoref{fig:tikz-program-graph-assignment}. This is a simple example, and the program graph can be more complex depending on the code, but the concept is the same.
 Further examples can be found in~\cite[Figure 2.6]{nielson_formal_2019}.
@@ -100,4 +102,71 @@ Further examples can be found in~\cite[Figure 2.6]{nielson_formal_2019}.
     \input{figures/program-graph}
     \caption{An example that shows a program graph of an assignment}
     \label{fig:tikz-program-graph-assignment}
-\end{figure}    
+\end{figure}
+
+We later describe the abstract syntax; \autoref{tab:abstract-syntax-instructions} describes the instructions the abstract syntax will contain.
+There is no control structure in the abstract syntax, like if-statements and loops or sequences of instructions.
+This is because the abstract syntax is simplified to make understanding the theory behind abstract interpretation easier.
+This is all handled in the program graph, where the control structure is represented as edges in the program graph.
+
+\begin{figure}
+    \center
+    \begin{tabular}{r l}
+        $I ::=$ & $skip \mid v_a := e \mid v_a := ? \mid C_{sql} \mid b$
+    \end{tabular}
+    \caption{Abstract Syntax for Instructions}
+    \label{tab:abstract-syntax-instructions}
+\end{figure}
+
+If-statements and loops are still used as boolean expressions in edges, used like guards in the program graph.
+We can make equations for the edges of the program graph, where $b$ is a Boolean expression, and $S$ is a set of states done in the control structure.
+
+$edges(q_{\circ} \rightsquigarrow q_{\bullet})\llbracket \text{if } b \text{ then } S_1 \text{ else } S_2 \rrbracket = \text{let } q_{cond}$ be a new node.
+\begin{align}
+S_{cond} &= edges(q_\circ \rightsquigarrow q_{cond})\llbracket b \rrbracket \\
+S_{true} &= edges(q_{cond} \rightsquigarrow q_{\bullet})\llbracket S_1 \rrbracket \\
+    S_{false} &= edges(q_{cond} \rightsquigarrow q_{\bullet})\llbracket S_2 \rrbracket \\
+    &\text{in } S_{cond} \cup S_{true} \cup S_{false}
+\end{align}
+
+$edges(q_{\circ} \rightsquigarrow q_{\bullet})\llbracket \text{while } b \text{ do } I\rrbracket= \text{let } q_{cond}$ be a new node,
+\begin{align}
+    S_{cond} &= edges(q_\circ \rightsquigarrow q_{cond}) \llbracket b \rrbracket \\
+    S_{body}&=edges(q_{cond} \rightsquigarrow q_{body})\llbracket I \rrbracket \\
+    S_{loop} &= edges(q_{body} \rightsquigarrow \q_{cond})\llbracket\text{true}\rrbracket \\
+    S_{exit} &= edges(q_{cond} \rightsquigarrow q_{\bullet})\llbracket\text{false}\rrbracket \\
+    &\text{in } S_{cond} \cup S_{body} \cup S_{loop} \cup S_{exit}
+\end{align}
+
+In \autoref{fig:tikz-program-graph-loop} and \autoref{fig:tikz-program-graph-if}, we see examples of how a loop and an if-statement are represented in a program graph.
+
+\begin{figure}[htb!]
+    \center
+    \input{figures/if_graph}
+    \caption{An example that shows a program graph of an if-statement}
+    \label{fig:tikz-program-graph-if}
+\end{figure}
+
+\begin{figure}[htb!]
+    \center
+    \input{figures/loop_graph}
+    \caption{An example that shows a program graph of a loop}
+    \label{fig:tikz-program-graph-loop}
+\end{figure}
+
+In the abstract syntax, we will not have formulated sequences of $I_0, I_1, I_2, \dots, I_n$ as in the program graph, but rather as a set of states $S$, where we at the end go back to the initial state, this is shown in \autoref{fig:tikz-composition-graph}.
+
+We can make equations for the edges of the composition graph, where $I_1$ and $I_2$ are instructions.
+$edges(q_{\circ} \rightsquigarrow q_{\bullet})\llbracket I_1 ; I_2 \rrbracket = \text{let q be a new node}$
+\begin{align}
+S_1 &= edges(q_{\circ} \rightsquigarrow q)\llbracket I_1 \rrbracket\\
+S_2 &= edges(q \rightsquigarrow q_{\bullet})\llbracket I_2 \rrbracket, \\
+&\text{ in } S_1 \cup S_2
+\end{align}
+
+\begin{figure}
+    \center
+    \input{figures/composition_graph}
+    \caption{An example that shows a composition graph}
+    \label{fig:tikz-composition-graph}
+\end{figure}
