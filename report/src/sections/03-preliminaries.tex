@@ -133,7 +133,7 @@ $edges(q_{\circ} \rightsquigarrow q_{\bullet})\llbracket \text{while } b \text{ 
 \begin{align}
     S_{cond} &= edges(q_\circ \rightsquigarrow q_{cond}) \llbracket b \rrbracket \\
     S_{body}&=edges(q_{cond} \rightsquigarrow q_{body})\llbracket I \rrbracket \\
-    S_{loop} &= edges(q_{body} \rightsquigarrow \q_{cond})\llbracket\text{true}\rrbracket \\
+    S_{loop} &= edges(q_{body} \rightsquigarrow q_{cond})\llbracket\text{true}\rrbracket \\
     S_{exit} &= edges(q_{cond} \rightsquigarrow q_{\bullet})\llbracket\text{false}\rrbracket \\
     &\text{in } S_{cond} \cup S_{body} \cup S_{loop} \cup S_{exit}
 \end{align}
