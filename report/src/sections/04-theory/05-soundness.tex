@@ -4,7 +4,7 @@ In this subsection we give an informal argument of soundness for the specificati
 A formal proof would be far too long and should ideally be verified with a formal proof management system.
 Further the specification of the language that we are basing our analysis on~\cite{halder_abstract_2012} is not entirely formal and in some cases ambiguities arise, as such a entirely formal proof can only be done if the specification of the language is completely formalized.
 
-In the 'proofs' in this section we allow ourselves to substitute terms $s \into \lookupcl(v)$ with $s$, the justification is that $s \into \lookupcl(v)$ will only ever overestimate $s$, that is $s \sqsubseteq s \into \lookupcl(v)$.
+For the proofs and proof-sketches in this section we allow ourselves to substitute terms $s \into \lookupcl(v)$ with $s$, the justification is that $s \into \lookupcl(v)$ will only ever overestimate $s$, that is $s \sqsubseteq s \into \lookupcl(v)$.
 
 \begin{conjecture}\label{thm:sound-exp}
     $\absexpsem{\cdot}$ is sound, formally $(\rho_d, \rho_a) \in \concrete_2(\env{\ab{d}}, \env{\ab{a}}) \implies \expsem{e}(\rho_d, \rho_a) \in \concrete_{4a}(\absexpsem{e}\env{\ab{d}}, \env{\ab{a}})$.

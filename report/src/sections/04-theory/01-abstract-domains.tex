@@ -211,7 +211,7 @@ For the purpose of proving soundness later we also overload $\gamma_{4a}$ as fol
     \concrete_{4a} &: \mathsf{Val} \; \uints \rightarrow \mathcal{P}(\nums) \cup \mathcal{P}(\nums^\star) \\
     \concrete_{4a} &: \mathsf{Val} \; \mathcal{P}(\bools) \rightarrow \mathcal{P}(\bools) \cup \mathcal{P}(\bools^\star)
 \end{align}
-With the same 'implementation' as above where $\bools = \{\true, \false, \mnull\}$.
+With the same \emph{implementation} as above where $\bools = \{\true, \false, \mnull\}$.
 
 \subsubsection{Abstract tables}\label{subsubsec:abstract_domain_of_tables}
 
@@ -247,7 +247,11 @@ We admit that this notion is a bit vague and informal, but displays the intuitio
 Formalizing the prequel, we consider $\ab{t} : \ab{\mathbf{TUP}} \rightarrow \ab{\mathbf{NAT}}$ to be represented as a single set $\ab{t'}$ instead, that is $\ab{t}({e}) = 0 \iff e \notin \ab{t'}$ and  $\ab{t}({e}) = (\leq 0) \iff e \in \ab{t'}$.
 Further as the form of an abstract table is given by the schema and the mapping $\lookupcl$ the final formalization for some table with name $v_d$ is then $\ab{t} \in \mathcal{P}\left(\bigtimes_{i = 1}^{n}\lookupcl(v_i)\right)$ for $attr(v_d) = (v_1, v_2, \dots, v_n)$, where $attr : \mathbb{V}_d \rightarrow \mathbb{V}_t^\star$ is given by the schema of the database.
 
-Before we can define the concretisation, we define the power multiset as $\mathcal{M}(S) = \{m | m : S \rightarrow \nums\}$, and thus we define the concretisation of a table, for $attr(v_d) = (v_1, v_2, \dots, v_n)$:
+As the concretization of an abstract table is a multi-set we need to define a map from the underlying set $S$ to the set of multi-sets over that underlying set $\mathcal{M}(S)$ before we can define the concretization itself, in symbols:
+\begin{equation}
+    \mathcal{M}(S) = \{t | t : S \rightarrow \nums\}
+\end{equation}
+And thus we can define the concretisation of a table, for $attr(v_d) = (v_1, v_2, \dots, v_n)$:
 \begin{gather}
     \concrete^{v_d}_{4d} : \mathcal{P}\left(\bigtimes_{i = 1}^{n}\lookupcl(v_i)\right) \rightarrow \mathcal{M}\left(\bigtimes_{i = 1}^n \cc(\lookupcl(v_i))\right)\\
     \begin{split}
