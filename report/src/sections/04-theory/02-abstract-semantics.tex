@@ -240,16 +240,20 @@ First we define $var_{v_d}(\phi)$ to be the vector of column variables in $attr(
 Next we define $v_d \downarrow_{\true}^{(\rho_{\ab{d}}, \rho_{\ab{a}})} \phi, v_d \downarrow_{\false}^{(\rho_{\ab{d}}, \rho_{\ab{a}})} \phi$ and  $v_d \downarrow_{\unknown}^{(\rho_{\ab{d}}, \rho_{\ab{a}})} \phi$ to be the set of tuples in the evaluation of $v_d$ with respect to $(\rho_{\ab{d}}, \rho_{\ab{a}})$ where $\phi$ is definitely true, definitely false and where we are unsure respectively, formally:
 \begin{align}
     \begin{split}
-        v_d \downarrow_{\true}^{(\rho_{\ab{d}}, \rho_{\ab{a}})} \phi = \{ l \in \rho_{\ab{d}}(v_d) \mid \mathsf{Single} \; \{ \true \} = \abspredsem{\phi[\pi_{\mathbf{v}_t}(l)/\mathbf{v}_t]}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
-        \text{ for } \mathbf{v}_t = var_{v_d}(\phi) \}
+        v_d \downarrow_{\true}^{(\rho_{\ab{d}}, \rho_{\ab{a}})} \phi = &\{ l \in \rho_{\ab{d}}(v_d) \\
+        &\mid \mathsf{Single} \; \{ \true \} = \abspredsem{\phi[\pi_{\mathbf{v}_t}(l)/\mathbf{v}_t]}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
+        &\text{ for } \mathbf{v}_t = var_{v_d}(\phi) \}
     \end{split}\\
     \begin{split}
-        v_d \downarrow_{\false}^{(\rho_{\ab{d}}, \rho_{\ab{a}})} \phi = \{ l \in \rho_{\ab{d}}(v_d) \mid \mathsf{Single} \; \{ \false \} = \abspredsem{\phi[\pi_{\mathbf{v}_t}(l)/\mathbf{v}_t]}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
-        \text{ for } \mathbf{v}_t = var_{v_d}(\phi) \}
+        v_d \downarrow_{\false}^{(\rho_{\ab{d}}, \rho_{\ab{a}})} \phi = &\{ l \in \rho_{\ab{d}}(v_d) \\
+        &\mid \mathsf{Single} \; \{ \false \} = \abspredsem{\phi[\pi_{\mathbf{v}_t}(l)/\mathbf{v}_t]}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
+        &\text{ for } \mathbf{v}_t = var_{v_d}(\phi) \}
     \end{split}\\
     \begin{split}
-        v_d \downarrow_{\unknown}^{(\rho_{\ab{d}}, \rho_{\ab{a}})} \phi = \{ l \in \rho_{\ab{d}}(v_d) \mid \true \in b \land b \in \abspredsem{\phi[\pi_{\mathbf{v}_t}(l)/\mathbf{v}_t]}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
-        \text{ for } \mathbf{v}_t = var_{v_d}(\phi) \} \setminus v_d \downarrow_{\true}^{(\rho_{\ab{d}}, \rho_{\ab{a}})} \phi
+        v_d \downarrow_{\unknown}^{(\rho_{\ab{d}}, \rho_{\ab{a}})} \phi = &\{ l \in \rho_{\ab{d}}(v_d) \\
+        &\mid \true \in b \land b \in \abspredsem{\phi[\pi_{\mathbf{v}_t}(l)/\mathbf{v}_t]}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
+        &\text{ for } \mathbf{v}_t = var_{v_d}(\phi) \} \\
+        &\setminus v_d \downarrow_{\true}^{(\rho_{\ab{d}}, \rho_{\ab{a}})} \phi
     \end{split}
 \end{align}
 
