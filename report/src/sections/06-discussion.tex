@@ -27,14 +27,14 @@ Altering it to be so would prove to be challenging for the following reasons.
 We found that using their semantics for an analysis could result in it being non-terminating,
 therefore deeming it not viable.
 The non-termination can be seen in the way that they represent abstract tables.
-Specifically, in \autoref{tab:table8h&c},
-we clearly see how their semantics introduce duplicate entries in a table, where $\{Age^\#,Dno^\#,Sal^\#\}=\{{[}25,59{]},2,{[}1500,2499{]}\}$ appears twice.
+Specifically, in \autoref{tab:table-halder},
+we clearly see how their semantics introduce duplicate entries in a table, where $\{Age^\sharp,Dno^\sharp,Sal^\sharp\}=\{{[}25,59{]},2,{[}1500,2499{]}\}$ appears twice.
 \begin{table}[]
     \centering
     \caption{Table 8 from~\cite{halder_abstract_2012}}
     \begin{tabular}{lll}
         \toprule
-        $Age^\#$ & $Dno^\#$ & $Sal^\#$ \\ \midrule
+        $Age^\sharp$ & $Dno^\sharp$ & $Sal^\sharp$ \\ \midrule
         {[}25,59{]}             & 2                       & {[}1500,2499{]}         \\
         {[}12,24{]}             & 1                       & {[}1500,2499{]}         \\
         {[}25,59{]}             & 2                       & {[}1500,2499{]}         \\
@@ -42,7 +42,7 @@ we clearly see how their semantics introduce duplicate entries in a table, where
         {[}25,59{]}             & 3                       & {[}2500,10000{]}        \\
         {[}60,100{]}            & 1                       & {[}1500,2499{]}         \\
         {[}12,24{]}             & 2                       & {[}2500,10000{]}        \\ \bottomrule
-    \end{tabular}\label{tab:table8h&c}
+    \end{tabular}\label{tab:table-halder}
 \end{table}
 This means that a situation can happen, where adding more of the same tuples could end up enlarging the analysis indefinitely.
 
@@ -54,7 +54,7 @@ So even though this paper provides a model that can be used for actual analysis,
 Due to time constraints, it has not been possible to cover as much of SQL as \autoref{subsubsec:abstract_domain_of_tables} does.
 This limits the amount of use cases the tool could be used for, naturally leaving an expansion of the tool to future work.
 
-As mentioned in \autoref{subsec:summaryresults}, a plan was also established to implement a system that made use of the tool developed in this paper.
+As mentioned, a plan was also established to implement a system that made use of the tool developed in this paper.
 Unfortunately, it was not possible to make such a system, given the amount of work was required to ensure a terminating analysis.
 Considering the complicated nature of the analysis, which quickly gets tricky if carried out in hand, a system would be required to provide a meaningful use in the future.
 
