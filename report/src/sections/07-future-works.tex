@@ -7,10 +7,10 @@ As of the current implementation, the abstract interpretation is limited to inte
 The extension of the abstract interpretation to support floating point numbers would allow for a more precise analysis of the database queries.
 One of the obstacles to this extension is the fact that floating point numbers are represented in a different ways in different programming languages, which makes it difficult to create a general abstract interpretation for floating point numbers.
 
-Another area that could be further developed is the rigor of the soundness proof.
-Since you can keep reducing the area represented by the abstract interpretation, given more time it would be natural to assume that the soundness proof could be made more concise to further narrow down the area represented by the abstract interpretation.
-This is a very time-consuming process, but it would be interesting to see how far you could take it.
-Though the more you try to shrink the area, the more edge cases appear which need to be handled.
+Another area that could be further developed is the rigorousness of the soundness proof.
+At the current state of the soundness proof is more akin to a sketch of a proof, rather than a full proof.
+Therefore, one of the future works could be to further develop the soundness proof to make it more rigorous.
+This would involve going through the proof and making sure that all the steps are correct and that all the assumptions are valid, which would require a lot of time and effort, but would make the proof more reliable and increase the confidence in the results of the abstract interpretation.
 
 Besides the rigor, you could also try to increase the precision of the abstract interpretation.
 This could be done by adding more rules to the abstract interpretation, such as a better way of handling Boolean values and how to more accurately represent them, which would allow for a more precise analysis of the database queries.
