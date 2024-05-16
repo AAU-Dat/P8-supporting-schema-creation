@@ -267,8 +267,8 @@ The abstract \textit{select}, takes all values in the table where we are definit
 Then it wraps them in a $\mathsf{List}$ 'label' and inserts this in the lattice of the respective variable before assigning the variable to this value.
 \begin{align}
 \begin{split} \nonumber
-    \abssqlsem{\langle select&(v_a, v_d, \mathbf{v}_t), \phi \rangle}\biggl(\rho_{\ab{d}}, \rho_{\ab{a}})
-    = (\rho_{\ab{d}}, \rho_{\ab{a}}[v_a \mapsto \\
+\abssqlsem{\langle select&(v_a, v_d, \mathbf{v}_t), \phi \rangle}(\rho_{\ab{d}}, \rho_{\ab{a}})
+= \biggl(\rho_{\ab{d}}, \rho_{\ab{a}}[v_a \mapsto \\
     &\mathsf{List} \Bigl( \pi_{\mathbf{v}_t} \bigl(\abstable \downarrow_{\true}^{(\env{\ab{d}}, \env{\absvars})} \phi \cup \abstable \downarrow_{\unknown}^{(\env{\ab{d}}, \env{\absvars})} \phi \bigr) \Bigr) \into \lookupcl(v_a) ]\biggr)
 \end{split}\\
     &\text{where } \ab{t}=\rho_{\ab{d}}(v_d)
