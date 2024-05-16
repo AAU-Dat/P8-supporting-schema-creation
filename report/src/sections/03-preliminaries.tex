@@ -56,11 +56,13 @@ As a shorthand we take $x \sqcup y = \bigsqcup \{x, y\}$ and $x \sqcap y = \bigs
         L_1 \times L_2 \times \dots L_n = \{(x_1, x_2, \dots x_n) \mid x_i \in L_i\}
     \end{equation*}
     where the order $\sqsubseteq$ is defined componentwise:
-    \begin{equation*}
-        (x_1, x_2, \dots, x_n) \sqsubseteq (x_1', x_2', \dots, x_n')
+    \begin{align*}
+        \begin{split}
+        (x_1, x_2, \dots, x_n) &\sqsubseteq (x_1', x_2', \dots, x_n') \\
         \iff
-        \forall i = 1, 2, \dots n : x_i \sqsubseteq x_i'.
-    \end{equation*}
+        \forall i &= 1, 2, \dots n : x_i \sqsubseteq x_i'
+        \end{split}
+    \end{align*}
 \end{theorem}
 
 \begin{theorem}
