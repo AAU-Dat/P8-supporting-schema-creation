@@ -64,8 +64,8 @@
 }
 \makeatother
 
-\tikzstyle{state} = [rectangle, minimum width=1cm, minimum height=1cm, text centered, draw=black, fill=white!30]
-\tikzstyle{circle} = [ellipse, minimum width=1cm, minimum height=0.5cm, text centered, draw=black, fill=white!30]
+
+\usetikzlibrary{shapes, arrows, fit, calc, automata, positioning}
 
 \newcommand{\abssem}[1]{\ab{\mathcal{S}} \llbracket #1 \rrbracket}
 \newcommand{\sem}[1]{\mathcal{S} \llbracket #1 \rrbracket}
