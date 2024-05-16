@@ -79,10 +79,35 @@ As a shorthand we take $x \sqcup y = \bigsqcup \{x, y\}$ and $x \sqcap y = \bigs
 }
 
 \subsection{Abstract Interpretation}
+Galois connection is a concept that is used in abstract interpretation.
 
-\begin{theorem}\label{thm:galoispre}
-    For $\gamma : L_1 \rightarrow L_2$ where $L_1$ and $L_2$ are complete lattices there exist a function $\alpha : L_2 \rightarrow L_1$ such that $\alpha$ and $\gamma$ forms a Galois connection if $\gamma(\bigsqcap B) = \bigsqcap_{b \in B}\gamma(b)$ for every $B \subseteq L_1$.
-\end{theorem}
+For two complete lattices $L_1$ and $L_2$, a Galois connection is a formal way of expressing the relationship between two complete lattices through two monotone functions $\alpha$ and $\beta$.
+
+\begin{definition}
+For two complete lattices $(L_1, \sqsubseteq_{L_1})$ and $(L_2, \sqsubseteq_{L_2})$, a Galois connection consists of two functions:
+\begin{itemize}
+\item \(\alpha: L_1 \to L_2\) (often called the abstraction function)
+\item \(\beta: L_2 \to L_1\) (often called the concretion function)
+\end{itemize}
+These functions must satisfy the following adjoint condition:
+
+$\forall x \in L_1, y \in L_2 : \alpha(x) \sqsubseteq_{L_2} y \iff x \sqsubseteq_{L_1} \beta(y)$
+\end{definition}
+
+\subsubsection{Properties of Galois Connection}
+
+From the adjoint condition, the following properties can be derived, though they are not additional conditions but consequences of the adjoint condition:
+
+\begin{itemize}
+    \item \(\alpha\) is monotone: If \( x_1 \sqsubseteq_{L_1} x_2 \) then \( \alpha(x_1) \sqsubseteq_{L_2} \alpha(x_2) \).
+    \item \(\beta\) is monotone: If \( y_1 \sqsubseteq_{L_2} y_2 \) then \( \beta(y_1) \sqsubseteq_{L_1} \beta(y_2) \).
+    \item \( \forall x \in L_1 : x \sqsubseteq_{L_1} \beta(\alpha(x)) \)
+    \item \( \forall y \in L_2 : \alpha(\beta(y)) \sqsubseteq_{L_2} y \)
+\end{itemize}
+
+%\begin{theorem}\label{thm:galoispre}
+%    For $\gamma : L_1 \rightarrow L_2$ where $L_1$ and $L_2$ are complete lattices there exist a function $\alpha : L_2 \rightarrow L_1$ such that $\alpha$ and $\gamma$ forms a Galois connection if $\gamma(\bigsqcap B) = \bigsqcap_{b \in B}\gamma(b)$ for every $B \subseteq L_1$.
+%\end{theorem}
 
 \subsection{Converting Code Program Graph}\label{subsection:converting-code-program-graph}
 This section will briefly cover how the program graph is created.
