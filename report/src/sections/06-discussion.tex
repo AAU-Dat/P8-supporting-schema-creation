@@ -55,7 +55,7 @@ we clearly see how their semantics introduce duplicate entries in a table, where
 This means that a situation can happen, where adding more of the same tuples could end up enlarging the analysis indefinitely.
 
 This is exactly what this paper tries to escape.
-As mentioned in\autoref{subsubsec:abstract_domain_of_tables}, using abstract bags of abstract tuples eliminates the possibility of having duplicate tuple, ensuring a finite state space and terminating analysis.
+As mentioned in \autoref{subsubsec:abstract_domain_of_tables}, using abstract bags of abstract tuples eliminates the possibility of having duplicate tuple, ensuring a finite state space and terminating analysis.
 
 Changing the way in which the abstractions are represented means that quite a lot of change is needed for the semantics.
 So even though this paper provides a model that can be used for actual analysis, it also has its compromises.
@@ -68,6 +68,6 @@ Considering the complicated nature of the analysis, which quickly gets tricky if
 
 
 Moreover, the choice of SQL, as the language for the implementation, added more complication than necessary.
-The reason for this being that the language has many implementation features that are different from dialect to dialect.
+The reason for this is that the language has many implementation features that are different from dialect to dialect.
 Therefore, it might have been better to use a more abstract language, as relational algebra, to implement the system.
 Especially since the contribution in this paper only defined a subset of the operations in PostgreSQL.
