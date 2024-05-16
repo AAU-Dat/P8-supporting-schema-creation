@@ -6,7 +6,6 @@
       "tools": [
         "pdflatex",
         "biber",
-        "makeglossaries",
         "pdflatex",
         "pdflatex"
       ]

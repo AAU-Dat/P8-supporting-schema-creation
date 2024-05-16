@@ -2,7 +2,7 @@
 
 In the following section we will describe the abstract domains of our value analysis.
 
-\subsubsection{Abstract domain strings as regular expressions}\label{subsubsec:abstract_domains_strings}
+\subsubsection{Abstract domain of strings as regular expressions}\label{subsubsec:abstract_domains_strings}
 We have chosen regular expressions/languages to represent the abstract domain of the family of SQL string data types.
 Regular expressions/languages are chosen instead of more powerful representations because of the decidable nature of inclusion and equality between them.
 
@@ -18,7 +18,9 @@ We only consider integers, but we imagine that the domain can be easily extended
 Let $\mathbf{INT}$ be the set of union intervals, that is inductively defined as:
 \[
     \inference{i \text{ is an interval}}{i \in \mathbf{INT}} \quad
-    \inference{\mathscr{I}_1 \in \textbf{INT} & \mathscr{I}_2 \in \textbf{INT}}{\mathscr{I}_1 \cup  \mathscr{I}_2 \in \mathbf{INT}} \quad
+    \inference{\mathscr{I}_1 \in \textbf{INT} & \mathscr{I}_2 \in \textbf{INT}}{\mathscr{I}_1 \cup  \mathscr{I}_2 \in \mathbf{INT}}
+\]
+\[
     \inference{\mathscr{I}_1 \in \textbf{INT} & \mathscr{I}_2 \in \textbf{INT}}{\mathscr{I}_1 \cap  \mathscr{I}_2 \in \mathbf{INT}}
 \]
 
@@ -50,11 +52,13 @@ Before we can define a cover lattice, we need to define the notion of a top-cove
 Given a top-cover $X$ of a lattice $(S, \subseteq, \cup, \cap)$.
 A cover lattice of $S$ in respect to $X$ denoted $\clattice{X}{S}$ is the minimum set where,
 For $X$ and $S$:
-\begin{align}
+\[
     \inference{x \in X}{x \in C_X(S)} \quad
-    \inference{x_1 \in C_X(S) & x_2 \in C_X(S)}{x_1 \cup  x_2 \in C_X(S)} \quad
+    \inference{x_1 \in C_X(S) & x_2 \in C_X(S)}{x_1 \cup  x_2 \in C_X(S)}
+\]
+\[
     \inference{x_1 \in C_X(S) & x_2 \in C_X(S)}{x_1 \cap  x_2 \in C_X(S)}
-\end{align}
+\]
 \end{definition}
 
 As a note when we use the notation $C_X(S)$ we always assume that $X$ is a top cover of $S$.
@@ -99,8 +103,8 @@ Where $\strs$ are the set of all strings and $\nums$ the set of all integers.
 
 Now we are able to express the concretisation for regular expressions and union intervals.
 \begin{align}
-    \concrete^v_6 &: \lookupcl(v) \rightarrow \cc(\lookupcl(v)) \\
-    \concrete^v_6(X) &= \mathcal{L}(X)
+    &\concrete^v_6 : \lookupcl(v) \rightarrow \cc(\lookupcl(v)) \\
+    &\concrete^v_6(X) = \mathcal{L}(X)
 \end{align}
 
 % \begin{definition}
@@ -145,19 +149,22 @@ Now we are able to express the concretisation for regular expressions and union 
 
 We define abstract tuples as the product cover-lattices of $\regexs$ and $\uints$ intertwined depending on the schema of the table.
 The concretisation function is defined as follows:
-\begin{align}
-    \concrete^{v_1, v_2, \dots, v_n}_5 &: \bigtimes_{i = 1}^{n}(\lookupcl(v_i)) \rightarrow \mathcal{P}\left(\bigtimes_{i = 1}^n \cc(\lookupcl(v_i)) \right) \\
-    \concrete^{v_1, v_2, \dots, v_n}_5(\ab{e_1}, \ab{e_2}, \dots, \ab{e_n}) &= \concrete^{v_1}_6(\ab{e_1}) \times \concrete^{v_2}_6(\ab{e_2}) \times \dots \times \concrete^{v_n}_6(\ab{e_n})
-\end{align}
+\begin{gather}
+    \concrete^{v_1, v_2, \dots, v_n}_5 : \bigtimes_{i = 1}^{n}(\lookupcl(v_i)) \rightarrow \mathcal{P}\left(\bigtimes_{i = 1}^n \cc(\lookupcl(v_i)) \right)\\
+    \begin{split}
+        \concrete^{v_1, v_2, \dots, v_n}_5(\ab{e_1}, \ab{e_2}, \dots, \ab{e_n}) = &\concrete^{v_1}_6(\ab{e_1}) \times \concrete^{v_2}_6(\ab{e_2}) \times\\
+        &\dots \times \concrete^{v_n}_6(\ab{e_n})
+    \end{split}
+\end{gather}
 
 \subsubsection{Abstract application variable values}
 In the concrete semantics defined by \cite{halder_abstract_2012}, application variables can be assigned to either singleton or lists of values.
 As much as we can we would like to distinguish between these two cases, therefore we introduce the set $\mathsf{Val} \; S$ of list and singleton values inductively defined as:
-\begin{align}
+\begin{gather*}
     \inference{}{\bot \in \mathsf{Val} \; S} \quad
-    \inference{s \in S}{\mathsf{Single} \; s \in \mathsf{Val} \; S} \quad
-    \inference{S' \subseteq S}{\mathsf{List} \; S' \in \mathsf{Val} \; S} \quad
-\end{align}
+    \inference{s \in S}{\mathsf{Single} \; s \in \mathsf{Val} \; S}\\
+    \inference{S' \subseteq S}{\mathsf{List} \; S' \in \mathsf{Val} \; S}
+\end{gather*}
 % todo this should be uncommented if we wan't to fix the galios connection.
 % We define the partial order $\sqsubseteq$ of the lattice $(\mathsf{Val} \; A, \sqsubseteq, \sqcup, \sqcap)$ as follows:
 % \begin{align}
@@ -190,12 +197,14 @@ And the following notation will also be helpful later:
 \end{align}
 
 We define the concretisation of application variable values as:
-\begin{align}
-    \concrete^v_{4a} &: \mathsf{Val} \; \lookupcl(v) \rightarrow \mathcal{P}(\cc(\lookupcl(v))) \cup\mathcal{P}((\cc(\lookupcl(v)))^\star) \\
-    \concrete^v_{4a}(\mathsf{Single} \; \ab{s}) &= \concrete_6(\ab{s}) \\
-    \concrete^v_{4a}(\mathsf{List} \; \ab{S'}) &= \bigcup_{n \in \mathbb{N}}\left\{s_1, s_2, \dots, s_n \in (\cc(\lookupcl(v)))^n \middle| \forall i \in \{1, 2, \dots, n\} : \exists \ab{s} \in \ab{S'} : s_i \in \concrete^v_6(\ab{s}) \right\}
-\end{align}
-
+\begin{gather}
+    \concrete^v_{4a} : \mathsf{Val} \; \lookupcl(v) \rightarrow \mathcal{P}(\cc(\lookupcl(v))) \cup\mathcal{P}((\cc(\lookupcl(v)))^\star)\\
+    \concrete^v_{4a}(\mathsf{Single} \; \ab{s}) = \concrete_6(\ab{s})\\
+    \begin{split}
+        \concrete^v_{4a}(\mathsf{List} \; \ab{S'}) = \bigcup_{n \in \mathbb{N}}\biggl\{&s_1, s_2, \dots, s_n \in (\cc(\lookupcl(v)))^n \Big|\\
+        &\forall i \in \{1, 2, \dots, n\} : \exists \ab{s} \in \ab{S'} : s_i \in \concrete^v_6(\ab{s}) \biggr\}
+    \end{split}
+\end{gather}
 
 \subsubsection{Abstract tables}\label{subsubsec:abstract_domain_of_tables}
 
@@ -232,10 +241,13 @@ Formalizing the prequel, we consider $\ab{t} : \ab{\mathbf{TUP}} \rightarrow \ab
 Further as the form of an abstract table is given by the schema and the mapping $\lookupcl$ the final formalization for some table with name $v_d$ is then $\ab{t} \in \mathcal{P}\left(\bigtimes_{i = 1}^{n}\lookupcl(v_i)\right)$ for $attr(v_d) = (v_1, v_2, \dots, v_n)$.
 
 We define the concretisation of a table, where $attr(v_d) = (v_1, v_2, \dots, v_n)$ $\mathcal{M}$ is the bag power set as:
-\begin{align}
-    \concrete^{v_d}_{4d} &: \mathcal{P}\left(\bigtimes_{i = 1}^{n}\lookupcl(v_i)\right) \rightarrow \mathcal{M}\left(\bigtimes_{i = 1}^n \cc(\lookupcl(v_i))\right) \\
-    \concrete^{v_d}_{4d}(\ab{t}) &= \left\{ t \in \mathcal{M}\left(\bigtimes_{i = 1}^n \cc(\lookupcl(v_i))\right) \middle|\forall e \in t : \exists \ab{e} \in \ab{t} : e \in \concrete^{attr(v_d)}_5(\ab{e}) \right\}
-\end{align}
+\begin{gather}
+    \concrete^{v_d}_{4d} : \mathcal{P}\left(\bigtimes_{i = 1}^{n}\lookupcl(v_i)\right) \rightarrow \mathcal{M}\left(\bigtimes_{i = 1}^n \cc(\lookupcl(v_i))\right)\\
+    \begin{split}
+        \concrete^{v_d}_{4d}(\ab{t}) = \biggl\{ &t \in \mathcal{M}\Bigl(\bigtimes_{i = 1}^n \cc(\lookupcl(v_i))\Bigr) \Big|\\
+        &\forall e \in t : \exists \ab{e} \in \ab{t} : e \in \concrete^{attr(v_d)}_5(\ab{e}) \biggr\}
+    \end{split}
+\end{gather}
 
 \subsubsection{Abstract environments}
 
@@ -253,22 +265,25 @@ And the concrete counter parts:
     \mathfrak{E} &= \mathfrak{E}_a \times \mathfrak{E}_d
 \end{align}
 
-And we define the concretisation functions for environments as:
-\begin{align}
-    \concrete_2 &: \ab{\mathfrak{E}} \rightarrow \mathcal{P}(\mathfrak{E}) \\
-    \concrete_2(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \concrete_{3d}(\rho_{\ab{d}}) \times \concrete_{3a}(\rho_{\ab{a}})
-\end{align}
-\begin{align}
-    \concrete_{3d} &: \ab{\mathfrak{E}_d} \rightarrow \mathcal{P}(\mathfrak{E}_d) \\
-    \concrete_{3d}(\rho_{\ab{d}}) &= \left\{ \rho_{a} \in \mathfrak{E}_d \middle| \forall v_d \in \mathbb{V}_d : \rho_d(v_d) \in \concrete^{v_d}_{4d}(\rho_{\ab{d}}(v_d)) \right\}
-\end{align}
-\begin{align}
-    \concrete_{3a} &: \ab{\mathfrak{E}_a} \rightarrow \mathcal{P}(\mathfrak{E}_a) \\
-    \concrete_{3a}(\rho_{\ab{a}}) &= \left\{ \rho_{a} \in \mathfrak{E}_a \middle| \forall v_a \in \mathbb{V}_a : \rho_a(v_a) \in \concrete^{v_a}_{4a}(\rho_{\ab{a}}(v_a)) \right\}
-\end{align}
-And in the same vain we define a concretisation function for sets of environments as:
-\begin{align}
-    \concrete_1 &: \mathcal{P}(\ab{\mathfrak{E}}) \rightarrow \mathcal{P}(\mathfrak{E}) \\
-    \concrete_1(\ab{P}) &= \left\{ (\rho_{d}, \rho_{a}) \in \mathfrak{E} \middle| \exists (\rho_{\ab{d}}, \rho_{\ab{a}}) \in \ab{P} : (\rho_{d}, \rho_{a}) \in \concrete_2(\rho_{\ab{d}}, \rho_{\ab{a}})\right\}
-\end{align}
+And we define the concretization functions for environments as:
+\begin{gather}
+    \concrete_2 : \ab{\mathfrak{E}} \rightarrow \mathcal{P}(\mathfrak{E})\\
+    \concrete_2(\rho_{\ab{d}}, \rho_{\ab{a}}) = \concrete_{3d}(\rho_{\ab{d}}) \times \concrete_{3a}(\rho_{\ab{a}})
+\end{gather}
+\begin{gather}
+    \concrete_{3d} : \ab{\mathfrak{E}_d} \rightarrow \mathcal{P}(\mathfrak{E}_d)\\
+    \concrete_{3d}(\rho_{\ab{d}}) = \biggl\{ \rho_{a} \in \mathfrak{E}_d \Big| \forall v_d \in \mathbb{V}_d : \rho_d(v_d) \in \concrete^{v_d}_{4d}(\rho_{\ab{d}}(v_d)) \biggr\}
+\end{gather}
+\begin{gather}
+    \concrete_{3a} : \ab{\mathfrak{E}_a} \rightarrow \mathcal{P}(\mathfrak{E}_a)\\
+    \concrete_{3a}(\rho_{\ab{a}}) = \biggl\{ \rho_{a} \in \mathfrak{E}_a \Big| \forall v_a \in \mathbb{V}_a : \rho_a(v_a) \in \concrete^{v_a}_{4a}(\rho_{\ab{a}}(v_a)) \biggr\}
+\end{gather}
+And in the same vain we define a concretization function for sets of environments as:
+\begin{gather}
+    \concrete_1 : \mathcal{P}(\ab{\mathfrak{E}}) \rightarrow \mathcal{P}(\mathfrak{E})\\
+    \begin{split}
+        \concrete_1(\ab{P}) = \biggl\{ &(\rho_{d}, \rho_{a}) \in \mathfrak{E} \Big|\\
+        &\exists (\rho_{\ab{d}}, \rho_{\ab{a}}) \in \ab{P} : (\rho_{d}, \rho_{a}) \in \concrete_2(\rho_{\ab{d}}, \rho_{\ab{a}})\biggr\}
+    \end{split}
+\end{gather}
 
