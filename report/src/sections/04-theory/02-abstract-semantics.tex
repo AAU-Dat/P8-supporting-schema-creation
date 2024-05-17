@@ -1,7 +1,7 @@
 \subsection{Abstract Semantics}\label{subsec:abstract-semantics}
 This section will describe the abstract semantics of SQAAL.
 
-\autoref{eq:generalBOP} through \ref{eq:generalUOP}, show the definition of abstract operations on members of $\mathsf{Val} \; A$.
+\autoref{eq:generalBOP} through~\ref{eq:generalUOP}, show the definition of abstract operations on members of $\mathsf{Val} \; A$.
 These operations are denoted by $\aop$, where $\aop$ is defined in \autoref{eq:operation}.
 These equations provide a systematic way to perform abstract operations on values within the lattice $\mathsf{Val} \ A$.
 The specific operations $\aaop$ are defined for the respective types later on.
@@ -16,7 +16,8 @@ The specific operations $\aaop$ are defined for the respective types later on.
     \aop (\mathsf{List} \; S) &= \mathsf{List} \; \{ \aaop s \mid s \in S \} \label{eq:generalUOP}
 \end{align}
 
-Similarly we define $\app{op}$, which is for operations of sets.
+Similarly, we define $\app{op}$, which is for operations of sets.
+
 \begin{align}
     \app{op} &: \mathsf{Val} \; A \rightarrow \mathsf{Val} \; B \rightarrow \mathsf{Val} \; C \\
     \mathsf{Single} \; s_1 \app{op} \mathsf{Single} \; s_2 &= \mathsf{List} \; (\{s_1\} \op \{s_2\}) \\
@@ -26,10 +27,13 @@ Similarly we define $\app{op}$, which is for operations of sets.
     \app{op} (\mathsf{Single} \; s) &= \mathsf{List} \; (\op \{ s \}) \\
     \app{op} (\mathsf{List} \; S) &= \mathsf{List} \; (\op S )
 \end{align}
+
 This will also be helpful later, when we define the abstract semantics of SQL commands.
 
 \subsubsection{Abstract Semantics of Boolean expressions}
 We define the general abstract semantics of Boolean expressions such that $\aab{bop}$ is a specialized instance of $\aaop$ in the following manner:
+
+
 \begin{align}
     \begin{split}
         \aab{bop} : \mathcal{P}(\{\true, \false, null\}) &\rightarrow \mathcal{P}(\{\true, \false, null\}) \\
@@ -39,11 +43,13 @@ We define the general abstract semantics of Boolean expressions such that $\aab{
 \begin{align}
     B_1 \;\aab{bop}\; B_2 &= \bigcup_{b_1 \in B_2, b_2 \in B_2} b_1 \;\aaab{bop}\; b_2
 \end{align}
+
 Where $\aaab{bop}$ is defined for $\land$, $\lor$ and $\neg$ in \autoref{tab:aaabland}, \autoref{tab:aaablor} and \autoref{tab:aaabneg} respectively.
 
-\autoref{eq:abstract-bool-semantics-start} through \ref{eq:abstract-bool-semantics-end} show the abstract semantics of Boolean expressions $(\absboolsem{})$ defined in \autoref{eq:bool-operation}, that is logical operators and comparisons between expressions.
+\autoref{eq:abstract-bool-semantics-start} through~\ref{eq:abstract-bool-semantics-end} show the abstract semantics of Boolean expressions $(\absboolsem{})$ defined in \autoref{eq:bool-operation}, that is logical operators and comparisons between expressions.
 $\ab{\mathfrak{E}}$ describes the set of abstract states. $\absexpsem{exp}$ describes the abstract evaluation of an expression, $(\rho_{\ab{d}}, \rho_{\ab{a}})$ is an abstract state in the database.
-In \autoref{eq:abstract-bool-semantics-end}, we check if either of the two expressions are lists; if that is the case and they are the same type, we add $\{\{\texttt{false}\}\}$ to the result, as we are unsure if the two expressions are equal.
+
+In \autoref{eq:abstract-bool-semantics-end}, we check if either of the two expressions are lists; if that is the case, and they are the same type, we add $\{\{\texttt{false}\}\}$ to the result, as we are unsure if the two expressions are equal.
 Otherwise, we proceed as usual.
 
 \begin{align}
@@ -82,7 +88,7 @@ Otherwise, we proceed as usual.
         &\land E_1 \;\ab{\comp}\; E_2 = E \\
         \text{and } E_1 &= \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}})  \\
         \text{and }  E_2 &= \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}})
-    \end{split}
+    \end{split}\label{eq:abstract-bool-semantics-end}
 \end{multline}
 
 
@@ -124,7 +130,7 @@ Otherwise, we proceed as usual.
 \end{table}
 
 \subsubsection{Comparison of Abstract Integers and Strings}\label{subsubsec:abstract-comparison}
-For abstract integers (union of intervals) $\mathscr{I}_1$ and $\mathscr{I}_2$ and arbitrary values $X_1$ and $X_2$ (either intervals or regular expressions), we define their abstract comparison in \autoref{eq:aaabcomp}s through \ref{eq:aaabcomp3}.
+For abstract integers (union of intervals) $\mathscr{I}_1$ and $\mathscr{I}_2$ and arbitrary values $X_1$ and $X_2$ (either intervals or regular expressions), we define their abstract comparison in \autoref{eq:aaabcomp}s through~\ref{eq:aaabcomp3}.
 For abstract equality (\autoref{eq:aaabcomp}), we require that the two abstract values being compared be of the same type: abstract integers or abstract strings, lest the result be undefined.
 If the two abstract values only represent the same value, equality can only be true.
 If the values the two abstract values represent do not intersect, equality can only be false.
@@ -144,8 +150,8 @@ Otherwise, they overlap; in this case, we are unsure whether the concrete values
     \label{eq:aaabcomp}
 \end{align}
 
-$min(\mathscr{I})$ and $max(\mathscr{I})$ denotes the maximum and minimum value represented by $\mathscr{I}$, we argue that such values can easily be computed if $\mathscr{I}$ is kept in a canonical form within the actual implementation.
-With the former mentioned, \autoref{eq:aaabcomp2} and \ref{eq:aaabcomp3} should be self-explanatory.
+$\min(\mathscr{I})$ and $\max(\mathscr{I})$ denotes the maximum and minimum value represented by $\mathscr{I}$, we argue that such values can easily be computed if $\mathscr{I}$ is kept in a canonical form within the actual implementation.
+With the former mentioned, \autoref{eq:aaabcomp2} and~\ref{eq:aaabcomp3} should be self-explanatory.
 To clarify, we only allow abstract integers to be compared this way.
 
 \begin{align}\label{eq:aaabcomp2}
@@ -172,6 +178,7 @@ In \autoref{sem:exp3} and ~\ref{sem:exp4} we describe the semantics of variables
 In the case of database variables in \autoref{sem:exp4}, we assume attribute names do not clash.
 \autoref{eq:unary-op} and ~\ref{eq:binary-op} describe the semantics of unary and binary operations on expressions.
 The justification of abstract binary operations is analogous to the one given for the semantics of comparison operators (\autoref{eq:abstract-bool-semantics-end}).
+
 \begin{align}
     \absexpsem{\cdot} &: \mathbb{E} \rightarrow \ab{\mathfrak{E}} \rightarrow \mathsf{Val} \; \mathbf{REG} \cup \mathsf{Val} \; \mathbf{INT}\\
     \absexpsem{n}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \mathsf{Single} \; [n, n] \label{sem:exp1} \\
@@ -186,13 +193,16 @@ The justification of abstract binary operations is analogous to the one given fo
     \absexpsem{op_u \; e}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{op_u} \; (\absexpsem{e}(\rho_{\ab{d}}, \rho_{\ab{a}})) \label{eq:unary-op} \\
     \absexpsem{e_1 \;op_b\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \;\ab{op_b}\; \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \label{eq:binary-op}
 \end{align}
-Before defining the abstract operations, $\aaop$, for expressions, we will define some auxiliary functions.
+
+Before defining the abstract operations $\aaop$, for expressions, we will define some auxiliary functions.
 We define the length of a regular expression $R$, $\|R\|$ as:
+
 \begin{align}\label{eq:r1}
     \|R\| & = \{ \left[ \|\min(R)\|, +\infty \right) \} \\
     \text{where } & \|\min(R)\| = \min\{ \|s\| \mid s \in R \} \\ \label{eq:r2}
     \text{and } & \|s\| \text{ is the length of the word $s$}
 \end{align}
+
 The former is obviously an over-approximation, the length of the shortest $\|\min(R)\|$ can be found by classical shortest path algorithm on the automata of $R$, $\mathcal{A}(R)$.
 Such algorithms have a time complexity $\Theta(E + V \log V)$, where $E$ is the number of edges in the automata and $V$ is the number of states.
 We deem this acceptable.
@@ -205,15 +215,16 @@ This automaton is then converted back to a regular expression by the usual GNFA 
 \begin{align}
     cvt(op, R_1 \cup R_2) &= cvt(op, R_1) \cup cvt(op, R_2) \\
     cvt(op, R_1 \cap R_2) &= cvt(op, R_1) \cap cvt(op, R_2) \\
-    cvt(op, R_1R_2) &= cvt(op, R_1) \; cvt(op, R_2) \\
+    cvt(op, R_1 R_2) &= cvt(op, R_1) \; cvt(op, R_2) \\
     cvt(op, R^\star) &= (cvt(op, R))^\star \\
     cvt(op, \overline{R}) &= cvt(op, (\mathcal{R} \circ \mathcal{A}) (\overline{R})) \label{eq:complement} \\
     cvt(op, \sigma) &= op(\sigma)
 \end{align}
 
-\autoref{eq:concat} to \ref{eq:length} describes a subset of String operators, present in PostgreSQL, abstractly.
+\autoref{eq:concat} to~\ref{eq:length} describes a subset of String operators, present in PostgreSQL, abstractly.
+
 \begin{align}\label{eq:concat}
-    &R_1 \;\aab{||}\; R_2 = R_1R_2 \\
+    &R_1 \;\aab{||}\; R_2 = R_1 R_2 \\
     \begin{split}
         &\aab{lower}(R) = cvt(\sigma \mapsto \sigma', R) \\
         & \quad \quad \text{such } \text{that } \sigma' \text{ is the lowercase representation of } \sigma
@@ -277,14 +288,16 @@ Next we define $v_d \downarrow_{\true}^{(\rho_{\ab{d}}, \rho_{\ab{a}})} \phi, v_
 The domain and codomain of the analysis functions for SQL statements is as follows:
 
 \begin{equation}
-    \abssqlsem{\cdot} : \mathbb{C}_{sql} \rightarrow \ab{\mathfrak{E}} \rightarrow \ab{\mathfrak{E}}
+    \abssqlsem{\cdot} : \mathbb{C}_{sql} \rightarrow \ab{\mathfrak{E}} \rightarrow \ab{\mathfrak{E}}\label{eq:equation-docomain-analysis}
 \end{equation}
 
 Each of the analysis functions for SQL statements requires some explanation.
 Therefore, we will present each of them carefully in the sequel.
 
 The abstract \textit{select}, takes all values in the table where we are definitely sure or maybe sure that the predicate evaluates to true for the current state.
-Then it wraps them in a $\mathsf{List}$ 'label' and inserts this in the lattice of the respective variable before assigning the variable to this value.
+Then it wraps them in a $\mathsf{List}$ label and inserts this in the lattice of the respective variable before assigning the variable to this value.
+
+
 \begin{align}
 \begin{split} \nonumber
     \abssqlsem{\langle select&(v_a, v_d, \mathbf{v}_t), \phi \rangle}\biggl(\rho_{\ab{d}}, \rho_{\ab{a}})
@@ -339,7 +352,7 @@ Let $\ab{P}$ be a set of abstract environments $(\env{\ab{d}}, \env{\absvars})$.
     \abssem{\cdot} &: \mathbb{I} \rightarrow \mathcal{P}(\ab{\mathfrak{E}}) \rightarrow \mathcal{P}(\ab{\mathfrak{E}}) \\
     \abssem{\texttt{skip}}(\ab{P}) &= \ab{P} \\
     \begin{split}
-        \abssem{v_a := e}(\ab{P}) &= \{(\env{\ab{d}}, \env{\absvars}[v_a \mapsto s']) \mid (\env{\ab{d}}, \env{\absvars}) \in \ab{P} \\
+        \abssem{v_a \coloneqq e}(\ab{P}) &= \{(\env{\ab{d}}, \env{\absvars}[v_a \mapsto s']) \mid (\env{\ab{d}}, \env{\absvars}) \in \ab{P} \\
         &\land s = \absexpsem{e}(\env{\ab{d}}, \env{\absvars}) \land s' = s \into \lookupcl(v_a) \}
     \end{split}\\
     \abssem{b}(\ab{P}) &= \{ (\env{\ab{d}}, \env{\absvars}) \in \ab{P} \mid \true \in B \land B \in \absboolsem{b}(\env{\ab{d}}, \env{\absvars}) \} \\
@@ -349,6 +362,7 @@ Let $\ab{P}$ be a set of abstract environments $(\env{\ab{d}}, \env{\absvars})$.
 As a last note on the abstract semantics, we know $(\mathcal{P}(\ab{\mathfrak{E}}), \subseteq, \cup, \cap)$ is a finite and complete lattice.
 Therefore, if $\abssem{I}$ is monotone, our analysis will be decidable.
 Hence, we prove the following theorem:
+
 \begin{restatable}{theorem}{csql}\label{thm:csql}
     $\abssem{I}$ is a monotone function in a finite and complete lattice.
 \end{restatable}

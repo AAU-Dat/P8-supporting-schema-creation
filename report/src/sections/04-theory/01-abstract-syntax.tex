@@ -9,10 +9,10 @@ Omitted parts within this simplified abstract syntax correspond to features or c
 Certain constructs have been modified to enhance clarity, most notably:
 \begin{itemize}
     \item variables representing database names $v_d \in \mathbb{V}_d$ has been introduced.
-    \item Database variables from \cite{halder_abstract_2012} are now called column variables, in symbols $v_t \in \mathbb{V}_t$.
+    \item Database variables from~\cite{halder_abstract_2012} are now called column variables, in symbols $v_t \in \mathbb{V}_t$.
 \end{itemize}
 
-The abstract syntax of SQAAL is defined in terms of the syntactic sets introduced in \autoref{tab:syntatic-sets}.
+The abstract syntax of SQAAL is defined in terms of the syntactic sets introduced in \autoref{fig:syntatic-sets}.
 \begin{figure}[htb!]
      \center
     \begin{tabular}{r p{0.6\columnwidth }}
@@ -33,10 +33,10 @@ The abstract syntax of SQAAL is defined in terms of the syntactic sets introduce
     $I \in \mathbb{I}$                          & Instructions/commands                                     \\
     \end{tabular}
     \caption{Syntatic Sets}
-    \label{tab:syntatic-sets}
+    \label{fig:syntatic-sets}
 \end{figure}
 
-The abstract syntax of SQAAL is presented in \autoref{tab:abstract-syntax}.
+The abstract syntax of SQAAL is presented in \autoref{fig:abstract-syntax}.
 For simplicity's sake we assume that $\mathbb{V}_a$, $\mathbb{V}_d$ and $\mathbb{V}_t$ are mutually disjoint.
 
 \begin{figure}[htb!]
@@ -44,7 +44,7 @@ For simplicity's sake we assume that $\mathbb{V}_a$, $\mathbb{V}_d$ and $\mathbb
     \begin{tabular}{r p{0.65\columnwidth}}
         $c \Coloneqq$ & $n \mid k$ \\
         $v \Coloneqq$ & $v_t \mid v_a$ \\
-        $e \Coloneqq$ & $c \mid v \mid op_u\; e \mid \;e_1 op_b\; e_2$ for $op_u = \{-, lower, upper, bit\_lenght lenght\}$ and $op_b = \{+, -, *, /, ||\}$ \\
+        $e \Coloneqq$ & $c \mid v \mid op_u\; e \mid \;e_1 op_b\; e_2$ for $op_u = \{-, lower, upper, bit\_length length\}$ and $op_b = \{+, -, *, /, ||\}$ \\
 
         $b \Coloneqq$ & $e_1 = e_2 \mid e_1 \leq e_2 \mid e_1 < e_2 \mid \neg b \mid b_1 \lor b_2 \mid b_1 \land b_2 \mid \texttt{true} \mid \texttt{false}$ \\
 
@@ -55,5 +55,5 @@ For simplicity's sake we assume that $\mathbb{V}_a$, $\mathbb{V}_d$ and $\mathbb
         $I \Coloneqq$ & $skip \mid v_a \coloneqq e \mid v_a \coloneqq ? \mid C_{sql} \mid b$ \\
     \end{tabular}
     \caption{Abstract Syntax}
-    \label{tab:abstract-syntax}
+    \label{fig:abstract-syntax}
 \end{figure}
