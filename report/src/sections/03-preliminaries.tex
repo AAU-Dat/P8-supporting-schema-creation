@@ -1,19 +1,26 @@
 
 \section{preliminaries}\label{sec:preliminaries}
 
-\subsection{Lattices}\label{sec:lattices}
+\subsection{Lattices}\label{subsec:lattices}
 This section contains the definitions and theorems of lattices, complete lattices, and partial orders.
 These definitions are necessary to understand the theory behind abstract interpretation.\cite{nielson_formal_2019}
 
+
 \begin{definition}
-    A \textit{partial order} $(S, \sqsubseteq)$ is set $S$ equipped with a binary relation $\sqsubseteq$ that is reflexive, transitive and anti-symmetric.
+    A \textit{partial order} $(S, \sqsubseteq)$ is set $S$ equipped with a binary relation $\sqsubseteq$ that is reflexive, transitive and antisymmetric.
 \end{definition}
 
+
 For $X \sqsubseteq S$ and $y \in S$ we take
+
+
 \begin{equation*}
     X \sqsubseteq y \iff \forall x \in X : x \sqsubseteq y,
 \end{equation*}
+
+
 and analogous for $y \sqsubseteq X$.
+
 
 \begin{definition}
     A \textit{complete lattice} $(S, \sqsubseteq, \sqcup, \sqcap)$ is a partial order $(S, \sqsubseteq)$ in which for all $X \subseteq S:$ $\bigsqcup X$ and $\bigsqcap X$ are defined,
@@ -26,7 +33,9 @@ and analogous for $y \sqsubseteq X$.
         \end{equation*}
 \end{definition}
 
+
 As a shorthand we take $x \sqcup y = \bigsqcup \{x, y\}$ and $x \sqcap y = \bigsqcap \{x, y\}$.
+
 
 \begin{definition}
     A \textit{lattice} $(S, \sqsubseteq, \sqcup, \sqcap)$ is a partial order $(S, \sqsubseteq)$ in which for all $x,y \in S:$ $x \sqcup y$ and $x \sqcap y$ are defined,
@@ -39,6 +48,7 @@ As a shorthand we take $x \sqcup y = \bigsqcup \{x, y\}$ and $x \sqcap y = \bigs
         \end{equation*}
 \end{definition}
 
+
 \begin{theorem}\label{thm:kleene_finite}
     In a complete lattice $L$ with finite height, every monotone function $f : L \rightarrow L$ has a unique fixed point
     \begin{equation*}
@@ -46,16 +56,20 @@ As a shorthand we take $x \sqcup y = \bigsqcup \{x, y\}$ and $x \sqcap y = \bigs
     \end{equation*}.
 \end{theorem}
 
+
 \begin{theorem}\label{thm:kleene_scott}
     In a complete lattice $L$, every Scott-continuous function $f : L \rightarrow L$ has a unique fixed point $lfp(f)$.
 \end{theorem}
+
 
 \begin{theorem}
     If $L_1, L_2, \dots, L_n$ are complete lattices, the so is the product:
     \begin{equation*}
         L_1 \times L_2 \times \dots L_n = \{(x_1, x_2, \dots x_n) \mid x_i \in L_i\}
     \end{equation*}
-    where the order $\sqsubseteq$ is defined componentwise:
+
+    where the order $\sqsubseteq$ is defined component-wise:
+
     \begin{align*}
         \begin{split}
         (x_1, x_2, \dots, x_n) &\sqsubseteq (x_1', x_2', \dots, x_n') \\
@@ -68,7 +82,7 @@ As a shorthand we take $x \sqcup y = \bigsqcup \{x, y\}$ and $x \sqcap y = \bigs
 \begin{theorem}
     If $A$ is a set and $L$ a complete lattice, then $L^A$ is a complete lattice when
     \begin{equation}
-        f \sqsubseteq g \iff \forall a \in A : f(a) \sqsubseteq g(a) \text{ where } f,g \in L^A.
+        f \sqsubseteq g \iff \forall a \in A : f(a) \sqsubseteq g(a) \text{ where } f,g \in L^A.\label{eq:equation-complete-lattice-theorem}
     \end{equation}
 
 \end{theorem}
@@ -78,23 +92,32 @@ As a shorthand we take $x \sqcup y = \bigsqcup \{x, y\}$ and $x \sqcap y = \bigs
     The four theorems above should have a source.
 }
 
-\subsection{Abstract Interpretation}
+\subsection{Abstract Interpretation}\label{subsec:abstract-interpretation}
 
 \begin{theorem}\label{thm:galoispre}
-    For $\gamma : L_1 \rightarrow L_2$ where $L_1$ and $L_2$ are complete lattices there exist a function $\alpha : L_2 \rightarrow L_1$ such that $\alpha$ and $\gamma$ forms a Galois connection if $\gamma(\bigsqcap B) = \bigsqcap_{b \in B}\gamma(b)$ for every $B \subseteq L_1$.
+    For $\gamma : L_1 \rightarrow L_2$ where $L_1$ and $L_2$ are complete lattices there exist a function $\alpha : L_2 \rightarrow L_1$ such that $\alpha$ and $\gamma$ forms a Galois connection if $\gamma\left(\bigsqcap B\right) = \bigsqcap_{b \in B}\gamma(b)$ for every $B \subseteq L_1$.
 \end{theorem}
 
-\subsection{Converting Code Program Graph}\label{subsection:converting-code-program-graph}
+\subsection{Converting Code Program Graph}\label{subsec:converting-code-program-graph}
 This section will briefly cover how the program graph is created.
-Creating a program graph from the code is already a proven concept. Therefore, this paper will not delve into the details but inform the reader.
+Creating a program graph from the code is already a proven concept.
+Therefore, this paper will not delve into the details but inform the reader.
 The book used to show that the concept of creating a program graph from code is a proven concept is~\cite[see][chap 2.2]{nielson_formal_2019}.
 A program graph consists of a finite set of nodes, initial and final nodes, actions, and edges.
 
-These directed edges represent the program's flow, and the nodes represent its state. The edges' actions are the atomic operations that the program can perform. The initial node is the program's starting point, and the final node is the program's end.
+These directed edges represent the program's flow, and the nodes represent its state.
+The edges' actions are the atomic operations that the program can perform.
+The initial node is the program's starting point, and the final node is the program's end.
 
-The program graph is created by parsing the code and creating nodes and edges that represent the flow of the code. This process, while it may sound complex, is relatively straightforward. For instance, if the code is only an assignment of a variable, there will be a node for the initial state before the variable is assigned, a node for the final state after the variable is assigned, and an edge between them that represents the action of the assignment. This is written as the following equation:
-$edges(q_{\circ} \rightsquigarrow q_{\bullet})\llbracket x:=a \rrbracket = \{(q_{\circ}, x:=a, q_{\bullet})\}$
-$q_{\circ}$ is the initial node, $q_{\bullet}$ is the final node, and $x:=a$ is the assignment. This creates a set that represents the program graph, which can be seen in \autoref{fig:tikz-program-graph-assignment}. This is a simple example, and the program graph can be more complex depending on the code, but the concept is the same.
+The program graph is created by parsing the code and creating nodes and edges that represent the flow of the code.
+This process, while it may sound complex, is relatively straightforward.
+For instance, if the code is only an assignment of a variable, there will be a node for the initial state before the variable is assigned, a node for the final state after the variable is assigned, and an edge between them that represents the action of the assignment.
+This is written as the following equation:
+$edges(q_{\circ} \rightsquigarrow q_{\bullet})\llbracket x \coloneqq a \rrbracket = \{(q_{\circ}, x \coloneqq a, q_{\bullet})\}$
+$q_{\circ}$ is the initial node, $q_{\bullet}$ is the final node, and $x \coloneqq a$ is the assignment.
+
+This creates a set that represents the program graph, which can be seen in \autoref{fig:tikz-program-graph-assignment}.
+This is a simple example, and the program graph can be more complex depending on the code, but the concept is the same.
 Further examples can be found in~\cite[Figure 2.6]{nielson_formal_2019}.
 
 \begin{figure}[htb!]
@@ -104,7 +127,7 @@ Further examples can be found in~\cite[Figure 2.6]{nielson_formal_2019}.
     \label{fig:tikz-program-graph-assignment}
 \end{figure}
 
-We later describe the abstract syntax; \autoref{tab:abstract-syntax-instructions} describes the instructions the abstract syntax will contain.
+We later describe the abstract syntax; \autoref{fig:abstract-syntax-instructions} describes the instructions the abstract syntax will contain.
 There is no control structure in the abstract syntax, like if-statements and loops or sequences of instructions.
 This is because the abstract syntax is simplified to make understanding the theory behind abstract interpretation easier.
 This is all handled in the program graph, where the control structure is represented as edges in the program graph.
@@ -112,10 +135,10 @@ This is all handled in the program graph, where the control structure is represe
 \begin{figure}
     \center
     \begin{tabular}{r l}
-        $I ::=$ & $skip \mid v_a := e \mid v_a := ? \mid C_{sql} \mid b$
+        $I \Coloneqq$ & $skip \mid v_a \coloneqq e \mid v_a \coloneqq ? \mid C_{sql} \mid b$
     \end{tabular}
     \caption{Abstract Syntax for Instructions}
-    \label{tab:abstract-syntax-instructions}
+    \label{fig:abstract-syntax-instructions}
 \end{figure}
 
 If-statements and loops are still used as boolean expressions in edges, used like guards in the program graph.
