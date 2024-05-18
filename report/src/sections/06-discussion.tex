@@ -14,15 +14,14 @@ Throughout the work progress, it was originally planned to have a working system
 However,
 due to time constraints and the complexity of the research,
 it was deemed necessary to move the system to future work.
-Due to this, there are no test results to discuss.
+Due to this, there are no empirical results to discuss.
 However, it is still possible to discuss the implications of the results that could have been found.
 
 
 \subsection{Problems in the work}\label{subsec:workproblems}
 Providing a framework for doing analysis on a database system proved harder than first expected.
 This became clear in the choice of working with the paper~\cite{halder_abstract_2012} as a foundation to our work.
-Although the paper provided an extensive syntax and semantics, it was not capable of being used as an analysis tool.
-Altering it to be so would prove to be challenging for the following reasons.
+Although the paper provided an extensive syntax and semantics, it was not capable of being used as an analysis tool for the following reasons.
 
 We found that using their semantics for an analysis could result in it being non-terminating,
 therefore deeming it not viable.
@@ -49,21 +48,36 @@ we clearly see how their semantics introduce duplicate entries in a table, where
 
 
 This means that a situation can happen, where adding more of the same tuples could end up enlarging the analysis indefinitely.
+Specifically, it happens during \textit{infinite} programs with no end state, such as the one shown in \autoref{fig:programgraph}.
+
 
 This is exactly what this paper tries to escape.
-As mentioned in \autoref{subsubsec:abstract_domain_of_tables}, using abstract bags of abstract tuples eliminates the possibility of having duplicate tuple, ensuring a finite state space and terminating analysis.
+As mentioned in \autoref{subsubsec:abstract_domain_of_tables}, using abstract bags of abstract tuples eliminates the possibility of having duplicate tuples.
+So, in the paper~\cite{halder_abstract_2012}, an \textit{infinite} program could result in adding even more duplicate tuples, increasing the state space indefinitely.
+But because of our choice of abstraction, we will never have duplicate tuples in a database table.
+Instead, we will simply keep the already existing tuple, conclude that we now potentially see the same state space, and stop exploring that branch, as we have already explored from that state in the state space.
+Exactly this is the key difference that makes sure that our implementation is finite.
 
 Changing the way in which the abstractions are represented means that quite a lot of change is needed for the semantics.
 So even though this paper provides a model that can be used for actual analysis, it also has its compromises.
-Due to time constraints, it has not been possible to cover as much of SQL as \autoref{subsubsec:abstract_domain_of_tables} does.
+Due to time constraints, it has not been possible to cover as much of SQL as ~\cite{halder_abstract_2012} does.
+
+Therefore, due to the need to discard some semantics, programs using these missing commands/actions cannot be analyzed.
+This limitation restricts the programs and schemas that can implement this paper's model.
+However, programs that only use semantics covered by SQAAL can be analyzed, even if they are infinite.
+This means that while SQAAL can handle non-terminating programs, there are many programs SQAAL cannot handle that Halder's implementation can manage.
+
+An example of this is in the SELECT SQL action: SQAAL is currently unable to handle additional methods such as DISTINCT and GROUP BY, whereas the implementation in ~\cite{halder_abstract_2012} can.
+
 This limits the amount of use cases the tool could be used for, naturally leaving an expansion of the tool to future work.
 
 As mentioned, a plan was also established to implement a system that made use of the tool developed in this paper.
 Unfortunately, it was not possible to make such a system, given the amount of work was required to ensure a terminating analysis.
-Considering the complicated nature of the analysis, which quickly gets tricky if carried out in hand, a system would be required to provide a meaningful use in the future.
+Considering the complicated nature of the analysis, which quickly gets cumbersome if carried out in hand, a system would be required to provide a meaningful use in the future.
 
 
 Moreover, the choice of SQL, as the language for the implementation, added more complication than necessary.
 The reason for this is that the language has many implementation features that are different from dialect to dialect.
 Therefore, it might have been better to use a more abstract language, as relational algebra, to implement the system.
-Especially since the contribution in this paper only defined a subset of the operations in PostgreSQL.
+Especially since the contribution in this paper only defined a subset of the operations of the chosen SQL dialect, which is PostgreSQL.
+The choice of SQL dialect was not chosen for a noteworthy reason though.
