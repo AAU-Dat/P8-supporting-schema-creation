@@ -5,7 +5,6 @@
 This section contains the definitions and theorems of lattices, complete lattices, and partial orders.
 These definitions are necessary to understand the theory behind abstract interpretation.\cite{nielson_formal_2019}
 
-
 \begin{definition}
     A \textit{partial order} $(S, \sqsubseteq)$ is set $S$ equipped with a binary relation $\sqsubseteq$ that is reflexive, transitive and antisymmetric.
 \end{definition}
@@ -102,23 +101,17 @@ As a shorthand we take $x \sqcup y = \bigsqcup \{x, y\}$ and $x \sqcap y = \bigs
 This section will briefly cover how the program graph is created.
 Creating a program graph from the code is already a proven concept.
 Therefore, this paper will not delve into the details but inform the reader.
-The book used to show that the concept of creating a program graph from code is a proven concept is~\cite[see][chap 2.2]{nielson_formal_2019}.
+The book used to show that the concept of creating a program graph from code is a proven concept~\cite[see][chap 2.2]{nielson_formal_2019}.
 A program graph consists of a finite set of nodes, initial and final nodes, actions, and edges.
 
 These directed edges represent the program's flow, and the nodes represent its state.
 The edges' actions are the atomic operations that the program can perform.
 The initial node is the program's starting point, and the final node is the program's end.
+We denote the program graph as $edges(q_{\circ} \rightsquigarrow q_{\bullet})\llbracket I \rrbracket$ where $q_{\circ}$ is the initial node, $q_{\bullet}$ is the final node, and $I$ is the instruction.
 
-The program graph is created by parsing the code and creating nodes and edges that represent the flow of the code.
-This process, while it may sound complex, is relatively straightforward.
-For instance, if the code is only an assignment of a variable, there will be a node for the initial state before the variable is assigned, a node for the final state after the variable is assigned, and an edge between them that represents the action of the assignment.
-This is written as the following equation:
-$edges(q_{\circ} \rightsquigarrow q_{\bullet})\llbracket x \coloneqq a \rrbracket = \{(q_{\circ}, x \coloneqq a, q_{\bullet})\}$
-$q_{\circ}$ is the initial node, $q_{\bullet}$ is the final node, and $x \coloneqq a$ is the assignment.
-
-This creates a set that represents the program graph, which can be seen in \autoref{fig:tikz-program-graph-assignment}.
-This is a simple example, and the program graph can be more complex depending on the code, but the concept is the same.
-Further examples can be found in~\cite[Figure 2.6]{nielson_formal_2019}.
+The program graph is created by parsing the code and creating nodes and edges that represent the flow of the code. This process, while it may sound complex, is relatively straightforward. For instance, if the code is only an assignment of a variable, there will be a node for the initial state before the variable is assigned, a node for the final state after the variable is assigned, and an edge between them that represents the action of the assignment. This is written as the following equation:
+$edges(q_{\circ} \rightsquigarrow q_{\bullet})\llbracket x:=a \rrbracket = \{(q_{\circ}, x:=a, q_{\bullet})\}$
+$q_{\circ}$ is the initial node, $q_{\bullet}$ is the final node, and $x:=a$ is the assignment. This creates a set that represents the program graph, which can be seen in \autoref{fig:tikz-program-graph-assignment}. This is a simple example, and the program graph can be more complex depending on the code, but the concept is the same. Further examples can be found in~\cite[Figure 2.6]{nielson_formal_2019}.
 
 \begin{figure}[htb!]
     \center
@@ -144,21 +137,23 @@ This is all handled in the program graph, where the control structure is represe
 If-statements and loops are still used as boolean expressions in edges, used like guards in the program graph.
 We can make equations for the edges of the program graph, where $b$ is a Boolean expression, and $S$ is a set of states done in the control structure.
 
-$edges(q_{\circ} \rightsquigarrow q_{\bullet})\llbracket \text{if } b \text{ then } S_1 \text{ else } S_2 \rrbracket = \text{let } q_{cond}$ be a new node.
+For an if-statement `if b then S1 else S2`:
+$edges(q_{\circ} \rightsquigarrow q_{\bullet})\llbracket \text{if } b \text{ then } S_1 \text{ else } S_2 \rrbracket = \text{let } q_{cond}, q_{if}, q_{else}, q_{merge}$ be new nodes.
 \begin{align}
-S_{cond} &= edges(q_\circ \rightsquigarrow q_{cond})\llbracket b \rrbracket \\
-S_{true} &= edges(q_{cond} \rightsquigarrow q_{\bullet})\llbracket S_1 \rrbracket \\
-    S_{false} &= edges(q_{cond} \rightsquigarrow q_{\bullet})\llbracket S_2 \rrbracket \\
-    &\text{in } S_{cond} \cup S_{true} \cup S_{false}
+    S_{cond} &= edges(q_\circ \rightsquigarrow q_{if})\llbracket b \rrbracket \cup edges(q_\circ \rightsquigarrow q_{else})\llbracket \neg b \rrbracket \\
+    S_{if} &= edges(q_{if} \rightsquigarrow q_{if_{out}})\llbracket S_1 \rrbracket \\
+    S_{else} &= edges(q_{else} \rightsquigarrow q_{else_{out}})\llbracket S_2 \rrbracket \\
+    S_{merge} &= edges(q_{if_{out}} \rightsquigarrow q_{\bullet}) \cup edges(q_{else_{out}} \rightsquigarrow q_{\bullet}) \\
+    &\text{in } S_{cond} \cup S_{if_{in}} \cup S_{else_{in}} \cup S_{merge}
 \end{align}
 
-$edges(q_{\circ} \rightsquigarrow q_{\bullet})\llbracket \text{while } b \text{ do } I\rrbracket= \text{let } q_{cond}$ be a new node,
+For a while loop `while b do I`:
+$edges(q_{\circ} \rightsquigarrow q_{\bullet})\llbracket \text{while } b \text{ do } I \rrbracket = \text{let } q_{loop}$ be a new node.
 \begin{align}
-    S_{cond} &= edges(q_\circ \rightsquigarrow q_{cond}) \llbracket b \rrbracket \\
-    S_{body}&=edges(q_{cond} \rightsquigarrow q_{body})\llbracket I \rrbracket \\
-    S_{loop} &= edges(q_{body} \rightsquigarrow q_{cond})\llbracket\text{true}\rrbracket \\
-    S_{exit} &= edges(q_{cond} \rightsquigarrow q_{\bullet})\llbracket\text{false}\rrbracket \\
-    &\text{in } S_{cond} \cup S_{body} \cup S_{loop} \cup S_{exit}
+    S_{circ} &= edges(q_\circ \rightsquigarrow q_{loop}) \llbracket b \rrbracket \\
+    S_{stop} &= edges(q_{\circ} \rightsquigarrow q_{\bullet})\llbracket \neg b \rrbracket \\
+    S_{loop} &= edges(q_{loop} \rightsquigarrow q_{circ})\llbracket I \rrbracket \\
+    &\text{in } S_{circ} \cup S_{stop} \cup S_{loop}
 \end{align}
 
 In \autoref{fig:tikz-program-graph-loop} and \autoref{fig:tikz-program-graph-if}, we see examples of how a loop and an if-statement are represented in a program graph.
@@ -177,14 +172,14 @@ In \autoref{fig:tikz-program-graph-loop} and \autoref{fig:tikz-program-graph-if}
     \label{fig:tikz-program-graph-loop}
 \end{figure}
 
-In the abstract syntax, we will not have formulated sequences of $I_0, I_1, I_2, \dots, I_n$ as in the program graph, but rather as a set of states $S$, where we at the end go back to the initial state, this is shown in \autoref{fig:tikz-composition-graph}.
+In the abstract syntax, we will not have formulated sequences of $I_0, I_1, I_2, \dots, I_n$ as in the program graph, but rather as a set of states $S$, where we at the end go back to the initial state, as shown in \autoref{fig:tikz-composition-graph}.
 
-We can make equations for the edges of the composition graph, where $I_1$ and $I_2$ are instructions.
-$edges(q_{\circ} \rightsquigarrow q_{\bullet})\llbracket I_1 ; I_2 \rrbracket = \text{let q be a new node}$
+We can make equations for the edges of the composition graph, where $I_1$ and $I_2$ are instructions:
+$edges(q_{\circ} \rightsquigarrow q_{\bullet})\llbracket I_1 ; I_2 \rrbracket = $ let $q$ be a new node.
 \begin{align}
-S_1 &= edges(q_{\circ} \rightsquigarrow q)\llbracket I_1 \rrbracket\\
-S_2 &= edges(q \rightsquigarrow q_{\bullet})\llbracket I_2 \rrbracket, \\
-&\text{ in } S_1 \cup S_2
+    S_1 &= edges(q_{\circ} \rightsquigarrow q)\llbracket I_1 \rrbracket \\
+    S_2 &= edges(q \rightsquigarrow q_{\bullet})\llbracket I_2 \rrbracket \\
+    &\text{in } S_1 \cup S_2
 \end{align}
 
 \begin{figure}
