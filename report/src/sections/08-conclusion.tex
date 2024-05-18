@@ -1,9 +1,18 @@
 \section{Conclusion} \label{sec:conclusion}
-We have provided an improved language for the abstract interpretation of databases from~\cite{halder_abstract_2012} and shown that the improved interpretation is always sound.
-Our semantics is based on the abstract interpretation of the paper, and we have shown that the abstract interpretation of the relational algebra is sound.
+With the language for the abstract interpretation of databases from~\cite{halder_abstract_2012} as a starting point, we have further developed the language to try and improve some of the areas where the original language was lacking.
+Our semantics is based on the abstract interpretation of the paper though the size of both the syntax and semantics has been reduced.
+the original language would run indefinitely in some cases, which is not desirable.
+We have improved the language to what we believe ensures termination.
 
-The improved language is sound; however, its expressibility has been reduced compared to its predecessor, as it will always terminate.
-This is because the improved language is more restrictive than the original language.
-This limitation particularly arises when inserting a table as a field into another table.
+When discussing the soundness of the language, we believe the language is sound.
+but we have not been able to prove it formally.
+we believe that such a proof would be possible, but the process of doing so would be very time-consuming.
 
-Our study focuses on leveraging abstract interpretation to verify database properties across abstract states, ensuring the validity of properties across all conceivable concrete states.
+When it comes to the representation of some of the datatype in the language, we have made some changes.
+Those changes being the string representation in the form of regular expression.
+As well as the use of ranges to represent integers.
+
+This is why we think that the language is a good starting point for further development and research to see if it can be used to verify properties of databases in the future.
+Or to see if this can be implemented in a tool that can be used to verify properties of databases.
+
+
