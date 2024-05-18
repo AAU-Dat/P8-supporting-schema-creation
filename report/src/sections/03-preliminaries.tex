@@ -94,8 +94,8 @@ As a shorthand we take $x \sqcup y = \bigsqcup \{x, y\}$ and $x \sqcap y = \bigs
 \subsection{Abstract Interpretation}\label{subsec:abstract-interpretation}
 
 Here we give a quick presentation abstract interpretation.
-The presentation is heavily based on \cite{nielson_formal_2019} with some additions from \cite{moller_statitc_nodate}.
-As the presentation is rudimentary we encourage the reader to review \cite{noauthor_abstract_nodate} or \cite{cousot_abstract_1996} for a informal introduction of the subject, and the respective chapters in \cite{nielson_formal_2019} and \cite{moller_statitc_nodate} for a more complete explanation or \cite{cousot_abstract_1977} for the seminal work.
+The presentation is heavily based on~\cite{nielson_formal_2019} with some additions from~\cite{moller_statitc_nodate}.
+As the presentation is rudimentary we encourage the reader to review~\cite{noauthor_abstract_nodate} or~\cite{cousot_abstract_1996} for an introduction of the subject, and the respective chapters in~\cite{nielson_formal_2019} and~\cite{moller_statitc_nodate} for a more complete explanation or~\cite{cousot_abstract_1977} for the seminal work.
 
 First we define two central notions, namely soundness and valid analysis assignments.
 
@@ -103,9 +103,10 @@ First we define two central notions, namely soundness and valid analysis assignm
     Given a set $\rho \in \mathfrak{E}$ of possible concrete program memories, and a set $\ab{\rho} \in \ab{\mathfrak{E}}$ of possible abstract program memories, related by a concretization function $\gamma : \mathcal{P}(\ab{\mathfrak{E}}) \rightarrow \mathcal{P}(\mathfrak{E})$.
     A concrete semantic over program instructs $I \in \mathbb{I}$, $\sem{\cdot} : \mathbb{I} \rightarrow \mathfrak{E} \rightarrow \mathfrak{E}$ and an abstract semantic $\abssem{\cdot} : \mathbb{I} \rightarrow \mathcal{P}(\ab{\mathfrak{E}}) \rightarrow \mathcal{P}(\ab{\mathfrak{E}})$, $\abssem{\cdot}$ is said to be \emph{sound} whenever:
     \begin{equation}
-        \rho \in \concrete(\ab{E}) \land \sem{I}(m) = m' \implies m' \in \concrete(\abssem{I}(\ab{E}))
+        \rho \in \concrete(\ab{E}) \land \sem{I}(m) = m' \implies m' \in \concrete(\abssem{I}(\ab{E}))\label{eq:equation}
     \end{equation}
 \end{definition}
+
 
 \begin{definition}\label{def:valid}
     Given a program graph with vertices $Q$ and edges $E$, an assignment $A : Q \rightarrow \mathcal{P}(\ab{\mathfrak{E}})$, that assignment is said to be \emph{valid} if its the case that:
@@ -117,7 +118,7 @@ First we define two central notions, namely soundness and valid analysis assignm
 
 Given the previously two definitions, if the initial abstract memories for the initial program point $\ab{E}_\triangleright$ is set such that $E_{\triangleright} \subseteq \concrete(\ab{E}_\triangleright)$, for concrete memories holding initially $E_{\triangleright}$ in the initial program point, the abstract semantics are sound and the analysis assignment is valid, then it can be shown that if $\rho \in \concrete(A(q_\circ))$ and $\langle q_\circ; \rho \rangle \xRightarrow{\omega^\star} \langle q_\bullet; \rho' \rangle$ then $\rho' \in \concrete(A(q_\bullet))$.
 What that intuitively means is that the analysis assignment is a safe over approximation of the actual state-space of the program.
-Valid analysis assignment can then readily be computed as explained in \cite{nielson_formal_2019}.
+Valid analysis assignment can then readily be computed as explained in~\cite{nielson_formal_2019}.
 
 % \begin{theorem}\label{thm:galoispre}
 %     For $\gamma : L_1 \rightarrow L_2$ where $L_1$ and $L_2$ are complete lattices there exist a function $\alpha : L_2 \rightarrow L_1$ such that $\alpha$ and $\gamma$ forms a Galois connection if $\gamma\left(\bigsqcap B\right) = \bigsqcap_{b \in B}\gamma(b)$ for every $B \subseteq L_1$.
@@ -135,9 +136,20 @@ The edges' actions are the atomic operations that the program can perform.
 The initial node is the program's starting point, and the final node is the program's end.
 We denote the program graph as $edges(q_{\circ} \rightsquigarrow q_{\bullet})\llbracket I \rrbracket$ where $q_{\circ}$ is the initial node, $q_{\bullet}$ is the final node, and $I$ is the instruction.
 
-The program graph is created by parsing the code and creating nodes and edges that represent the flow of the code. This process, while it may sound complex, is relatively straightforward. For instance, if the code is only an assignment of a variable, there will be a node for the initial state before the variable is assigned, a node for the final state after the variable is assigned, and an edge between them that represents the action of the assignment. This is written as the following equation:
-$edges(q_{\circ} \rightsquigarrow q_{\bullet})\llbracket x:=a \rrbracket = \{(q_{\circ}, x:=a, q_{\bullet})\}$
-$q_{\circ}$ is the initial node, $q_{\bullet}$ is the final node, and $x:=a$ is the assignment. This creates a set that represents the program graph, which can be seen in \autoref{fig:tikz-program-graph-assignment}. This is a simple example, and the program graph can be more complex depending on the code, but the concept is the same. Further examples can be found in~\cite[Figure 2.6]{nielson_formal_2019}.
+The program graph is created by parsing the code and creating nodes and edges that represent the flow of the code.
+This process, while it may sound complex, is relatively straightforward.
+For instance, if the code is only an assignment of a variable, there will be a node for the initial state before the variable is assigned, a node for the final state after the variable is assigned, and an edge between them that represents the action of the assignment.
+This is written as the following equation:
+
+\begin{equation}
+    edges(q_{\circ} \rightsquigarrow q_{\bullet})\llbracket x\coloneqq a \rrbracket = \{(q_{\circ}, x\coloneqq a, q_{\bullet})\}\label{eq:equation3}
+\end{equation}
+
+
+$q_{\circ}$ is the initial node, $q_{\bullet}$ is the final node\coloneqq and $x\coloneqq a$ is the assignment.
+This creates a set that represents the program graph, which can be seen in \autoref{fig:tikz-program-graph-assignment}.
+This is a simple example, and the program graph can be more complex depending on the code, but the concept is the same.
+Further examples can be found in~\cite[Figure 2.6]{nielson_formal_2019}.
 
 \begin{figure}[htb!]
     \center
@@ -165,8 +177,13 @@ We can make equations for the edges of the program graph, where $b$ is a Boolean
 
 For an if-statement `if b then S1 else S2`:
 $edges(q_{\circ} \rightsquigarrow q_{\bullet})\llbracket \text{if } b \text{ then } S_1 \text{ else } S_2 \rrbracket = \text{let } q_{cond}, q_{if}, q_{else}, q_{merge}$ be new nodes.
+
+
 \begin{align}
-    S_{cond} &= edges(q_\circ \rightsquigarrow q_{if})\llbracket b \rrbracket \cup edges(q_\circ \rightsquigarrow q_{else})\llbracket \neg b \rrbracket \\
+    \begin{split}
+        S_{cond} &= edges(q_\circ \rightsquigarrow q_{if})\llbracket b \rrbracket \\
+        & \cup edges(q_\circ \rightsquigarrow q_{else})\llbracket \neg b \rrbracket
+    \end{split} \\
     S_{if} &= edges(q_{if} \rightsquigarrow q_{if_{out}})\llbracket S_1 \rrbracket \\
     S_{else} &= edges(q_{else} \rightsquigarrow q_{else_{out}})\llbracket S_2 \rrbracket \\
     S_{merge} &= edges(q_{if_{out}} \rightsquigarrow q_{\bullet}) \cup edges(q_{else_{out}} \rightsquigarrow q_{\bullet}) \\
@@ -175,6 +192,8 @@ $edges(q_{\circ} \rightsquigarrow q_{\bullet})\llbracket \text{if } b \text{ the
 
 For a while loop `while b do I`:
 $edges(q_{\circ} \rightsquigarrow q_{\bullet})\llbracket \text{while } b \text{ do } I \rrbracket = \text{let } q_{loop}$ be a new node.
+
+
 \begin{align}
     S_{circ} &= edges(q_\circ \rightsquigarrow q_{loop}) \llbracket b \rrbracket \\
     S_{stop} &= edges(q_{\circ} \rightsquigarrow q_{\bullet})\llbracket \neg b \rrbracket \\
@@ -182,7 +201,9 @@ $edges(q_{\circ} \rightsquigarrow q_{\bullet})\llbracket \text{while } b \text{ 
     &\text{in } S_{circ} \cup S_{stop} \cup S_{loop}
 \end{align}
 
+
 In \autoref{fig:tikz-program-graph-loop} and \autoref{fig:tikz-program-graph-if}, we see examples of how a loop and an if-statement are represented in a program graph.
+
 
 \begin{figure}[htb!]
     \center
@@ -198,10 +219,13 @@ In \autoref{fig:tikz-program-graph-loop} and \autoref{fig:tikz-program-graph-if}
     \label{fig:tikz-program-graph-loop}
 \end{figure}
 
+
 In the abstract syntax, we will not have formulated sequences of $I_0, I_1, I_2, \dots, I_n$ as in the program graph, but rather as a set of states $S$, where we at the end go back to the initial state, as shown in \autoref{fig:tikz-composition-graph}.
 
 We can make equations for the edges of the composition graph, where $I_1$ and $I_2$ are instructions:
 $edges(q_{\circ} \rightsquigarrow q_{\bullet})\llbracket I_1 ; I_2 \rrbracket = $ let $q$ be a new node.
+
+
 \begin{align}
     S_1 &= edges(q_{\circ} \rightsquigarrow q)\llbracket I_1 \rrbracket \\
     S_2 &= edges(q \rightsquigarrow q_{\bullet})\llbracket I_2 \rrbracket \\
