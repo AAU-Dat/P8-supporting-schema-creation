@@ -56,6 +56,7 @@ As a shorthand we take $x \sqcup y = \bigsqcup \{x, y\}$ and $x \sqcap y = \bigs
     \end{equation*}.
 \end{theorem}
 
+
 \begin{theorem}
     If $L_1, L_2, \dots, L_n$ are complete lattices, then so is the product:
     \begin{equation*}
@@ -85,9 +86,35 @@ As a shorthand we take $x \sqcup y = \bigsqcup \{x, y\}$ and $x \sqcap y = \bigs
 
 \subsection{Abstract Interpretation}\label{subsec:abstract-interpretation}
 
-\begin{theorem}\label{thm:galoispre}
-    For $\gamma : L_1 \rightarrow L_2$ where $L_1$ and $L_2$ are complete lattices there exist a function $\alpha : L_2 \rightarrow L_1$ such that $\alpha$ and $\gamma$ forms a Galois connection if $\gamma\left(\bigsqcap B\right) = \bigsqcap_{b \in B}\gamma(b)$ for every $B \subseteq L_1$.
-\end{theorem}
+Here we give a quick presentation abstract interpretation.
+The presentation is heavily based on \cite{nielson_formal_2019} with some additions from \cite{moller_statitc_nodate}.
+As the presentation is rudimentary we encourage the reader to review \cite{noauthor_abstract_nodate} or \cite{cousot_abstract_1996} for a informal introduction of the subject, and the respective chapters in \cite{nielson_formal_2019} and \cite{moller_statitc_nodate} for a more complete explanation or \cite{cousot_abstract_1977} for the seminal work.
+
+First we define two central notions, namely soundness and valid analysis assignments.
+
+\begin{definition}
+    Given a set $\rho \in \mathfrak{E}$ of possible concrete program memories, and a set $\ab{\rho} \in \ab{\mathfrak{E}}$ of possible abstract program memories, related by a concretization function $\gamma : \mathcal{P}(\ab{\mathfrak{E}}) \rightarrow \mathcal{P}(\mathfrak{E})$.
+    A concrete semantic over program instructs $I \in \mathbb{I}$, $\sem{\cdot} : \mathbb{I} \rightarrow \mathfrak{E} \rightarrow \mathfrak{E}$ and an abstract semantic $\abssem{\cdot} : \mathbb{I} \rightarrow \mathcal{P}(\ab{\mathfrak{E}}) \rightarrow \mathcal{P}(\ab{\mathfrak{E}})$, $\abssem{\cdot}$ is said to be \emph{sound} whenever:
+    \begin{equation}
+        \rho \in \concrete(\ab{E}) \land \sem{I}(m) = m' \implies m' \in \concrete(\abssem{I}(\ab{E}))
+    \end{equation}
+\end{definition}
+
+\begin{definition}\label{def:valid}
+    Given a program graph with vertices $Q$ and edges $E$, an assignment $A : Q \rightarrow \mathcal{P}(\ab{\mathfrak{E}})$, that assignment is said to be \emph{valid} if its the case that:
+    \begin{itemize}
+        \item If $q_\circ \xrightarrow{I} q_\bullet \in E$ then $\abssem{I}(A(q_\circ)) \subseteq A(q_\bullet)$,
+        \item and $\ab{E}_\triangleright \subseteq A(q_\triangleright)$, where $q_\triangleright$ is the initial program point in the program graph and $\ab{E}_\triangleright$ is a set of abstract memories that hold initially in the initial state.
+    \end{itemize}
+\end{definition}
+
+Given the previously two definitions, if the initial abstract memories for the initial program point $\ab{E}_\triangleright$ is set such that $E_{\triangleright} \subseteq \concrete(\ab{E}_\triangleright)$, for concrete memories holding initially $E_{\triangleright}$ in the initial program point, the abstract semantics are sound and the analysis assignment is valid, then it can be shown that if $\rho \in \concrete(A(q_\circ))$ and $\langle q_\circ; \rho \rangle \xRightarrow{\omega^\star} \langle q_\bullet; \rho' \rangle$ then $\rho' \in \concrete(A(q_\bullet))$.
+What that intuitively means is that the analysis assignment is a safe over approximation of the actual state-space of the program.
+Valid analysis assignment can then readily be computed as explained in \cite{nielson_formal_2019}.
+
+% \begin{theorem}\label{thm:galoispre}
+%     For $\gamma : L_1 \rightarrow L_2$ where $L_1$ and $L_2$ are complete lattices there exist a function $\alpha : L_2 \rightarrow L_1$ such that $\alpha$ and $\gamma$ forms a Galois connection if $\gamma\left(\bigsqcap B\right) = \bigsqcap_{b \in B}\gamma(b)$ for every $B \subseteq L_1$.
+% \end{theorem}
 
 \subsection{Converting Code Program Graph}\label{subsec:converting-code-program-graph}
 This section will briefly cover how the program graph is created.
