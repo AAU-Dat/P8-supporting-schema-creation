@@ -14,9 +14,9 @@ All definitions and notation in this subsection are due to \cite{nielson_formal_
 For $X \sqsubseteq S$ and $y \in S$ we take
 
 
-\begin{equation*}
+\begin{equation}
     X \sqsubseteq y \iff \forall x \in X : x \sqsubseteq y,
-\end{equation*}
+\end{equation}
 
 
 and analogous for $y \sqsubseteq X$.
@@ -24,13 +24,13 @@ and analogous for $y \sqsubseteq X$.
 
 \begin{definition}
     A \emph{complete lattice} $(S, \sqsubseteq, \sqcup, \sqcap)$ is a partial order $(S, \sqsubseteq)$ in which for all $X \subseteq S:$ $\bigsqcup X$ and $\bigsqcap X$ are defined,
-        \begin{equation*}
+        \begin{equation}
             X \sqsubseteq \bigsqcup X \land \forall y \in S : X \sqsubseteq y \implies \bigsqcup X \sqsubseteq y,
-        \end{equation*}
+        \end{equation}
         and
-        \begin{equation*}
+        \begin{equation}
             \bigsqcap X \sqsubseteq X \land \forall y \in S : y \sqsubseteq X \implies y \sqsubseteq \bigsqcap X.
-        \end{equation*}
+        \end{equation}
 \end{definition}
 
 
@@ -39,39 +39,39 @@ As a shorthand we take $x \sqcup y = \bigsqcup \{x, y\}$ and $x \sqcap y = \bigs
 
 \begin{definition}
     A \emph{lattice} $(S, \sqsubseteq, \sqcup, \sqcap)$ is a partial order $(S, \sqsubseteq)$ in which for all $x,y \in S:$ $x \sqcup y$ and $x \sqcap y$ are defined,
-        \begin{equation*}
+        \begin{equation}
             \{x, y\} \sqsubseteq x \sqcup y \land \forall z \in S : \{x, y\} \sqsubseteq z \implies x \sqcup y \sqsubseteq z,
-        \end{equation*}
+        \end{equation}
         and
-        \begin{equation*}
+        \begin{equation}
             x \sqcap y \sqsubseteq \{x, y\} \land \forall z \in S : z \sqsubseteq \{x, y\} \implies z \sqsubseteq x \sqcap y.
-        \end{equation*}
+        \end{equation}
 \end{definition}
 
 
 \begin{theorem}\label{thm:kleene_finite}
     In a complete lattice $L$ with finite height, every monotone function $f : L \rightarrow L$ has a unique fixed point
-    \begin{equation*}
+    \begin{equation}
         lfp(f) = \bigsqcup\{f^n(\perp) \mid n \in \mathbb{N}\}
-    \end{equation*}.
+    \end{equation}.
 \end{theorem}
 
 
 \begin{theorem}
     If $L_1, L_2, \dots, L_n$ are complete lattices, then so is the product:
-    \begin{equation*}
+    \begin{equation}
         L_1 \times L_2 \times \dots L_n = \{(x_1, x_2, \dots x_n) \mid x_i \in L_i\}
-    \end{equation*}
+    \end{equation}
 
     Where the order $\sqsubseteq$ is defined component-wise:
 
-    \begin{align*}
+    \begin{align}
         \begin{split}
         (x_1, x_2, \dots, x_n) &\sqsubseteq (x_1', x_2', \dots, x_n') \\
         \iff
         \forall i &= 1, 2, \dots n : x_i \sqsubseteq x_i'
         \end{split}
-    \end{align*}
+    \end{align}
 \end{theorem}
 
 \begin{theorem}
@@ -83,6 +83,101 @@ As a shorthand we take $x \sqcup y = \bigsqcup \{x, y\}$ and $x \sqcap y = \bigs
     \end{equation}
 \end{theorem}
 
+\subsection{Converting Code Program Graph}\label{subsec:converting-code-program-graph}
+
+Because of the particular flavor of abstract interpretation we use uses program graphs instead of control flow graphs we justify the conversion here, to be more precise we justify the conversion of control flow construct defined in \cite{halder_abstract_2012} to program graphs.
+This particular flavor of abstract interpretation was choose because it allowed us to be encode the control flow in the graph, allowing us to \emph{abstract} away details of control flow in our analysis specification.
+
+\begin{definition}
+    A \emph{program graph}~\cite{nielson_formal_2019} is a tuple $PG = (Q, q_\vartriangleright, q_\blacktriangleright, \mathbb{I}, E)$ where:
+    \begin{itemize}
+        \item $Q$ is a finite set of nodes,
+        \item $I$ is a set of instructions,
+        \item $q_\triangleright, q_\blacktriangleleft \in Q$ are the \emph{initial node} and \emph{final node}, respectively,
+        \item and $E \subseteq Q \times \mathbb{I} \times Q$ is a finite set of \emph{edges}.
+    \end{itemize}
+    An edge $q_\circ \xrightarrow{I} q_\bullet$ has \emph{source} node $q_\circ$ and \emph{target} node $q_\bullet$ and is labeled with action $I$.
+    Finally $q_\triangleright, q_\blacktriangleleft \in Q$ are distinct, and no edges are to have source $q_\blacktriangleleft$.
+\end{definition}
+
+Programs/instructions as defined in the syntax of ~\cite{halder_abstract_2012}:
+\begin{align}
+    I &\Coloneqq & &\texttt{if } b \texttt{ then } I_1 \texttt{ else } I_2 \\
+      &\mid      & &\texttt{while } b \texttt{ do } I \\
+      &\mid      & &I_1; I_2 \\
+      &\mid      & &\dots
+\end{align}
+can be converted to a program graph via the function $edges$ which in the recursive cases if defined to be:
+
+\begin{equation}
+\begin{aligned}
+    &edges(q_\circ \rightsquigarrow q_\bullet) \llbracket \texttt{if } b \texttt{ then } I_1 \texttt{ else } I_2 \rrbracket = \\
+    &\quad \text{let } \\
+    &\quad\quad q, q' \text{ be new nodes} \\
+    &\quad\quad E_{b} = edges(q_\circ \rightsquigarrow q) \llbracket b \rrbracket \\
+    &\quad\quad E_{\neg b} = edges(q_\circ \rightsquigarrow q') \llbracket \neg b \rrbracket \\
+    &\quad\quad E_{I_1}= edges(q \rightsquigarrow q_\bullet) \llbracket I_1 \rrbracket \\
+    &\quad\quad E_{I_2}= edges(q' \rightsquigarrow q_\bullet) \llbracket I_2 \rrbracket \\
+    &\quad \text{in } E_{b} \cup E_{\neg b} \cup E_{I_1} \cup E_{I_2}
+\end{aligned}
+\end{equation}
+
+As visualized in \autoref{fig:tikz-program-graph-if}.
+
+\begin{figure}[htb!]
+    \center
+    \input{figures/if_graph}
+    \caption{An example that shows a program graph of an if-statement}
+    \label{fig:tikz-program-graph-if}
+\end{figure}
+
+\begin{equation}
+\begin{aligned}
+    &edges(q_\circ \rightsquigarrow q_\bullet) \llbracket \texttt{while } b \texttt{ do } I \rrbracket = \\
+    &\quad \text{let } \\
+    &\quad\quad q \text{ be new nodes} \\
+    &\quad\quad E_{b} = edges(q_\circ \rightsquigarrow q) \llbracket b \rrbracket \\
+    &\quad\quad E_{\neg b} = edges(q_\circ \rightsquigarrow q_\bullet) \llbracket \neg b \rrbracket \\
+    &\quad\quad E_{I} = edges(q \rightsquigarrow q_\circ) \llbracket I \rrbracket \\
+    &\quad \text{in } E_{b} \cup E_{\neg b} \cup E_{I}
+\end{aligned}
+\end{equation}
+
+As visualized in \autoref{fig:tikz-program-graph-loop}.
+
+\begin{figure}[htb!]
+    \center
+    \input{figures/loop_graph}
+    \caption{An example that shows a program graph of a loop}
+    \label{fig:tikz-program-graph-loop}
+\end{figure}
+
+\begin{equation}
+\begin{aligned}
+    &edges(q_\circ \rightsquigarrow q_\bullet) \llbracket I_1; I_2 \rrbracket = \\
+    &\quad \text{let } \\
+    &\quad\quad q \text{ be new nodes} \\
+    &\quad\quad E_{I_1} = edges(q_\circ \rightsquigarrow q) \llbracket I_1 \rrbracket \\
+    &\quad\quad E_{I_2} = edges(q \rightsquigarrow q_\bullet) \llbracket I_2 \rrbracket \\
+    &\quad \text{in } E_{I_1} \cup E_{I_2}
+\end{aligned}
+\end{equation}
+
+As visualized in \autoref{fig:tikz-composition-graph}.
+
+\begin{figure}
+    \center
+    \input{figures/composition_graph}
+    \caption{An example that shows a composition graph}
+    \label{fig:tikz-composition-graph}
+\end{figure}
+
+And when I is a base case, that is, not a sequential, if-else or while statement:
+\begin{equation}
+    edges(q_\circ \rightsquigarrow q_\bullet) \llbracket I \rrbracket = \{q_\circ \xrightarrow{I} q_\bullet\}
+\end{equation}
+
+Thus for some program $P = I$, the program graph of $P$ is simply $edges(q_\triangleright \rightsquigarrow q_\blacktriangleleft)\llbracket P \rrbracket$.
 
 \subsection{Abstract Interpretation}\label{subsec:abstract-interpretation}
 
@@ -110,100 +205,11 @@ First we define two central notions, namely soundness and valid analysis assignm
 
 Given the previously two definitions, if the initial abstract memories for the initial program point $\ab{E}_\triangleright$ is set such that $E_{\triangleright} \subseteq \concrete(\ab{E}_\triangleright)$, for concrete memories holding initially $E_{\triangleright}$ in the initial program point, the abstract semantics are sound and the analysis assignment is valid, then it can be shown that if $\rho \in \concrete(A(q_\circ))$ and $\langle q_\circ; \rho \rangle \xRightarrow{\omega^\star} \langle q_\bullet; \rho' \rangle$ then $\rho' \in \concrete(A(q_\bullet))$.
 What that intuitively means is that the analysis assignment is a safe over approximation of the actual state-space of the program.
-Valid analysis assignment can then readily be computed as explained in \cite{nielson_formal_2019}.
+Valid analysis assignment can then readily be computed as explained in \cite{nielson_formal_2019}, in essence valid analysis assignment are computed by iterative application of $f$ when the constraint given in \autoref{def:valid} are converted to a fix point equation $x = f(x)$.
+The prequel is essentially made possible by \autoref{thm:kleene_finite} and the fact that we construct our analysis in such a way that $f$ is over a finite and complete lattice.
+Further given \autoref{thm:kleene_finite} it is easy to see that the analysis will reach a fixed point in a finite number of steps, if $f$ is defined over a finite and complete lattice.
 
 % \begin{theorem}\label{thm:galoispre}
 %     For $\gamma : L_1 \rightarrow L_2$ where $L_1$ and $L_2$ are complete lattices there exist a function $\alpha : L_2 \rightarrow L_1$ such that $\alpha$ and $\gamma$ forms a Galois connection if $\gamma\left(\bigsqcap B\right) = \bigsqcap_{b \in B}\gamma(b)$ for every $B \subseteq L_1$.
 % \end{theorem}
 
-\subsection{Converting Code Program Graph}\label{subsec:converting-code-program-graph}
-This section will briefly cover how the program graph is created.
-Creating a program graph from the code is already a proven concept.
-Therefore, this paper will not delve into the details but inform the reader.
-The book used to show that the concept of creating a program graph from code is a proven concept~\cite[see][chap 2.2]{nielson_formal_2019}.
-A program graph consists of a finite set of nodes, initial and final nodes, actions, and edges.
-
-These directed edges represent the program's flow, and the nodes represent its state.
-The edges' actions are the atomic operations that the program can perform.
-The initial node is the program's starting point, and the final node is the program's end.
-We denote the program graph as $edges(q_{\circ} \rightsquigarrow q_{\bullet})\llbracket I \rrbracket$ where $q_{\circ}$ is the initial node, $q_{\bullet}$ is the final node, and $I$ is the instruction.
-
-The program graph is created by parsing the code and creating nodes and edges that represent the flow of the code. This process, while it may sound complex, is relatively straightforward. For instance, if the code is only an assignment of a variable, there will be a node for the initial state before the variable is assigned, a node for the final state after the variable is assigned, and an edge between them that represents the action of the assignment. This is written as the following equation:
-$edges(q_{\circ} \rightsquigarrow q_{\bullet})\llbracket x:=a \rrbracket = \{(q_{\circ}, x:=a, q_{\bullet})\}$
-$q_{\circ}$ is the initial node, $q_{\bullet}$ is the final node, and $x:=a$ is the assignment. This creates a set that represents the program graph, which can be seen in \autoref{fig:tikz-program-graph-assignment}. This is a simple example, and the program graph can be more complex depending on the code, but the concept is the same. Further examples can be found in~\cite[Figure 2.6]{nielson_formal_2019}.
-
-\begin{figure}[htb!]
-    \center
-    \input{figures/program-graph}
-    \caption{An example that shows a program graph of an assignment}
-    \label{fig:tikz-program-graph-assignment}
-\end{figure}
-
-We later describe the abstract syntax; \autoref{fig:abstract-syntax-instructions} describes the instructions the abstract syntax will contain.
-There is no control structure in the abstract syntax, like if-statements and loops or sequences of instructions.
-This is because the abstract syntax is simplified to make understanding the theory behind abstract interpretation easier.
-This is all handled in the program graph, where the control structure is represented as edges in the program graph.
-
-\begin{figure}
-    \center
-    \begin{tabular}{r l}
-        $I \Coloneqq$ & $skip \mid v_a \coloneqq e \mid v_a \coloneqq ? \mid C_{sql} \mid b$
-    \end{tabular}
-    \caption{Abstract Syntax for Instructions}
-    \label{fig:abstract-syntax-instructions}
-\end{figure}
-
-If-statements and loops are still used as boolean expressions in edges, used like guards in the program graph.
-We can make equations for the edges of the program graph, where $b$ is a Boolean expression, and $S$ is a set of states done in the control structure.
-
-For an if-statement `if b then S1 else S2`:
-$edges(q_{\circ} \rightsquigarrow q_{\bullet})\llbracket \text{if } b \text{ then } S_1 \text{ else } S_2 \rrbracket = \text{let } q_{cond}, q_{if}, q_{else}, q_{merge}$ be new nodes.
-\begin{align}
-    S_{cond} &= edges(q_\circ \rightsquigarrow q_{if})\llbracket b \rrbracket \cup edges(q_\circ \rightsquigarrow q_{else})\llbracket \neg b \rrbracket \\
-    S_{if} &= edges(q_{if} \rightsquigarrow q_{if_{out}})\llbracket S_1 \rrbracket \\
-    S_{else} &= edges(q_{else} \rightsquigarrow q_{else_{out}})\llbracket S_2 \rrbracket \\
-    S_{merge} &= edges(q_{if_{out}} \rightsquigarrow q_{\bullet}) \cup edges(q_{else_{out}} \rightsquigarrow q_{\bullet}) \\
-    &\text{in } S_{cond} \cup S_{if_{in}} \cup S_{else_{in}} \cup S_{merge}
-\end{align}
-
-For a while loop `while b do I`:
-$edges(q_{\circ} \rightsquigarrow q_{\bullet})\llbracket \text{while } b \text{ do } I \rrbracket = \text{let } q_{loop}$ be a new node.
-\begin{align}
-    S_{circ} &= edges(q_\circ \rightsquigarrow q_{loop}) \llbracket b \rrbracket \\
-    S_{stop} &= edges(q_{\circ} \rightsquigarrow q_{\bullet})\llbracket \neg b \rrbracket \\
-    S_{loop} &= edges(q_{loop} \rightsquigarrow q_{circ})\llbracket I \rrbracket \\
-    &\text{in } S_{circ} \cup S_{stop} \cup S_{loop}
-\end{align}
-
-In \autoref{fig:tikz-program-graph-loop} and \autoref{fig:tikz-program-graph-if}, we see examples of how a loop and an if-statement are represented in a program graph.
-
-\begin{figure}[htb!]
-    \center
-    \input{figures/if_graph}
-    \caption{An example that shows a program graph of an if-statement}
-    \label{fig:tikz-program-graph-if}
-\end{figure}
-
-\begin{figure}[htb!]
-    \center
-    \input{figures/loop_graph}
-    \caption{An example that shows a program graph of a loop}
-    \label{fig:tikz-program-graph-loop}
-\end{figure}
-
-In the abstract syntax, we will not have formulated sequences of $I_0, I_1, I_2, \dots, I_n$ as in the program graph, but rather as a set of states $S$, where we at the end go back to the initial state, as shown in \autoref{fig:tikz-composition-graph}.
-
-We can make equations for the edges of the composition graph, where $I_1$ and $I_2$ are instructions:
-$edges(q_{\circ} \rightsquigarrow q_{\bullet})\llbracket I_1 ; I_2 \rrbracket = $ let $q$ be a new node.
-\begin{align}
-    S_1 &= edges(q_{\circ} \rightsquigarrow q)\llbracket I_1 \rrbracket \\
-    S_2 &= edges(q \rightsquigarrow q_{\bullet})\llbracket I_2 \rrbracket \\
-    &\text{in } S_1 \cup S_2
-\end{align}
-
-\begin{figure}
-    \center
-    \input{figures/composition_graph}
-    \caption{An example that shows a composition graph}
-    \label{fig:tikz-composition-graph}
-\end{figure}
