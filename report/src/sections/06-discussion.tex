@@ -52,7 +52,7 @@ As mentioned in \autoref{subsubsec:abstract_domain_of_tables}, using abstract ba
 So, in the paper~\cite{halder_abstract_2012}, an \textit{infinite} program could result in adding even more duplicate tuples, increasing the state space indefinitely.
 But because of our choice of abstraction, we will never have duplicate tuples in a database table.
 Instead, we will simply keep the already existing tuple, conclude that we now potentially see the same state space, and stop exploring that branch, as we have already explored from that state in the state space.
-Exactly this is the key difference that makes sure that our implementation is finite, whereas ~\cite{halder_abstract_2012} can be infinite.
+Exactly this is the key difference that makes sure that our implementation is finite.
 
 Changing the way in which the abstractions are represented means that quite a lot of change is needed for the semantics.
 So even though this paper provides a model that can be used for actual analysis, it also has its compromises.
