@@ -20,7 +20,7 @@
 \usepackage{algpseudocode}
 
 % Packages with options set
-\usepackage[hidelinks]{hyperref}
+\usepackage{hyperref}
 \usepackage[textsize=small,obeyDraft]{todonotes}
 \usepackage[newfloat, outputdir=../out]{minted}
 \usepackage[backend=biber,
@@ -36,6 +36,22 @@
 
 
 % Package setup
+\makeatletter
+\hypersetup{%
+    plainpages=false,%
+    pdftitle=\@title,%
+    pdfauthor={Anders Malta Jacobsen, Casper Ståhl, Daniel Runge Petersen, Lars Emanuel Hansen, Oliver Holmgaard, Sebastian Aaholm},%
+    pdfsubject={Semester project at Aalborg University},%
+    bookmarksnumbered=true,%
+    colorlinks=true,%
+    citecolor=black,%
+    filecolor=black,%
+    linkcolor=black,% you should probably change this to black before printing
+    urlcolor=black,%
+    pdfstartview=FitH%
+}
+\makeatother
+
 \setlength{\marginparwidth}{2cm} % todonotes width
 \setminted{linenos, autogobble, breaklines, fontsize=\footnotesize, style=friendly, xleftmargin=1em, numbersep=5pt}
 \usemintedstyle[bash]{emacs}
