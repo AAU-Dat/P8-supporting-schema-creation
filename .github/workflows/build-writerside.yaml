@@ -25,7 +25,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Build docs using Writerside Docker builder
-        uses: JetBrains/writerside-github-action@v4
+        uses: JetBrains/writerside-github-action@v3
       - name: Save artifact with build results
         uses: actions/upload-artifact@v3
         with:
