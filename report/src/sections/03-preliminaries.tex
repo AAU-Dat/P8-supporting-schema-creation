@@ -3,33 +3,34 @@
 
 \subsection{Lattices}\label{subsec:lattices}
 This section contains the definitions and theorems of lattices, complete lattices, and partial orders.
-These definitions are necessary to understand the theory behind abstract interpretation.\cite{nielson_formal_2019}
+These definitions will be used later in the paper and are foundational to abstract interpretation.
+All definitions and notation in this subsection are due to \cite{nielson_formal_2019}.
 
 \begin{definition}
-    A \textit{partial order} $(S, \sqsubseteq)$ is set $S$ equipped with a binary relation $\sqsubseteq$ that is reflexive, transitive and antisymmetric.
+    A \emph{partial order} $(S, \sqsubseteq)$ is set $S$ equipped with a binary relation $\sqsubseteq$ that is reflexive, transitive and antisymmetric.
 \end{definition}
 
 
 For $X \sqsubseteq S$ and $y \in S$ we take
 
 
-\begin{equation*}
+\begin{equation}
     X \sqsubseteq y \iff \forall x \in X : x \sqsubseteq y,
-\end{equation*}
+\end{equation}
 
 
 and analogous for $y \sqsubseteq X$.
 
 
 \begin{definition}
-    A \textit{complete lattice} $(S, \sqsubseteq, \sqcup, \sqcap)$ is a partial order $(S, \sqsubseteq)$ in which for all $X \subseteq S:$ $\bigsqcup X$ and $\bigsqcap X$ are defined,
-        \begin{equation*}
+    A \emph{complete lattice} $(S, \sqsubseteq, \sqcup, \sqcap)$ is a partial order $(S, \sqsubseteq)$ in which for all $X \subseteq S:$ $\bigsqcup X$ and $\bigsqcap X$ are defined,
+        \begin{equation}
             X \sqsubseteq \bigsqcup X \land \forall y \in S : X \sqsubseteq y \implies \bigsqcup X \sqsubseteq y,
-        \end{equation*}
+        \end{equation}
         and
-        \begin{equation*}
+        \begin{equation}
             \bigsqcap X \sqsubseteq X \land \forall y \in S : y \sqsubseteq X \implies y \sqsubseteq \bigsqcap X.
-        \end{equation*}
+        \end{equation}
 \end{definition}
 
 
@@ -37,53 +38,49 @@ As a shorthand we take $x \sqcup y = \bigsqcup \{x, y\}$ and $x \sqcap y = \bigs
 
 
 \begin{definition}
-    A \textit{lattice} $(S, \sqsubseteq, \sqcup, \sqcap)$ is a partial order $(S, \sqsubseteq)$ in which for all $x,y \in S:$ $x \sqcup y$ and $x \sqcap y$ are defined,
-        \begin{equation*}
+    A \emph{lattice} $(S, \sqsubseteq, \sqcup, \sqcap)$ is a partial order $(S, \sqsubseteq)$ in which for all $x,y \in S:$ $x \sqcup y$ and $x \sqcap y$ are defined,
+        \begin{equation}
             \{x, y\} \sqsubseteq x \sqcup y \land \forall z \in S : \{x, y\} \sqsubseteq z \implies x \sqcup y \sqsubseteq z,
-        \end{equation*}
+        \end{equation}
         and
-        \begin{equation*}
+        \begin{equation}
             x \sqcap y \sqsubseteq \{x, y\} \land \forall z \in S : z \sqsubseteq \{x, y\} \implies z \sqsubseteq x \sqcap y.
-        \end{equation*}
+        \end{equation}
 \end{definition}
 
 
 \begin{theorem}\label{thm:kleene_finite}
     In a complete lattice $L$ with finite height, every monotone function $f : L \rightarrow L$ has a unique fixed point
-    \begin{equation*}
+    \begin{equation}
         lfp(f) = \bigsqcup\{f^n(\perp) \mid n \in \mathbb{N}\}
-    \end{equation*}.
+    \end{equation}.
 \end{theorem}
 
 
-% \begin{theorem}\label{thm:kleene_scott}
-%     In a complete lattice $L$, every Scott-continuous function $f : L \rightarrow L$ has a unique fixed point $lfp(f)$.
-% \end{theorem}
-
-
 \begin{theorem}
-    If $L_1, L_2, \dots, L_n$ are complete lattices, the so is the product:
-    \begin{equation*}
+    If $L_1, L_2, \dots, L_n$ are complete lattices, then so is the product:
+    \begin{equation}
         L_1 \times L_2 \times \dots L_n = \{(x_1, x_2, \dots x_n) \mid x_i \in L_i\}
-    \end{equation*}
+    \end{equation}
 
-    where the order $\sqsubseteq$ is defined component-wise:
+    Where the order $\sqsubseteq$ is defined component-wise:
 
-    \begin{align*}
+    \begin{align}
         \begin{split}
         (x_1, x_2, \dots, x_n) &\sqsubseteq (x_1', x_2', \dots, x_n') \\
         \iff
         \forall i &= 1, 2, \dots n : x_i \sqsubseteq x_i'
         \end{split}
-    \end{align*}
+    \end{align}
 \end{theorem}
 
 \begin{theorem}
     If $A$ is a set and $L$ a complete lattice, then $A \rightarrow L$ is a complete lattice when
     \begin{equation}
-        f \sqsubseteq g \iff \forall a \in A : f(a) \sqsubseteq g(a) \text{ where } f,g \in L^A.\label{eq:equation-complete-lattice-theorem}
+    \begin{split}
+        f \sqsubseteq g \iff \forall a \in A : f(a) \sqsubseteq g(a) \\ \text{ where } f,g \in A \rightarrow L.\label{eq:equation-complete-lattice-theorem}
+    \end{split}
     \end{equation}
-
 \end{theorem}
 
 \todo[inline]{
@@ -92,12 +89,13 @@ As a shorthand we take $x \sqcup y = \bigsqcup \{x, y\}$ and $x \sqcap y = \bigs
 }
 
 \subsection{Abstract Interpretation}\label{subsec:abstract-interpretation}
-
 Here we give a quick presentation abstract interpretation.
 The presentation is heavily based on~\cite{nielson_formal_2019} with some additions from~\cite{moller_statitc_nodate}.
 As the presentation is rudimentary we encourage the reader to review~\cite{noauthor_abstract_nodate} or~\cite{cousot_abstract_1996} for an introduction of the subject, and the respective chapters in~\cite{nielson_formal_2019} and~\cite{moller_statitc_nodate} for a more complete explanation or~\cite{cousot_abstract_1977} for the seminal work.
 
-First we define two central notions, namely soundness and valid analysis assignments.
+
+Because of the particular flavor of abstract interpretation we use uses program graphs instead of control flow graphs we justify the conversion here, to be more precise we justify the conversion of control flow construct defined in \cite{halder_abstract_2012} to program graphs.
+This particular flavor of abstract interpretation was choose because it allowed us to be encode the control flow in the graph, allowing us to \emph{abstract} away details of control flow in our analysis specification.
 
 \begin{definition}
     Given a set $\rho \in \mathfrak{E}$ of possible concrete program memories, and a set $\ab{\rho} \in \ab{\mathfrak{E}}$ of possible abstract program memories, related by a concretization function $\gamma : \mathcal{P}(\ab{\mathfrak{E}}) \rightarrow \mathcal{P}(\mathfrak{E})$.
@@ -111,10 +109,15 @@ First we define two central notions, namely soundness and valid analysis assignm
 \begin{definition}\label{def:valid}
     Given a program graph with vertices $Q$ and edges $E$, an assignment $A : Q \rightarrow \mathcal{P}(\ab{\mathfrak{E}})$, that assignment is said to be \emph{valid} if its the case that:
     \begin{itemize}
-        \item If $q_\circ \xrightarrow{I} q_\bullet \in E$ then $\abssem{I}(A(q_\circ)) \subseteq A(q_\bullet)$,
-        \item and $\ab{E}_\triangleright \subseteq A(q_\triangleright)$, where $q_\triangleright$ is the initial program point in the program graph and $\ab{E}_\triangleright$ is a set of abstract memories that hold initially in the initial state.
+        \item $Q$ is a finite set of nodes,
+        \item $I$ is a set of instructions,
+        \item $q_\triangleright, q_\blacktriangleleft \in Q$ are the \emph{initial node} and \emph{final node}, respectively,
+        \item and $E \subseteq Q \times \mathbb{I} \times Q$ is a finite set of \emph{edges}.
     \end{itemize}
+    An edge $q_\circ \xrightarrow{I} q_\bullet$ has \emph{source} node $q_\circ$ and \emph{target} node $q_\bullet$ and is labeled with action $I$.
+    Finally $q_\triangleright, q_\blacktriangleleft \in Q$ are distinct, and no edges are to have source $q_\blacktriangleleft$.
 \end{definition}
+
 
 Given the previously two definitions, if the initial abstract memories for the initial program point $\ab{E}_\triangleright$ is set such that $E_{\triangleright} \subseteq \concrete(\ab{E}_\triangleright)$, for concrete memories holding initially $E_{\triangleright}$ in the initial program point, the abstract semantics are sound and the analysis assignment is valid, then it can be shown that if $\rho \in \concrete(A(q_\circ))$ and $\langle q_\circ; \rho \rangle \xRightarrow{\omega^\star} \langle q_\bullet; \rho' \rangle$ then $\rho' \in \concrete(A(q_\bullet))$.
 What that intuitively means is that the analysis assignment is a safe over approximation of the actual state-space of the program.
@@ -195,10 +198,10 @@ $edges(q_{\circ} \rightsquigarrow q_{\bullet})\llbracket \text{while } b \text{ 
 
 
 \begin{align}
-    S_{circ} &= edges(q_\circ \rightsquigarrow q_{loop}) \llbracket b \rrbracket \\
-    S_{stop} &= edges(q_{\circ} \rightsquigarrow q_{\bullet})\llbracket \neg b \rrbracket \\
-    S_{loop} &= edges(q_{loop} \rightsquigarrow q_{circ})\llbracket I \rrbracket \\
-    &\text{in } S_{circ} \cup S_{stop} \cup S_{loop}
+    I &\Coloneqq & &\texttt{if } b \texttt{ then } I_1 \texttt{ else } I_2 \\
+      &\mid      & &\texttt{while } b \texttt{ do } I \\
+      &\mid      & &I_1; I_2 \\
+      &\mid      & &\dots
 \end{align}
 
 
@@ -211,6 +214,20 @@ In \autoref{fig:tikz-program-graph-loop} and \autoref{fig:tikz-program-graph-if}
     \caption{An example that shows a program graph of an if-statement}
     \label{fig:tikz-program-graph-if}
 \end{figure}
+
+\begin{equation}
+\begin{aligned}
+    &edges(q_\circ \rightsquigarrow q_\bullet) \llbracket \texttt{while } b \texttt{ do } I \rrbracket = \\
+    &\quad \text{let } \\
+    &\quad\quad q \text{ be new nodes} \\
+    &\quad\quad E_{b} = edges(q_\circ \rightsquigarrow q) \llbracket b \rrbracket \\
+    &\quad\quad E_{\neg b} = edges(q_\circ \rightsquigarrow q_\bullet) \llbracket \neg b \rrbracket \\
+    &\quad\quad E_{I} = edges(q \rightsquigarrow q_\circ) \llbracket I \rrbracket \\
+    &\quad \text{in } E_{b} \cup E_{\neg b} \cup E_{I}
+\end{aligned}
+\end{equation}
+
+As visualized in \autoref{fig:tikz-program-graph-loop}.
 
 \begin{figure}[htb!]
     \center
@@ -232,9 +249,52 @@ $edges(q_{\circ} \rightsquigarrow q_{\bullet})\llbracket I_1 ; I_2 \rrbracket = 
     &\text{in } S_1 \cup S_2
 \end{align}
 
+
 \begin{figure}
     \center
     \input{figures/composition_graph}
     \caption{An example that shows a composition graph}
     \label{fig:tikz-composition-graph}
 \end{figure}
+
+And when I is a base case, that is, not a sequential, if-else or while statement:
+\begin{equation}
+    edges(q_\circ \rightsquigarrow q_\bullet) \llbracket I \rrbracket = \{q_\circ \xrightarrow{I} q_\bullet\}
+\end{equation}
+
+Thus for some program $P = I$, the program graph of $P$ is simply $edges(q_\triangleright \rightsquigarrow q_\blacktriangleleft)\llbracket P \rrbracket$.
+
+\subsection{Abstract Interpretation}\label{subsec:abstract-interpretation}
+
+Here we give a quick presentation abstract interpretation.
+The presentation is heavily based on \cite{nielson_formal_2019} with some additions from \cite{moller_statitc_nodate}.
+As the presentation is rudimentary we encourage the reader to review \cite{noauthor_abstract_nodate} or \cite{cousot_abstract_1996} for a informal introduction of the subject, and the respective chapters in \cite{nielson_formal_2019} and \cite{moller_statitc_nodate} for a more complete explanation or \cite{cousot_abstract_1977} for the seminal work.
+
+First we define two central notions, namely soundness and valid analysis assignments.
+
+\begin{definition}
+    Given a set $\rho \in \mathfrak{E}$ of possible concrete program memories, and a set $\ab{\rho} \in \ab{\mathfrak{E}}$ of possible abstract program memories, related by a concretization function $\gamma : \mathcal{P}(\ab{\mathfrak{E}}) \rightarrow \mathcal{P}(\mathfrak{E})$.
+    A concrete semantic over program instructs $I \in \mathbb{I}$, $\sem{\cdot} : \mathbb{I} \rightarrow \mathfrak{E} \rightarrow \mathfrak{E}$ and an abstract semantic $\abssem{\cdot} : \mathbb{I} \rightarrow \mathcal{P}(\ab{\mathfrak{E}}) \rightarrow \mathcal{P}(\ab{\mathfrak{E}})$, $\abssem{\cdot}$ is said to be \emph{sound} whenever:
+    \begin{equation}
+        \rho \in \concrete(\ab{E}) \land \sem{I}(m) = m' \implies m' \in \concrete(\abssem{I}(\ab{E}))
+    \end{equation}
+\end{definition}
+
+\begin{definition}\label{def:valid}
+    Given a program graph with vertices $Q$ and edges $E$, an assignment $A : Q \rightarrow \mathcal{P}(\ab{\mathfrak{E}})$, that assignment is said to be \emph{valid} if its the case that:
+    \begin{itemize}
+        \item If $q_\circ \xrightarrow{I} q_\bullet \in E$ then $\abssem{I}(A(q_\circ)) \subseteq A(q_\bullet)$,
+        \item and $\ab{E}_\triangleright \subseteq A(q_\triangleright)$, where $q_\triangleright$ is the initial program point in the program graph and $\ab{E}_\triangleright$ is a set of abstract memories that hold initially in the initial state.
+    \end{itemize}
+\end{definition}
+
+Given the previously two definitions, if the initial abstract memories for the initial program point $\ab{E}_\triangleright$ is set such that $E_{\triangleright} \subseteq \concrete(\ab{E}_\triangleright)$, for concrete memories holding initially $E_{\triangleright}$ in the initial program point, the abstract semantics are sound and the analysis assignment is valid, then it can be shown that if $\rho \in \concrete(A(q_\circ))$ and $\langle q_\circ; \rho \rangle \xRightarrow{\omega^\star} \langle q_\bullet; \rho' \rangle$ then $\rho' \in \concrete(A(q_\bullet))$.
+What that intuitively means is that the analysis assignment is a safe over approximation of the actual state-space of the program.
+Valid analysis assignment can then readily be computed as explained in \cite{nielson_formal_2019}, in essence valid analysis assignment are computed by iterative application of $f$ when the constraint given in \autoref{def:valid} are converted to a fix point equation $x = f(x)$.
+The prequel is essentially made possible by \autoref{thm:kleene_finite} and the fact that we construct our analysis in such a way that $f$ is over a finite and complete lattice.
+Further given \autoref{thm:kleene_finite} it is easy to see that the analysis will reach a fixed point in a finite number of steps, if $f$ is defined over a finite and complete lattice.
+
+% \begin{theorem}\label{thm:galoispre}
+%     For $\gamma : L_1 \rightarrow L_2$ where $L_1$ and $L_2$ are complete lattices there exist a function $\alpha : L_2 \rightarrow L_1$ such that $\alpha$ and $\gamma$ forms a Galois connection if $\gamma\left(\bigsqcap B\right) = \bigsqcap_{b \in B}\gamma(b)$ for every $B \subseteq L_1$.
+% \end{theorem}
+
