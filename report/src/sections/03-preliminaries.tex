@@ -110,7 +110,7 @@ Programs/instructions as defined in the syntax of ~\cite{halder_abstract_2012}:
 can be converted to a program graph via the function $edges$ which in the recursive cases if defined to be:
 
 \begin{equation}
-\begin{aligned}
+\begin{split}
     &edges(q_\circ \rightsquigarrow q_\bullet) \llbracket \texttt{if } b \texttt{ then } I_1 \texttt{ else } I_2 \rrbracket = \\
     &\quad \text{let } \\
     &\quad\quad q, q' \text{ be new nodes} \\
@@ -119,7 +119,7 @@ can be converted to a program graph via the function $edges$ which in the recurs
     &\quad\quad E_{I_1}= edges(q \rightsquigarrow q_\bullet) \llbracket I_1 \rrbracket \\
     &\quad\quad E_{I_2}= edges(q' \rightsquigarrow q_\bullet) \llbracket I_2 \rrbracket \\
     &\quad \text{in } E_{b} \cup E_{\neg b} \cup E_{I_1} \cup E_{I_2}
-\end{aligned}
+\end{split}\label{eq:equation14}
 \end{equation}
 
 As visualized in \autoref{fig:tikz-program-graph-if}.
