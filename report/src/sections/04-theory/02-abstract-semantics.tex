@@ -49,8 +49,8 @@ Where $\aaab{bop}$ is defined for $\land$, $\lor$ and $\neg$ in \autoref{tab:aaa
 \autoref{eq:abstract-bool-semantics-start} through~\ref{eq:abstract-bool-semantics-end} show the abstract semantics of Boolean expressions $(\absboolsem{})$ defined in \autoref{eq:bool-operation}, that is logical operators and comparisons between expressions.
 $\ab{\mathfrak{E}}$ describes the set of abstract states. $\absexpsem{exp}$ describes the abstract evaluation of an expression, $(\rho_{\ab{d}}, \rho_{\ab{a}})$ is an abstract state in the database.
 
-In \autoref{eq:abstract-bool-semantics-end}, we check if either of the two expressions are lists; if that is the case, and they are the same type, we add $\{\{\texttt{false}\}\}$ to the result, as we are unsure if the two expressions are equal.
-Otherwise, we proceed as usual.
+% In \autoref{eq:abstract-bool-semantics-end}, we check if either of the two expressions are lists; if that is the case, and they are the same type, we add $\{\{\texttt{false}\}\}$ to the result, as we are unsure if the two expressions are equal.
+% Otherwise, we proceed as usual.
 
 \begin{align}
     \absboolsem{\cdot} &: \mathbb{B} \rightarrow \ab{\mathfrak{E}} \rightarrow \mathsf{Val} \; \mathcal{P}(\{\true, \false, null\}) \label{eq:bool-operation}
@@ -60,7 +60,8 @@ Otherwise, we proceed as usual.
     \absboolsem{\texttt{false}}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \mathsf{Single} \; \{\false\} \\
     \absboolsem{b_1 \lor b_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absboolsem{b_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ab{\lor} \absboolsem{b_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
     \absboolsem{b_1 \land b_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absboolsem{b_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ab{\land} \absboolsem{b_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
-    \absboolsem{\neg b}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{\neg} \absboolsem{b}(\rho_{\ab{d}}, \rho_{\ab{a}})
+    \absboolsem{\neg b}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{\neg} \absboolsem{b}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
+    \absboolsem{e_1 \;comp\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= E_1 \;\ab{\comp}\; E_2
     % \absboolsem{e_1 \neq e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{\neg}(\absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \;\ab{=}\; \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}})) \label{eq:abstract-bool-semantics-end1} \\
 %    \absboolsem{e_1 \;comp\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=  \begin{cases}
 %        \app{\{\{\texttt{false,true}\}\} \cup} E \quad \quad \text{if } w\\
@@ -74,22 +75,6 @@ Otherwise, we proceed as usual.
 %    \text{and }  E_2 &= \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \label{eq:abstract-bool-semantics-end}
     %\absboolsem{e_1 \;comp\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= E_1 \;\ab{\comp}\; E_2 \quad \text{where }  E_1 = \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ \text{and } E_2 = \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \label{eq:abstract-bool-semantics-end}
 \end{align}
-
-
-
-\begin{multline}
-    \absboolsem{e_1 \;comp\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) = \\
-    \begin{cases}
-        \app{\{\{\texttt{false,true}\}\} \cup} E \quad \quad \text{if } w \\
-        E_1 \;\ab{\comp}\; E_2 \quad \quad \quad \quad \text{otherwise}
-    \end{cases} \\
-    \begin{split}
-        \text{where } w&=(E_1 = \mathsf{List} \; S_1 \lor E_2 = \mathsf{List} \; S_2) \\
-        &\land E_1 \;\ab{\comp}\; E_2 = E \\
-        \text{and } E_1 &= \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}})  \\
-        \text{and }  E_2 &= \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}})
-    \end{split}\label{eq:abstract-bool-semantics-end}
-\end{multline}
 
 
 \begin{table}[H]
@@ -198,7 +183,7 @@ Before defining the abstract operations $\aaop$, for expressions, we will define
 We define the length of a regular expression $R$, $\|R\|$ as:
 
 \begin{align}\label{eq:r1}
-    \|R\| & = \{ \left[ \|\min(R)\|, +\infty \right) \} \\
+    \|R\| & = [\|\min(R)\|, +\infty ] \\
     \text{where } & \|\min(R)\| = \min\{ \|s\| \mid s \in R \} \\ \label{eq:r2}
     \text{and } & \|s\| \text{ is the length of the word $s$}
 \end{align}
@@ -210,8 +195,8 @@ If $R$ does not contain a term $R'^\star$, we are essentially forced to find the
 
 Next, we define $cvt$, which is abstract string conversion over regular expressions, defined by recursing on the operands of union, intersection, concatenation and Kleene star.
 In the base case, a single symbol is converted as defined by $op$.
-In the case of the complement, seen in \autoref{eq:complement}, we convert $\overline{R}$ to its DFA equivalent by the usual construction, $\mathcal{A}:REG\rightarrow DFA$~\cite{sipserbook}.
-This automaton is then converted back to a regular expression by the usual GNFA construction, $\mathcal{R}: DFA\rightarrow REG$~\cite{sipserbook}, thus eliminating the complement.
+In the case of the complement, seen in \autoref{eq:complement}, we convert $\overline{R}$ to its DFA equivalent by the usual construction, $\mathcal{A}:\mathbf{REG} \rightarrow \mathbf{DFA}$~\cite{sipserbook}.
+This automaton is then converted back to a regular expression by the usual GNFA construction, $\mathcal{R}: \mathbf{DFA} \rightarrow \mathbf{REG}$~\cite{sipserbook}, thus eliminating the complement.
 \begin{align}
     cvt(op, R_1 \cup R_2) &= cvt(op, R_1) \cup cvt(op, R_2) \\
     cvt(op, R_1 \cap R_2) &= cvt(op, R_1) \cap cvt(op, R_2) \\
