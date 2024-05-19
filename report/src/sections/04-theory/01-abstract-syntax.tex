@@ -6,18 +6,25 @@
 
 This paper adopts a modified version of the abstract syntax originally presented in~\cite{cortesi_abstract_2013}.
 Omitted parts within this simplified abstract syntax correspond to features or constructs that are not utilized or discussed in the context of the current application.
-Certain constructs have been modified to enhance clarity, most notably:
+We give a brief outline of changes:
 \begin{itemize}
-    \item variables representing database names $v_d \in \mathbb{V}_d$ has been introduced.
-    \item Database variables from~\cite{halder_abstract_2012} are now called column variables, in symbols $v_t \in \mathbb{V}_t$.
+    \item The equivalent of database variables (attributes) are now denoted $v_t$ and are called column variables or attributes.
+    \item Table names, denoted $v_d$ are now explicit and are required to be present in SQL commands.
+    \item The non deterministic choice operator $\texttt{[]}$ between two instructions has been introduced.
+    \item $v_a \coloneq \; ?$ has been removed but we now allow non-deterministic values $R$ and $\mathscr{I}$ to be present in expressions.
 \end{itemize}
+
+Further we differential between the instructions allowed on the edges of a program graph $\mathbb{I}$, and the instructions allowed in the language for which the analysis is allowed $\mathbb{P}$.
+We will show finish this section by show the conversion between program and program graph, but before we can do that we need to introduce the syntax.
 
 The abstract syntax of SQAAL is defined in terms of the syntactic sets introduced in \autoref{fig:syntatic-sets}.
 \begin{figure}[htb!]
      \center
     \begin{tabular}{r p{0.6\columnwidth }}
     $n \in \mathbb{Z}$                          & Integers                                                   \\
-    $k \in \mathbb{S}$                                  & Strings                                                    \\
+    $k \in \mathbb{S}$                          & Strings                                                    \\
+    $\mathscr{I} \in \mathbf{INT}$                          & Non-deterministic integer                                                   \\
+    $R \in \mathbf{REG}$                          & Non-deterministic string                                                   \\
     $c \in \mathbb{C}$                          & Constants                                                 \\
     $v_a \in \mathbb{V}_a$                      & Application variables                                     \\
     $v_d \in \mathbb{V}_d$                      & Database variables \\
@@ -30,7 +37,8 @@ The abstract syntax of SQAAL is defined in terms of the syntactic sets introduce
     $\phi  \in \mathbb{W}$                      & Well-formed formulas (pre-condition part of SQL commands) \\
     $A_{sql} \in \mathbb{A}_{sql}$              & Action part of SQL commands                               \\
     $C_{sql} \in \mathbb{C}_{sql}$              & SQL commands                                              \\
-    $I \in \mathbb{I}$                          & Instructions/commands                                     \\
+    $I \in \mathbb{I}$                          & Program graph instructions                                     \\
+    $P \in \mathbb{P}$                        & Program instructions                                            \\
     \end{tabular}
     \caption{Syntatic Sets}
     \label{fig:syntatic-sets}
@@ -52,8 +60,105 @@ For simplicity's sake we assume that $\mathbb{V}_a$, $\mathbb{V}_d$ and $\mathbb
         $\phi \Coloneqq$ & $a_f \mid \neg \phi_1 \mid \phi_1 \lor \phi_2 \mid \phi_1 \land \phi_2 \mid \forall v_n \phi \mid \exists v_n \phi$ \\
         $A_{sql} \Coloneqq$ & $select(v_a, v_d, \mathbf{v}_t) \mid update(v_d, \mathbf{v}_t, \mathbf{e}) \mid delete(v_d) \mid insert(v_d, \mathbf{v}_t, \mathbf{e})$ \\
         $C_{sql} \Coloneqq$ & $\langle A_{sql}, \phi \rangle $ \\
-        $I \Coloneqq$ & $skip \mid v_a \coloneqq e \mid C_{sql} \mid b$ \\
+        $I \Coloneqq$ & $\texttt{skip} \mid v_a \coloneqq e \mid C_{sql} \mid b$ \\
+        $P \Coloneqq$ & $\texttt{skip} \mid v_a \coloneqq e \mid C_{sql} \mid \texttt{if } b \texttt{ then } P_1 \texttt{ else } P_2 \mid \texttt{while } b \texttt{ do } P \mid P_1; P_2 \mid P_1 \texttt{[]} P_2 $ \\
     \end{tabular}
     \caption{Abstract Syntax}
     \label{fig:abstract-syntax}
 \end{figure}
+
+Now we are ready to define the conversion from program to program graph.
+The conversion is given by the function $edges$ which in the recursive cases are defined as follows, starting with the if-then-else statement, as visualized in \autoref{fig:tikz-program-graph-if}:
+
+\begin{equation}
+    \begin{split}
+        &edges(q_\circ \rightsquigarrow q_\bullet) \llbracket \texttt{if } b \texttt{ then } P_1 \texttt{ else } P_2 \rrbracket = \\
+        &\quad \text{let } \\
+        &\quad\quad q, q' \text{ be new nodes} \\
+        &\quad\quad E_{b} = edges(q_\circ \rightsquigarrow q) \llbracket b \rrbracket \\
+        &\quad\quad E_{\neg b} = edges(q_\circ \rightsquigarrow q') \llbracket \neg b \rrbracket \\
+        &\quad\quad E_{P_1}= edges(q \rightsquigarrow q_\bullet) \llbracket P_1 \rrbracket \\
+        &\quad\quad E_{P_2}= edges(q' \rightsquigarrow q_\bullet) \llbracket P_2 \rrbracket \\
+        &\quad \text{in } E_{b} \cup E_{\neg b} \cup E_{P_1} \cup E_{P_2}
+    \end{split}\label{eq:equation8}
+\end{equation}
+
+\begin{figure}[htb!]
+    \center
+    \input{figures/if_graph}
+    \caption{An example that shows a program graph of an if-statement}
+    \label{fig:tikz-program-graph-if}
+\end{figure}
+
+And for the while statement, as visualized in \autoref{fig:non-deterministic-choice}:
+
+\begin{equation}
+    \begin{split}
+        &edges(q_\circ \rightsquigarrow q_\bullet) \llbracket \texttt{while } b \texttt{ do } P \rrbracket = \\
+        &\quad \text{let } \\
+        &\quad\quad q \text{ be new nodes} \\
+        &\quad\quad E_{b} = edges(q_\circ \rightsquigarrow q) \llbracket b \rrbracket \\
+        &\quad\quad E_{\neg b} = edges(q_\circ \rightsquigarrow q_\bullet) \llbracket \neg b \rrbracket \\
+        &\quad\quad E_{P} = edges(q \rightsquigarrow q_\circ) \llbracket P \rrbracket \\
+        &\quad \text{in } E_{b} \cup E_{\neg b} \cup E_{P}
+    \end{split}\label{eq:equation9}
+\end{equation}
+
+\begin{figure}[htb!]
+    \center
+    \input{figures/loop_graph}
+    \caption{An example that shows a program graph of a loop}
+    \label{fig:tikz-program-graph-loop}
+\end{figure}
+
+And for the composition statement, as visualized in \autoref{fig:tikz-composition-graph}:
+
+\begin{equation}
+    \begin{split}
+        &edges(q_\circ \rightsquigarrow q_\bullet) \llbracket P_1; P_2 \rrbracket = \\
+        &\quad \text{let } \\
+        &\quad\quad q \text{ be new nodes} \\
+        &\quad\quad E_{P_1} = edges(q_\circ \rightsquigarrow q) \llbracket P_1 \rrbracket \\
+        &\quad\quad E_{P_2} = edges(q \rightsquigarrow q_\bullet) \llbracket P_2 \rrbracket \\
+        &\quad \text{in } E_{P_1} \cup E_{P_2}
+    \end{split}\label{eq:equation10}
+\end{equation}
+
+
+\begin{figure}
+    \center
+    \input{figures/composition_graph}
+    \caption{An example that shows a composition graph}
+    \label{fig:tikz-composition-graph}
+\end{figure}
+
+
+And for non-deterministic choice statement, as visualized in \autoref{fig:tikz-composition-graph}:
+
+\begin{equation}
+    \begin{split}
+        &edges(q_\circ \rightsquigarrow q_\bullet) \llbracket P_1 \texttt{[]} P_2 \rrbracket = \\
+        &\quad \text{let } \\
+        &\quad\quad q, q' \text{ be new nodes} \\
+        &\quad\quad E_{q} = edges(q_\circ \rightsquigarrow q) \llbracket \texttt{skip} \rrbracket \\
+        &\quad\quad E_{q'} = edges(q_\circ \rightsquigarrow q') \llbracket \texttt{skip} \rrbracket \\
+        &\quad\quad E_{P_1}= edges(q \rightsquigarrow q_\bullet) \llbracket P_1 \rrbracket \\
+        &\quad\quad E_{P_2}= edges(q' \rightsquigarrow q_\bullet) \llbracket P_2 \rrbracket \\
+        &\quad \text{in } E_{q} \cup E_{q'} \cup E_{P_1} \cup E_{P_2}
+    \end{split}\label{eq:equation8}
+\end{equation}
+
+\begin{figure}[htb!]
+    \center
+    \input{figures/non-deterministic-choice}
+    \caption{An example that shows a program graph of an if-statement}
+    \label{fig:non-deterministic-choice}
+\end{figure}
+
+And in the base case of $I$:
+
+\begin{align}
+    edges(q_\circ \rightsquigarrow q_\bullet) \llbracket I \rrbracket &= \{q_\circ \xrightarrow{I} q_\bullet\}\label{eq:equation11} \\
+\end{align}
+
+Thus, for some program $P$, the program graph of $P$ is simply $edges(q_\triangleright \rightsquigarrow q_\blacktriangleleft)\llbracket P \rrbracket$.
