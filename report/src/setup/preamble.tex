@@ -4,12 +4,11 @@
 % Packages
 \RequirePackage{clrscode4e}
 \usepackage{microtype}
-\usepackage{amsfonts}
+\usepackage{mathtools}
 \usepackage{stix2}
 \usepackage{FiraMono}
 \usepackage{booktabs}
 \usepackage{tikz}
-\usepackage{mathtools}
 \usepackage{amsmath}
 \usepackage{thm-restate}
 
@@ -18,7 +17,7 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage[textsize=small,obeyDraft]{todonotes}
 \usepackage[newfloat, outputdir=../out]{minted}
-\usepackage[autostyle]{csquotes}
+%\usepackage[autostyle]{csquotes}
 \usepackage[backend=biber,
     bibencoding=utf8,
     maxbibnames=20,
@@ -29,6 +28,7 @@
 
 \usepackage{stmaryrd}
 \usepackage{pf2}
+\usepackage{anyfontsize}
 
 % Package setup
 \makeatletter
@@ -118,7 +118,7 @@
 \newcommand{\abspredsem}[1]{\widehat{\mathcal{W}}\llbracket #1 \rrbracket}
 \newcommand{\predsem}[1]{\mathcal{W}\llbracket #1 \rrbracket}
 \newcommand{\absatomsem}[1]{\widehat{\mathcal{T}}\llbracket #1 \rrbracket}
-\newcommand{\app}[1]{\;\llparenthesis#1\rrparenthesis\;}
+\newcommand{\app}[1]{\;\left \lParen#1\right \rParen\;}
 \newcommand{\regexs}{\mathbf{REG}}
 \newcommand{\regex}{R}
 \newcommand{\lang}{\mathcal{L}}
