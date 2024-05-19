@@ -5,7 +5,8 @@
 \RequirePackage{clrscode4e}
 \usepackage{microtype}
 \usepackage{amsfonts}
-\usepackage[notext]{stix2}
+%\usepackage{newtxmath}
+\usepackage{stix2}
 \usepackage{FiraMono}
 \usepackage{booktabs}
 \usepackage{tikz}
@@ -36,7 +37,9 @@
     plainpages=false,%
     pdftitle=\@title,%
     pdfauthor={Anders Malta Jacobsen, Casper Ståhl, Daniel Runge Petersen, Lars Emanuel Hansen, Oliver Holmgaard, Sebastian Aaholm},%
+    pdflang={en-GB},%
     pdfsubject={Semester project at Aalborg University},%
+    pdfkeywords ={Abstract Interpretation, Formal Verification, Databases}
     bookmarksnumbered=true,%
     colorlinks=true,%
     citecolor=black,%
@@ -122,8 +125,8 @@
 \newcommand{\lang}{\mathcal{L}}
 \newcommand{\uints}{\mathbf{INT}}
 \newcommand{\uint}{\mathscr{I}}
-\newcommand{\strs}{\mathbf{STR}}
-\newcommand{\nums}{\mathbf{NUM}}
+\newcommand{\strs}{\mathbb{S}}
+\newcommand{\nums}{\mathbb{Z}}
 \newcommand{\bools}{\mathbf{BOOL}}
 \newcommand{\cc}{c}
 \floatplacement{listing}{htb!}
