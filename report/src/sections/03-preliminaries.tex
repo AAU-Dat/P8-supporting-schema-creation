@@ -91,15 +91,15 @@ Because of the particular flavor of abstract interpretation we use uses program 
 This particular flavor of abstract interpretation was chosen because it allowed us to encode the control flow in the graph, allowing us to \emph{abstract} away details of control flow in our analysis specification.
 
 \begin{definition}
-    A \emph{program graph}~\cite{nielson_formal_2019} is a tuple $PG = (Q, q_\vartriangleright, q_\blacktriangleright, \mathbb{I}, E)$ where:
+    A \emph{program graph}~\cite{nielson_formal_2019} is a tuple $PG = (Q, q_\whitepointerright, q_\blackpointerleft, \mathbb{I}, E)$ where:
     \begin{itemize}
         \item $Q$ is a finite set of nodes,
         \item $\mathbb{I}$ is a set of instructions,
-        \item $q_\triangleright, q_\blacktriangleleft \in Q$ are the \emph{initial node} and \emph{final node}, respectively,
+        \item $q_\whitepointerright, q_\blackpointerleft \in Q$ are the \emph{initial node} and \emph{final node}, respectively,
         \item and $E \subseteq Q \times \mathbb{I} \times Q$ is a finite set of \emph{edges}.
     \end{itemize}
     An edge $q_\circ \xrightarrow{I} q_\bullet$ has \emph{source} node $q_\circ$ and \emph{target} node $q_\bullet$ and is labeled with action $I$.
-    Finally, $q_\triangleright, q_\blacktriangleleft \in Q$ are distinct, and no edges are to have source $q_\blacktriangleleft$.
+    Finally, $q_\whitepointerright, q_\blackpointerleft \in Q$ are distinct, and no edges are to have source $q_\blackpointerleft$.
 \end{definition}
 
 \subsection{Abstract Interpretation}\label{subsec:abstract-interpretation}
@@ -123,11 +123,11 @@ First we define two central notions, namely soundness and valid analysis assignm
     Given a program graph with vertices $Q$ and edges $E$, an assignment $A : Q \rightarrow \mathcal{P}(\ab{\mathfrak{E}})$, that assignment is said to be \emph{valid} if it is the case that:
     \begin{itemize}
         \item If $q_\circ \xrightarrow{I} q_\bullet \in E$ then $\abssem{I}(A(q_\circ)) \subseteq A(q_\bullet)$,
-        \item and $\ab{E}_\triangleright \subseteq A(q_\triangleright)$, where $q_\triangleright$ is the initial program point in the program graph and $\ab{E}_\triangleright$ is a set of abstract memories that hold initially in the initial state.
+        \item and $\ab{E}_\whitepointerright \subseteq A(q_\whitepointerright)$, where $q_\whitepointerright$ is the initial program point in the program graph and $\ab{E}_\whitepointerright$ is a set of abstract memories that hold initially in the initial state.
     \end{itemize}
 \end{definition}
 
-Given the previous two definitions, if the initial abstract memories for the initial program point $\ab{E}_\triangleright$ is set such that $E_{\triangleright} \subseteq \concrete(\ab{E}_\triangleright)$, for concrete memories holding initially $E_{\triangleright}$ in the initial program point, the abstract semantics are sound and the analysis assignment is valid, then it can be shown that if $\rho \in \concrete(A(q_\circ))$ and $\langle q_\circ; \rho \rangle \xRightarrow{\omega^\star} \langle q_\bullet; \rho' \rangle$ then $\rho' \in \concrete(A(q_\bullet))$.
+Given the previous two definitions, if the initial abstract memories for the initial program point $\ab{E}_\whitepointerright$ is set such that $E_{\whitepointerright} \subseteq \concrete(\ab{E}_\whitepointerright)$, for concrete memories holding initially $E_{\whitepointerright}$ in the initial program point, the abstract semantics are sound and the analysis assignment is valid, then it can be shown that if $\rho \in \concrete(A(q_\circ))$ and $\langle q_\circ; \rho \rangle \xRightarrow{\omega^\star} \langle q_\bullet; \rho' \rangle$ then $\rho' \in \concrete(A(q_\bullet))$.
 
 What that intuitively means is that the analysis assignment is a safe over approximation of the actual state-space of the program.
 Valid analysis assignment can then readily be computed as explained in~\cite{nielson_formal_2019}.

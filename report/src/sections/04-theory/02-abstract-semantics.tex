@@ -370,14 +370,14 @@ Hence, we prove the following theorem:
 \end{restatable}
 
 % \begin{align*}
-%     E^\# \llbracket R_1 \texttt{||} R_2 \rrbracket                          \\
-%     = E^\# \llbracket R_1 \rrbracket \oplus  E^\# \llbracket R_2 \rrbracket \\
+%     E^\# \lBrack R_1 \texttt{||} R_2 \rBrack                          \\
+%     = E^\# \lBrack R_1 \rBrack \oplus  E^\# \lBrack R_2 \rBrack \\
 %     \text{where } R_1 \text{ and } R_2 \text{ are regular expressions and } \\
 %     \oplus \text{ is the concatenation operator.}
 % \end{align*}
 %
 % \begin{align*}
-%     E^\# \llbracket \texttt{bit\_length} (R) \rrbracket \\
+%     E^\# \lBrack \texttt{bit\_length} (R) \rBrack \\
 %     =  [length(B(s)), length(B(S))]                     \\
 %     bit\_length \text{ returns a range of the binary}   \\
 %     \text{ representation of regular expression } R.    \\
@@ -385,43 +385,43 @@ Hence, we prove the following theorem:
 % \end{align*}
 %
 % \begin{align*}
-%     E^\# \llbracket \texttt{char\_length} (R) \rrbracket       \\
+%     E^\# \lBrack \texttt{char\_length} (R) \rBrack       \\
 %     =  [length(s), lenght(S)]                                  \\
 %     char\_length \text{ returns a range of the shortest and}   \\
 %     \text{ longest string created from the regular expression} \\
 % \end{align*}
 %
 % \begin{align*}
-%     E^\# \llbracket \texttt{lower} (c) \rrbracket =c'                                                    \\
-%     E^\# \llbracket \texttt{lower}(R_1 \cup R_2) \rrbracket                                              \\
-%     = E^\# \llbracket \texttt{lower}(R_1) \rrbracket \cup E^\# \llbracket \texttt{lower}(R_2) \rrbracket \\
-%     E^\# \llbracket \texttt{lower}(R_1 \cap R_2) \rrbracket                                              \\
-%     = E^\# \llbracket \texttt{lower}(R_1) \rrbracket \cap E^\# \llbracket \texttt{lower}(R_2) \rrbracket \\
-%     E^\# \llbracket \texttt{lower}(R_1^*) \rrbracket                                                     \\
-%     = E^\# \llbracket \texttt{lower}(R_1)^* \rrbracket                                                   \\
+%     E^\# \lBrack \texttt{lower} (c) \rBrack =c'                                                    \\
+%     E^\# \lBrack \texttt{lower}(R_1 \cup R_2) \rBrack                                              \\
+%     = E^\# \lBrack \texttt{lower}(R_1) \rBrack \cup E^\# \lBrack \texttt{lower}(R_2) \rBrack \\
+%     E^\# \lBrack \texttt{lower}(R_1 \cap R_2) \rBrack                                              \\
+%     = E^\# \lBrack \texttt{lower}(R_1) \rBrack \cap E^\# \lBrack \texttt{lower}(R_2) \rBrack \\
+%     E^\# \lBrack \texttt{lower}(R_1^*) \rBrack                                                     \\
+%     = E^\# \lBrack \texttt{lower}(R_1)^* \rBrack                                                   \\
 %     \text{Where }c \in \Sigma \text{ and } c' \text{ is the lower case of } c.                           \\
 %     R_1 \text{ and } R_2 \text{ are regular expressions.}                                                \\
 % \end{align*}
 %
 % \begin{align*}
-%     E^\# \llbracket \texttt{upper}(R) \rrbracket \\
+%     E^\# \lBrack \texttt{upper}(R) \rBrack \\
 %     \text{Where upper is the same as lower but converts to upper case.}
 % \end{align*}
 %
 % \begin{align*}
-%     E^\# \llbracket \texttt{position}(R_1, in, R_2) \rrbracket \\
+%     E^\# \lBrack \texttt{position}(R_1, in, R_2) \rBrack \\
 %     = I                                             \\
 %     \text{where } R1 \text{ and } R2 \text{ are regular expressions and }
 %     I \text{ is an integer.}                        \\
 % \end{align*}
 %
 % \begin{align*}
-%     E^\# \llbracket \texttt{sub\_string} (R, I_1, I_2) \rrbracket \\
+%     E^\# \lBrack \texttt{sub\_string} (R, I_1, I_2) \rBrack \\
 %     = []                                                          \\
 % \end{align*}
 %
 % \begin{align*}
-%     E^\# \llbracket \texttt{trim} ('pos', R_1 \text{ from } R_2) \rrbracket                            \\
+%     E^\# \lBrack \texttt{trim} ('pos', R_1 \text{ from } R_2) \rBrack                            \\
 %     =  \texttt{trim}('pos', R_1 \text{ from } R_2)                                                     \\
 %     \texttt{trim} \text{ removes all leading, trailing or both occurrences of } R_2 \text{ from } R_1. \\
 %     \text{where } R_1 \text{ and } E_2 \text{ are regular expressions, and 'pos' is a string.}         \\

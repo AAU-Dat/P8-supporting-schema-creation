@@ -72,13 +72,13 @@ The conversion is given by the function $edges$ which in the recursive cases are
 
 \begin{equation}
     \begin{split}
-        &edges(q_\circ \rightsquigarrow q_\bullet) \llbracket \texttt{if } b \texttt{ then } P_1 \texttt{ else } P_2 \rrbracket = \\
+        &edges(q_\circ \rightsquigarrow q_\bullet) \lBrack \texttt{if } b \texttt{ then } P_1 \texttt{ else } P_2 \rBrack = \\
         &\quad \text{let } \\
         &\quad\quad q, q' \text{ be new nodes} \\
-        &\quad\quad E_{b} = edges(q_\circ \rightsquigarrow q) \llbracket b \rrbracket \\
-        &\quad\quad E_{\neg b} = edges(q_\circ \rightsquigarrow q') \llbracket \neg b \rrbracket \\
-        &\quad\quad E_{P_1}= edges(q \rightsquigarrow q_\bullet) \llbracket P_1 \rrbracket \\
-        &\quad\quad E_{P_2}= edges(q' \rightsquigarrow q_\bullet) \llbracket P_2 \rrbracket \\
+        &\quad\quad E_{b} = edges(q_\circ \rightsquigarrow q) \lBrack b \rBrack \\
+        &\quad\quad E_{\neg b} = edges(q_\circ \rightsquigarrow q') \lBrack \neg b \rBrack \\
+        &\quad\quad E_{P_1}= edges(q \rightsquigarrow q_\bullet) \lBrack P_1 \rBrack \\
+        &\quad\quad E_{P_2}= edges(q' \rightsquigarrow q_\bullet) \lBrack P_2 \rBrack \\
         &\quad \text{in } E_{b} \cup E_{\neg b} \cup E_{P_1} \cup E_{P_2}
     \end{split}\label{eq:equation8}
 \end{equation}
@@ -94,12 +94,12 @@ And for the while statement, as visualized in \autoref{fig:non-deterministic-cho
 
 \begin{equation}
     \begin{split}
-        &edges(q_\circ \rightsquigarrow q_\bullet) \llbracket \texttt{while } b \texttt{ do } P \rrbracket = \\
+        &edges(q_\circ \rightsquigarrow q_\bullet) \lBrack \texttt{while } b \texttt{ do } P \rBrack = \\
         &\quad \text{let } \\
         &\quad\quad q \text{ be new nodes} \\
-        &\quad\quad E_{b} = edges(q_\circ \rightsquigarrow q) \llbracket b \rrbracket \\
-        &\quad\quad E_{\neg b} = edges(q_\circ \rightsquigarrow q_\bullet) \llbracket \neg b \rrbracket \\
-        &\quad\quad E_{P} = edges(q \rightsquigarrow q_\circ) \llbracket P \rrbracket \\
+        &\quad\quad E_{b} = edges(q_\circ \rightsquigarrow q) \lBrack b \rBrack \\
+        &\quad\quad E_{\neg b} = edges(q_\circ \rightsquigarrow q_\bullet) \lBrack \neg b \rBrack \\
+        &\quad\quad E_{P} = edges(q \rightsquigarrow q_\circ) \lBrack P \rBrack \\
         &\quad \text{in } E_{b} \cup E_{\neg b} \cup E_{P}
     \end{split}\label{eq:equation9}
 \end{equation}
@@ -115,11 +115,11 @@ And for the composition statement, as visualized in \autoref{fig:tikz-compositio
 
 \begin{equation}
     \begin{split}
-        &edges(q_\circ \rightsquigarrow q_\bullet) \llbracket P_1; P_2 \rrbracket = \\
+        &edges(q_\circ \rightsquigarrow q_\bullet) \lBrack P_1; P_2 \rBrack = \\
         &\quad \text{let } \\
         &\quad\quad q \text{ be new nodes} \\
-        &\quad\quad E_{P_1} = edges(q_\circ \rightsquigarrow q) \llbracket P_1 \rrbracket \\
-        &\quad\quad E_{P_2} = edges(q \rightsquigarrow q_\bullet) \llbracket P_2 \rrbracket \\
+        &\quad\quad E_{P_1} = edges(q_\circ \rightsquigarrow q) \lBrack P_1 \rBrack \\
+        &\quad\quad E_{P_2} = edges(q \rightsquigarrow q_\bullet) \lBrack P_2 \rBrack \\
         &\quad \text{in } E_{P_1} \cup E_{P_2}
     \end{split}\label{eq:equation10}
 \end{equation}
@@ -137,13 +137,13 @@ And for non-deterministic choice statement, as visualized in \autoref{fig:tikz-c
 
 \begin{equation}
     \begin{split}
-        &edges(q_\circ \rightsquigarrow q_\bullet) \llbracket P_1 \texttt{[]} P_2 \rrbracket = \\
+        &edges(q_\circ \rightsquigarrow q_\bullet) \lBrack P_1 \texttt{[]} P_2 \rBrack = \\
         &\quad \text{let } \\
         &\quad\quad q, q' \text{ be new nodes} \\
-        &\quad\quad E_{q} = edges(q_\circ \rightsquigarrow q) \llbracket \texttt{skip} \rrbracket \\
-        &\quad\quad E_{q'} = edges(q_\circ \rightsquigarrow q') \llbracket \texttt{skip} \rrbracket \\
-        &\quad\quad E_{P_1}= edges(q \rightsquigarrow q_\bullet) \llbracket P_1 \rrbracket \\
-        &\quad\quad E_{P_2}= edges(q' \rightsquigarrow q_\bullet) \llbracket P_2 \rrbracket \\
+        &\quad\quad E_{q} = edges(q_\circ \rightsquigarrow q) \lBrack \texttt{skip} \rBrack \\
+        &\quad\quad E_{q'} = edges(q_\circ \rightsquigarrow q') \lBrack \texttt{skip} \rBrack \\
+        &\quad\quad E_{P_1}= edges(q \rightsquigarrow q_\bullet) \lBrack P_1 \rBrack \\
+        &\quad\quad E_{P_2}= edges(q' \rightsquigarrow q_\bullet) \lBrack P_2 \rBrack \\
         &\quad \text{in } E_{q} \cup E_{q'} \cup E_{P_1} \cup E_{P_2}
     \end{split}\label{eq:equation8}
 \end{equation}
@@ -158,7 +158,7 @@ And for non-deterministic choice statement, as visualized in \autoref{fig:tikz-c
 And in the base case of $I$:
 
 \begin{align}
-    edges(q_\circ \rightsquigarrow q_\bullet) \llbracket I \rrbracket &= \{q_\circ \xrightarrow{I} q_\bullet\}\label{eq:equation11} \\
+    edges(q_\circ \rightsquigarrow q_\bullet) \lBrack I \rBrack &= \{q_\circ \xrightarrow{I} q_\bullet\}\label{eq:equation11} \\
 \end{align}
 
-Thus, for some program $P$, the program graph of $P$ is simply $edges(q_\triangleright \rightsquigarrow q_\blacktriangleleft)\llbracket P \rrbracket$.
+Thus, for some program $P$, the program graph of $P$ is simply $edges(q_\whitepointerright \rightsquigarrow q_\blackpointerleft)\lBrack P \rBrack$.
