@@ -85,7 +85,7 @@ In a complete lattice $L$ with finite height, every monotone function $f : L \ri
     \end{equation}
 \end{theorem}
 
-\subsection{Converting Code Program Graph}\label{subsec:converting-code-program-graph}
+\subsection{Program Graphs}\label{subsec:program-graphs}
 
 Because of the particular flavor of abstract interpretation we use uses program graphs instead of control flow graphs we justify the conversion here, to be more precise we justify the conversion of control flow construct defined in~\cite{halder_abstract_2012} to program graphs.
 This particular flavor of abstract interpretation was chosen because it allowed us to encode the control flow in the graph, allowing us to \emph{abstract} away details of control flow in our analysis specification.
@@ -101,92 +101,6 @@ This particular flavor of abstract interpretation was chosen because it allowed 
     An edge $q_\circ \xrightarrow{I} q_\bullet$ has \emph{source} node $q_\circ$ and \emph{target} node $q_\bullet$ and is labeled with action $I$.
     Finally, $q_\whitepointerright, q_\blackpointerleft \in Q$ are distinct, and no edges are to have source $q_\blackpointerleft$.
 \end{definition}
-
-Programs/instructions as defined in the syntax of ~\cite{halder_abstract_2012}:
-
-\begin{align*}
-    I &\Coloneqq & &\texttt{if } b \texttt{ then } I_1 \texttt{ else } I_2 \\
-    &\mid      & &\texttt{while } b \texttt{ do } I \\
-    &\mid      & &I_1; I_2 \\
-    &\mid      & &\dots
-\end{align*}
-
-can be converted to a program graph via the function $edges$ which in the recursive cases is defined to be:
-
-\begin{equation}
-    \begin{split}
-        &edges(q_\circ \rightsquigarrow q_\bullet) \lBrack \texttt{if } b \texttt{ then } I_1 \texttt{ else } I_2 \rBrack = \\
-        &\quad \text{let } \\
-        &\quad\quad q, q' \text{ be new nodes} \\
-        &\quad\quad E_{b} = edges(q_\circ \rightsquigarrow q) \lBrack b \rBrack \\
-        &\quad\quad E_{\neg b} = edges(q_\circ \rightsquigarrow q') \lBrack \neg b \rBrack \\
-        &\quad\quad E_{I_1}= edges(q \rightsquigarrow q_\bullet) \lBrack I_1 \rBrack \\
-        &\quad\quad E_{I_2}= edges(q' \rightsquigarrow q_\bullet) \lBrack I_2 \rBrack \\
-        &\quad \text{in } E_{b} \cup E_{\neg b} \cup E_{I_1} \cup E_{I_2}
-    \end{split}\label{eq:equation8}
-\end{equation}
-
-As visualized in \autoref{fig:tikz-program-graph-if}.
-
-\begin{figure}[htb!]
-    \center
-    \input{figures/if_graph}
-    \caption{An example that shows a program graph of an if-statement}
-    \label{fig:tikz-program-graph-if}
-\end{figure}
-
-And for while:
-
-\begin{equation}
-    \begin{split}
-        &edges(q_\circ \rightsquigarrow q_\bullet) \lBrack \texttt{while } b \texttt{ do } I \rBrack = \\
-        &\quad \text{let } \\
-        &\quad\quad q \text{ be new nodes} \\
-        &\quad\quad E_{b} = edges(q_\circ \rightsquigarrow q) \lBrack b \rBrack \\
-        &\quad\quad E_{\neg b} = edges(q_\circ \rightsquigarrow q_\bullet) \lBrack \neg b \rBrack \\
-        &\quad\quad E_{I} = edges(q \rightsquigarrow q_\circ) \lBrack I \rBrack \\
-        &\quad \text{in } E_{b} \cup E_{\neg b} \cup E_{I}
-    \end{split}\label{eq:equation9}
-\end{equation}
-
-As visualized in \autoref{fig:tikz-program-graph-loop}.
-
-\begin{figure}[htb!]
-    \center
-    \input{figures/loop_graph}
-    \caption{An example that shows a program graph of a loop}
-    \label{fig:tikz-program-graph-loop}
-\end{figure}
-
-And for composition:
-
-\begin{equation}
-    \begin{split}
-        &edges(q_\circ \rightsquigarrow q_\bullet) \lBrack I_1; I_2 \rBrack = \\
-        &\quad \text{let } \\
-        &\quad\quad q \text{ be new nodes} \\
-        &\quad\quad E_{I_1} = edges(q_\circ \rightsquigarrow q) \lBrack I_1 \rBrack \\
-        &\quad\quad E_{I_2} = edges(q \rightsquigarrow q_\bullet) \lBrack I_2 \rBrack \\
-        &\quad \text{in } E_{I_1} \cup E_{I_2}
-    \end{split}\label{eq:equation10}
-\end{equation}
-
-As visualized in \autoref{fig:tikz-composition-graph}.
-
-\begin{figure}
-    \center
-    \input{figures/composition_graph}
-    \caption{An example that shows a composition graph}
-    \label{fig:tikz-composition-graph}
-\end{figure}
-
-And when $I$ is a base case, that is, not an if-else, while, or composition statement:
-
-\begin{equation}
-    edges(q_\circ \rightsquigarrow q_\bullet) \lBrack I \rBrack = \{q_\circ \xrightarrow{I} q_\bullet\}\label{eq:equation11}
-\end{equation}
-
-Thus, for some program $P = I$, the program graph of $P$ is simply $edges(q_\whitepointerright \rightsquigarrow q_\blackpointerleft)\lBrack P \rBrack$.
 
 \subsection{Abstract Interpretation}\label{subsec:abstract-interpretation}
 
