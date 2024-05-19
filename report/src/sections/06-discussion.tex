@@ -3,11 +3,11 @@
 %SQL was not they best use, as it has many implementation features that are different for platforms, therefore we might want to have used a more abstract language.
 
 %The semantics for our language is not well defined, making our soundness proof a little bit shaky. Such as the boolean expressions, as they are not defined how they interact with lists or other boolean (Both our paper and cortesi and halder).
-%There is no actual type system, so we assume that a variable has a type without formally defining it. 
+%There is no actual type system, so we assume that a variable has a type without formally defining it.
 
 %We use postgres SQL, but we have only defined a subset of the operations.
 %Our language is more limited than Cortesi and Halder, as we do not have the same amount of operations.
-%There are some programs in cortesi and halder that we cannot check, which are programs where more than one column is selected, due to the cover lattice only being able to handle one variable and not a column of variables. 
+%There are some programs in cortesi and halder that we cannot check, which are programs where more than one column is selected, due to the cover lattice only being able to handle one variable and not a column of variables.
 %Null values are not handled in our system, as we do not have a way to check for them. Meaning that we cannot check for null values in our system.
 
 Throughout the work progress, it was originally planned to have a working system with the analysis tool.
@@ -15,7 +15,7 @@ However,
 due to time constraints and the complexity of the research,
 it was deemed necessary to move the system to future work.
 Due to this, there are no empirical results to discuss.
-However, it is still possible to discuss the implications of the results that could have been found.
+However, it is still possible to discuss the implications of the results that could have been found.\todo{Casper says: How can you discuss results that don't exist?}
 
 
 \subsection{Problems in the work}\label{subsec:workproblems}
@@ -62,7 +62,7 @@ Changing the way in which the abstractions are represented means that quite a lo
 So even though this paper provides a model that can be used for actual analysis, it also has its compromises.
 Due to time constraints, it has not been possible to cover as much of SQL as ~\cite{halder_abstract_2012} does.
 
-Therefore, due to the need to discard some semantics, programs using these missing commands/actions cannot be analyzed.
+Therefore, due to the need to discard some semantics, programs using these missing commands/actions can not be analyzed.
 This limitation restricts the programs and schemas that can implement this paper's model.
 However, programs that only use semantics covered by SQAAL can be analyzed, even if they are infinite.
 This means that while SQAAL can handle non-terminating programs, there are many programs SQAAL cannot handle that Halder's implementation can manage.

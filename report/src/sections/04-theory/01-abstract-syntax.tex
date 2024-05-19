@@ -42,7 +42,7 @@ For simplicity's sake we assume that $\mathbb{V}_a$, $\mathbb{V}_d$ and $\mathbb
 \begin{figure}[htb!]
     \center
     \begin{tabular}{r p{0.65\columnwidth}}
-        $c \Coloneqq$ & $n \mid k$ \\
+        $c \Coloneqq$ & $n \mid k \mid R \mid \mathscr{I}$ \\
         $v \Coloneqq$ & $v_t \mid v_a$ \\
         $e \Coloneqq$ & $c \mid v \mid op_u\; e \mid \;e_1 op_b\; e_2$ for $op_u = \{-, lower, upper, bit\_length length\}$ and $op_b = \{+, -, *, /, ||\}$ \\
 
@@ -52,7 +52,7 @@ For simplicity's sake we assume that $\mathbb{V}_a$, $\mathbb{V}_d$ and $\mathbb
         $\phi \Coloneqq$ & $a_f \mid \neg \phi_1 \mid \phi_1 \lor \phi_2 \mid \phi_1 \land \phi_2 \mid \forall v_n \phi \mid \exists v_n \phi$ \\
         $A_{sql} \Coloneqq$ & $select(v_a, v_d, \mathbf{v}_t) \mid update(v_d, \mathbf{v}_t, \mathbf{e}) \mid delete(v_d) \mid insert(v_d, \mathbf{v}_t, \mathbf{e})$ \\
         $C_{sql} \Coloneqq$ & $\langle A_{sql}, \phi \rangle $ \\
-        $I \Coloneqq$ & $skip \mid v_a \coloneqq e \mid v_a \coloneqq ? \mid C_{sql} \mid b$ \\
+        $I \Coloneqq$ & $skip \mid v_a \coloneqq e \mid C_{sql} \mid b$ \\
     \end{tabular}
     \caption{Abstract Syntax}
     \label{fig:abstract-syntax}

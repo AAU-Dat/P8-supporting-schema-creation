@@ -26,8 +26,8 @@ For the program to work, we need to define the table for the database, this is s
 \end{listing}
 
 
-The database has two operations, \texttt{insert} and \texttt{update}.
-The \texttt{insert} operation inserts a new row into the table, i.e.\ a new user, and the \texttt{update} operation updates the balance of two accounts.
+The database has two operations, \texttt{insert} and \texttt{update}.\todo{Casper says: there is also delete and select?}
+The \texttt{insert} operation inserts a new row into the table, i.e.\ a new user, and the \texttt{update} operation updates the balance of two accounts.\todo{Casper says: insert inserts and update updates?}
 The SQL queries for the operations are shown in \autoref{lst:sql-queries} and \autoref{lst:sql-queries2}.
 
 
@@ -51,15 +51,17 @@ The SQL queries for the operations are shown in \autoref{lst:sql-queries} and \a
     END
     WHERE name IN (name1, name2);
     \end{minted}
-    \caption{SQL query for the update operation}
+    \caption{SQL query for the update operation}\todo{Casper says: where does this come from?}
     \label{lst:sql-queries2}
 \end{listing}
 
 
-Understanding the database schema and operations is crucial as it forms the foundation for defining the behavior of the operations.
+Understanding the database schema and operations is crucial as it forms the foundation for defining the behavior of the operations.\todo{Casper says: okay?}
 The program that defines the behaviour of the operations is shown in \autoref{lst:program}.
 The program first checks if there are two or more accounts in the database; if not, it inserts a new account with the \texttt{INSERT} operation.
 If there are more than two accounts, we try to transfer an amount from one account to another; that is the \texttt{UPDATE} operation
+
+\todo[inline]{Casper says: Program and graph do not match.}
 
 
 \begin{listing}[htb!]
@@ -81,14 +83,14 @@ newuser:
     U := ?
     <insert(U, B)> into (account)
     \end{minted}
-    \caption{Program that defines the behavior of the operations}
+    \caption{Program that defines the behavior of the operations}\todo{C}
     \label{lst:program}
 \end{listing}
 
 
 Now everything for the analysis is ready.
 We just need to define what the analysis should check for.
-This is defined by properties, which are defined by the LTL grammar on the attributes in the database.
+This is defined by properties, which are defined by the LTL grammar on the attributes in the database.\todo{Casper says: We can still not check LTL properties.}
 The properties we want to check on the database are shown in \autoref{lst:properties}.
 
 \begin{equation}
