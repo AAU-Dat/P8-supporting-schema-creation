@@ -14,8 +14,8 @@ We give a brief outline of changes:
     \item $v_a \coloneq \; ?$ has been removed but we now allow non-deterministic values $R$ and $\mathscr{I}$ to be present in expressions.
 \end{itemize}
 
-Further we differential between the instructions allowed on the edges of a program graph $\mathbb{I}$, and the instructions allowed in the language for which the analysis is allowed $\mathbb{P}$.
-We will show finish this section by show the conversion between program and program graph, but before we can do that we need to introduce the syntax.
+Further we differentiate between the instructions allowed on the edges of a program graph $\mathbb{I}$, and the instructions allowed in the language for which the analysis is allowed $\mathbb{P}$.
+We will finish this section by showing the conversion between program and program graph, but before we can do that we need to introduce the syntax.
 
 The abstract syntax of SQAAL is defined in terms of the syntactic sets introduced in \autoref{fig:syntatic-sets}.
 \begin{figure}[htb!]
@@ -73,8 +73,7 @@ The conversion is given by the function $edges$ which in the recursive cases are
 \begin{equation}
     \begin{split}
         &edges(q_\circ \rightsquigarrow q_\bullet) \lBrack \texttt{if } b \texttt{ then } P_1 \texttt{ else } P_2 \rBrack = \\
-        &\quad \text{let } \\
-        &\quad\quad q, q' \text{ be new nodes} \\
+        &\quad \text{let } q, q' \text{ be new nodes} \\
         &\quad\quad E_{b} = edges(q_\circ \rightsquigarrow q) \lBrack b \rBrack \\
         &\quad\quad E_{\neg b} = edges(q_\circ \rightsquigarrow q') \lBrack \neg b \rBrack \\
         &\quad\quad E_{P_1}= edges(q \rightsquigarrow q_\bullet) \lBrack P_1 \rBrack \\
@@ -90,13 +89,12 @@ The conversion is given by the function $edges$ which in the recursive cases are
     \label{fig:tikz-program-graph-if}
 \end{figure}
 
-And for the while statement, as visualized in \autoref{fig:non-deterministic-choice}:
+And for the while statement, as visualized in \autoref{fig:tikz-program-graph-loop}:
 
 \begin{equation}
     \begin{split}
         &edges(q_\circ \rightsquigarrow q_\bullet) \lBrack \texttt{while } b \texttt{ do } P \rBrack = \\
-        &\quad \text{let } \\
-        &\quad\quad q \text{ be new nodes} \\
+        &\quad \text{let } q \text{ be a new node} \\
         &\quad\quad E_{b} = edges(q_\circ \rightsquigarrow q) \lBrack b \rBrack \\
         &\quad\quad E_{\neg b} = edges(q_\circ \rightsquigarrow q_\bullet) \lBrack \neg b \rBrack \\
         &\quad\quad E_{P} = edges(q \rightsquigarrow q_\circ) \lBrack P \rBrack \\
@@ -116,8 +114,7 @@ And for the composition statement, as visualized in \autoref{fig:tikz-compositio
 \begin{equation}
     \begin{split}
         &edges(q_\circ \rightsquigarrow q_\bullet) \lBrack P_1; P_2 \rBrack = \\
-        &\quad \text{let } \\
-        &\quad\quad q \text{ be new nodes} \\
+        &\quad \text{let } q \text{ be a new node} \\
         &\quad\quad E_{P_1} = edges(q_\circ \rightsquigarrow q) \lBrack P_1 \rBrack \\
         &\quad\quad E_{P_2} = edges(q \rightsquigarrow q_\bullet) \lBrack P_2 \rBrack \\
         &\quad \text{in } E_{P_1} \cup E_{P_2}
@@ -133,13 +130,13 @@ And for the composition statement, as visualized in \autoref{fig:tikz-compositio
 \end{figure}
 
 
-And for non-deterministic choice statement, as visualized in \autoref{fig:tikz-composition-graph}:
+And for non-deterministic choice statement, as visualized in \autoref{fig:non-deterministic-choice}:
+
 
 \begin{equation}
     \begin{split}
         &edges(q_\circ \rightsquigarrow q_\bullet) \lBrack P_1 \texttt{[]} P_2 \rBrack = \\
-        &\quad \text{let } \\
-        &\quad\quad q, q' \text{ be new nodes} \\
+        &\quad \text{let } q, q' \text{ be new nodes} \\
         &\quad\quad E_{q} = edges(q_\circ \rightsquigarrow q) \lBrack \texttt{skip} \rBrack \\
         &\quad\quad E_{q'} = edges(q_\circ \rightsquigarrow q') \lBrack \texttt{skip} \rBrack \\
         &\quad\quad E_{P_1}= edges(q \rightsquigarrow q_\bullet) \lBrack P_1 \rBrack \\
