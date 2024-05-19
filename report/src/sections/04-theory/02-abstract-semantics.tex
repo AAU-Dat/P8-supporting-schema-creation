@@ -298,6 +298,7 @@ Then it wraps them in a $\mathsf{List}$ label and inserts this in the lattice of
 For \textit{insert}, we evaluate each expression in $\mathbf{e}$, and take the product of them as the set of abstract tuples to be inserted.
 We take the product as each expression might evaluate to a $\mathsf{list}$ type.
 These respective values are inserted into the lattice of the column they correspond to.
+
 At last, we turn the values into actual abstract tuples in the table, here we find it helpful to view a tuple as a function $attr(v_d) \rightarrow \bigcup_{v_t \in attr(v_d)}\lookupcl(v_t)$.
 In particular, we start with a tuple with all entries equal to null $\lambda\_.\mnull$, then for each of the evaluations of the expressions we update the tuples to take those values in the correct places.
 
