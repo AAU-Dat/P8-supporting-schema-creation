@@ -47,7 +47,7 @@ This allows us to do model checking
         \li \Do
         $(s,\rho_d,\rho_a) \coloneqq pop(todo)$
         \li \For{$\xrightarrow[]{\text{i}}s'\in s$}
-        \li \Do $(\rho'_d,\rho'_a) \coloneqq \widehat{\mathcal{S}}\llbracket i\rrbracket(\rho_d,\rho_a)$
+        \li \Do $(\rho'_d,\rho'_a) \coloneqq \widehat{\mathcal{S}}\lBrack i\rBrack(\rho_d,\rho_a)$
         \li \If{$(s',\rho'_d,\rho'_a)$ \textbf{not in} $state\_space$}
         \li \Do $Insert(s',\rho'_d,\rho'_a,todo)$
         \End
