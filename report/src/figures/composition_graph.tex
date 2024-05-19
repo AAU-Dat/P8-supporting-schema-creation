@@ -1,9 +1,9 @@
 \begin{tikzpicture}
     \tikzstyle{arrow} = [thick,->,>=stealth]
     \node [circle, draw] (start) at (0,0){};
-    \node (a) [cloud,  cloud puffs=9.4, minimum width=1cm, draw, shift={($(start.east)+(1.5,0)$)}] {$I_1$};
+    \node (a) [cloud,  cloud puffs=9.4, minimum width=1cm, draw, shift={($(start.east)+(1.5,0)$)}] {$P_1$};
     \node [circle, draw, shift={($(a.east)+(1.5,0)$)}] (b) {};
-    \node (c) [cloud,  cloud puffs=9.4, minimum width=1cm, draw, shift={($(b.east)+(1.5,0)$)}] {$I_2$};
+    \node (c) [cloud,  cloud puffs=9.4, minimum width=1cm, draw, shift={($(b.east)+(1.5,0)$)}] {$P_2$};
     \node [circle, draw, shift={($(c.east)+(1.5,0)$)}, fill=black] (end) {};
 
     \draw[arrow, ->] (start) to node[above,scale=.7] {} (a);
