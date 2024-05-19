@@ -197,6 +197,7 @@ Next, we define $cvt$, which is abstract string conversion over regular expressi
 In the base case, a single symbol is converted as defined by $op$.
 In the case of the complement, seen in \autoref{eq:complement}, we convert $\overline{R}$ to its DFA equivalent by the usual construction, $\mathcal{A}:\mathbf{REG} \rightarrow \mathbf{DFA}$~\cite{sipserbook}.
 This automaton is then converted back to a regular expression by the usual GNFA construction, $\mathcal{R}: \mathbf{DFA} \rightarrow \mathbf{REG}$~\cite{sipserbook}, thus eliminating the complement.
+
 \begin{align}
     cvt(op, R_1 \cup R_2) &= cvt(op, R_1) \cup cvt(op, R_2) \\
     cvt(op, R_1 \cap R_2) &= cvt(op, R_1) \cap cvt(op, R_2) \\
@@ -227,6 +228,7 @@ This automaton is then converted back to a regular expression by the usual GNFA 
 
 \autoref{eq:abstractBOP} describes how to do binary operations on numbers.
 The arithmetic operations, $\aaab{aop}$, are defined as follows for intervals.
+
 \begin{align}\label{eq:abstractBOP}
     \bigcup \mathcal{I} \;\aab{aop}\; \bigcup \mathcal{I}' &= \bigcup_{\mathscr{I}\in \mathcal{I}, \mathscr{I}'\in \mathcal{I}'}\mathscr{I}\aaab{aop}\mathscr{I}'\nonumber\\
     \text{where } \mathcal{I}&=\{\mathscr{I}_1,\dots,\mathscr{I}_n\}\nonumber\\
@@ -237,6 +239,7 @@ The arithmetic operations, $\aaab{aop}$, are defined as follows for intervals.
 The base rule of all the predicates is defined in \autoref{eq:atomicformulas}, as this is the base case for all the other predicates.
 It takes atomic formulas, $a_f$, and returns the abstract truth value of $a_f$.
 The other predicates all build on this base case with rules such as negation, disjunction and conjunction.
+
 \begin{align}
     \abspredsem{\cdot} &: \mathbb{W} \rightarrow \ab{\mathfrak{E}} \rightarrow \mathsf{Val} \; \{\true, \false, \mnull\} \\ \label{eq:atomicformulas}
     \abspredsem{a_f}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absboolsem{a_f}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
@@ -251,6 +254,7 @@ The other predicates all build on this base case with rules such as negation, di
 
 First we define $var_{v_d}(\phi)$ to be the vector of column variables in $attr(v_d)$ appearing in $\phi$, ordered by the way they appear in the schema of $v_d$.
 Next we define $v_d \downarrow_{\true}^{(\rho_{\ab{d}}, \rho_{\ab{a}})} \phi, v_d \downarrow_{\false}^{(\rho_{\ab{d}}, \rho_{\ab{a}})} \phi$ and  $v_d \downarrow_{\unknown}^{(\rho_{\ab{d}}, \rho_{\ab{a}})} \phi$ to be the set of tuples in the evaluation of $v_d$ with respect to $(\rho_{\ab{d}}, \rho_{\ab{a}})$ where $\phi$ is definitely true, definitely false and where we are unsure respectively, formally:
+
 \begin{align}
     \begin{split}
         v_d \downarrow_{\true}^{(\rho_{\ab{d}}, \rho_{\ab{a}})} \phi = &\{ l \in \rho_{\ab{d}}(v_d) \\
