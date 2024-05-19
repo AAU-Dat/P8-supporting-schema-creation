@@ -15,7 +15,7 @@ However,
 due to time constraints and the complexity of the research,
 it was deemed necessary to move the system to future work.
 Due to this, there are no empirical results to discuss.
-However, it is still possible to discuss the implications of the results that could have been found.
+However, it is still possible to discuss the implications of the results that could have been found.\todo{Casper says: How can you discuss results that don't exist?}
 
 
 \subsection{Problems in the work}\label{subsec:workproblems}
@@ -48,7 +48,7 @@ we clearly see how their semantics introduce duplicate entries in a table, where
 
 
 This means that a situation can happen, where adding more of the same tuples could end up enlarging the analysis indefinitely.
-Specifically, it happens during \textit{infinite} programs with no end state, such as the one shown in \autoref{fig:programgraph}.
+Specifically, it happens during \textit{infinite} programs with no end state, such as the one shown in \autoref{fig:programgraph}.\todo{Figure does not exist.}
 
 
 This is exactly what this paper tries to escape.
@@ -62,10 +62,10 @@ Changing the way in which the abstractions are represented means that quite a lo
 So even though this paper provides a model that can be used for actual analysis, it also has its compromises.
 Due to time constraints, it has not been possible to cover as much of SQL as ~\cite{halder_abstract_2012} does.
 
-Therefore, due to the need to discard some semantics, programs using these missing commands/actions cannot be analyzed.
+Therefore, due to the need to discard some semantics, programs using these missing commands/actions can not be analyzed.
 This limitation restricts the programs and schemas that can implement this paper's model.
 However, programs that only use semantics covered by SQAAL can be analyzed, even if they are infinite.
-This means that while SQAAL can handle non-terminating programs, there are many programs SQAAL cannot handle that Halder's implementation can manage.
+This means that while SQAAL can handle non-terminating programs, there are many programs SQAAL can not handle that Halder's implementation can manage.
 
 An example of this is in the SELECT SQL action: SQAAL is currently unable to handle additional methods such as DISTINCT and GROUP BY, whereas the implementation in ~\cite{halder_abstract_2012} can.
 

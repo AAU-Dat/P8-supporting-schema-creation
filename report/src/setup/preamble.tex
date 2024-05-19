@@ -3,26 +3,22 @@
 
 % Packages
 \RequirePackage{clrscode4e}
-%\usepackage{stix2}
-\usepackage{amsmath}
-% \usepackage{amsthm} \\ the proof environment clashes with the one in pf2.
-\usepackage{amssymb}
-\usepackage{amsbsy}
-\usepackage{mathrsfs}
-\usepackage{dsfont}
-\usepackage{bbold}
+\usepackage{microtype}
+\usepackage{amsfonts}
+\usepackage{stix2}
+\usepackage{FiraMono}
 \usepackage{booktabs}
 \usepackage{tikz}
-\usepackage{pf2}
-\usepackage{thmtools, thm-restate}
-\usepackage{stmaryrd}
-\usepackage{mathabx}
-\usepackage{algpseudocode}
+\usepackage{mathtools}
+\usepackage{amsmath}
+\usepackage{thm-restate}
 
 % Packages with options set
-\usepackage{hyperref}
+\usepackage[inference]{semantic}
+\usepackage[hidelinks]{hyperref}
 \usepackage[textsize=small,obeyDraft]{todonotes}
 \usepackage[newfloat, outputdir=../out]{minted}
+\usepackage[autostyle]{csquotes}
 \usepackage[backend=biber,
     bibencoding=utf8,
     maxbibnames=20,
@@ -30,10 +26,9 @@
     citestyle=numeric-comp,
     url=false
 ]{biblatex}
-\usepackage[inference]{semantic}
-\usepackage{mathtools}
-%\usepackage[scaled=0.82]{FiraMono}
 
+\usepackage{stmaryrd}
+\usepackage{pf2}
 
 % Package setup
 \makeatletter
@@ -41,7 +36,9 @@
     plainpages=false,%
     pdftitle=\@title,%
     pdfauthor={Anders Malta Jacobsen, Casper Ståhl, Daniel Runge Petersen, Lars Emanuel Hansen, Oliver Holmgaard, Sebastian Aaholm},%
+    pdflang={en-GB},%
     pdfsubject={Semester project at Aalborg University},%
+    pdfkeywords ={Abstract Interpretation, Formal Verification, Databases}
     bookmarksnumbered=true,%
     colorlinks=true,%
     citecolor=black,%
@@ -127,8 +124,8 @@
 \newcommand{\lang}{\mathcal{L}}
 \newcommand{\uints}{\mathbf{INT}}
 \newcommand{\uint}{\mathscr{I}}
-\newcommand{\strs}{\mathbf{STR}}
-\newcommand{\nums}{\mathbf{NUM}}
+\newcommand{\strs}{\mathbb{S}}
+\newcommand{\nums}{\mathbb{Z}}
 \newcommand{\bools}{\mathbf{BOOL}}
 \newcommand{\cc}{c}
 \floatplacement{listing}{htb!}

@@ -1,10 +1,11 @@
 
 \section{preliminaries}\label{sec:preliminaries}
-
-\subsection{Lattices}\label{subsec:lattices}
 This section contains the definitions and theorems of lattices, complete lattices, and partial orders.
 These definitions will be used later in the paper and are foundational to abstract interpretation.
-All definitions and notation in this subsection are due to~\cite{nielson_formal_2019}.
+
+\subsection{Lattices}\label{subsec:lattices}
+All definitions and notation in this subsection come from ~\cite{nielson_formal_2019}.
+
 
 \begin{definition}
     A \emph{partial order} $(S, \sqsubseteq)$ is set $S$ equipped with a binary relation $\sqsubseteq$ that is reflexive, transitive and antisymmetric.
@@ -47,6 +48,7 @@ As a shorthand we take $x \sqcup y = \bigsqcup \{x, y\}$ and $x \sqcap y = \bigs
         x \sqcap y \sqsubseteq \{x, y\} \land \forall z \in S : z \sqsubseteq \{x, y\} \implies z \sqsubseteq x \sqcap y.\label{eq:equation5}
     \end{equation}
 \end{definition}
+\todo{swap definition 2 and 3?}
 
 
 \begin{theorem}\label{thm:kleene_finite}
@@ -92,25 +94,27 @@ This particular flavor of abstract interpretation was chosen because it allowed 
     A \emph{program graph}~\cite{nielson_formal_2019} is a tuple $PG = (Q, q_\vartriangleright, q_\blacktriangleright, \mathbb{I}, E)$ where:
     \begin{itemize}
         \item $Q$ is a finite set of nodes,
-        \item $I$ is a set of instructions,
+        \item $\mathbb{I}$ is a set of instructions,
         \item $q_\triangleright, q_\blacktriangleleft \in Q$ are the \emph{initial node} and \emph{final node}, respectively,
         \item and $E \subseteq Q \times \mathbb{I} \times Q$ is a finite set of \emph{edges}.
     \end{itemize}
     An edge $q_\circ \xrightarrow{I} q_\bullet$ has \emph{source} node $q_\circ$ and \emph{target} node $q_\bullet$ and is labeled with action $I$.
-    Finally $q_\triangleright, q_\blacktriangleleft \in Q$ are distinct, and no edges are to have source $q_\blacktriangleleft$.
+    Finally, $q_\triangleright, q_\blacktriangleleft \in Q$ are distinct, and no edges are to have source $q_\blacktriangleleft$.
 \end{definition}
 
 Programs/instructions as defined in the syntax of ~\cite{halder_abstract_2012}:
-\begin{align}
+
+\begin{align*}
     I &\Coloneqq & &\texttt{if } b \texttt{ then } I_1 \texttt{ else } I_2 \\
     &\mid      & &\texttt{while } b \texttt{ do } I \\
     &\mid      & &I_1; I_2 \\
     &\mid      & &\dots
-\end{align}
-can be converted to a program graph via the function $edges$ which in the recursive cases if defined to be:
+\end{align*}
+
+can be converted to a program graph via the function $edges$ which in the recursive cases is defined to be:
 
 \begin{equation}
-    \begin{aligned}
+    \begin{split}
         &edges(q_\circ \rightsquigarrow q_\bullet) \llbracket \texttt{if } b \texttt{ then } I_1 \texttt{ else } I_2 \rrbracket = \\
         &\quad \text{let } \\
         &\quad\quad q, q' \text{ be new nodes} \\
@@ -119,7 +123,7 @@ can be converted to a program graph via the function $edges$ which in the recurs
         &\quad\quad E_{I_1}= edges(q \rightsquigarrow q_\bullet) \llbracket I_1 \rrbracket \\
         &\quad\quad E_{I_2}= edges(q' \rightsquigarrow q_\bullet) \llbracket I_2 \rrbracket \\
         &\quad \text{in } E_{b} \cup E_{\neg b} \cup E_{I_1} \cup E_{I_2}
-    \end{aligned}\label{eq:equation8}
+    \end{split}\label{eq:equation8}
 \end{equation}
 
 As visualized in \autoref{fig:tikz-program-graph-if}.
@@ -131,8 +135,10 @@ As visualized in \autoref{fig:tikz-program-graph-if}.
     \label{fig:tikz-program-graph-if}
 \end{figure}
 
+And for while:
+
 \begin{equation}
-    \begin{aligned}
+    \begin{split}
         &edges(q_\circ \rightsquigarrow q_\bullet) \llbracket \texttt{while } b \texttt{ do } I \rrbracket = \\
         &\quad \text{let } \\
         &\quad\quad q \text{ be new nodes} \\
@@ -140,7 +146,7 @@ As visualized in \autoref{fig:tikz-program-graph-if}.
         &\quad\quad E_{\neg b} = edges(q_\circ \rightsquigarrow q_\bullet) \llbracket \neg b \rrbracket \\
         &\quad\quad E_{I} = edges(q \rightsquigarrow q_\circ) \llbracket I \rrbracket \\
         &\quad \text{in } E_{b} \cup E_{\neg b} \cup E_{I}
-    \end{aligned}\label{eq:equation9}
+    \end{split}\label{eq:equation9}
 \end{equation}
 
 As visualized in \autoref{fig:tikz-program-graph-loop}.
@@ -152,15 +158,17 @@ As visualized in \autoref{fig:tikz-program-graph-loop}.
     \label{fig:tikz-program-graph-loop}
 \end{figure}
 
+And for composition:
+
 \begin{equation}
-    \begin{aligned}
+    \begin{split}
         &edges(q_\circ \rightsquigarrow q_\bullet) \llbracket I_1; I_2 \rrbracket = \\
         &\quad \text{let } \\
         &\quad\quad q \text{ be new nodes} \\
         &\quad\quad E_{I_1} = edges(q_\circ \rightsquigarrow q) \llbracket I_1 \rrbracket \\
         &\quad\quad E_{I_2} = edges(q \rightsquigarrow q_\bullet) \llbracket I_2 \rrbracket \\
         &\quad \text{in } E_{I_1} \cup E_{I_2}
-    \end{aligned}\label{eq:equation10}
+    \end{split}\label{eq:equation10}
 \end{equation}
 
 As visualized in \autoref{fig:tikz-composition-graph}.
@@ -172,25 +180,25 @@ As visualized in \autoref{fig:tikz-composition-graph}.
     \label{fig:tikz-composition-graph}
 \end{figure}
 
-And when $I$ is a base case, that is, not a sequential, if-else or while statement:
+And when $I$ is a base case, that is, not an if-else, while, or composition statement:
 
 \begin{equation}
     edges(q_\circ \rightsquigarrow q_\bullet) \llbracket I \rrbracket = \{q_\circ \xrightarrow{I} q_\bullet\}\label{eq:equation11}
 \end{equation}
 
-Thus for some program $P = I$, the program graph of $P$ is simply $edges(q_\triangleright \rightsquigarrow q_\blacktriangleleft)\llbracket P \rrbracket$.
+Thus, for some program $P = I$, the program graph of $P$ is simply $edges(q_\triangleright \rightsquigarrow q_\blacktriangleleft)\llbracket P \rrbracket$.
 
 \subsection{Abstract Interpretation}\label{subsec:abstract-interpretation}
 
 Here we give a quick presentation abstract interpretation.
 The presentation is heavily based on~\cite{nielson_formal_2019} with some additions from~\cite{moller_statitc_nodate}.
-As the presentation is rudimentary we encourage the reader to review~\cite{noauthor_abstract_nodate} or~\cite{cousot_abstract_1996} for a informal introduction of the subject, and the respective chapters in~\cite{nielson_formal_2019} and~\cite{moller_statitc_nodate} for a more complete explanation or~\cite{cousot_abstract_1977} for the seminal work.
+As the presentation is rudimentary we encourage the reader to review~\cite{noauthor_abstract_nodate} or~\cite{cousot_abstract_1996} for an informal introduction of the subject, and the respective chapters in~\cite{nielson_formal_2019} and~\cite{moller_statitc_nodate} for a more complete explanation or~\cite{cousot_abstract_1977} for the seminal work.
 
 First we define two central notions, namely soundness and valid analysis assignments.
 
 \begin{definition}
     Given a set $\rho \in \mathfrak{E}$ of possible concrete program memories, and a set $\ab{\rho} \in \ab{\mathfrak{E}}$ of possible abstract program memories, related by a concretization function $\gamma : \mathcal{P}(\ab{\mathfrak{E}}) \rightarrow \mathcal{P}(\mathfrak{E})$.
-    A concrete semantic over program instructs $I \in \mathbb{I}$, $\sem{\cdot} : \mathbb{I} \rightarrow \mathfrak{E} \rightarrow \mathfrak{E}$ and an abstract semantic $\abssem{\cdot} : \mathbb{I} \rightarrow \mathcal{P}(\ab{\mathfrak{E}}) \rightarrow \mathcal{P}(\ab{\mathfrak{E}})$, $\abssem{\cdot}$ is said to be \emph{sound} whenever:
+    A concrete semantic over program instructions $I \in \mathbb{I}$, $\sem{\cdot} : \mathbb{I} \rightarrow \mathfrak{E} \rightarrow \mathfrak{E}$ and an abstract semantic $\abssem{\cdot} : \mathbb{I} \rightarrow \mathcal{P}(\ab{\mathfrak{E}}) \rightarrow \mathcal{P}(\ab{\mathfrak{E}})$, $\abssem{\cdot}$ is said to be \emph{sound} whenever:
     \begin{equation}
         \rho \in \concrete(\ab{E}) \land \sem{I}(m) = m' \implies m' \in \concrete(\abssem{I}(\ab{E}))\label{eq:equation12}
     \end{equation}
@@ -198,17 +206,19 @@ First we define two central notions, namely soundness and valid analysis assignm
 
 \begin{definition}
     \label{def:valid}
-    Given a program graph with vertices $Q$ and edges $E$, an assignment $A : Q \rightarrow \mathcal{P}(\ab{\mathfrak{E}})$, that assignment is said to be \emph{valid} if its the case that:
+    Given a program graph with vertices $Q$ and edges $E$, an assignment $A : Q \rightarrow \mathcal{P}(\ab{\mathfrak{E}})$, that assignment is said to be \emph{valid} if it is the case that:
     \begin{itemize}
         \item If $q_\circ \xrightarrow{I} q_\bullet \in E$ then $\abssem{I}(A(q_\circ)) \subseteq A(q_\bullet)$,
         \item and $\ab{E}_\triangleright \subseteq A(q_\triangleright)$, where $q_\triangleright$ is the initial program point in the program graph and $\ab{E}_\triangleright$ is a set of abstract memories that hold initially in the initial state.
     \end{itemize}
 \end{definition}
 
-Given the previously two definitions, if the initial abstract memories for the initial program point $\ab{E}_\triangleright$ is set such that $E_{\triangleright} \subseteq \concrete(\ab{E}_\triangleright)$, for concrete memories holding initially $E_{\triangleright}$ in the initial program point, the abstract semantics are sound and the analysis assignment is valid, then it can be shown that if $\rho \in \concrete(A(q_\circ))$ and $\langle q_\circ; \rho \rangle \xRightarrow{\omega^\star} \langle q_\bullet; \rho' \rangle$ then $\rho' \in \concrete(A(q_\bullet))$.
+Given the previous two definitions, if the initial abstract memories for the initial program point $\ab{E}_\triangleright$ is set such that $E_{\triangleright} \subseteq \concrete(\ab{E}_\triangleright)$, for concrete memories holding initially $E_{\triangleright}$ in the initial program point, the abstract semantics are sound and the analysis assignment is valid, then it can be shown that if $\rho \in \concrete(A(q_\circ))$ and $\langle q_\circ; \rho \rangle \xRightarrow{\omega^\star} \langle q_\bullet; \rho' \rangle$ then $\rho' \in \concrete(A(q_\bullet))$.
+
 What that intuitively means is that the analysis assignment is a safe over approximation of the actual state-space of the program.
-Valid analysis assignment can then readily be computed as explained in~\cite{nielson_formal_2019}, in essence valid analysis assignment are computed by iterative application of $f$ when the constraint given in \autoref{def:valid} are converted to a fix point equation $x = f(x)$.
-The prequel is essentially made possible by \autoref{thm:kleene_finite} and the fact that we construct our analysis in such a way that $f$ is over a finite and complete lattice.
+Valid analysis assignment can then readily be computed as explained in~\cite{nielson_formal_2019}.
+In essence valid analysis assignment are computed by iterative application of $f$ when the constraint given in \autoref{def:valid} are converted to a fix point equation $x = f(x)$.
+This is essentially made possible by \autoref{thm:kleene_finite} and the fact that we construct our analysis in such a way that $f$ is over a finite and complete lattice.
 Further given \autoref{thm:kleene_finite} it is easy to see that the analysis will reach a fixed point in a finite number of steps, if $f$ is defined over a finite and complete lattice.
 
 % \begin{theorem}\label{thm:galoispre}

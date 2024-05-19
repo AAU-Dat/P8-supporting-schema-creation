@@ -32,7 +32,7 @@ For the proofs and proof-sketches in this section we allow ourselves to substitu
 \end{proof}
 
 
-\begin{conjecture}\label{thm:sound-exp}
+\begin{conjecture}\label{thm:sound-bexp}
     $\abspredsem{e}$ is sound, formally $(\rho_d, \rho_a) \in \concrete_2(\env{\ab{d}}, \env{\ab{a}}) \implies \predsem{\phi}(\rho_d, \rho_a) \in \concrete_{4a}(\abspredsem{\phi}(\env{\ab{d}}, \env{\ab{a}}))$.
 \end{conjecture}
 
@@ -117,7 +117,7 @@ For the proofs and proof-sketches in this section we allow ourselves to substitu
 \end{proof}
 
 
-\begin{conjecture}\label{thm:sound-update}
+\begin{conjecture}\label{thm:sound-delete}
     $\abssqlsem{\langle delete(\absattrs), \abspred \rangle}$ is sound, formally $(\rho_d, \rho_a) \in \concrete_2(\rho_{\ab{d}}, \rho_{\ab{a}}) \implies \sqlsem{\langle delete(\absattrs), \abspred \rangle}(\rho_d, \rho_a) \in \concrete_2(\abssqlsem{\langle delete(\absattrs), \abspred \rangle}(\rho_{\ab{d}}, \rho_{\ab{a}}))$
 \end{conjecture}
 
