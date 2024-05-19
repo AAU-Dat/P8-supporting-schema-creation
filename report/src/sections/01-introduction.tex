@@ -89,18 +89,25 @@ The approach is based on the use of abstract interpretation to analyze the datab
 We use this database-program description together with Linear Temporal Logic (LTL) for describing temporal properties that is interesting with respect to the evolution of the database over time.\todo{Casper says: same as above.}
 
 \subsection{Article Overview}\label{subsec:article-overview}
-\todo[inline]{Casper says: I think we could be more specific by calling the theory section \emph{Analysis Specification}.}
-Give an overview of the sections to follow
 
-
-The Theory section of this paper will cover the theoretical framework for analyzing an abstract interpretation of a database and application.
-This includes the following:
-
+The rest of the article is structured as follows:
+In \autoref{sec:preliminaries} we cover the preliminaries needed to understand the rest of the paper, in particular we cover lattices, program graphs and their semantics and abstract interpretation.
+In \autoref{sec:theory} we describe our contribution in detail:
 \begin{itemize}
-    \item The Abstract Domains, where the different domains of our model, such as strings and integers, will be explained.
-    \item The Abstract Syntax and Semantics, where the abstract syntax is described and the abstract semantics is explained.
-    \item Abstraction and Concretization describe how the abstractions relate to their concrete counterparts.
-    % \item Finally, the Model Overview will show the system model used in the paper.
+    \item In \autoref{subsec:abstract-syntax} we describe the syntax of the language we of the analysis, further we define the conversion of programs in this language to program graphs;
+    \item in \autoref{subsec:abstract-domains} we describe the abstract domains of our analysis and how they related to the concrete domains, notably we describe:
+    \begin{itemize}
+        \item Regular expressions as an abstract domain for strings,
+        \item union intervals as an abstract domain for numbers,
+        \item cover-lattices as a technique to deal with infinite lattices in a finite manner,
+        \item Abstract bags of abstract tuples as an abstract domain of bags.
+    \end{itemize}
+    \item In \autoref{subsec:abstract-semantics} we give the abstract semantics for the instructions pertaining to the edges of program graphs, of note we define the abstract semantics for the SQL select-, insert-, update- and delete statement;
+    \item In \autoref{subsec:soundness} we argue that our analysis is sound;
+    \item and finally in \autoref{} we show that our analysis will terminate.
 \end{itemize}
+In \autoref{sec:discussion} we discuss the quality of the presented analysis and in \autoref{sec:future-works} we present new avenues for future work.
+Finally the we conclude the paper in \autoref{sec:conclusion}.
 
-Through this, we establish the theoretical framework for analyzing an abstract interpretation of a database and application.
+
+
