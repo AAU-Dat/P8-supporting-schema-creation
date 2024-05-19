@@ -22,9 +22,10 @@ For the proofs and proof-sketches in this section we allow ourselves to substitu
 
 \begin{conjecture}\label{thm:sound-bool}
     $\absboolsem{\cdot}$ is sound, formally
-    \begin{equation*}
-        (\rho_d, \rho_a) \in \concrete_2(\env{\ab{d}}, \env{\ab{a}}) \implies \boolsem{b}(\rho_d, \rho_a) \in \concrete_{4a}(\absboolsem{b}(\env{\ab{d}}, \env{\ab{a}}))
-    \end{equation*}
+    \begin{multline*}
+        (\rho_d, \rho_a) \in \concrete_2(\env{\ab{d}}, \env{\ab{a}}) \implies \\
+    \boolsem{b}(\rho_d, \rho_a) \in \concrete_{4a}(\absboolsem{b}(\env{\ab{d}}, \env{\ab{a}}))
+    \end{multline*}
 \end{conjecture}
 
 
