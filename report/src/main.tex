@@ -2,7 +2,7 @@
 %! Date = 29-12-2023
 
 % Preamble
-\documentclass[english,a4paper,compsoc]{IEEEtran}
+\documentclass[english,a4paper,compsoc,journal]{IEEEtran}
 \overfullrule=10pt
 \frenchspacing
 
@@ -12,8 +12,11 @@
 
 % Document
 \begin{document}
-    \maketitle
     \input{sections/00-abstract}
+
+    \maketitle
+    \IEEEdisplaynontitleabstractindextext
+
     \input{sections/01-introduction}
     \input{sections/03-preliminaries}
     \input{sections/04-theory}

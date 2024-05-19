@@ -1,5 +1,5 @@
 \section{Introduction}\label{sec:introduction}
-Software analysis is a broad field encompassing a wide range of techniques and methodologies, each tailored to address specific aspects of software systems.
+\IEEEPARstart{S}{oftware} analysis is a broad field encompassing a wide range of techniques and methodologies, each tailored to address specific aspects of software systems.
 One such technique is value analysis, which focuses on the behavior of a program with respect to its input and output values~\cite{jackson_software_2000}.
 Value analysis can be approached from various angles, including the consideration of meta-information like information flow or taint analysis.
 While these approaches offer valuable insights into the behavior of a program, they often require detailed knowledge of the program's internal workings and are not always applicable to all types of software systems.
@@ -23,7 +23,7 @@ To illustrate, consider the database schema \autoref{lst:motivate-sql} with the 
     \begin{minted}{sql}
         CREATE TABLE account (
             name    TEXT,
-            balance INT
+            balance INT <
         );
     \end{minted}
     \caption{A simple schema representing an account.}
