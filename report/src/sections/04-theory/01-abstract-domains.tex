@@ -137,14 +137,13 @@ Now we are able to express the concretization for regular expressions and union 
 %     We use $(h_1, h_2 \dots h_n)\into C_{\mathcal{X}}(\mathcal{S})=(h_1 \into C_{X_1}(S_1), h_2\into C_{X_2}(S_2), \dots, h_n \into C_{X_n}(S_n))$, where $\mathcal{X}=(X_1, X_2, \dots, X_n)$ and $\mathcal{S}=(S_1, S_2, \dots, S_n)$ to show how a tuples elements are inserted into the cover lattice what $\mathcal{X}$ and $\mathcal{S}$ are.
 % \end{definition}
 
-\begin{example}
     \autoref{fig:tikz-reg-partition} illustrates a simple lattice cover of the regular languages.
     The regular language $R$ is represented by the gray circle and its complement $\overline{R}$ is represented by the white circle.
     The union of the two regular language represent the entire regular language $\Sigma^*$ and their intersection is the empty set $\emptyset$.
 
     \autoref{fig:tikz-reg-partition-lattice} illustrates the cover lattice induced by the lattice cover.
     The top element $\top$ is the entire regular language $\Sigma^*$ and the bottom element $\bot$ is the empty set $\emptyset$.
-\end{example}
+
 
 % Tikzfigures
 \begin{figure}
@@ -232,8 +231,8 @@ We define the concretization of application variable values as:
     \concrete^v_{4a} : \mathsf{Val} \; \lookupcl(v) \rightarrow \mathcal{P}(\cc(\lookupcl(v))) \cup\mathcal{P}((\cc(\lookupcl(v)))^\star)\\
     \concrete^v_{4a}(\mathsf{Single} \; \ab{s}) = \concrete_6(\ab{s})\\
     \begin{split}
-        \concrete^v_{4a}(\mathsf{List} \; \ab{S'}) = \bigcup_{n \in \mathbb{N}}\biggl\{&s_1, s_2, \dots, s_n \in (\cc(\lookupcl(v)))^n \Big|\\
-        &\forall i \in \{1, 2, \dots, n\} : \exists \ab{s} \in \ab{S'} : s_i \in \concrete^v_6(\ab{s}) \biggr\}
+        \concrete^v_{4a}(\mathsf{List} \; \ab{S'}) = \bigcup_{n \in \mathbb{N}}\biggl\{&s_1, s_2, \dots, s_n \in (\cc(\lookupcl(v)))^n \\
+        & \Big| \forall i \in \{1, 2, \dots, n\} : \exists \ab{s} \in \ab{S'} : s_i \in \concrete^v_6(\ab{s}) \biggr\}
     \end{split}
 \end{gather}
 
@@ -357,8 +356,8 @@ And in the same vain we define a concretization function for sets of environment
 \begin{gather}
     \concrete_1 : \mathcal{P}(\ab{\mathfrak{E}}) \rightarrow \mathcal{P}(\mathfrak{E})\\
     \begin{split}
-        \concrete_1(\ab{P}) = \biggl\{ &(\rho_{d}, \rho_{a}) \in \mathfrak{E} \Big|\\
-        &\exists (\rho_{\ab{d}}, \rho_{\ab{a}}) \in \ab{P} : (\rho_{d}, \rho_{a}) \in \concrete_2(\rho_{\ab{d}}, \rho_{\ab{a}})\biggr\}
+        \concrete_1(\ab{P}) = \biggl\{ &(\rho_{d}, \rho_{a}) \in \mathfrak{E} \\
+        &\Big| \exists (\rho_{\ab{d}}, \rho_{\ab{a}}) \in \ab{P} : (\rho_{d}, \rho_{a}) \in \concrete_2(\rho_{\ab{d}}, \rho_{\ab{a}})\biggr\}
     \end{split}
 \end{gather}
 
