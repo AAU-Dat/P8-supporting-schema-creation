@@ -85,6 +85,10 @@ In a complete lattice $L$ with finite height, every monotone function $f : L \ri
     \end{equation}
 \end{theorem}
 
+\begin{theorem}
+    If $A$ is a set then $(\mathcal{P}(A), \subseteq, \cup, \cap)$ is a complete lattice, called the \emph{powerset lattice}.
+\end{theorem}
+
 \subsection{Program Graphs}\label{subsec:program-graphs}
 
 Because of the particular flavor of abstract interpretation we use uses program graphs instead of control flow graphs we justify the conversion here, to be more precise we justify the conversion of control flow construct defined in~\cite{halder_abstract_2012} to program graphs.
@@ -103,6 +107,9 @@ This particular flavor of abstract interpretation was chosen because it allowed 
     Finally, $q_\whitepointerright, q_\blackpointerleft \in Q$ are distinct, and no edges are to have source $q_\blackpointerleft$.
 \end{definition}
 
+Given a \emph{semantic function} $\sem{\cdot} : \mathbb{I} \rightarrow \mathfrak{E} \rightarrow \mathcal{P}(\mathfrak{E})$ over some non-empty set of memories $\mathfrak{E}$, if $q_\circ \xrightarrow{I} q_\bullet \in E$ and $\sem{I}(\rho) = P$ such that $P$ is non-empty then for all $\rho' \in P$ we have an execution steps $\langle q_\circ; \rho \rangle \xRightarrow{I} \langle q_\bullet; \rho' \rangle$.
+The reflexive and transitive closure of all such relations of an accompanying program graph is denoted $\langle q_\circ; \rho \rangle \xRightarrow{\omega^\star} \langle q_\bullet; \rho' \rangle$.
+
 \subsection{Abstract Interpretation}\label{subsec:abstract-interpretation}
 
 Here we give a quick presentation abstract interpretation.
@@ -115,7 +122,7 @@ First we define two central notions, namely soundness and valid analysis assignm
     Given a set $\rho \in \mathfrak{E}$ of possible concrete program memories, and a set $\ab{\rho} \in \ab{\mathfrak{E}}$ of possible abstract program memories, related by a concretization function $\gamma : \mathcal{P}(\ab{\mathfrak{E}}) \rightarrow \mathcal{P}(\mathfrak{E})$.
     A concrete semantic over program instructions $I \in \mathbb{I}$, $\sem{\cdot} : \mathbb{I} \rightarrow \mathfrak{E} \rightarrow \mathfrak{E}$ and an abstract semantic $\abssem{\cdot} : \mathbb{I} \rightarrow \mathcal{P}(\ab{\mathfrak{E}}) \rightarrow \mathcal{P}(\ab{\mathfrak{E}})$, $\abssem{\cdot}$ is said to be \emph{sound} whenever:
     \begin{equation}
-        \rho \in \concrete(\ab{E}) \land \sem{I}(m) = m' \implies m' \in \concrete(\abssem{I}(\ab{E}))\label{eq:equation12}
+        \rho \in \concrete(\ab{P}) \implies \sem{I}(\rho) \subseteq \concrete(\abssem{I}(\ab{P}))\label{eq:equation12}
     \end{equation}
 \end{definition}
 
@@ -137,6 +144,7 @@ In essence valid analysis assignment are computed by iterative application of $f
 This is essentially made possible by \autoref{thm:kleene_finite} and the fact that we construct our analysis in such a way that $f$ is over a finite and complete lattice.
 Further given \autoref{thm:kleene_finite} it is easy to see that the analysis will reach a fixed point in a finite number of steps, if $f$ is defined over a finite and complete lattice.
 
+The abstract syntax for SQAAL encompasses the various elements and constructs that constitute the language's grammar. These syntactic sets define the valid combinations of symbols and keywords that form syntactically correct statements in SQAAL. They include components such as keywords, identifiers, operators, literals, and punctuation marks, each serving a specific role in expressing queries and analytical operations.
 % \begin{theorem}\label{thm:galoispre}
 %     For $\gamma : L_1 \rightarrow L_2$ where $L_1$ and $L_2$ are complete lattices there exist a function $\alpha : L_2 \rightarrow L_1$ such that $\alpha$ and $\gamma$ forms a Galois connection if $\gamma\left(\bigsqcap B\right) = \bigsqcap_{b \in B}\gamma(b)$ for every $B \subseteq L_1$.
 % \end{theorem}

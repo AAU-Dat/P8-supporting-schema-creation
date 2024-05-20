@@ -15,7 +15,7 @@ We will correct this problem later in \autoref{subsubsec:cover-lattice}.
 \subsubsection{Abstract integers as union intervals}\label{subsubsec:abstract_domains_numbers} We have chosen a finite union and intersection of intervals to represent the abstract domain of the family of SQL number data types.
 We call them union of intervals as all such objects can be written as a union of intervals.
 We only consider integers, but we imagine that the domain can be easily extended to the reals.
-Let $\mathbf{INT}$ be the set of union intervals, that is inductively defined as:
+Let $\mathbf{INT}$ be the set of union intervals, with members denoted $\mathscr{I}$, that is inductively defined as:
 
 
 \begin{gather*}
@@ -25,18 +25,19 @@ Let $\mathbf{INT}$ be the set of union intervals, that is inductively defined as
 \end{gather*}
 
 
-For the set of integers $\mathbb{Z}$, we will only consider $[a, b], [a, +\infty]$ and $[-\infty, b]$ where $a \leq b$ and $a, b \in \mathbb{Z}$, as valid intervals.
+For the set of integers $\mathbb{Z}$, we will only consider $\emptyset, [a, b], [a, +\infty]$ and $[-\infty, b]$ where $a \leq b$ and $a, b \in \mathbb{Z}$, as valid intervals.
 
 We define the language of union intervals as follows:
 
 
-\begin{align}
+\begin{align*}
     \lang(\uint_1 \cup \uint_2) &= \lang(\uint_1) \cup \lang(\uint_2) \\
     \lang(\uint_1 \cap \uint_2) &= \lang(\uint_1) \cap \lang(\uint_2) \\
+    \lang(\emptyset) &= \emptyset \\
     \lang([a, b]) &= \left\{ n \in \nums \middle| a \leq n \leq b \right\} \\
     \lang([a, +\infty]) &= \left\{ n \in \nums \middle| a \leq n \right\} \\
     \lang([-\infty, b]) &= \left\{ n \in \nums \middle| n \leq b \right\}
-\end{align}
+\end{align*}
 
 
 As for the abstract domain of strings, we generally don't distinguish between a union interval $\uint$ and its language $\mathcal{L}(\uint)$ when it simplifies matters.

@@ -9,7 +9,7 @@ For the proofs and proof-sketches in this section we allow ourselves to substitu
 \begin{conjecture}\label{thm:sound-exp}
     $\absexpsem{\cdot}$ is sound, formally
     \begin{equation*}
-        (\rho_d, \rho_a) \in \concrete_2(\env{\ab{d}}, \env{\ab{a}}) \implies \expsem{e}(\rho_d, \rho_a) \in \concrete_{4a}(\absexpsem{e}\env{\ab{d}}, \env{\ab{a}})
+        (\rho_d, \rho_a) \in \concrete_2(\env{\ab{d}}, \env{\ab{a}}) \implies \expsem{e}(\rho_d, \rho_a) \subseteq \concrete_{4a}(\absexpsem{e}\env{\ab{d}}, \env{\ab{a}})
     \end{equation*}
 \end{conjecture}
 
@@ -24,7 +24,7 @@ For the proofs and proof-sketches in this section we allow ourselves to substitu
     $\absboolsem{\cdot}$ is sound, formally
     \begin{multline*}
         (\rho_d, \rho_a) \in \concrete_2(\env{\ab{d}}, \env{\ab{a}}) \implies \\
-    \boolsem{b}(\rho_d, \rho_a) \in \concrete_{4a}(\absboolsem{b}(\env{\ab{d}}, \env{\ab{a}}))
+    \boolsem{b}(\rho_d, \rho_a) \subseteq \concrete_{4a}(\absboolsem{b}(\env{\ab{d}}, \env{\ab{a}}))
     \end{multline*}
 \end{conjecture}
 
@@ -46,7 +46,7 @@ For the proofs and proof-sketches in this section we allow ourselves to substitu
     \begin{multline*}
     (\rho_d, \rho_a)
         \in \concrete_2(\env{\ab{d}}, \env{\ab{a}}) \implies \\
-        \predsem{\phi}(\rho_d, \rho_a) \in \concrete_{4a}(\abspredsem{\phi}(\env{\ab{d}}, \env{\ab{a}}))
+        \predsem{\phi}(\rho_d, \rho_a) \subseteq \concrete_{4a}(\abspredsem{\phi}(\env{\ab{d}}, \env{\ab{a}}))
     \end{multline*}
 \end{conjecture}
 
@@ -63,12 +63,12 @@ For the proofs and proof-sketches in this section we allow ourselves to substitu
     $\abssem{\texttt{skip}}$ is sound, formally
     \begin{equation*}
     (\rho_d, \rho_a)
-        \in \concrete_1(\ab{P}) \implies \sem{\texttt{skip}}(\rho_d, \rho_a) \in \concrete_1(\abssem{\texttt{skip}}(\ab{P}))
+        \in \concrete_1(\ab{P}) \implies \sem{\texttt{skip}}(\rho_d, \rho_a) \subseteq \concrete_1(\abssem{\texttt{skip}}(\ab{P}))
     \end{equation*}
 \end{conjecture}
 
 \begin{proof}
-    \pf\ Assume $\rho \in \concrete_1(\ab{P})$, then $\sem{\texttt{skip}}(\rho) = \rho$ and $\abssem{\texttt{skip}}(\ab{P}) = \ab{P}$, and therefore $\sem{\texttt{skip}}(\rho) \in \concrete_1(\abssem{\texttt{skip}}(\ab{P}))$.
+    \pf\ Assume $\rho \in \concrete_1(\ab{P})$, then $\sem{\texttt{skip}}(\rho) = \{\rho\}$ and $\abssem{\texttt{skip}}(\ab{P}) = \ab{P}$, and therefore $\sem{\texttt{skip}}(\rho) \subseteq \concrete_1(\abssem{\texttt{skip}}(\ab{P}))$.
 \end{proof}
 
 
@@ -78,7 +78,7 @@ For the proofs and proof-sketches in this section we allow ourselves to substitu
     \begin{multline*}
     (\rho_d, \rho_a)
         \in \concrete_1(\ab{P}) \implies \\
-        \sem{v_a \coloneqq e}(\rho_d, \rho_a) \in \concrete_1(\abssem{v_a \coloneqq e}(\ab{P}))
+        \sem{v_a \coloneqq e}(\rho_d, \rho_a) \subseteq \concrete_1(\abssem{v_a \coloneqq e}(\ab{P}))
     \end{multline*}
 \end{conjecture}
 
@@ -86,7 +86,7 @@ For the proofs and proof-sketches in this section we allow ourselves to substitu
 \begin{proof}
     \pf\
     Assume $(\env{d}, \env{a}) \in \concrete_1(\ab{P})$ then in $\sem{v_a \coloneqq e}(\env{d}, \env{a})$ $v_a$ is assigned to $\expsem{e}(\env{d}, \env{a})$.
-    Because $\expsem{e}(\env{d}, \env{a}) \in \concrete_{4a}(s) = \concrete_{4a}(\absexpsem{e}(\env{\ab{d}}, \env{\ab{a}}))$ for $(\env{\ab{d}}, \env{\ab{a}}) \in \ab{P}$ where $(\env{d}, \env{a}) \in \concrete_2(\env{\ab{d}}, \env{\ab{a}})$ then $\sem{v_a \coloneqq e}(\env{d}, \env{a}) \in \concrete_2(\env{\ab{d}}, \env{\ab{a}}[v_a \mapsto s])$, therefore also $\sem{v_a \coloneqq e}(\env{d}, \env{a})\in \concrete_1(\abssem{v_a \coloneqq e}(\ab{P}))$.
+    Because $\expsem{e}(\env{d}, \env{a}) \subset \concrete_{4a}(s) = \concrete_{4a}(\absexpsem{e}(\env{\ab{d}}, \env{\ab{a}}))$ for $(\env{\ab{d}}, \env{\ab{a}}) \in \ab{P}$ where $(\env{d}, \env{a}) \in \concrete_2(\env{\ab{d}}, \env{\ab{a}})$ then $\sem{v_a \coloneqq e}(\env{d}, \env{a}) \subseteq \concrete_2(\env{\ab{d}}, \env{\ab{a}}[v_a \mapsto s])$, therefore also $\sem{v_a \coloneqq e}(\env{d}, \env{a}) \subseteq \concrete_1(\abssem{v_a \coloneqq e}(\ab{P}))$.
 \end{proof}
 
 
@@ -96,15 +96,15 @@ For the proofs and proof-sketches in this section we allow ourselves to substitu
     \begin{equation*}
     (\rho_d, \rho_a)
         \in \concrete_1(\ab{P}) \implies \\
-        \sem{b}(\rho_d, \rho_a) \in \concrete_1(\abssem{b}(\ab{P}))
+        \sem{b}(\rho_d, \rho_a) \subseteq \concrete_1(\abssem{b}(\ab{P}))
     \end{equation*}
 \end{conjecture}
 
 
 \begin{proof}
     \pf\
-    Assume $(\env{d}, \env{a}) \in \concrete_1(\ab{P})$ and $\boolsem{b}(\env{d}, \env{a}) = \true$ then $\sem{b}(\env{d}, \env{a}) = (\env{d}, \env{a})$.
-    Because $\boolsem{b}(\env{d}, \env{a}) \in \concrete_{4a}(\absboolsem{b}(\env{\ab{d}}, \env{\ab{a}}))$ for $(\env{d}, \env{a}) \in \concrete_2(\env{\ab{d}}, \env{\ab{a}})$ where $(\env{\ab{d}}, \env{\ab{a}}) \in \ab{P}$ then $(\env{\ab{d}}, \env{\ab{a}})$ must be in $\abssem{b}(\ab{P})$ because $\absboolsem{b}(\env{\ab{d}}, \env{\ab{a}})$ must contain $B$ such that $B$ contains $\true$, because of the initial assumption.
+    Assume $(\env{d}, \env{a}) \in \concrete_1(\ab{P})$ and $\true \in \boolsem{b}(\env{d}, \env{a})$ then $\sem{b}(\env{d}, \env{a}) = (\env{d}, \env{a})$.
+    Because $\boolsem{b}(\env{d}, \env{a}) \subseteq \concrete_{4a}(\absboolsem{b}(\env{\ab{d}}, \env{\ab{a}}))$ for $(\env{d}, \env{a}) \in \concrete_2(\env{\ab{d}}, \env{\ab{a}})$ where $(\env{\ab{d}}, \env{\ab{a}}) \in \ab{P}$ then $(\env{\ab{d}}, \env{\ab{a}})$ must be in $\abssem{b}(\ab{P})$ because $\absboolsem{b}(\env{\ab{d}}, \env{\ab{a}})$ must contain $B$ such that $B$ contains $\true$, because of the initial assumption.
 \end{proof}
 
 
@@ -114,7 +114,7 @@ For the proofs and proof-sketches in this section we allow ourselves to substitu
     \begin{multline*}
     (\rho_d, \rho_a)
         \in \concrete_2(\rho_{\ab{d}}, \rho_{\ab{a}}) \implies \\
-        \sqlsem{\langle select(v_a, v_d, \mathbf{v}_t), \phi \rangle}(\rho_d, \rho_a) \in \\
+        \sqlsem{\langle select(v_a, v_d, \mathbf{v}_t), \phi \rangle}(\rho_d, \rho_a) \subseteq \\
         \concrete_2(\abssqlsem{\langle select(v_a, v_d, \mathbf{v}_t), \phi \rangle}(\rho_{\ab{d}}, \rho_{\ab{a}}))
     \end{multline*}
 \end{conjecture}
@@ -133,7 +133,7 @@ For the proofs and proof-sketches in this section we allow ourselves to substitu
     \begin{multline*}
     (\rho_d, \rho_a)
         \in \concrete_2(\rho_{\ab{d}}, \rho_{\ab{a}}) \implies \\
-        \sqlsem{\langle insert(\mathbf{v}_d, \mathbf{e}), \phi \rangle}(\rho_d, \rho_a) \in \\
+        \sqlsem{\langle insert(\mathbf{v}_d, \mathbf{e}), \phi \rangle}(\rho_d, \rho_a) \subseteq \\
         \concrete_2(\abssqlsem{\langle insert(\mathbf{v}_d, \mathbf{e}), \phi \rangle}(\rho_{\ab{d}}, \rho_{\ab{a}}))
     \end{multline*}
 
@@ -153,7 +153,7 @@ For the proofs and proof-sketches in this section we allow ourselves to substitu
     \begin{multline*}
     (\rho_d, \rho_a)
         \in \concrete_2(\rho_{\ab{d}}, \rho_{\ab{a}}) \implies \\
-        \sqlsem{\langle update(\absattrs, \absexps), \abspred \rangle}(\rho_d, \rho_a) \in \\
+        \sqlsem{\langle update(\absattrs, \absexps), \abspred \rangle}(\rho_d, \rho_a) \subseteq \\
         \concrete_2(\abssqlsem{\langle update(\absattrs, \absexps), \abspred \rangle}(\rho_{\ab{d}}, \rho_{\ab{a}}))
     \end{multline*}
 \end{conjecture}
@@ -177,7 +177,7 @@ For the proofs and proof-sketches in this section we allow ourselves to substitu
     \begin{multline*}
     (\rho_d, \rho_a)
         \in \concrete_2(\rho_{\ab{d}}, \rho_{\ab{a}}) \implies \\
-        \sqlsem{\langle delete(\absattrs), \abspred \rangle}(\rho_d, \rho_a) \in \\
+        \sqlsem{\langle delete(\absattrs), \abspred \rangle}(\rho_d, \rho_a) \subseteq \\
         \concrete_2(\abssqlsem{\langle delete(\absattrs), \abspred \rangle}(\rho_{\ab{d}}, \rho_{\ab{a}}))
     \end{multline*}
 \end{conjecture}
@@ -195,7 +195,7 @@ For the proofs and proof-sketches in this section we allow ourselves to substitu
     $\abssem{C_{sql}}$ is sound, formally
     \begin{equation*}
     (\rho_d, \rho_a)
-        \in \concrete_1(\ab{P}) \implies \sem{C_{sql}}(\rho_d, \rho_a) \in \concrete_1(\abssem{C_{sql}}(\ab{P}))
+        \in \concrete_1(\ab{P}) \implies \sem{C_{sql}}(\rho_d, \rho_a) \subseteq \concrete_1(\abssem{C_{sql}}(\ab{P}))
     \end{equation*}
 \end{conjecture}
 
@@ -210,7 +210,7 @@ For the proofs and proof-sketches in this section we allow ourselves to substitu
     $\abssem{I}$ is sound, formally
     \begin{equation*}
         (\rho_d, \rho_a)
-            \in \concrete_1(\ab{P}) \implies \sem{I}(\rho_d, \rho_a) \in \concrete_1(\abssem{I}(\ab{P}))
+            \in \concrete_1(\ab{P}) \implies \sem{I}(\rho_d, \rho_a) \subseteq \concrete_1(\abssem{I}(\ab{P}))
     \end{equation*}
 \end{conjecture}
 
