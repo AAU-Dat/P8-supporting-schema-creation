@@ -5,8 +5,7 @@
 \RequirePackage{clrscode4e}
 \usepackage{microtype}
 \usepackage{mathtools}
-\usepackage{stix2}
-\usepackage{FiraMono}
+\usepackage[notext]{stix2}
 \usepackage{booktabs}
 \usepackage{tikz}
 \usepackage{amsmath}
@@ -26,9 +25,8 @@
     url=false
 ]{biblatex}
 
-\usepackage{stmaryrd}
 \usepackage{pf2}
-\usepackage{anyfontsize}
+\usepackage{orcidlink}
 
 % Package setup
 \makeatletter
@@ -80,8 +78,8 @@
 
 \usetikzlibrary{shapes, arrows, fit, calc, automata, positioning}
 
-\newcommand{\abssem}[1]{\ab{\mathcal{S}} \llbracket #1 \rrbracket}
-\newcommand{\sem}[1]{\mathcal{S} \llbracket #1 \rrbracket}
+\newcommand{\abssem}[1]{\ab{\mathcal{S}} \lBrack #1 \rBrack}
+\newcommand{\sem}[1]{\mathcal{S} \lBrack #1 \rBrack}
 \newcommand{\env}[1]{\rho_{#1}}
 \newcommand{\abstablep}{t'^{\#}}
 \newcommand{\absvars}{\ab{a}}
@@ -94,10 +92,10 @@
 \newcommand{\concrete}{\gamma}
 \newcommand{\aabstract}{\alpha}
 \DeclareMathOperator{\map}{map}
-\newcommand{\absboolsem}[1]{\widehat{\mathcal{B}}\llbracket #1 \rrbracket}
-\newcommand{\boolsem}[1]{\mathcal{B}\llbracket #1 \rrbracket}
-\newcommand{\absexpsem}[1]{\widehat{\mathcal{E}}\llbracket #1 \rrbracket}
-\newcommand{\expsem}[1]{\mathcal{E}\llbracket #1 \rrbracket}
+\newcommand{\absboolsem}[1]{\widehat{\mathcal{B}}\lBrack #1 \rBrack}
+\newcommand{\boolsem}[1]{\mathcal{B}\lBrack #1 \rBrack}
+\newcommand{\absexpsem}[1]{\widehat{\mathcal{E}}\lBrack #1 \rBrack}
+\newcommand{\expsem}[1]{\mathcal{E}\lBrack #1 \rBrack}
 \newcommand{\true}{t\!t}
 \newcommand{\false}{f\!\!f}
 \newcommand{\unknown}{?\!?}
@@ -113,11 +111,11 @@
 \newcommand{\comp}{comp}
 \newcommand{\into}{\hookrightarrow}
 \newcommand{\lookupcl}{\mathcal{C}}
-\newcommand{\abssqlsem}[1]{\widehat{\mathcal{Q}}\llbracket #1 \rrbracket}
-\newcommand{\sqlsem}[1]{\mathcal{Q}\llbracket #1 \rrbracket}
-\newcommand{\abspredsem}[1]{\widehat{\mathcal{W}}\llbracket #1 \rrbracket}
-\newcommand{\predsem}[1]{\mathcal{W}\llbracket #1 \rrbracket}
-\newcommand{\absatomsem}[1]{\widehat{\mathcal{T}}\llbracket #1 \rrbracket}
+\newcommand{\abssqlsem}[1]{\widehat{\mathcal{Q}}\lBrack #1 \rBrack}
+\newcommand{\sqlsem}[1]{\mathcal{Q}\lBrack #1 \rBrack}
+\newcommand{\abspredsem}[1]{\widehat{\mathcal{W}}\lBrack #1 \rBrack}
+\newcommand{\predsem}[1]{\mathcal{W}\lBrack #1 \rBrack}
+\newcommand{\absatomsem}[1]{\widehat{\mathcal{T}}\lBrack #1 \rBrack}
 \newcommand{\app}[1]{\;\left \lParen#1\right \rParen\;}
 \newcommand{\regexs}{\mathbf{REG}}
 \newcommand{\regex}{R}

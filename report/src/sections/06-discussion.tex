@@ -31,18 +31,19 @@ we clearly see how their semantics introduce duplicate entries in a table, where
 
 
 \begin{table}
+    \renewcommand{\arraystretch}{1.3}
     \centering
-    \caption{Table 8 from~\cite{halder_abstract_2012}}
+    \caption{Table 8 From~\cite{halder_abstract_2012}}
     \begin{tabular}{lll}
         \toprule
-        $Age^\sharp$ & $Dno^\sharp$ & $Sal^\sharp$ \\ \midrule
-        {[}25,59{]}             & 2                       & {[}1500,2499{]}         \\
-        {[}12,24{]}             & 1                       & {[}1500,2499{]}         \\
-        {[}25,59{]}             & 2                       & {[}1500,2499{]}         \\
-        {[}5,11{]}              & 1                       & {[}1500,2499{]}         \\
-        {[}25,59{]}             & 3                       & {[}2500,10000{]}        \\
-        {[}60,100{]}            & 1                       & {[}1500,2499{]}         \\
-        {[}12,24{]}             & 2                       & {[}2500,10000{]}        \\ \bottomrule
+        $Age^\sharp$ & $Dno^\sharp$ & $Sal^\sharp$   \\ \midrule
+        $[25,59]$    & 2            & $[1500,2499]$  \\
+        $[12,24]$    & 1            & $[1500,2499]$  \\
+        $[25,59]$    & 2            & $[1500,2499]$  \\
+        $[5,11]$     & 1            & $[1500,2499]$  \\
+        $[25,59]$    & 3            & $[2500,10000]$ \\
+        $[60,100]$   & 1            & $[1500,2499]$  \\
+        $[12,24]$    & 2            & $[2500,10000]$ \\ \bottomrule
     \end{tabular}\label{tab:table-halder}
 \end{table}
 
