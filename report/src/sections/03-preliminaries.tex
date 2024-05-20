@@ -107,6 +107,9 @@ This particular flavor of abstract interpretation was chosen because it allowed 
     Finally, $q_\whitepointerright, q_\blackpointerleft \in Q$ are distinct, and no edges are to have source $q_\blackpointerleft$.
 \end{definition}
 
+Given a \emph{semantic function} $\sem{\cdot} : \mathbb{I} \rightarrow \mathfrak{E} \rightarrow \mathcal{P}(\mathfrak{E})$ over some non-empty set of memories $\mathfrak{E}$, if $q_\circ \xrightarrow{I} q_\bullet \in E$ and $\sem{I}(\rho) = P$ such that $P$ is non-empty then for all $\rho' \in P$ we have an execution steps $\langle q_\circ; \rho \rangle \xRightarrow{I} \langle q_\bullet; \rho' \rangle$.
+The reflexive and transitive closure of all such relations of an accompanying program graph is denoted $\langle q_\circ; \rho \rangle \xRightarrow{\omega^\star} \langle q_\bullet; \rho' \rangle$.
+
 \subsection{Abstract Interpretation}\label{subsec:abstract-interpretation}
 
 Here we give a quick presentation abstract interpretation.
@@ -119,7 +122,7 @@ First we define two central notions, namely soundness and valid analysis assignm
     Given a set $\rho \in \mathfrak{E}$ of possible concrete program memories, and a set $\ab{\rho} \in \ab{\mathfrak{E}}$ of possible abstract program memories, related by a concretization function $\gamma : \mathcal{P}(\ab{\mathfrak{E}}) \rightarrow \mathcal{P}(\mathfrak{E})$.
     A concrete semantic over program instructions $I \in \mathbb{I}$, $\sem{\cdot} : \mathbb{I} \rightarrow \mathfrak{E} \rightarrow \mathfrak{E}$ and an abstract semantic $\abssem{\cdot} : \mathbb{I} \rightarrow \mathcal{P}(\ab{\mathfrak{E}}) \rightarrow \mathcal{P}(\ab{\mathfrak{E}})$, $\abssem{\cdot}$ is said to be \emph{sound} whenever:
     \begin{equation}
-        \rho \in \concrete(\ab{E}) \land \sem{I}(m) = m' \implies m' \in \concrete(\abssem{I}(\ab{E}))\label{eq:equation12}
+        \rho \in \concrete(\ab{P}) \implies \sem{I}(\rho) \subseteq \concrete(\abssem{I}(\ab{P}))\label{eq:equation12}
     \end{equation}
 \end{definition}
 
