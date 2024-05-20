@@ -18,27 +18,28 @@ Further we differentiate between the instructions allowed on the edges of a prog
 We will finish this section by showing the conversion between program and program graph, but before we can do that we need to introduce the syntax.
 
 The abstract syntax of SQAAL is defined in terms of the syntactic sets introduced in \autoref{fig:syntatic-sets}.
+
 \begin{figure}[htb!]
-     \center
+    \center
     \begin{tabular}{r p{0.6\columnwidth }}
-    $n \in \mathbb{Z}$                          & Integers                                                   \\
-    $k \in \mathbb{S}$                          & Strings                                                    \\
-    $\mathscr{I} \in \mathbf{INT}$                          & Non-deterministic integer                                                   \\
-    $R \in \mathbf{REG}$                          & Non-deterministic string                                                   \\
-    $c \in \mathbb{C}$                          & Constants                                                 \\
-    $v_a \in \mathbb{V}_a$                      & Application variables                                     \\
-    $v_d \in \mathbb{V}_d$                      & Database variables \\
-    $v_t \in \mathbb{V}_t$                    & Column variables   \\
-    $v \in \mathbb{V} = \mathbb{V}_a \cup \mathbb{V}_t$ & Variables                                                 \\
-    $e \in \mathbb{E}$                          & Arithmetic expressions                                    \\
-    $b \in \mathbb{B}$                          & Boolean expressions                                       \\
-    $\tau \in \mathbb{T}$                       & Terms                                                     \\
-    $a_f \in \mathbb{A}_f$                      & Atomic formulas                                           \\
-    $\phi  \in \mathbb{W}$                      & Well-formed formulas (pre-condition part of SQL commands) \\
-    $A_{sql} \in \mathbb{A}_{sql}$              & Action part of SQL commands                               \\
-    $C_{sql} \in \mathbb{C}_{sql}$              & SQL commands                                              \\
-    $I \in \mathbb{I}$                          & Program graph instructions                                     \\
-    $P \in \mathbb{P}$                        & Program instructions                                            \\
+        $n \in \mathbb{Z}$                                  & Integers                                                  \\
+        $k \in \mathbb{S}$                                  & Strings                                                   \\
+        $\mathscr{I} \in \mathbf{INT}$                      & Interval unions                                           \\
+        $R \in \mathbf{REG}$                                & Regular expressions                                       \\
+        $c \in \mathbb{C}$                                  & Constants                                                 \\
+        $v_a \in \mathbb{V}_a$                              & Application variables                                     \\
+        $v_d \in \mathbb{V}_d$                              & Database variables                                        \\
+        $v_t \in \mathbb{V}_t$                              & Column variables                                          \\
+        $v \in \mathbb{V} = \mathbb{V}_a \cup \mathbb{V}_t$ & Variables                                                 \\
+        $e \in \mathbb{E}$                                  & Arithmetic expressions                                    \\
+        $b \in \mathbb{B}$                                  & Boolean expressions                                       \\
+        $\tau \in \mathbb{T}$                               & Terms                                                     \\
+        $a_f \in \mathbb{A}_f$                              & Atomic formulas                                           \\
+        $\phi  \in \mathbb{W}$                                & Well-formed formulas (pre-condition part of SQL commands) \\
+        $A_{sql} \in \mathbb{A}_{sql}$                      & Action part of SQL commands                               \\
+        $C_{sql} \in \mathbb{C}_{sql}$                      & SQL commands                                              \\
+        $I \in \mathbb{I}$                                  & Program graph instructions                                \\
+        $P \in \mathbb{P}$                                  & Program instructions                                      \\
     \end{tabular}
     \caption{Syntatic Sets}
     \label{fig:syntatic-sets}

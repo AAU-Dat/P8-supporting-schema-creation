@@ -69,12 +69,9 @@ Additionally, we use LTL as described in X, Y, and Z to describe properties to c
 
 
 \subsection{Related Work}\label{subsec:related-work}
+This paper builds on the seminal work of abstract interpretation by Cousot and Cousot~\cite{cousot_abstract_1977}, and in particular we consider the follow-up paper~\cite{cousot_abstract_1996} from which we take the idea of using intervals and regular expressions as the abstract domains in our analysis.
 
-\todo[inline]{Casper says: The seminal work of \cite{cousot_abstract_1977} should also be mentioned here.}
-
-\todo[inline]{Casper says: \cite{cousot_abstract_1996} should also be mentioned here, and maybe the fact that we try to \emph{implement} some of the ideas mentioned namely regular expressions as abstract domains and kindof linear inequalities and in that regard we should mention \cite{li2010abstract}.}
-
-This paper builds on work of abstract interpretation of database queries by Cortesi and Halder~\cite{halder_abstract_2012}.
+Additionally, we heavily use the work of abstract interpretation of database queries by Cortesi and Halder~\cite{halder_abstract_2012}.
 Concretely, we use their work for analysing a database schema in relation to a program using the syntax they describe.\todo[inline]{Casper says: the Related Works section should also give  brief outline of their contribution.}
 
 
@@ -86,7 +83,7 @@ This paper extends the Abstract Interpretation framework for static dependency a
 Kashyap et al.~\cite{kashyap_integrity_2022} have proposed a new approach to integrity checking of database applications using abstract interpretation.
 The approach is based on the use of abstract interpretation to analyze the database application and to check the integrity of the data, i.e., to verify that the data is consistent with the constraints defined in the database management system.
 
-We use this database-program description together with Linear Temporal Logic (LTL) for describing temporal properties that is interesting with respect to the evolution of the database over time.\todo{Casper says: same as above.}
+%We use this database-program description together with Linear Temporal Logic (LTL) for describing temporal properties that is interesting with respect to the evolution of the database over time.\todo{Casper says: same as above.}
 
 \subsection{Article Overview}\label{subsec:article-overview}
 
