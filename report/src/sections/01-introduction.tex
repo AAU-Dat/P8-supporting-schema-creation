@@ -48,26 +48,6 @@ Extending the analysis to consider abstract tuples, not just abstract values, it
 \todo{\textbf{TODO:Show the contributions through a second example that runs through how we used the updated semantics. Move from method}
 }
 
-\subsection{Contributions}\label{subsec:contributions}
-\todo[inline]{Casper says: These section (\ref{subsec:contributions}, \ref{subsec:related-work}, \ref{subsec:article-overview}) read like notes, I assume they are.}
-
-Use Halder concretely for abstract interpretation
-
-This paper builds on work of abstract interpretation of database queries by Cortesi and Halder.
-Concretely, we use their work for analysing a database schema in relation to a program using the syntax they describe.
-
-
-Improve on the levels of abstraction, i.e., add not just abstract values but also abstract tuples
-
-Describe an implementable algorithm for performing static analysis targeting specific properties, given a program and database.
-
-Prove soundness for the analysis.
-
-
-Describe the properties we wish to check using LTL-like encodings, i.e., phrases like \emph{always, eventually,} and \emph{never}, to describe undesirable database states.\todo{Casper says: As of now we are only able to check invariants.}
-Additionally, we use LTL as described in X, Y, and Z to describe properties to check against.
-
-
 \subsection{Related Work}\label{subsec:related-work}
 This paper builds on the seminal work of abstract interpretation by Cousot and Cousot~\cite{cousot_abstract_1977}, and in particular we consider the follow-up paper~\cite{cousot_abstract_1996} from which we take the idea of using intervals and regular expressions as the abstract domains in our analysis.
 
@@ -84,6 +64,42 @@ Kashyap et al.~\cite{kashyap_integrity_2022} have proposed a new approach to int
 The approach is based on the use of abstract interpretation to analyze the database application and to check the integrity of the data, i.e., to verify that the data is consistent with the constraints defined in the database management system.
 
 %We use this database-program description together with Linear Temporal Logic (LTL) for describing temporal properties that is interesting with respect to the evolution of the database over time.\todo{Casper says: same as above.}
+
+\subsection{Contributions}\label{subsec:contributions}
+\todo[inline]{Casper says: These section (\ref{subsec:contributions}, \ref{subsec:related-work}, \ref{subsec:article-overview}) read like notes, I assume they are.}
+
+%Use Halder concretely for abstract interpretation:
+As described in \autoref{subsec:related-work}, one of our main contributions is describing an analysis made by extending the work made by Cortesi and Halder.
+
+%Improve on the levels of abstraction, i.e., add not just abstract values but also abstract tuples:
+
+Included in this, we extend the level of abstraction used in the analysis.
+Where they only abstract over tuples, this paper abstracts over both the tuples and values, and the multiplicity of the tuples and values in the database, ultimately guaranteeing a finite analysis.
+This is thoroughly covered in \autoref{sec:theory}.
+
+%Describe an implementable algorithm for performing static analysis targeting specific properties, given a program and database:
+
+Also included in the contribution is a description of an analysis used to check properties when given a program and its associated database.
+
+While we have not provided a specific method for checking general properties, we have outlined a systematic approach for verifying invariants.
+Invariants are a particular type of property that should always be held during the program's execution.
+
+This way, we can run the analysis on the program and afterward check at each step of the program if the invariant holds.
+If it does not, we can stop the analysis and report that the program is incorrect.
+
+We can check for invariants in every state of the program.
+We do this in a program graph, where each node represents a state of the program.
+We can check if the invariant holds in each node.
+This way, we can systematically verify the program's correctness throughout its execution.
+
+The invariants can be checked with the predicate syntax which is described in \autoref{fig:abstract-syntax}.
+
+%Prove soundness for the analysis:
+To ensure that our work is correct, we informally prove soundness of the analysis.
+By doing this, we can always be sure that our analysis produces an overestimation of the concrete values and tuples.
+The soundness proof can be found in \autoref{subsec:soundness}.
+
+%Describe the properties we wish to check using LTL-like encodings, i.e., phrases like \emph{always, eventually,} and \emph{never}, to describe undesirable database states.\todo{Casper says: As of now we are only able to check invariants.}
 
 \subsection{Article Overview}\label{subsec:article-overview}
 
