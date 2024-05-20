@@ -51,21 +51,49 @@ Extending the analysis to consider abstract tuples, not just abstract values, it
 \subsection{Contributions}\label{subsec:contributions}
 \todo[inline]{Casper says: These section (\ref{subsec:contributions}, \ref{subsec:related-work}, \ref{subsec:article-overview}) read like notes, I assume they are.}
 
-Use Halder concretely for abstract interpretation
+%Use Halder concretely for abstract interpretation:
+This paper builds on the work of abstract interpretation of database queries by Cortesi and Halder.
+Concretely, we use their work to analyze a database schema concerning a program using an alteration of the syntax they describe.
 
-This paper builds on work of abstract interpretation of database queries by Cortesi and Halder.
-Concretely, we use their work for analysing a database schema in relation to a program using the syntax they describe.
+%Improve on the levels of abstraction, i.e., add not just abstract values but also abstract tuples:
 
+Also, by building upon their work, we extend the level of abstraction used in the analysis.
+Where they only abstracted over values, this paper also abstracts over tuples in the database, ultimately guaranteeing a finite analysis.
+This is thoroughly covered in \autoref{sec:theory}.
 
-Improve on the levels of abstraction, i.e., add not just abstract values but also abstract tuples
+%Describe an implementable algorithm for performing static analysis targeting specific properties, given a program and database:
 
-Describe an implementable algorithm for performing static analysis targeting specific properties, given a program and database.
+Also included in the contribution is an implementable algorithm, which can be used for performing static analysis.
+This algorithm targets specific properties when given a program and its associated database.
+The allowed properties can be seen in the following \autoref{subsubsec:properties}.
 
-Prove soundness for the analysis.
+%Prove soundness for the analysis:
+To ensure that our abstractions are correct, we informally prove their soundness.
+By doing this, we can always be sure that our abstractions are an overestimation of the concrete values and tuples.
+This ensures that an abstract value always represents a concrete value.
+The soundness proof can be found in \autoref{subsec:soundness}.
 
+%Describe the properties we wish to check using LTL-like encodings, i.e., phrases like \emph{always, eventually,} and \emph{never}, to describe undesirable database states.\todo{Casper says: As of now we are only able to check invariants.}
+\subsubsection{Properties} \label{subsubsec:properties}
+While we have not provided a specific method for checking general properties, we have outlined a systematic approach for verifying invariants.
+Invariants are a particular type of property that should always be held during the program's execution.
 
-Describe the properties we wish to check using LTL-like encodings, i.e., phrases like \emph{always, eventually,} and \emph{never}, to describe undesirable database states.\todo{Casper says: As of now we are only able to check invariants.}
-Additionally, we use LTL as described in X, Y, and Z to describe properties to check against.
+This way, we can check at each step of the program to see if the invariant holds, and if it does not, we can stop the analysis and report that the program is incorrect.
+
+We can check for invariants in every state of the program.
+We do this in the program graph, where each node represents a state of the program.
+We can check if the invariant holds in each node.
+This way, we can systematically verify the program's correctness throughout its execution.
+
+Describing an invariant is done using $\forall$, $\exists$, $\land$, $\lor$, and $\neg$.
+
+An example of an invariant is:
+\begin{equation}
+    \forall x \in \mathbb{N} : x \geq 0
+\end{equation}
+
+This invariant states that for all $x$ in the set of natural numbers $\mathbb{N}$, $x$ must be greater than or equal to 0.
+The invariant must hold in every state of the program where x is considered.
 
 
 \subsection{Related Work}\label{subsec:related-work}
