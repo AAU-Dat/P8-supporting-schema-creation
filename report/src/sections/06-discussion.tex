@@ -23,8 +23,7 @@ Although the paper provided an extensive syntax and semantics, it was not capabl
 We found that using their semantics for an analysis could result in it being non-terminating,
 therefore deeming it not viable.
 The non-termination can be seen in the way that they represent abstract tables.
-Specifically, in \autoref{tab:table-halder},
-we clearly see how their semantics introduce duplicate entries in a table, where $({[}25,59{]},2,{[}1500,2499{]})$ appears twice.
+Specifically, in \autoref{tab:table-halder}, we clearly see how their semantics introduce duplicate entries in a table, where $({[}25,59{]},2,{[}1500,2499{]})$ appears twice.
 
 
 \begin{table}
@@ -48,7 +47,6 @@ we clearly see how their semantics introduce duplicate entries in a table, where
 This means that a situation can happen, where adding more of the same tuples could end up enlarging the analysis indefinitely.
 Specifically, it happens during \textit{infinite} programs with no end state, such as the one shown in \autoref{fig:programgraph}.\todo{Figure does not exist.}
 
-
 This is exactly what this paper tries to escape.
 As mentioned in \autoref{subsubsec:abstract_domain_of_tables}, using abstract bags of abstract tuples eliminates the possibility of having duplicate tuples.
 So, in the paper~\cite{halder_abstract_2012}, an \textit{infinite} program could result in adding even more duplicate tuples, increasing the state space indefinitely.
@@ -57,15 +55,14 @@ Instead, we will simply keep the already existing tuple, conclude that we now po
 Exactly this is the key difference that makes sure that our implementation is finite.
 
 Changing the way in which the abstractions are represented means that quite a lot of change is needed for the semantics.
-So even though this paper provides a model that can be used for actual analysis, it also has its compromises.
-Due to time constraints, it has not been possible to cover as much of SQL as ~\cite{halder_abstract_2012} does.
+So even though this paper provides a model that can be used for actual analysis, it also has its compromises - it has not been possible to cover as much of SQL as~\cite{halder_abstract_2012} does.
 
 Therefore, due to the need to discard some semantics, programs using these missing commands/actions can not be analyzed.
 This limitation restricts the programs and schemas that can implement this paper's model.
 However, programs that only use semantics covered by SQAAL can be analyzed, even if they are infinite.
 This means that while SQAAL can handle non-terminating programs, there are many programs SQAAL can not handle that Halder's implementation can manage.
 
-An example of this is in the SELECT SQL action: SQAAL is currently unable to handle additional methods such as DISTINCT and GROUP BY, whereas the implementation in ~\cite{halder_abstract_2012} can.
+An example of this is in the SELECT SQL action: SQAAL is currently unable to handle additional methods such as DISTINCT and GROUP BY, whereas the implementation in~\cite{halder_abstract_2012} can.
 
 This limits the amount of use cases the tool could be used for, naturally leaving an expansion of the tool to future work.
 
@@ -73,33 +70,29 @@ As mentioned, a plan was also established to implement a system that made use of
 Unfortunately, it was not possible to make such a system, given the amount of work was required to ensure a terminating analysis.
 Considering the complicated nature of the analysis, which quickly gets cumbersome if carried out in hand, a system would be required to provide a meaningful use in the future.
 
-
 Moreover, the choice of SQL, as the language for the implementation, added more complication than necessary.
 The reason for this is that the language has many implementation features that are different from dialect to dialect.
 Therefore, it might have been better to use a more abstract language, as relational algebra, to implement the system.
 Especially since the contribution in this paper only defined a subset of the operations of the chosen SQL dialect, which is PostgreSQL.
 The choice of SQL dialect was not chosen for a noteworthy reason though.
 
-
 The current way that the top-covers and cover-lattices are supposed to be derived is also vague, we simply state that they are given by the user through some mechanism.
 One such way would require the user to tag each variable and database attribute with a top-cover such that the respective cover-lattices could be derived.
 This method would be easy to implement but would be very cumbersome for the user, even in the case where top-covers could be shared between variables.
 We think it could be interesting the refine the notion and explore mechanism that would make this method less cumbersome for the user.
+
 For future work we propose:
 If the tagging of a variables with a top-cover was viewed as type one could make use of methods from type systems.
 As an example: Type inference could be used to infer the top-covers of certain variables, and maybe the top-covers could be inferred from the properties that were being tested.
 Ideally this notion should be explored in a simple language without the weirdness introduced in the language of this paper.
 
-
 As of the current implementation, the abstract interpretation is limited to integers, therefore one of the improvements that could be made is to extend the abstract interpretation to support floating point numbers.
 The extension of the abstract interpretation to support floating point numbers would allow for more programs to be analyzed.
 One of the obstacles to this extension is the fact that floating point operations are handles differently in different programming languages, which makes it difficult to create a general abstraction.
 
-
 Another area that could be further developed is the rigorousness of the soundness proof.
 At the current state of the soundness proof is more akin to a sketch of a proof, rather than a full proof.
 Ideally the implementation of the analysis and the concrete semantics should have been developed in a proof assistant, such that the soundness could have been proven formally.
-
 
 We know for a fact that our analysis is not optimal in regards to precision, observe that the definition of the $\aab{length}$ in \autoref{eq:length}, there we are explicitly being less precise than we could be to dodge a NP-hard problem.
 Besides this obvious example there are probably unnecessary slack elsewhere, therefore one could also try to increase the precision of the abstract interpretation in such places.
