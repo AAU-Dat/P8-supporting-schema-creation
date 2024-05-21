@@ -3,17 +3,6 @@ This sections presents some ideas for future works that could be pursued to exte
 Some of the areas explored in this paper could be further developed.
 One of these areas is the use of abstract interpretation in regard to numbers.
 Numbers can come in a few different type when dealing with databases.
-As of the current implementation, the abstract interpretation is limited to integers, therefore one of the improvements that could be made is to extend the abstract interpretation to support floating point numbers.
-The extension of the abstract interpretation to support floating point numbers would allow for a more precise analysis of the database queries.
-One of the obstacles to this extension is the fact that floating point numbers are represented in a different ways in different programming languages, which makes it difficult to create a general abstract interpretation for floating point numbers.
-
-Another area that could be further developed is the rigorousness of the soundness proof.
-At the current state of the soundness proof is more akin to a sketch of a proof, rather than a full proof.
-Therefore, one of the future works could be to further develop the soundness proof to make it more rigorous.
-This would involve going through the proof and making sure that all the steps are correct and that all the assumptions are valid, which would require a lot of time and effort, but would make the proof more reliable and increase the confidence in the results of the abstract interpretation.
-
-Besides the rigor, you could also try to increase the precision of the abstract interpretation.
-To reach this goal, you could try to make a proof of optimality but as of now it is not certain if the current analysis is optimal.
 
 Currently, this paper only shows the theoretical approach to this problem therefore one of the future works could be to implement the abstract semantics in a program that could be used to analyze a database system and check for some requested properties.
 For such a program to be made a lot of work would be needed to implement the abstract interpretation and the semantics in a way that would be able to analyze a general database system with some of the restrictions there are in the current state of the theory.
