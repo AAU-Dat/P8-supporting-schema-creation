@@ -3,18 +3,20 @@
 In the following section we will describe the abstract domains of our value analysis.
 
 \subsubsection{Abstract strings as regular expressions}\label{subsubsec:abstract_domains_strings}
-We have chosen to use regular expressions/languages to represent the abstract domain of the family of SQL string data types.
+We have chosen regular expressions/languages to represent the abstract domain of the family of SQL string data types.
 Regular expressions/languages are used instead of more powerful representations because of the decidable nature of inclusion and equality between them.
 
-Let $\regexs$ denote the set of regular expressions, for elements of $\regex \in \regexs$ we denote the language of $\regex$ as $\lang(\regex)$.
+Let $\regexs$ denote the set of regular expressions; for elements of $\regex \in \regexs$, we denote the language of $\regex$ as $\lang(\regex)$.
 In general, we will not distinguish between $R$ and $\lang(\regex)$ when it simplifies matters.
-The lattice of $(\regexs, \subseteq, \cup, \cap)$ is a lattice but not a finite one, this is a problem: Essentially, we want the state-space our analysis to be finite, such that we can employ the Kleene fixed-point theorem (see \autoref{thm:kleene_finite}) to prove the termination of our analysis.
-If the state-space is built from infinite parts the state-space itself will be infinite.
+The lattice of $(\regexs, \subseteq, \cup, \cap)$ is a lattice but not a finite one; this is a problem: Essentially, we want the state-space of our analysis to be finite, such that we can employ the Kleene fixed-point theorem (see \autoref{thm:kleene_finite}) to prove the termination of our analysis.
+If the state-space is built from infinite parts, the state-space itself will be infinite.
 We will correct this problem later in \autoref{subsubsec:cover-lattice}.
 
-\subsubsection{Abstract integers as union intervals}\label{subsubsec:abstract_domains_numbers} We have chosen a finite union and intersection of intervals to represent the abstract domain of the family of SQL number data types.
-We call them union of intervals as all such objects can be written as a union of intervals.
-We only consider integers, but we imagine that the domain can be easily extended to the reals.
+\subsubsection{Abstract integers as union intervals}\label{subsubsec:abstract_domains_numbers}
+We have chosen a finite union and intersection of intervals to represent the abstract domain of the family of SQL number data types.
+Using a finite union ensures that operations such as union, intersection, and membership checking remain computable and efficient, which would not be feasible with infinite unions due to their inherent computational complexity.
+We call them a union of intervals as all such objects can be written as a union of intervals.
+We only consider integers, but the domain can be easily extended to the reals.
 Let $\mathbf{INT}$ be the set of union intervals, with members denoted $\mathscr{I}$, that is inductively defined as:
 
 
