@@ -120,7 +120,7 @@ First we define two central notions, namely soundness and valid analysis assignm
 
 \begin{definition}
     Given a set $\rho \in \mathfrak{E}$ of possible concrete program memories, and a set $\ab{\rho} \in \ab{\mathfrak{E}}$ of possible abstract program memories, related by a concretization function $\gamma : \mathcal{P}(\ab{\mathfrak{E}}) \rightarrow \mathcal{P}(\mathfrak{E})$.
-    A concrete semantic over program instructions $I \in \mathbb{I}$, $\sem{\cdot} : \mathbb{I} \rightarrow \mathfrak{E} \rightarrow \mathfrak{E}$ and an abstract semantic $\abssem{\cdot} : \mathbb{I} \rightarrow \mathcal{P}(\ab{\mathfrak{E}}) \rightarrow \mathcal{P}(\ab{\mathfrak{E}})$, $\abssem{\cdot}$ is said to be \emph{sound} whenever:
+    A concrete semantic over program instructions $I \in \mathbb{I}$, $\sem{\cdot} : \mathbb{I} \rightarrow \mathfrak{E} \rightarrow \mathcal{P}(\mathfrak{E})$ and an abstract semantic $\abssem{\cdot} : \mathbb{I} \rightarrow \mathcal{P}(\ab{\mathfrak{E}}) \rightarrow \mathcal{P}(\ab{\mathfrak{E}})$, $\abssem{\cdot}$ is said to be \emph{sound} whenever:
     \begin{equation}
         \rho \in \concrete(\ab{P}) \implies \sem{I}(\rho) \subseteq \concrete(\abssem{I}(\ab{P}))\label{eq:equation12}
     \end{equation}

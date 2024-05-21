@@ -243,10 +243,13 @@ For the purpose of proving soundness later we also overload $\gamma_{4a}$ as fol
 \begin{align}
     \concrete_{4a} &: \mathsf{Val} \; \regexs \rightarrow \mathcal{P}(\strs) \cup \mathcal{P}(\strs^\star)\\
     \concrete_{4a} &: \mathsf{Val} \; \uints \rightarrow \mathcal{P}(\nums) \cup \mathcal{P}(\nums^\star) \\
-    \concrete_{4a} &: \mathsf{Val} \; \mathcal{P}(\bools) \rightarrow \mathcal{P}(\bools) \cup \mathcal{P}(\bools^\star)
 \end{align}
 
-With the same \emph{implementation} as above where $\bools = \{\true, \false, \mnull\}$.
+With the same \emph{implementation} as above, and:
+\begin{align}
+    \concrete_{4a} &: \mathcal{P}(\{\true, \false, \mnull\}) \rightarrow \mathcal{P}(\{\true, \false, \mnull\}) \\
+    \concrete_{4a} &= \mathrm{id}
+\end{align}
 
 \subsubsection{Abstract tables}\label{subsubsec:abstract_domain_of_tables}
 We consider a concrete table $t$ as function from the domain of possible tuples in the table $\mathbf{TUP}$ to the codomain of natural numbers including $0$, $\mathbf{NAT}$:
