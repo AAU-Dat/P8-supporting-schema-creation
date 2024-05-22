@@ -52,8 +52,7 @@ Extending the analysis to consider abstract tuples, not just abstract values, it
 This paper builds on the seminal work of abstract interpretation by Cousot and Cousot~\cite{cousot_abstract_1977}, and in particular we consider the follow-up paper~\cite{cousot_abstract_1996} from which we take the idea of using intervals and regular expressions as the abstract domains in our analysis.
 
 Additionally, we heavily use the work of abstract interpretation of database queries by Cortesi and Halder~\cite{halder_abstract_2012}.
-Concretely, we use their work for analysing a database schema in relation to a program using the syntax they describe.\todo[inline]{Casper says: the Related Works section should also give  brief outline of their contribution.}
-
+Concretely, we use their work for analysing a database schema in relation to a program using the syntax they describe.
 
 Jana et al.~\cite{jana_extending_2020} have extended the application of abstract interpretation to the domain of web security.
 Dependency information (data- and/or control-dependencies) among program variables and program statements is playing crucial roles in a wide range of software-engineering activities, e.g., program slicing, information flow security analysis, debugging, code optimization, code reuse, code understanding.
@@ -63,30 +62,20 @@ This paper extends the Abstract Interpretation framework for static dependency a
 Kashyap et al.~\cite{kashyap_integrity_2022} have proposed a new approach to integrity checking of database applications using abstract interpretation.
 The approach is based on the use of abstract interpretation to analyze the database application and to check the integrity of the data, i.e., to verify that the data is consistent with the constraints defined in the database management system.
 
-%We use this database-program description together with Linear Temporal Logic (LTL) for describing temporal properties that is interesting with respect to the evolution of the database over time.\todo{Casper says: same as above.}
 
 \subsection{Contributions}\label{subsec:contributions}
-\todo[inline]{Casper says: These section (\ref{subsec:contributions}, \ref{subsec:related-work}, \ref{subsec:article-overview}) read like notes, I assume they are.}
-
-%Use Halder concretely for abstract interpretation:
 As described in \autoref{subsec:related-work}, one of our main contributions is describing an analysis made by extending the work made by Cortesi and Halder.
 
-%Improve on the levels of abstraction, i.e., add not just abstract values but also abstract tuples:
-
 Included in this, we extend the level of abstraction used in the analysis.
-Where they only abstract over tuples, this paper abstracts over both the tuples and values, and the multiplicity of the tuples and values in the database, ultimately guaranteeing a finite analysis.
+Where~\cite{halder_abstract_2012} only abstract over values, we abstract over both the tuples and values, and the multiplicity of the tuples and values in the database, ultimately guaranteeing a finite analysis.
 This is thoroughly covered in \autoref{sec:theory}.
 
-%Describe an implementable algorithm for performing static analysis targeting specific properties, given a program and database:
-
 Also included in the contribution is a description of an analysis used to check properties when given a program and its associated database.
-
 While we have not provided a specific method for checking general properties, we have outlined a systematic approach for verifying invariants.
 Invariants are a particular type of property that should always be held during the program's execution.
 
 This way, we can run the analysis on the program and afterward check at each step of the program if the invariant holds.
 If it does not, we can stop the analysis and report that the program is incorrect.
-
 We can check for invariants in every state of the program.
 We do this in a program graph, where each node represents a state of the program.
 We can check if the invariant holds in each node.
@@ -94,18 +83,15 @@ This way, we can systematically verify the program's correctness throughout its 
 
 The invariants can be checked with the predicate syntax which is described in \autoref{fig:abstract-syntax}.
 
-%Prove soundness for the analysis:
 To ensure that our work is correct, we informally prove soundness of the analysis.
 By doing this, we can always be sure that our analysis produces an overestimation of the concrete values and tuples.
 The soundness proof can be found in \autoref{subsec:soundness}.
 
-%Describe the properties we wish to check using LTL-like encodings, i.e., phrases like \emph{always, eventually,} and \emph{never}, to describe undesirable database states.\todo{Casper says: As of now we are only able to check invariants.}
-
 \subsection{Article Overview}\label{subsec:article-overview}
-
 The rest of the article is structured as follows:
 In \autoref{sec:preliminaries} we cover the preliminaries needed to understand the rest of the paper, in particular we cover lattices, program graphs and their semantics and abstract interpretation.
 In \autoref{sec:theory} we describe our contribution in detail:
+
 \begin{itemize}
     \item In \autoref{subsec:abstract-syntax} we describe the syntax of the language we of the analysis, further we define the conversion of programs in this language to program graphs;
     \item in \autoref{subsec:abstract-domains} we describe the abstract domains of our analysis and how they related to the concrete domains, notably we describe:
@@ -117,8 +103,9 @@ In \autoref{sec:theory} we describe our contribution in detail:
     \end{itemize}
     \item In \autoref{subsec:abstract-semantics} we give the abstract semantics for the instructions pertaining to the edges of program graphs, of note we define the abstract semantics for the SQL select-, insert-, update- and delete statement;
     \item In \autoref{subsec:soundness} we argue that our analysis is sound;
-    \item and finally in \autoref{} we show that our analysis will terminate.
+    \item and finally in \autoref{} we show that our analysis will terminate.\todo{Write this section/subsection}
 \end{itemize}
+
 In \autoref{sec:discussion} we discuss the quality of the presented analysis and in \autoref{sec:future-works} we present new avenues for future work.
 Finally the we conclude the paper in \autoref{sec:conclusion}.
 

@@ -3,16 +3,10 @@
 
 \IEEEtitleabstractindextext{%
     \begin{abstract}
-        \textbf{Number unos:}
-        Halder and Cortesi et al. proposed using abstract interpretation to represent database flows. Their article
-        describes using soundness to guarantee states that a database cannot come in. However, the abstract interpretation does not consider termination, hindering the usability of the analysis.
-
-        This paper addresses this problem by proposing a smaller abstract interpretation that can terminate.
-        We proceed by providing the abstract syntax of how the analysis should be written with semantics. Last, we provide formal proof that the analysis is indeed sound.
-        \textbf{Number dos:}
-        Halder and Cortesi et al. proposed using abstract interpretation to represent database flows. Their approach utilizes soundness to ensure certain database states are unreachable. However, their abstract interpretation does not account for termination, limiting the usability of the analysis.
-        This paper addresses this issue by proposing a more refined abstract interpretation that ensures termination. We provide the abstract syntax and semantics for implementing this analysis. Finally, we present a formal proof demonstrating the soundness of our proposed method.
-
+        This paper presents an extension of abstract interpretation applied to SQL, aiming to overcome the non-termination problem in Halder and Cortesi's work.
+        Our method resolves this non-termination issue by introducing additional abstractions for both tuples and values.
+        Additionally, we introduce new abstractions of the values using regular expressions for strings and intervals for integers, which we have seen mentioned by Cousot but have yet to find any papers on or implementations for.
+        Our framework is informally proven to be sound and terminate reliably, providing a solid foundation for future research.
     \end{abstract}
     \begin{IEEEkeywords}
         Abstract Interpretation, Databases, Formal Verification, Program Analysis
