@@ -36,25 +36,8 @@ For the proofs and proof-sketches in this section we allow ourselves to substitu
     Therefore $\absboolsem{b_1 \; bop_b \; b_2}$ and $\absboolsem{bop_u \; b}$ are sound.
     In the case of $\absboolsem{e_1 \; comp \; e_2}$ due to ambiguity in how lists of values are handled the predicate of if-then-else statements due to~\cite{halder_abstract_2012}, we graciously overestimate when $b_1$ or $b_2$ evaluates to list types adding $\{\true, \false\}$ to the possible result, essentially allowing all behavior in Boolean instructions under these conditions.
     Otherwise, we compare the values as expected taking care to overestimate the respective comparison operations, due to brevity we won't go into the respective operations.
-    The soundness of $\absboolsem{\cdot}$, of course depends on $\absexpsem{\cdot}$ as each Boolean expression has leafs corresponding to some expression in $\mathbb{E}$.
-\end{proof}
-
-
-\begin{conjecture}
-    \label{thm:sound-bexp}
-    $\abspredsem{e}$ is sound, formally
-    \begin{multline*}
-    (\rho_d, \rho_a)
-        \in \concrete_2(\env{\ab{d}}, \env{\ab{a}}) \implies \\
-        \predsem{\phi}(\rho_d, \rho_a) \subseteq \concrete_{4a}(\abspredsem{\phi}(\env{\ab{d}}, \env{\ab{a}}))
-    \end{multline*}
-\end{conjecture}
-
-
-\begin{proof}
-    \pfsketch\
-    $\abspredsem{b}$ is in essence just an extension of $\absboolsem{\cdot}$ that includes quantifiers, therefore we essentially only need to prove soundness of those.
     Both quantifiers are turned into repeated application of either abstract conjunction and abstract disjunction over the elements being quantified, soundness then follows from the fact that abstract conjunction and disjunction are over approximations.
+    The soundness of $\absboolsem{\cdot}$, of course depends on $\absexpsem{\cdot}$ as each Boolean expression has leafs corresponding to some expression in $\mathbb{E}$.
 \end{proof}
 
 
