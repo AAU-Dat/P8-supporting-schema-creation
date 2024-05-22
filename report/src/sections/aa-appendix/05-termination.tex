@@ -1,0 +1,36 @@
+\section{Proof of theorem \ref{thm:absenv}}
+
+\absenv*
+
+\begin{proof}
+   We know that $\ab{\mathfrak{E}}$ is a function mapping application variable names $v_a$ to abstract values, and table names $v_d$ to abstract tables.
+    \step{application}{$\ab{\mathfrak{E}}_a$ is a finite and complete lattice}
+    \begin{proof}
+        \pf\ From \autoref{eq:absenva} we know that $\ab{\mathfrak{E}}_a$ maps to the union of the cover lattices between all application variables.
+        We then know from \autoref{eq:lookupcl} that the type $S_i$ of each cover lattice is either \textbf{REG} with some $X_i=\mathcal{R}\subset\textbf{REG}$ or \textbf{INT} with some $X_i=\mathcal{I}\subset\textbf{INT}$.
+        This means that from \autoref{co:topcoverr} and~\ref{co:topcoveri}, we know that the cover lattices are all finite and complete lattices.
+        Therefore, the union must also be a finite and complete lattice.
+        \qedstep
+        \begin{proof}
+            \pf\ By \stepref{application}
+        \end{proof}
+    \end{proof}
+    \step{database}{$\ab{\mathfrak{E}}_d$ is a finite and complete lattice}
+    \begin{proof}
+        \pf\ From \autoref{eq:absenvd} we see that $\ab{\mathfrak{E}}_d$ maps to the union of all database variables $v_d$, where we take the powerset of the cartesian product between the cover lattices of all table variables in the given database variable.
+        As in \stepref{application}, we know from \autoref{eq:lookupcl} that the type $S_i$ of each cover lattice is either \textbf{REG} with some $X_i=\mathcal{R}\subset\textbf{REG}$ or \textbf{INT} with some $X_i=\mathcal{I}\subset\textbf{INT}$.
+        Again, this means that from \autoref{co:topcoverr} and~\ref{co:topcoveri}, we know that the cover lattices are all finite and complete lattices.
+        So naturally, the cartesian product between finite and complete lattices will still be a finite and complete lattice.
+        Taking the powerset of these then means that we consider all subsets of this cartesian product.
+        Again, a subset of a finite and complete lattice will still be finite and complete.
+        For the same reason, the union between all database variables must also be a finite and complete lattice.
+        \qedstep
+        \begin{proof}
+            \pf\ By \stepref{database}
+        \end{proof}
+    \end{proof}
+    \qedstep
+    \begin{proof}
+        \pf\ By \stepref{application} and \stepref{database}
+    \end{proof}
+\end{proof}

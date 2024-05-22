@@ -1,0 +1,20 @@
+\subsection{Termination}\label{subsec:termination}
+
+In this subsection we will argument for our analysis terminating.
+
+Our analysis takes base in the semantics for instructions $\abssem{I}$.
+Hence, to prove that our analysis terminates, we would need to show that $\abssem{I}$ always reaches a fixed point.
+
+As seen in \autoref{eq:abssemtype}, $\abssem{I}$ maps to $\mathcal{P}(\ab{\mathfrak{E}})$.
+We know from \autoref{thm:csql} that $\abssem{I}$ is a monotone function.
+So from \autoref{thm:kleene_finite}, we see that, in order for the analysis to reach a fixed point in a finite number of steps, $\mathcal{P}(\ab{\mathfrak{E}})$ has to be defined over a finite and complete lattice.
+
+To show that $\mathcal{P}(\ab{\mathfrak{E}})$ is a finite and complete lattice, we must show that $\ab{\mathfrak{E}}$ is a finite and complete lattice, as the powerset is merely all subsets.
+To show that $\ab{\mathfrak{E}}$ is a finite and complete lattice, we prove the following theorem:
+
+\begin{restatable}{theorem}{absenv}\label{thm:absenv}
+$\ab{\mathfrak{E}}$ is a finite and complete lattice.
+\end{restatable}
+
+Now, from \autoref{thm:absenv} we can conclude that $\mathcal{P}(\ab{\mathfrak{E}})$ must also be a finite and complete lattice.
+So, since $\abssem{I}$ is a monotone function and $\mathcal{P}(\ab{\mathfrak{E}})$ is a complete and finite lattice, we can conclude from \autoref{thm:kleene_finite} that our analysis reaches a fixed point in a finite number of steps, proving termination.
