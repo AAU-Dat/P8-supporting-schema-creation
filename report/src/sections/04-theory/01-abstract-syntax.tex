@@ -32,9 +32,6 @@ The abstract syntax of SQAAL is defined in terms of the syntactic sets introduce
         $v \in \mathbb{V} = \mathbb{V}_a \cup \mathbb{V}_t$ & Variables                                                 \\
         $e \in \mathbb{E}$                                  & Arithmetic expressions                                    \\
         $b \in \mathbb{B}$                                  & Boolean expressions                                       \\
-        $\tau \in \mathbb{T}$                               & Terms                                                     \\
-        $a_f \in \mathbb{A}_f$                              & Atomic formulas                                           \\
-        $\phi  \in \mathbb{W}$                                & Well-formed formulas (pre-condition part of SQL commands) \\
         $A_{sql} \in \mathbb{A}_{sql}$                      & Action part of SQL commands                               \\
         $C_{sql} \in \mathbb{C}_{sql}$                      & SQL commands                                              \\
         $I \in \mathbb{I}$                                  & Program graph instructions                                \\
@@ -50,18 +47,16 @@ For simplicity's sake we assume that $\mathbb{V}_a$, $\mathbb{V}_d$ and $\mathbb
 \begin{figure}[htb!]
     \center
     \begin{tabular}{r p{0.65\columnwidth}}
-        $c \Coloneqq$ & $n \mid k \mid R \mid \mathscr{I}$ \\
+        $? \Coloneqq$ & $R \mid \mathscr{I}$ \\
+        $c \Coloneqq$ & $n \mid k \mid \; ?$ \\
         $v \Coloneqq$ & $v_t \mid v_a$ \\
-        $e \Coloneqq$ & $c \mid v \mid op_u\; e \mid \;e_1 op_b\; e_2$ for $op_u = \{-, lower, upper, bit\_length length\}$ and $op_b = \{+, -, *, /, ||\}$ \\
+        $e \Coloneqq$ & $c \mid v \mid op_u\; e \mid \;e_1 op_b\; e_2$ for $op_u = \{-, lower, upper, bit\_length, length\}$ and $op_b = \{+, -, *, /, ||\}$ \\
 
-        $b \Coloneqq$ & $e_1 = e_2 \mid e_1 \leq e_2 \mid e_1 < e_2 \mid \neg b \mid b_1 \lor b_2 \mid b_1 \land b_2 \mid \texttt{true} \mid \texttt{false}$ \\
-
-        $a_f \Coloneqq$ & $e_1 = e_2 \mid e_1 \leq e_2 \mid e_1 < e_2$ \\
-        $\phi \Coloneqq$ & $a_f \mid \neg \phi_1 \mid \phi_1 \lor \phi_2 \mid \phi_1 \land \phi_2 \mid \forall v_n \phi \mid \exists v_n \phi$ \\
+        $b \Coloneqq$ & $e_1 = e_2 \mid e_1 \leq e_2 \mid e_1 < e_2 \mid \neg b \mid b_1 \lor b_2 \mid b_1 \land b_2 \mid \texttt{true} \mid \texttt{false} \mid \forall v_n b \mid \exists v_n b$ \\
         $A_{sql} \Coloneqq$ & $select(v_a, v_d, \mathbf{v}_t) \mid update(v_d, \mathbf{v}_t, \mathbf{e}) \mid delete(v_d) \mid insert(v_d, \mathbf{v}_t, \mathbf{e})$ \\
-        $C_{sql} \Coloneqq$ & $\langle A_{sql}, \phi \rangle $ \\
-        $I \Coloneqq$ & $\texttt{skip} \mid v_a \coloneqq e \mid C_{sql} \mid b$ \\
-        $P \Coloneqq$ & $\texttt{skip} \mid v_a \coloneqq e \mid C_{sql} \mid \texttt{if } b \texttt{ then } P_1 \texttt{ else } P_2 \mid \texttt{while } b \texttt{ do } P \mid P_1; P_2 \mid P_1 \texttt{[]} P_2 $ \\
+        $C_{sql} \Coloneqq$ & $\langle A_{sql}, b \rangle $ \\
+        $I \Coloneqq$ & $\texttt{skip} \mid v_a \coloneqq e \mid v_a \coloneqq \; ? \mid C_{sql} \mid b$ \\
+        $P \Coloneqq$ & $\texttt{skip} \mid v_a \coloneqq e \mid v_a \coloneqq \; ? \mid C_{sql} \mid \texttt{if } b \texttt{ then } P_1 \texttt{ else } P_2 \mid \texttt{while } b \texttt{ do } P \mid P_1; P_2 \mid P_1 \texttt{[]} P_2 $ \\
     \end{tabular}
     \caption{Abstract Syntax}
     \label{fig:abstract-syntax}
@@ -69,6 +64,7 @@ For simplicity's sake we assume that $\mathbb{V}_a$, $\mathbb{V}_d$ and $\mathbb
 
 Now we are ready to define the conversion from program to program graph.
 The conversion is given by the function $edges$ which in the recursive cases are defined as follows, starting with the if-then-else statement, as visualized in \autoref{fig:tikz-program-graph-if}:
+We allow non-deterministic values of $R$ and $\mathscr{I}$ to be constants for the purpose of defining the abstract semantics later on, however we do not allow such constant values to appear in expressions of programs in $\mathbb{P}$, however we do allow such values to appear on the right hand side of an assignment if they are not part of an expression.
 
 \begin{equation}
     \begin{split}
