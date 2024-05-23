@@ -54,7 +54,7 @@ The program inserts a tuple into the account table with the name "name" and a ba
 \end{listing}
 
 
-Constantly changing database contexts under Cortesi and Halder's framework may lead to analysis termination issues.
+Constantly changing database contexts under Cortesi and Halder's framework may lead to analysis termination issues. \todo{Gabriela, are you sure about this?, wouldn't the definition given on page 145 of (Halder Cortesi), (abstract insert) be used for this and since it is based on set union, then reach a fixed point?}
 However, there is a solution.
 By extending the analysis to include abstract tuples, i.e. representing tuples with abstract values and abstracting over the multiplicity in the table, the analysis can terminate even for the program in \autoref{lst:motivate-program}.
 
