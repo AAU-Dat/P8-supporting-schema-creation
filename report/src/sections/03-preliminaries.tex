@@ -84,7 +84,7 @@ In a complete lattice $L$ with finite height, every monotone function $f : L \ri
     \end{equation}
 \end{theorem}
 
-\begin{theorem}
+\begin{theorem}\label{thm:powerset}
     If $A$ is a set then $(\mathcal{P}(A), \subseteq, \cup, \cap)$ is a complete lattice, called the \emph{powerset lattice}.
 \end{theorem}
 
@@ -141,7 +141,7 @@ What that intuitively means is that the analysis assignment is a safe over appro
 Valid analysis assignment can then readily be computed as explained in~\cite{nielson_formal_2019}.
 In essence we can convert the constraints given in \autoref{def:valid} to a fixed point equation $x = f(x)$ as follows
 For each node $q_i \in Q$ for $|Q| = n$ construct the equation:
-\begin{align}
+\begin{align} \label{eq:q}
     A(q_i) &= A(q_i) \cup \left(\bigcup_{q \in pred(q_i)} \abssem{I}(A(q))\right) \\
     A(q_i) &= f_i(A(q_1), \dots A(q_n))
 \end{align}
@@ -151,7 +151,7 @@ In the special case of the initial state the equation is:
     A(q_\whitepointerright) &= f_\whitepointerright(A(q_1), A(q_2), \dots A(q_n))
 \end{align}
 These equations can then be converted to one equation $x = f(x)$, yielding:
-\begin{multline}
+\begin{multline} \label{eq:constraint}
         (A(q_1), \dots, A(q_n)) \\
         = (f_1(A(q_1), \dots, A(q_n)), \\
         \dots, f_n(A(q_1), \dots, A(q_n)))
