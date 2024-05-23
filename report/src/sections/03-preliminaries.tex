@@ -150,11 +150,10 @@ In the special case of the initial state the equation is:
     A(q_\whitepointerright) &= A(q_\whitepointerright) \cup \ab{E}_\whitepointerright \cup  \left(\bigcup_{q \in pred(q)} \abssem{I}(A(q))\right) \\
     A(q_\whitepointerright) &= f_\whitepointerright(A(q_1), A(q_2), \dots A(q_n))
 \end{align}
-These equations can then be converted to one equation $\mathbf{x} = f(\mathbf{x})$, yielding:
+These equations can then be converted to one equation $\mathbf{x} = f(\mathbf{x})$ with $f : \bigtimes_{i = 1}^n \powerset{\ab{\environments}} \rightarrow \bigtimes_{i = 1}^n \powerset{\ab{\environments}}$, yielding:
 \begin{multline}\label{eq:constraint}
-        (A(q_1), \dots, A(q_n)) \\
-        = (f_1(A(q_1), \dots, A(q_n)), \\
-        \dots, f_n(A(q_1), \dots, A(q_n)))
+    (A(q_1), \dots, A(q_n)) = \\
+    (f_1(A(q_1), \dots, A(q_n)), \dots, f_n(A(q_1), \dots, A(q_n)))
 \end{multline}
 
 Assuming that $\powerset{\ab{\environments}}$ is finite and complete lattice and therefore by \autoref{thm:product-lattice} $\bigtimes_{i = 1}^n \powerset{\ab{\environments}}$ is a finite and complete lattice, then by \autoref{thm:kleene_finite} we can find a solution to the equation $\mathbf{x} = f(\mathbf{x})$ by iterative application of $f$ on the least element $\emptyset$ until a fixed point is reached.

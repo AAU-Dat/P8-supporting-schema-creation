@@ -2,15 +2,12 @@
 
 In this subsection we will argument for our analysis terminating.
 
-Our analysis takes base in the constraint function seen in \autoref{eq:constraint}.
-Hence, to prove that our analysis terminates, we would need to show that this function always reaches a fixed point.
-Therefore, from \autoref{thm:kleene_finite} we need to show that the function is monotone and a complete and finite lattice.
+Our analysis takes base in the constraint function $f$ defined in \autoref{eq:constraint}.
+Hence, to prove that our analysis terminates, we would need to show that this function $f$ always reaches a fixed point.
+Therefore, from \autoref{thm:kleene_finite} we need to show that the function is monotone and defined over a complete and finite lattice.
 
-As \autoref{eq:q} is defined over the abstract semantics, we need to show that $\abssem{I}$ is monotone, in order for it to be monotone.
-Though, we have already showed in \autoref{thm:csql} that $\abssem{I}$ is monotone, hence \autoref{eq:q} is also monotone.
-
-Now, looking at the type of \autoref{thm:csql}, we see that it maps to the tuples over the powerset of abstract environments.
-So from \autoref{thm:kleene_finite}, we see that, in order for the analysis to reach a fixed point in a finite number of steps, $\bigtimes_{i = 1}^n \mathcal{P}(\ab{\mathfrak{E}})$ has to finite and complete.
+Now, looking at the type of $f$, we see that it maps from and to tuples over the powerset of abstract environments.
+So from \autoref{thm:kleene_finite}, we see that, in order for the analysis to reach a fixed point in a finite number of steps, $\bigtimes_{i = 1}^n \mathcal{P}(\ab{\mathfrak{E}})$ has to be a finite and complete lattice.
 
 To show that $\bigtimes_{i = 1}^n \mathcal{P}(\ab{\mathfrak{E}})$ is finite and complete, we must first show that $\ab{\mathfrak{E}}$ is finite.
 To show that $\ab{\mathfrak{E}}$ is finite, we prove the following theorem:
@@ -21,4 +18,8 @@ $\ab{\mathfrak{E}}$ is finite.
 
 Now, from \autoref{thm:absenv} and \autoref{thm:powerset} we can conclude that the powerset $\mathcal{P}(\ab{\mathfrak{E}})$ is a finite and complete lattice.
 Following this, from \autoref{thm:product-lattice} it also holds that $\bigtimes_{i = 1}^n \mathcal{P}(\ab{\mathfrak{E}})$ is a finite and complete lattice.
-So, since our constraint function \autoref{eq:constraint} is a monotone function and $\bigtimes_{i = 1}^n \mathcal{P}(\ab{\mathfrak{E}})$ is a complete and finite lattice, we can conclude from \autoref{thm:kleene_finite} that our analysis reaches a fixed point in a finite number of steps, proving termination.
+
+If $\abssem{I}$ is monotone, then $f$ is monotone.
+Though, we have already showed in \autoref{thm:csql} that $\abssem{I}$ is monotone, hence $f$ is also monotone.
+
+Since our constraint function $f$ is a monotone function over the complete and finite lattice $\bigtimes_{i = 1}^n \mathcal{P}(\ab{\mathfrak{E}})$, we can conclude from \autoref{thm:kleene_finite} that our analysis reaches a fixed point in a finite number of steps, proving termination.
