@@ -1,10 +1,12 @@
 \section{Introduction}\label{sec:introduction}
 \IEEEPARstart{S}{oftware} analysis is a broad field encompassing various techniques and methodologies, each tailored to address specific aspects of software systems.
-One such technique is sound analysis, which focuses on finding information guaranteed to hold during execution~\cite{jackson_software_2000}.
-Two common approaches to sound analysis are dynamic and static analysis.
-Dynamic analysis finds information guaranteed to hold at a specific execution, while static analysis involves finding information guaranteed to hold at all executions.
-While the dynamic approach offers valuable insights into the specific behaviour of a program's single execution, static analysis provides a more comprehensive view by ensuring that certain properties hold in all possible executions.
-In this paper, we use static program analysis, specifically abstract interpretation, to analyze software behaviour.
+Static analysis is one such technique, focusing on finding information guaranteed to hold at all executions of a program~\cite{jackson_software_2000}.
+Data flow analysis is a common approach within static analysis, used to examine the data flow through a program.
+In this paper, we employ static program analysis, specifically abstract interpretation, a specialized form of data flow analysis, to analyze software behaviour.
+
+%Two common approaches to sound analysis are dynamic and static analysis.
+%Dynamic analysis finds information guaranteed to hold at a specific execution, while static analysis involves finding information guaranteed to hold at all executions.
+%While the dynamic approach offers valuable insights into the specific behaviour of a program's single execution, static analysis provides a more comprehensive view by ensuring that certain properties hold in all possible executions~\cite{jackson_software_2000}.
 
 Abstract interpretation, first proposed by Cousot and Cousot in 1977~\cite{cousot_abstract_1977}, has emerged as a fundamental method for static program analysis.
 Over the years, it has evolved into a versatile tool, finding applications across various programming paradigms and system architectures.
@@ -17,9 +19,10 @@ This paper continues in these footsteps, aiming to further explore and extend th
 
 \subsection{Non-terminating Analysis}\label{subsec:non-terminating-analysis}
 The framework proposed by Halder and Cortesi may encounter non-termination issues.
-While it optimizes integrity constraints through static analysis of transactions, it does not specify particular properties to check.
-To illustrate, consider the database schema in \autoref{lst:motivate-sql}, the insert query in \autoref{lst:motivate-sql-insert} and the program in \autoref{lst:motivate-program}.
-The program inserts a tuple into the account table with the name "name" and a balance of 1 into the table account, and it does so indefinitely.
+While it can used to optimize integrity constraints through static analysis of transactions, it does not specify particular properties to check.
+To illustrate, consider the database schema in \autoref{lst:motivate-sql}, the insert query in \autoref{lst:motivate-sql-insert}, and the program in \autoref{lst:motivate-program}.
+The program inserts a tuple into the account table with the name "name" and a balance of 1 into the account table, and it does so indefinitely.
+
 
 \begin{listing}
     \begin{minted}{sql}
@@ -51,9 +54,9 @@ The program inserts a tuple into the account table with the name "name" and a ba
 \end{listing}
 
 
-The database context would constantly change under Cortesi and Halder's framework, potentially leading to analysis termination issues.
+Constantly changing database contexts under Cortesi and Halder's framework may lead to analysis termination issues.
 However, there is a solution.
-Extending the analysis to include abstract tuples where the values are abstract, the analysis can terminate even for the program in \autoref{lst:motivate-program}.
+By extending the analysis to include abstract tuples, i.e. representing tuples with abstract values and abstracting over the multiplicity in the table, the analysis can terminate even for the program in \autoref{lst:motivate-program}.
 
 
 \todo{\textbf{TODO:Show the contributions through a second example that runs through how we used the updated semantics. Move from method}
