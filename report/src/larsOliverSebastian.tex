@@ -1,4 +1,39 @@
-This paper investegates the application of analysing an abstract database schema in conjunction with a program, to check if some properties of the two are upheld. By using LTL properties and lattice theory, converting programs to graphs , and an abstract syntax, the database schema and program can be analysed 
+This paper investigates the application of analysing an abstract database schema in conjunction with a program, to check if some properties of the two are upheld.
+By using LTL properties and lattice theory, converting programs to graphs , and an abstract syntax, the database schema and program can be analysed
 
 
-\begin {abstract}     Papers like\cite{halder_abstract_2012} have shown that abstract interpretation can be used to analyze the behavior of database queries.     Some of the issues that are found in some of these already existing papers are failure to terminate, or the analysis is not precise enough.     This paper presents a novel approach to the abstract interpretation of database queries.     The abstract interpretation is based on the abstract semantics of the database queries, which are defined in terms of abstract domains.     The abstract domains are used to represent the possible values of the database queries, and the abstract interpretation is used to analyze the possible behaviors of the database queries.     This paper also presents a new way of representing strings in the form af regular expressions, which allows for a more precise analysis of the database queries, as well as integer values represented as intervals.     \end{abstract}
+\begin {abstract}
+    Halder and Cortesi et al.\ have shown that abstract interpretation can be used to analyse the behavior of database queries.
+    Some of the issues that are found in some of these already existing papers are failure to terminate, or the analysis is not precise enough.
+    This paper presents a novel approach to the abstract interpretation of database queries.
+    The abstract interpretation is based on the abstract semantics of the database queries, which are defined in terms of abstract domains.
+    The abstract domains are used to represent the possible values of the database queries, and the abstract interpretation is used to analyse the possible behaviors of the database queries.
+    This paper also presents a new way of representing strings in the form af regular expressions, which allows for a more precise analysis of the database queries, as well as integer values represented as intervals.
+\end{abstract}
+
+
+\textbf{Number unos:}
+Halder and Cortesi et al.\ proposed using abstract interpretation to represent database flows.
+Their article describes using soundness to guarantee states that a database cannot come in.
+However, the abstract interpretation does not consider termination, hindering the usability of the analysis.
+This paper addresses this problem by proposing a smaller abstract interpretation that can terminate.
+We proceed by providing the abstract syntax of how the analysis should be written with semantics.
+Last, we provide an informal proof that the analysis is indeed sound.
+
+\textbf{Number dos:}
+Halder and Cortesi et al.\ proposed using abstract interpretation to represent database flows.
+Their approach utilizes soundness to ensure certain database states are unreachable.
+However, their abstract interpretation does not account for termination, limiting the usability of the analysis.
+This paper addresses this issue by proposing a more refined abstract interpretation that ensures termination.
+We provide the abstract syntax and semantics for implementing this analysis.
+Finally, we present a formal proof demonstrating the soundness of our proposed method.
+
+%In this paper, we extend and simplify the application of abstract interpretation to Structured Query Language (SQL). Building on the foundational work of Cousot and Cousot (1977) and subsequent developments by Halder and Cortesi, we address the issue of non-terminating analysis in database contexts. Our contributions include the use of abstract tuples in addition to abstract values, an implementable algorithm for static analysis targeting specific database properties, and a proof of soundness for our approach. We also describe properties to be checked using Linear Temporal Logic (LTL) encodings. This work aims to improve the precision and applicability of abstract interpretation for formal verification of database-driven applications, ensuring termination and sound analysis even in complex database schema interactions.
+
+Halder and Cortesi et al.\ proposed using abstract interpretation to represent database flows.
+Their article describes using soundness to guarantee states that a database cannot come in.
+However, the abstract interpretation does not consider termination, hindering the usability of the analysis.
+This paper addresses this problem by proposing a smaller abstract interpretation that can terminate.
+We proceed by providing the abstract syntax of how the analysis should be written with semantics.
+Last, we provide an informal proof that the analysis is indeed sound.
+This paper also presents a new way of representing strings in the form af regular expressions, which allows for a more precise analysis of the database queries, as well as integer values represented as intervals.

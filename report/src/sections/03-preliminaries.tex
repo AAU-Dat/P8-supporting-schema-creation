@@ -24,6 +24,18 @@ and analogous for $y \sqsubseteq X$.
 
 
 \begin{definition}
+    A \emph{lattice} $(S, \sqsubseteq, \sqcup, \sqcap)$ is a partial order $(S, \sqsubseteq)$ in which for all $x,y \in S:$ $x \sqcup y$ and $x \sqcap y$ are defined,
+    \begin{equation}
+        \{x, y\} \sqsubseteq x \sqcup y \land \forall z \in S : \{x, y\} \sqsubseteq z \implies x \sqcup y \sqsubseteq z\label{eq:equation4}
+    \end{equation}
+    and
+    \begin{equation}
+        x \sqcap y \sqsubseteq \{x, y\} \land \forall z \in S : z \sqsubseteq \{x, y\} \implies z \sqsubseteq x \sqcap y\label{eq:equation5}
+    \end{equation}
+\end{definition}
+
+
+\begin{definition}
     A \emph{complete lattice} $(S, \sqsubseteq, \sqcup, \sqcap)$ is a partial order $(S, \sqsubseteq)$ in which for all $X \subseteq S:$ $\bigsqcup X$ and $\bigsqcap X$ are defined,
     \begin{equation}
         X \sqsubseteq \bigsqcup X \land \forall y \in S : X \sqsubseteq y \implies \bigsqcup X \sqsubseteq y\label{eq:equation2}
@@ -35,20 +47,7 @@ and analogous for $y \sqsubseteq X$.
 \end{definition}
 
 
-As a shorthand we take $x \sqcup y = \bigsqcup \{x, y\}$ and $x \sqcap y = \bigsqcap \{x, y\}$.
-
-
-\begin{definition}
-    A \emph{lattice} $(S, \sqsubseteq, \sqcup, \sqcap)$ is a partial order $(S, \sqsubseteq)$ in which for all $x,y \in S:$ $x \sqcup y$ and $x \sqcap y$ are defined,
-    \begin{equation}
-        \{x, y\} \sqsubseteq x \sqcup y \land \forall z \in S : \{x, y\} \sqsubseteq z \implies x \sqcup y \sqsubseteq z\label{eq:equation4}
-    \end{equation}
-    and
-    \begin{equation}
-        x \sqcap y \sqsubseteq \{x, y\} \land \forall z \in S : z \sqsubseteq \{x, y\} \implies z \sqsubseteq x \sqcap y\label{eq:equation5}
-    \end{equation}
-\end{definition}
-\todo{swap definition 2 and 3?}
+%As a shorthand we take $x \sqcup y = \bigsqcup \{x, y\}$ and $x \sqcap y = \bigsqcap \{x, y\}$.
 
 
 \begin{theorem}\label{thm:kleene_finite}
@@ -120,7 +119,7 @@ First we define two central notions, namely soundness and valid analysis assignm
 
 \begin{definition}
     Given a set $\rho \in \mathfrak{E}$ of possible concrete program memories, and a set $\ab{\rho} \in \ab{\mathfrak{E}}$ of possible abstract program memories, related by a concretization function $\gamma : \mathcal{P}(\ab{\mathfrak{E}}) \rightarrow \mathcal{P}(\mathfrak{E})$.
-    A concrete semantic over program instructions $I \in \mathbb{I}$, $\sem{\cdot} : \mathbb{I} \rightarrow \mathfrak{E} \rightarrow \mathfrak{E}$ and an abstract semantic $\abssem{\cdot} : \mathbb{I} \rightarrow \mathcal{P}(\ab{\mathfrak{E}}) \rightarrow \mathcal{P}(\ab{\mathfrak{E}})$, $\abssem{\cdot}$ is said to be \emph{sound} whenever:
+    A concrete semantic over program instructions $I \in \mathbb{I}$, $\sem{\cdot} : \mathbb{I} \rightarrow \mathfrak{E} \rightarrow \mathcal{P}(\mathfrak{E})$ and an abstract semantic $\abssem{\cdot} : \mathbb{I} \rightarrow \mathcal{P}(\ab{\mathfrak{E}}) \rightarrow \mathcal{P}(\ab{\mathfrak{E}})$, $\abssem{\cdot}$ is said to be \emph{sound} whenever:
     \begin{equation}
         \rho \in \concrete(\ab{P}) \implies \sem{I}(\rho) \subseteq \concrete(\abssem{I}(\ab{P}))\label{eq:equation12}
     \end{equation}

@@ -46,34 +46,30 @@ We define the general abstract semantics of Boolean expressions such that $\aab{
 
 Where $\aaab{bop}$ is defined for $\land$, $\lor$ and $\neg$ in \autoref{tab:aaabland}, \autoref{tab:aaablor} and \autoref{tab:aaabneg} respectively.
 
-\autoref{eq:abstract-bool-semantics-start} through~\ref{eq:abstract-bool-semantics-end} show the abstract semantics of Boolean expressions $(\absboolsem{})$ defined in \autoref{eq:bool-operation}, that is logical operators and comparisons between expressions.
+\autoref{eq:abstract-bool-semantics-start} through~\ref{eq:abstract-bool-semantics-end} show the abstract semantics of Boolean expressions $(\absboolsem{\cdot})$ defined in \autoref{eq:bool-operation}, that is logical operators and comparisons between expressions.
 $\ab{\mathfrak{E}}$ describes the set of abstract states. $\absexpsem{exp}$ describes the abstract evaluation of an expression, $(\rho_{\ab{d}}, \rho_{\ab{a}})$ is an abstract state in the database.
 
 % In \autoref{eq:abstract-bool-semantics-end}, we check if either of the two expressions are lists; if that is the case, and they are the same type, we add $\{\{\texttt{false}\}\}$ to the result, as we are unsure if the two expressions are equal.
 % Otherwise, we proceed as usual.
 
 \begin{align}
-    \absboolsem{\cdot} &: \mathbb{B} \rightarrow \ab{\mathfrak{E}} \rightarrow \mathsf{Val} \; \mathcal{P}(\{\true, \false, null\}) \label{eq:bool-operation}
+    \absboolsem{\cdot} &: \mathbb{B} \rightarrow \ab{\mathfrak{E}} \rightarrow \mathcal{P}(\{\true, \false, \mnull\}) \label{eq:bool-operation}
 \end{align}
 \begin{align}
-    \absboolsem{\texttt{true}}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \mathsf{Single} \; \{\true\} \label{eq:abstract-bool-semantics-start} \\
-    \absboolsem{\texttt{false}}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \mathsf{Single} \; \{\false\} \\
-    \absboolsem{b_1 \lor b_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absboolsem{b_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ab{\lor} \absboolsem{b_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
-    \absboolsem{b_1 \land b_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absboolsem{b_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ab{\land} \absboolsem{b_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
-    \absboolsem{\neg b}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{\neg} \absboolsem{b}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
-    \absboolsem{e_1 \;comp\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= E_1 \;\ab{\comp}\; E_2\label{eq:abstract-bool-semantics-end}
-    % \absboolsem{e_1 \neq e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{\neg}(\absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \;\ab{=}\; \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}})) \label{eq:abstract-bool-semantics-end1} \\
-%    \absboolsem{e_1 \;comp\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=  \begin{cases}
-%        \app{\{\{\texttt{false,true}\}\} \cup} E \quad \quad \text{if } w\\
-%        E_1 \;\ab{\comp}\; E_2 \quad \quad \quad \quad \text{otherwise}
-%    \end{cases} \nonumber \\
-%    \begin{split}
-%        \text{where } w&=(E_1 = \mathsf{List} \; S_1 \lor E_2 = \mathsf{List} \; S_2) \nonumber\\
-%        &\land E_1 \;\ab{\comp}\; E_2 = E \nonumber
-%    \end{split} \\
-%    \text{and } E_1 &= \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \nonumber \\
-%    \text{and }  E_2 &= \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \label{eq:abstract-bool-semantics-end}
-    %\absboolsem{e_1 \;comp\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= E_1 \;\ab{\comp}\; E_2 \quad \text{where }  E_1 = \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ \text{and } E_2 = \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \label{eq:abstract-bool-semantics-end}
+    \absboolsem{\texttt{true}}(\_) &= \{\true\} \label{eq:abstract-bool-semantics-start} \\
+    \absboolsem{\texttt{false}}(\_) &= \{\false\} \\
+    \absboolsem{b_1 \lor b_2}(\ab{\environment}) &= \absboolsem{b_1}(\ab{\environment}) \aab{\lor} \absboolsem{b_2}(\ab{\environment}) \\
+    \absboolsem{b_1 \land b_2}(\ab{\environment}) &= \absboolsem{b_1}(\ab{\environment}) \aab{\land} \absboolsem{b_2}(\ab{\environment}) \\
+    \absboolsem{\neg b}(\ab{\environment}) &= \aab{\neg} \absboolsem{b}(\ab{\environment}) \\
+    \absboolsem{e_1 \;comp\; e_2}(\ab{\environment}) &=
+    \begin{cases}
+        \bigcup B & \text{if } \mathsf{List} \; B = E_1 \;\ab{\comp}\; E_2 \\
+        b & \text{if } \mathsf{Var} \; b = E_1 \;\ab{\comp}\; E_2
+    \end{cases} \label{eq:abstract-bool-semantics-end} \\
+    \text{Where }& E_1 = \absexpsem{e_1}(\ab{\environment}) \\
+    \text{and }& E_2 = \absexpsem{e_2}(\ab{\environment}) \\
+    \absboolsem{\exists v_n \; b}(\ab{\environment}) &= \{\true\} \cup \underset{s \in \absexpsem{v}}{\aab{\bigvee}} \absboolsem{b[s/v_n]}(\ab{\environment}) \\
+    \absboolsem{\forall v_n \; b}(\ab{\environment}) &= \{\false\} \cup \underset{s \in \absexpsem{v}}{\aab{\bigwedge}} \absboolsem{b[s/v_n]}(\ab{\environment})
 \end{align}
 
 
@@ -166,17 +162,17 @@ The justification of abstract binary operations is analogous to the one given fo
 
 \begin{align}
     \absexpsem{\cdot} &: \mathbb{E} \rightarrow \ab{\mathfrak{E}} \rightarrow \mathsf{Val} \; \mathbf{REG} \cup \mathsf{Val} \; \mathbf{INT}\\
-    \absexpsem{n}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \mathsf{Single} \; [n, n] \label{sem:exp1} \\
-    \absexpsem{k}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \mathsf{Single} \; R,  \text{ such that }\mathcal{L}(R) = \{ k \} \label{sem:exp2} \\
-    \absexpsem{R}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \mathsf{Single} \; R \\
-    \absexpsem{\mathscr{I}}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \mathsf{Single} \; \mathscr{I} \\
-    \absexpsem{v_a}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=  \rho_{\ab{a}}(v_a) \label{sem:exp3} \\
+    \absexpsem{n}(\_) &= \mathsf{Single} \; [n, n] \label{sem:exp1} \\
+    \absexpsem{k}(\_) &= \mathsf{Single} \; R,  \text{ such that }\mathcal{L}(R) = \{ k \} \label{sem:exp2} \\
+    \absexpsem{R}(\_) &= \mathsf{Single} \; R \\
+    \absexpsem{\mathscr{I}}(\_) &= \mathsf{Single} \; \mathscr{I} \\
+    \absexpsem{v_a}(\_, \rho_{\ab{a}}) &=  \rho_{\ab{a}}(v_a) \label{sem:exp3} \\
     \begin{split}
-        \absexpsem{v_t}(\rho_{\ab{d}}, \rho_{\ab{a}}) &=  \mathsf{List} \; \pi_{v_t}(\rho_d(v_d)) \\
+        \absexpsem{v_t}(\rho_{\ab{d}}, \_) &=  \mathsf{List} \; \pi_{v_t}(\rho_d(v_d)) \\
         &\text{ such that } v_t \in attr(v_d) \label{sem:exp4}
     \end{split} \\
-    \absexpsem{op_u \; e}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{op_u} \; (\absexpsem{e}(\rho_{\ab{d}}, \rho_{\ab{a}})) \label{eq:unary-op} \\
-    \absexpsem{e_1 \;op_b\; e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absexpsem{e_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \;\ab{op_b}\; \absexpsem{e_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \label{eq:binary-op}
+    \absexpsem{op_u \; e}(\ab{\environment}) &= \ab{op_u} \; (\absexpsem{e}(\ab{\environment}) \label{eq:unary-op} \\
+    \absexpsem{e_1 \;op_b\; e_2}(\ab{\environment}) &= \absexpsem{e_1}(\ab{\environment}) \;\ab{op_b}\; \absexpsem{e_2}(\ab{\environment}) \label{eq:binary-op}
 \end{align}
 
 Before defining the abstract operations $\aaop$, for expressions, we will define some auxiliary functions.
@@ -235,42 +231,28 @@ The arithmetic operations, $\aaab{aop}$, are defined as follows for intervals.
     \text{and } \mathcal{I}'&=\{\mathscr{I}'_1,\dots,\mathscr{I}'_n\}
 \end{align}
 
-\subsubsection{Abstract Semantics of Predicates}
-The base rule of all the predicates is defined in \autoref{eq:atomicformulas}, as this is the base case for all the other predicates.
-It takes atomic formulas, $a_f$, and returns the abstract truth value of $a_f$.
-The other predicates all build on this base case with rules such as negation, disjunction and conjunction.
-
-\begin{align}
-    \abspredsem{\cdot} &: \mathbb{W} \rightarrow \ab{\mathfrak{E}} \rightarrow \mathsf{Val} \; \{\true, \false, \mnull\} \\ \label{eq:atomicformulas}
-    \abspredsem{a_f}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \absboolsem{a_f}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
-    \abspredsem{\neg \phi}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \ab{\neg} \left( \abspredsem{\phi}(\rho_{\ab{d}}, \rho_{\ab{a}}) \right) \\
-    \abspredsem{\phi_1 \lor \phi_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \abspredsem{\phi_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ab{\lor} \abspredsem{\phi_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
-    \abspredsem{\phi_1 \land \phi_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \abspredsem{\phi_1}(\rho_{\ab{d}}, \rho_{\ab{a}}) \ab{\land} \abspredsem{\phi_2}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
-    \abspredsem{\exists v_n \; \phi}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \underset{s \in \absexpsem{v_n}}{\ab{\bigvee}} \abspredsem{\phi[s/v_n]}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
-    \abspredsem{\forall v_n \; \phi}(\rho_{\ab{d}}, \rho_{\ab{a}}) &= \underset{s \in \absexpsem{v_n}}{\ab{\bigwedge}} \abspredsem{\phi[s/v_n]}(\rho_{\ab{d}}, \rho_{\ab{a}})
-\end{align}
 
 \subsubsection{Abstract Semantics of SQL statements}
 
-First we define $var_{v_d}(\phi)$ to be the vector of column variables in $attr(v_d)$ appearing in $\phi$, ordered by the way they appear in the schema of $v_d$.
-Next we define $v_d \downarrow_{\true}^{(\rho_{\ab{d}}, \rho_{\ab{a}})} \phi, v_d \downarrow_{\false}^{(\rho_{\ab{d}}, \rho_{\ab{a}})} \phi$ and  $v_d \downarrow_{\unknown}^{(\rho_{\ab{d}}, \rho_{\ab{a}})} \phi$ to be the set of tuples in the evaluation of $v_d$ with respect to $(\rho_{\ab{d}}, \rho_{\ab{a}})$ where $\phi$ is definitely true, definitely false and where we are unsure respectively, formally:
+First we define $var_{v_d}(b)$ to be the vector of column variables in $attr(v_d)$ appearing in $b$, ordered by the way they appear in the schema of $v_d$.
+Next we define $v_d \downarrow_{\true}^{(\rho_{\ab{d}}, \rho_{\ab{a}})} b, v_d \downarrow_{\false}^{(\rho_{\ab{d}}, \rho_{\ab{a}})} b$ and  $v_d \downarrow_{\unknown}^{(\rho_{\ab{d}}, \rho_{\ab{a}})} b$ to be the set of tuples in the evaluation of $v_d$ with respect to $(\rho_{\ab{d}}, \rho_{\ab{a}})$ where $b$ is definitely true, definitely false and where we are unsure respectively, formally:
 
 \begin{align}
     \begin{split}
-        v_d \downarrow_{\true}^{(\rho_{\ab{d}}, \rho_{\ab{a}})} \phi = &\{ l \in \rho_{\ab{d}}(v_d) \\
-        &\mid \mathsf{Single} \; \{ \true \} = \abspredsem{\phi[\pi_{\mathbf{v}_t}(l)/\mathbf{v}_t]}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
-        &\text{ for } \mathbf{v}_t = var_{v_d}(\phi) \}
+        v_d \downarrow_{\true}^{(\rho_{\ab{d}}, \rho_{\ab{a}})} b = &\{ l \in \rho_{\ab{d}}(v_d) \\
+        &\mid \{ \true \} = \absboolsem{b[\pi_{\mathbf{v}_t}(l)/\mathbf{v}_t]}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
+        &\text{ for } \mathbf{v}_t = var_{v_d}(b) \}
     \end{split}\\
     \begin{split}
-        v_d \downarrow_{\false}^{(\rho_{\ab{d}}, \rho_{\ab{a}})} \phi = &\{ l \in \rho_{\ab{d}}(v_d) \\
-        &\mid \mathsf{Single} \; \{ \false \} = \abspredsem{\phi[\pi_{\mathbf{v}_t}(l)/\mathbf{v}_t]}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
-        &\text{ for } \mathbf{v}_t = var_{v_d}(\phi) \}
+        v_d \downarrow_{\false}^{(\rho_{\ab{d}}, \rho_{\ab{a}})} b = &\{ l \in \rho_{\ab{d}}(v_d) \\
+        &\mid \{ \false \} = \absboolsem{b[\pi_{\mathbf{v}_t}(l)/\mathbf{v}_t]}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
+        &\text{ for } \mathbf{v}_t = var_{v_d}(b) \}
     \end{split}\\
     \begin{split}
-        v_d \downarrow_{\unknown}^{(\rho_{\ab{d}}, \rho_{\ab{a}})} \phi = &\{ l \in \rho_{\ab{d}}(v_d) \\
-        &\mid \true \in b \land b \in \abspredsem{\phi[\pi_{\mathbf{v}_t}(l)/\mathbf{v}_t]}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
-        &\text{ for } \mathbf{v}_t = var_{v_d}(\phi) \} \\
-        &\setminus v_d \downarrow_{\true}^{(\rho_{\ab{d}}, \rho_{\ab{a}})} \phi
+        v_d \downarrow_{\unknown}^{(\rho_{\ab{d}}, \rho_{\ab{a}})} b = &\{ l \in \rho_{\ab{d}}(v_d) \\
+        &\mid \true \in \absboolsem{b[\pi_{\mathbf{v}_t}(l)/\mathbf{v}_t]}(\rho_{\ab{d}}, \rho_{\ab{a}}) \\
+        &\text{ for } \mathbf{v}_t = var_{v_d}(b) \} \\
+        &\setminus v_d \downarrow_{\true}^{(\rho_{\ab{d}}, \rho_{\ab{a}})} b
     \end{split}
 \end{align}
 
@@ -289,9 +271,9 @@ Then it wraps them in a $\mathsf{List}$ label and inserts this in the lattice of
 
 \begin{equation}
 \begin{split}
-    \abssqlsem{&\langle select(v_a, v_d, \mathbf{v}_t), \phi \rangle}\biggl(\rho_{\ab{d}}, \rho_{\ab{a}})
+    \abssqlsem{&\langle select(v_a, v_d, \mathbf{v}_t), b \rangle}\biggl(\rho_{\ab{d}}, \rho_{\ab{a}})
     = (\rho_{\ab{d}}, \rho_{\ab{a}}[v_a \mapsto \\
-    &\mathsf{List} \Bigl( \pi_{\mathbf{v}_t} \bigl(v_d \downarrow_{\true}^{(\env{\ab{d}}, \env{\absvars})} \phi \cup v_d \downarrow_{\unknown}^{(\env{\ab{d}}, \env{\absvars})} \phi \bigr) \Bigr) \into \lookupcl(v_a) ]\biggr)
+    &\mathsf{List} \Bigl( \pi_{\mathbf{v}_t} \bigl(v_d \downarrow_{\true}^{(\env{\ab{d}}, \env{\absvars})} b \cup v_d \downarrow_{\unknown}^{(\env{\ab{d}}, \env{\absvars})} b \bigr) \Bigr) \into \lookupcl(v_a) ]\biggr)
 \end{split}\label{eq:equation123}
 \end{equation}
 
@@ -304,7 +286,7 @@ In particular, we start with a tuple with all entries equal to null $\lambda\_.\
 
 
 \begin{align}
-    \abssqlsem{\langle insert(v_d, \mathbf{v}_t, &\mathbf{e}), \phi \rangle}(\rho_{\ab{d}}, \rho_{\ab{a}}) = (\rho_{\ab{d}}[v_d\mapsto \ab{t}\cup s], \rho_{\ab{a}}) \nonumber \\
+    \abssqlsem{\langle insert(v_d, \mathbf{v}_t, &\mathbf{e}), \_ \rangle}(\rho_{\ab{d}}, \rho_{\ab{a}}) = (\rho_{\ab{d}}[v_d\mapsto \ab{t}\cup s], \rho_{\ab{a}}) \nonumber \\
     \text{where } \mathsf{List} \; S &= \app{\bigtimes_{i = 0}^{n}} \absexpsem{e_i}(\rho_{\ab{d}}, \rho_{\ab{a}}) \into \lookupcl(v_i) \nonumber\\
     \text{and } s &= \left\{ (\lambda\_.\mnull)[\mathbf{v}_t \mapsto \mathbf{s}] \;\middle|\; \mathbf{s} \in S\right\} \nonumber\\
     \text{and } \ab{t}&=\rho_{\ab{d}}(v_d)
@@ -315,16 +297,16 @@ In the case of the abstract tuples that definitely satisfy the predicate, we upd
 
 
 \begin{align}
-    \abssqlsem{\langle upd&ate(v_d, \mathbf{v}_t, \mathbf{e}), \abspred \rangle} (\env{\ab{d}}, \env{\absvars}) = (\env{\ab{d}}[v_d\mapsto \ab{t'}], \env{\absvars})\nonumber\\
-    &\text{where }\abstable' = v_d \downarrow_{\false}^{(\env{\ab{d}}, \env{\absvars})} \phi \nonumber\\
+    \abssqlsem{\langle upd&ate(v_d, \mathbf{v}_t, \mathbf{e}), b \rangle} (\env{\ab{d}}, \env{\absvars}) = (\env{\ab{d}}[v_d\mapsto \ab{t'}], \env{\absvars})\nonumber\\
+    &\text{where }\abstable' = v_d \downarrow_{\false}^{(\env{\ab{d}}, \env{\absvars})} b \nonumber\\
     \begin{split}
          &\cup \biggl\{ l\Bigl[ \mathbf{v}_t \mapsto \pi_{\mathbf{v}_t}(s) \sqcup \pi_{\mathbf{v}_t}(l) \Bigr] \;\Big|\;\\
-         &l \in v_d \downarrow_{\unknown}^{(\env{\ab{d}}, \env{\absvars})} \phi \land \\
+         &l \in v_d \downarrow_{\unknown}^{(\env{\ab{d}}, \env{\absvars})} b \land \\
          &s \in \app{\bigtimes_{i = 0}^{n}} \absexpsem{e_i}(\rho_{\ab{d}}, \rho_{\ab{a}}) \into \lookupcl(v_i)\biggr\} \nonumber
     \end{split} \\
     \begin{split}
         &\cup \biggl\{ l\Bigl[ \mathbf{v}_t \mapsto \pi_{\mathbf{v}_t}(s) \Bigr] \;\Big|\;\\
-        &l \in v_d \downarrow_{\true}^{(\env{\ab{d}}, \env{\absvars})} \phi \land \\
+        &l \in v_d \downarrow_{\true}^{(\env{\ab{d}}, \env{\absvars})} b \land \\
         &s \in \app{\bigtimes_{i = 0}^{n}} \absexpsem{e_i}(\rho_{\ab{d}}, \rho_{\ab{a}}) \into \lookupcl(v_i)\biggr\}
     \end{split}
 \end{align}
@@ -334,8 +316,8 @@ In the case of \textit{delete}, we remove all tuples where we are definitely sur
 
 
 \begin{align}
-    \abssqlsem{\langle delete&(v_d, \mathbf{v}_t), \abspred \rangle} (\env{\ab{d}}, \env{\absvars}) = (\env{\ab{d}}[v_d\mapsto \ab{t'}], \env{\absvars}) \nonumber\\
-    &\text{Where }\abstable' = v_d \downarrow_{\unknown}^{(\env{\ab{d}}, \env{\absvars})} \phi \cup v_d \downarrow_{\false}^{(\env{\ab{d}}, \env{\absvars})} \phi
+    \abssqlsem{\langle delete&(v_d, \mathbf{v}_t), b \rangle} (\env{\ab{d}}, \env{\absvars}) = (\env{\ab{d}}[v_d\mapsto \ab{t'}], \env{\absvars}) \nonumber\\
+    &\text{Where }\abstable' = v_d \downarrow_{\unknown}^{(\env{\ab{d}}, \env{\absvars})} b \cup v_d \downarrow_{\false}^{(\env{\ab{d}}, \env{\absvars})} b
 \end{align}
 
 \subsubsection{Abstract Semantics of Instructions}
@@ -350,15 +332,12 @@ Let $\ab{P}$ be a set of abstract environments $(\env{\ab{d}}, \env{\absvars})$.
 \begin{align}
     \abssem{\cdot} &: \mathbb{I} \rightarrow \mathcal{P}(\ab{\mathfrak{E}}) \rightarrow \mathcal{P}(\ab{\mathfrak{E}}) \\
     \abssem{\texttt{skip}}(\ab{P}) &= \ab{P} \\
-    \begin{split}
-        \abssem{v_a \coloneqq e}(\ab{P}) &= \{(\env{\ab{d}}, \env{\absvars}[v_a \mapsto s']) \mid (\env{\ab{d}}, \env{\absvars}) \in \ab{P} \\
-        \land s &= \absexpsem{e}(\env{\ab{d}}, \env{\absvars}) \land s' = s \into \lookupcl(v_a) \}
-    \end{split}\\
-    \begin{split}
-        \abssem{b}(\ab{P}) &= \{ (\env{\ab{d}}, \env{\absvars}) \in \ab{P} \\
-        & \mid \true \in B \land B \in \absboolsem{b}(\env{\ab{d}}, \env{\absvars}) \}
-    \end{split} \\
-    \abssem{C_{sql}}(\ab{P}) &= \{\abssqlsem{C_{sql}}(\env{\ab{d}}, \env{\absvars}) \mid (\env{\ab{d}}, \env{\absvars}) \in \ab{P} \}
+    \abssem{v_a \coloneqq e}(\ab{P}) &= \begin{aligned}[t]
+        \{(\env{\ab{d}}, \env{\absvars}[v_a \mapsto s]) & \mid (\env{\ab{d}}, \env{\absvars}) \in \ab{P} \\
+        & \land s = \absexpsem{e}(\env{\ab{d}}, \env{\absvars}) \into \lookupcl(v_a) \}
+    \end{aligned}\\
+    \abssem{b}(\ab{P}) &= \{ \ab{\environment} \in \ab{P} \mid \true \in \absboolsem{b}(\ab{\environment}) \} \\
+    \abssem{C_{sql}}(\ab{P}) &= \{\abssqlsem{C_{sql}}(\ab{\environment}) \mid \ab{\environment} \in \ab{P} \}
 \end{align}
 
 As a last note on the abstract semantics, we know $(\mathcal{P}(\ab{\mathfrak{E}}), \subseteq, \cup, \cap)$ is a finite and complete lattice.
