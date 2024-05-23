@@ -2,19 +2,23 @@
 
 In this subsection we will argument for our analysis terminating.
 
-Our analysis takes base in the semantics for instructions $\abssem{I}$.
-Hence, to prove that our analysis terminates, we would need to show that $\abssem{I}$ always reaches a fixed point.
+Our analysis takes base in the constraint function seen in \autoref{}\todo{Insert reference when function is made}.
+Hence, to prove that our analysis terminates, we would need to show that this function always reaches a fixed point.
+Therefore, from \autoref{thm:kleene_finite} we need to show that the function is monotone, and defined over a complete and finite lattice.
 
-As seen in \autoref{eq:abssemtype}, $\abssem{I}$ maps to $\mathcal{P}(\ab{\mathfrak{E}})$.
-We know from \autoref{thm:csql} that $\abssem{I}$ is a monotone function.
-So from \autoref{thm:kleene_finite}, we see that, in order for the analysis to reach a fixed point in a finite number of steps, $\mathcal{P}(\ab{\mathfrak{E}})$ has to be defined over a finite and complete lattice.
+As \autoref{} \todo{reference of function} is defined over the abstract semantics, we need to show that $\abssem{I}$ is monotone, in order for it to be monotone.
+Though, we have already showed in \autoref{thm:csql} that $\abssem{I}$ is monotone, hence \autoref{} \todo{reference} is also monotone.
 
-To show that $\mathcal{P}(\ab{\mathfrak{E}})$ is a finite and complete lattice, we must show that $\ab{\mathfrak{E}}$ is a finite and complete lattice, as the powerset is merely all subsets.
+Now, looking at the type of \autoref{}\todo{function reference}, we see that it maps to the tuples over the powerset of abstract environments.
+So from \autoref{thm:kleene_finite}, we see that, in order for the analysis to reach a fixed point in a finite number of steps, $\bigtimes_{i = 1}^n \mathcal{P}(\ab{\mathfrak{E}})$ has to be defined over a finite and complete lattice.
+
+To show that $\bigtimes_{i = 1}^n \mathcal{P}(\ab{\mathfrak{E}})$ is a finite and complete lattice, we must first show that $\ab{\mathfrak{E}}$ is a finite and complete lattice.
 To show that $\ab{\mathfrak{E}}$ is a finite and complete lattice, we prove the following theorem:
 
 \begin{restatable}{theorem}{absenv}\label{thm:absenv}
 $\ab{\mathfrak{E}}$ is a finite and complete lattice.
 \end{restatable}
 
-Now, from \autoref{thm:absenv} we can conclude that $\mathcal{P}(\ab{\mathfrak{E}})$ must also be a finite and complete lattice.
-So, since $\abssem{I}$ is a monotone function and $\mathcal{P}(\ab{\mathfrak{E}})$ is a complete and finite lattice, we can conclude from \autoref{thm:kleene_finite} that our analysis reaches a fixed point in a finite number of steps, proving termination.
+Now, from \autoref{thm:absenv} we can conclude that the powerset $\mathcal{P}(\ab{\mathfrak{E}})$ is defined over a finite and complete lattice, and is therefore also a finite and complete lattice.
+Following this, it also holds that the $\bigtimes_{i = 1}^n \mathcal{P}(\ab{\mathfrak{E}})$ must be a finite and complete lattice for the same reason as $\mathcal{P}(\ab{\mathfrak{E}})$.
+So, since our constraint function \autoref{} \todo{reference} is a monotone function and $\bigtimes_{i = 1}^n \mathcal{P}(\ab{\mathfrak{E}})$ is a complete and finite lattice, we can conclude from \autoref{thm:kleene_finite} that our analysis reaches a fixed point in a finite number of steps, proving termination.
