@@ -1,6 +1,8 @@
 \section{theory}\label{sec:theory}
-The core theory behind this paper is based on the abstract interpretation of a database and application, using lattice theory, serving as the foundation for analyzing the system.
-By applying this theory to the system, we can analyze the system's behavior and properties.
+In this section we will present the main contribution of the paper:
+First we present the abstract syntax of the programs that the analysis is defined for, further we define the conversion from program to program graph and give the abstract syntax for instructions appearing on the edges within such graphs.
+Next we formalize the abstract semantics, and thereafter we argue, through several proof sketches, that the abstract semantics are sound.
+At last we prove that our analysis will always terminate.
 
 \input{sections/04-theory/01-abstract-syntax}
 \input{sections/04-theory/01-abstract-domains}
