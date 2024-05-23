@@ -10,11 +10,11 @@ We give a brief outline of changes:
     \item The equivalent of database variables (attributes) are now denoted $v_t$ and are called column variables or attributes.
     \item Table names, denoted $v_d$ are now explicit and are required to be present in SQL commands.
     \item The non deterministic choice operator $\texttt{[]}$ between two instructions has been introduced.
-    \item $v_a \coloneq \; ?$ has been removed but we now allow non-deterministic values $R$ and $\mathscr{I}$ to be present in expressions.
+    \item In $v_a \coloneq \; ?$ instructions we allow the $?$ to be further specified, allowing abstract domains to take its place.
 \end{itemize}
 
 Further we differentiate between the instructions allowed on the edges of a program graph $\mathbb{I}$, and the instructions allowed in the language for which the analysis is allowed $\mathbb{P}$.
-We will finish this section by showing the conversion between program and program graph, but before we can do that we need to introduce the syntax.
+We will later in this section the conversion between program and program graph, but before we can do that we need to introduce the syntax.
 
 The abstract syntax of SQAAL is defined in terms of the syntactic sets introduced in \autoref{fig:syntatic-sets}.
 
