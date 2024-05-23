@@ -74,14 +74,15 @@ Also included in the contribution is a description of a static analysis used to 
 While we have not provided a specific method for checking general properties, we have outlined a systematic approach for verifying invariants.
 Invariants are a particular type of property that should always be held during the program's execution.
 
-This way, we can analysis the program and afterward check if for all possible steps of the program the invariant holds.
+This way, we can analysis the program and afterward check if for states suspected to be reachable by the analysis the invariant holds.
 If it does not, we can stop the analysis and report that the program is incorrect.
 We can check for invariants in every state of the program.
 We do this in a program graph, where each node represents a state of the program.
 We can check if the invariant holds in each node.
 This way, we can systematically verify the program's correctness throughout its execution.
 
-The invariants can be checked with the syntax which is described in \autoref{fig:abstract-syntax}.
+The invariants can be checked with the Boolean syntax which is described in \autoref{fig:abstract-syntax}.
+The current syntax lacks a way to flag such thing, but it should be possible to use the Boolean syntax fot this purpose.
 
 To ensure that our work is correct, we informally prove soundness of the static analysis.
 By doing this, we can always be sure that our analysis produces an overestimation of the concrete values and tuples.
