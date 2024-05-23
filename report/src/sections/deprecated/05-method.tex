@@ -59,7 +59,7 @@ The SQL queries for the operations are shown in \autoref{lst:sql-queries} and \a
 Understanding the database schema and operations is crucial as it forms the foundation for defining the behavior of the operations.
 The program that defines the behaviour of the operations is shown in \autoref{lst:program}.
 The program first checks if there are two or more accounts in the database; if not, it inserts a new account with the \texttt{INSERT} operation.
-If there are more than two accounts, we try to transfer an amount from one account to another; that is the \texttt{UPDATE} operation
+If there are more than two accounts, we try to transfer an amount from one account to another; that is the \texttt{UPDATE} operation.
 
 
 \begin{listing}[htb!]
@@ -88,19 +88,19 @@ newuser:
 
 Now everything for the analysis is ready.
 We just need to define what the analysis should check for.
-This is defined by properties, which are defined by the LTL grammar on the attributes in the database.
+This is defined by the properties, that we wish to be upheld in our schema.
 The properties we want to check on the database are shown in \autoref{lst:properties}.
 
-\begin{equation}
-    \lozenge (transferAmount > 0)
-    \label{eq:ltl-eventual-property}
-\end{equation}
+% \begin{equation}
+%     \lozenge (transferAmount > 0)
+%     \label{eq:ltl-eventual-property}
+% \end{equation}
 
 
-\begin{equation}
-    \square (fromB-TransferAmount > 0)
-    \label{eq:ltl-always-property}
-\end{equation}
+% \begin{equation}
+%     \square (fromB-TransferAmount > 0)
+%     \label{eq:ltl-always-property}
+% \end{equation}
 
 
 \begin{listing}[htb!]
