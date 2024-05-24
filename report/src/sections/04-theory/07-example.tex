@@ -1,20 +1,7 @@
 \section{Example}\label{sec:example}
+In this section we will present an example of a program that could be analyzed using the abstract interpretation presented in this paper.
 
-\begin{align}\label{eq:exaple equation}
-    \begin{split}
-    A(q_\whitepointerright)=A(q_\whitepointerright) &\cup \hat E_\whitepointerright \\&\cup \mathcal{\hat S} \lBrack skip \rBrack(A(q_{t4}))\\&\cup \mathcal{\hat S} \lBrack I_{12} \rBrack (A(q_{t6})) \\&\cup \mathcal{\hat S} \lBrack I_3 \rBrack (A(q_i)) \\&\cup \mathcal{\hat S} \lBrack I_5 \rBrack (A(q_d))
-    \end{split}\\
-    A(q_i)=A(q_i)&\cup \mathcal{\hat S} \lBrack I_1;I_2 \rBrack (A(q_\whitepointerright ))\\
-    A(q_d)=A(q_d)&\cup \mathcal{\hat S} \lBrack I_4 \rBrack (A(q_\whitepointerright ))\\
-    A(q_{t1})=A(q_{t1})&\cup \mathcal{\hat S} \lBrack I_6;I_7;I_8 \rBrack (A(q_\whitepointerright))\\
-    A(q_{t2})=A(q_{t2})&\cup \mathcal{\hat S} \lBrack I_9 \rBrack (A(q_{t1}))\\
-    A(q_{t3})=A(q_{t3})&\cup \mathcal{\hat S} \lBrack I_{10} \rBrack (A(q_{t2}))\\
-    A(q_{t4})=A(q_{t4})&\cup \mathcal{\hat S} \lBrack b \rBrack (A(q_{t3}))\\
-    A(q_{t5})=A(q_{t5})&\cup \mathcal{\hat S} \lBrack \neg b \rBrack (A(q_{t3}))\\
-    A(q_{t6})=A(q_{t6})&\cup \mathcal{\hat S} \lBrack I_{11} \rBrack (A(q_{t5}))\\
-    A(q_\blackpointerleft)=A(q_\blackpointerleft)
-\end{align}
-
+The program in Figure\ref{fig:program-code} is a simple program that simulates a bank system With delete, input, select, and update operations.
 \begin{figure}
     \begin{minted}[frame=lines, linenos, escapeinside=||, mathescape=true]{text}
 while true do(
@@ -42,7 +29,9 @@ while true do(
     \label{fig:program-code}
 \end{figure}
 
-\begin{align}
+The program in Figure\ref{fig:program-code} can be broken up into the following set of instructions.
+
+\begin{align} \label{eq:example-instructions}
     \begin{split}
     vName := [A-Z][a-z]* [A-Z][a-z]*;
     \end{split}
@@ -98,12 +87,36 @@ while true do(
     & I_{12}
 \end{align}
 
+A program graph is then made on the basis of the program in Figure\ref{fig:program-code} using the abstract interpretation.
 
-% \begin{align}
-%     \begin{split}
-%         vName := [A-Z][a-z]* [A-Z][a-z]*;
-%     \end{split}
-%     & I_1\\
-% \end{align}
+\todo[inline]{insert first program graph}
+
+
+The program graph can then be simplified to the following program graph.
+
+\todo[inline]{insert second program graph}
+
+From the states of the program graph we get the following equations.
+
+\begin{align}\label{eq:exaple-equation}
+\begin{split}
+    A(q_\whitepointerright)=A(q_\whitepointerright) &\cup \hat E_\whitepointerright \\&\cup \mathcal{\hat S} \lBrack skip \rBrack(A(q_{t4}))\\&\cup \mathcal{\hat S} \lBrack I_{12} \rBrack (A(q_{t6})) \\&\cup \mathcal{\hat S} \lBrack I_3 \rBrack (A(q_i)) \\&\cup \mathcal{\hat S} \lBrack I_5 \rBrack (A(q_d))
+\end{split}\\
+A(q_i)=A(q_i)&\cup \mathcal{\hat S} \lBrack I_1;I_2 \rBrack (A(q_\whitepointerright ))\\
+A(q_d)=A(q_d)&\cup \mathcal{\hat S} \lBrack I_4 \rBrack (A(q_\whitepointerright ))\\
+A(q_{t1})=A(q_{t1})&\cup \mathcal{\hat S} \lBrack I_6;I_7;I_8 \rBrack (A(q_\whitepointerright))\\
+A(q_{t2})=A(q_{t2})&\cup \mathcal{\hat S} \lBrack I_9 \rBrack (A(q_{t1}))\\
+A(q_{t3})=A(q_{t3})&\cup \mathcal{\hat S} \lBrack I_{10} \rBrack (A(q_{t2}))\\
+A(q_{t4})=A(q_{t4})&\cup \mathcal{\hat S} \lBrack b \rBrack (A(q_{t3}))\\
+A(q_{t5})=A(q_{t5})&\cup \mathcal{\hat S} \lBrack \neg b \rBrack (A(q_{t3}))\\
+A(q_{t6})=A(q_{t6})&\cup \mathcal{\hat S} \lBrack I_{11} \rBrack (A(q_{t5}))\\
+A(q_\blackpointerleft)=A(q_\blackpointerleft)
+\end{align}
+
+When solving the equations in\ref{eq:exaple-equation} using the semantics in this paper, we get the following fixpoint.
 
 \input{sections/04-theory/example-equations}
+
+You would then be able to use the fixpoint\ref{eq:exaple-equation} to analyze the program and check for some requested properties.
+In this case one of the properties could be to check if it is possible to have accounts with a negative balance, which in this case would be possible.
+Or you could check if it is possible to have accounts with names that are not in the format of the regular expression $[A-Z][a-z]* [A-Z][a-z]*$, which in this case would hold.
