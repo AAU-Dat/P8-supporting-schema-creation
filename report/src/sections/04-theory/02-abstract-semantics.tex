@@ -332,10 +332,10 @@ Let $\ab{P}$ be a set of abstract environments $(\env{\ab{d}}, \env{\absvars})$.
 \begin{align} \label{eq:abssemtype}
     \abssem{\cdot} &: \mathbb{I} \rightarrow \mathcal{P}(\ab{\mathfrak{E}}) \rightarrow \mathcal{P}(\ab{\mathfrak{E}}) \\
     \abssem{\texttt{skip}}(\ab{P}) &= \ab{P} \\
-    \abssem{v_a \coloneqq e}(\ab{P}) &= \begin{aligned}[t]
-        \{(\env{\ab{d}}, \env{\absvars}[v_a \mapsto s]) & \mid (\env{\ab{d}}, \env{\absvars}) \in \ab{P} \\
+    \begin{split}
+    \abssem{v_a \coloneqq e}(\ab{P}) &= \{(\env{\ab{d}}, \env{\absvars}[v_a \mapsto s]) \mid (\env{\ab{d}}, \env{\absvars}) \in \ab{P} \\
         & \land s = \absexpsem{e}(\env{\ab{d}}, \env{\absvars}) \into \lookupcl(v_a) \}
-    \end{aligned}\\
+    \end{split}\\
     \abssem{b}(\ab{P}) &= \{ \ab{\environment} \in \ab{P} \mid \true \in \absboolsem{b}(\ab{\environment}) \} \\
     \abssem{C_{sql}}(\ab{P}) &= \{\abssqlsem{C_{sql}}(\ab{\environment}) \mid \ab{\environment} \in \ab{P} \}
 \end{align}
