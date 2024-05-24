@@ -79,26 +79,27 @@ The approach is based on the use of abstract interpretation to analyze the datab
 
 
 \subsection{Contributions}\label{subsec:contributions}
-As described in \autoref{subsec:related-work}, one of our main contributions is describing an analysis made by extending the work made by Cortesi and Halder.
+As described in \autoref{subsec:related-work}, one of our main contributions is describing a static analysis made by extending the work made by Cortesi and Halder~\cite{halder_abstract_2012}.
 
 Included in this, we extend the level of abstraction used in the analysis.
 Where~\cite{halder_abstract_2012} only abstract over values, we abstract over both the tuples and values, and the multiplicity of the tuples and values in the database, ultimately guaranteeing a finite analysis.
 This is thoroughly covered in \autoref{sec:theory}.
 
-Also included in the contribution is a description of an analysis used to check properties when given a program and its associated database.
+Also included in the contribution is a description of a static analysis used to check properties when given a program and its associated database.
 While we have not provided a specific method for checking general properties, we have outlined a systematic approach for verifying invariants.
 Invariants are a particular type of property that should always be held during the program's execution.
 
-This way, we can run the analysis on the program and afterward check at each step of the program if the invariant holds.
+This way, we can analysis the program and afterward check if for states suspected to be reachable by the analysis the invariant holds.
 If it does not, we can stop the analysis and report that the program is incorrect.
 We can check for invariants in every state of the program.
 We do this in a program graph, where each node represents a state of the program.
 We can check if the invariant holds in each node.
 This way, we can systematically verify the program's correctness throughout its execution.
 
-The invariants can be checked with the predicate syntax which is described in \autoref{fig:abstract-syntax}.
+The invariants can be checked with the Boolean syntax which is described in \autoref{fig:abstract-syntax}.
+The current syntax lacks a way to flag such thing, but it should be possible to use the Boolean syntax fot this purpose.
 
-To ensure that our work is correct, we informally prove soundness of the analysis.
+To ensure that our work is correct, we informally prove soundness of the static analysis.
 By doing this, we can always be sure that our analysis produces an overestimation of the concrete values and tuples.
 The soundness proof can be found in \autoref{subsec:soundness}.
 
@@ -108,7 +109,7 @@ In \autoref{sec:preliminaries} we cover the preliminaries needed to understand t
 In \autoref{sec:theory} we describe our contribution in detail:
 
 \begin{itemize}
-    \item In \autoref{subsec:abstract-syntax} we describe the syntax of the language we of the analysis, further we define the conversion of programs in this language to program graphs;
+    \item In \autoref{subsec:abstract-syntax} we describe the syntax of the language used for the analysis, further we define the conversion of programs in this language to program graphs;
     \item in \autoref{subsec:abstract-domains} we describe the abstract domains of our analysis and how they related to the concrete domains, notably we describe:
     \begin{itemize}
         \item Regular expressions as an abstract domain for strings,
@@ -118,7 +119,7 @@ In \autoref{sec:theory} we describe our contribution in detail:
     \end{itemize}
     \item In \autoref{subsec:abstract-semantics} we give the abstract semantics for the instructions pertaining to the edges of program graphs, of note we define the abstract semantics for the SQL select-, insert-, update- and delete statement;
     \item In \autoref{subsec:soundness} we argue that our analysis is sound;
-    \item and finally in \autoref{} we show that our analysis will terminate.\todo{Write this section/subsection}
+    \item and finally in \autoref{subsec:termination} we show that our analysis will terminate.
 \end{itemize}
 
 In \autoref{sec:discussion} we discuss the quality of the presented analysis and in \autoref{sec:discussion} we also present new avenues for future work.

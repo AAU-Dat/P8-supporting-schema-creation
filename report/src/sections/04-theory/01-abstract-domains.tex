@@ -77,11 +77,11 @@ For a non-complete lattice $(S, \subseteq, \cup, \cap)$ and top-cover $X$ of $S$
 
 And the following corollary's immediately follow:
 
-\begin{corollary}
+\begin{corollary}\label{co:topcoverr}
     If $\mathcal{R}$ is a top-cover of $(\regexs, \subseteq, \cup, \cap)$ then $(\clattice{\mathcal{R}}{\regexs}, \subseteq, \cup, \cap)$ is a finite and complete lattice.
 \end{corollary}
 
-\begin{corollary}
+\begin{corollary}\label{co:topcoveri}
     If $\mathcal{I}$ is a top-cover of $(\uints, \subseteq, \cup, \cap)$ then $(\clattice{\mathcal{I}}{\uints}, \subseteq, \cup, \cap)$ is a finite and complete lattice.
 \end{corollary}
 
@@ -99,7 +99,7 @@ We overload this notation to work on sets of values in particular for $S' \subse
     S' \into C_X (S) &= \{s \into C_X(S) \mid s \in S'\}
 \end{align}
 
-To make this notion useful we assume that some mapping from application variables and table attributes to cover lattices is given by the user by some mechanism:
+To make this notion useful we assume that some mapping from application variables and table attributes to cover lattices is given by the user by some mechanism:\todo{Gabriela: is this assumption discussed somewhere else? does it seem like a reasonable assumption? can the intended user be expected to provide those? \\ Casper: Yes, we mention it in the discussion.}
 
 \begin{equation}\label{eq:lookupcl}
     \lookupcl : \mathbb{V}_t \cup \mathbb{V}_a \rightarrow \{ C_{X_1}(S_1), C_{X_2}(S_2), \dots, C_{X_n}(S_n) \}
@@ -312,13 +312,13 @@ And thus we can define the concretization of a table, for $attr(v_d) = (v_1, v_2
 \end{gather}
 
 
-\subsubsection{Abstract environments}
+\subsubsection{Abstract environments}\label{subsubsec:absenv}
 We define an abstract environment $\rho_{\ab{a}} \in \ab{\mathfrak{E}_a}$ mapping application variable names $v_a \in \mathbb{V}_a$ to abstract values, and $\rho_{\ab{d}} \in \ab{\mathfrak{E}_d}$ mapping table names $v_d \in \mathbb{V}_d$ to abstract tables.
 Given the previously mentioned map $\lookupcl$ in \autoref{eq:lookupcl} we define:
 
 
-\begin{align}
-    \ab{\mathfrak{E}_a} &= \mathbb{V}_a \rightarrow \mathsf{Val} \; \left( \bigcup_{v_a \in \mathbb{V}_a} \lookupcl(v_a) \right) \\
+\begin{align} \label{eq:absenva}
+    \ab{\mathfrak{E}_a} &= \mathbb{V}_a \rightarrow \mathsf{Val} \; \left( \bigcup_{v_a \in \mathbb{V}_a} \lookupcl(v_a) \right) \\ \label{eq:absenvd}
     \ab{\mathfrak{E}_d} &= \mathbb{V}_d \rightarrow \bigcup_{v_d \in \mathbb{V}_d} \mathcal{P}\left(\bigtimes_{v_t \in attr(v_d)}\lookupcl(v_t)\right) \\
     \ab{\mathfrak{E}} &= \ab{\mathfrak{E}_a} \times \ab{\mathfrak{E}_d}
 \end{align}

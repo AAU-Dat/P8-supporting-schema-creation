@@ -84,7 +84,7 @@ In a complete lattice $L$ with finite height, every monotone function $f : L \ri
     \end{equation}
 \end{theorem}
 
-\begin{theorem}
+\begin{theorem}\label{thm:powerset}
     If $A$ is a set then $(\mathcal{P}(A), \subseteq, \cup, \cap)$ is a complete lattice, called the \emph{powerset lattice}.
 \end{theorem}
 
@@ -139,9 +139,9 @@ Given the previous two definitions, if the initial abstract memories for the ini
 
 What that intuitively means is that the analysis assignment is a safe over approximation of the actual state-space of the program.
 Valid analysis assignment can then readily be computed as explained in~\cite{nielson_formal_2019}.
-In essence we can convert the constraints given in \autoref{def:valid} to a fixed point equation $x = f(x)$ as follows
+In essence we can convert the constraints given in \autoref{def:valid} to a fixed point equation $\mathbf{x} = f(\mathbf{x})$ as follows (Note that we use bold characters to denote vectors of values $\mathbf{x} = (x_1, \dots x_n)$ for any $n$, and we will do so for the rest of the paper.):
 For each node $q_i \in Q$ for $|Q| = n$ construct the equation:
-\begin{align}
+\begin{align} \label{eq:q}
     A(q_i) &= A(q_i) \cup \left(\bigcup_{q \in pred(q_i)} \abssem{I}(A(q))\right) \\
     A(q_i) &= f_i(A(q_1), \dots A(q_n))
 \end{align}
@@ -150,12 +150,11 @@ In the special case of the initial state the equation is:
     A(q_\whitepointerright) &= A(q_\whitepointerright) \cup \ab{E}_\whitepointerright \cup  \left(\bigcup_{q \in pred(q)} \abssem{I}(A(q))\right) \\
     A(q_\whitepointerright) &= f_\whitepointerright(A(q_1), A(q_2), \dots A(q_n))
 \end{align}
-These equations can then be converted to one equation $x = f(x)$, yielding:
-\begin{multline}
-        (A(q_1), \dots, A(q_n)) \\
-        = (f_1(A(q_1), \dots, A(q_n)), \\
-        \dots, f_n(A(q_1), \dots, A(q_n)))
+These equations can then be converted to one equation $\mathbf{x} = f(\mathbf{x})$ with $f : \bigtimes_{i = 1}^n \powerset{\ab{\environments}} \rightarrow \bigtimes_{i = 1}^n \powerset{\ab{\environments}}$, yielding:
+\begin{multline}\label{eq:constraint}
+    (A(q_1), \dots, A(q_n)) = \\
+    (f_1(A(q_1), \dots, A(q_n)), \dots, f_n(A(q_1), \dots, A(q_n)))
 \end{multline}
 
-Assuming that $\powerset{\ab{\environments}}$ is finite and complete lattice and therefore by \autoref{thm:product-lattice} $\bigtimes_{i = 1}^n \powerset{\ab{\environments}}$ is a finite and complete lattice, then by \autoref{thm:kleene_finite} we can find a solution to the equation $x = f(x)$ by iterative application of $f$ on the least element $\emptyset$ until a fixed point is reached.
+Assuming that $\powerset{\ab{\environments}}$ is finite and complete lattice and therefore by \autoref{thm:product-lattice} $\bigtimes_{i = 1}^n \powerset{\ab{\environments}}$ is a finite and complete lattice, then by \autoref{thm:kleene_finite} we can find a solution to the equation $\mathbf{x} = f(\mathbf{x})$ by iterative application of $f$ on the least element $\emptyset$ until a fixed point is reached.
 Further the solution can be reached in a finite number of steps.
