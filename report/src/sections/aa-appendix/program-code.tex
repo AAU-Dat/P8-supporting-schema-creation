@@ -1,0 +1,28 @@
+\section{Program code}\label{sec:program-code}
+
+\begin{figure}
+    \begin{minted}[frame=lines, linenos, escapeinside=||, mathescape=true]{text}
+while true do(
+    vName := [A-Z][a-z]* [A-Z][a-z]*;
+    vBalance := |$\top$|;
+    (Insert(account, <Name, Balance>, <vName, vBalance>), true)
+)[](
+    vName := |$\top$|;
+    (delete(account), name = vName)
+)[](
+    vName := [A-Z][a-z]* [A-Z][a-z]*;
+    toName := [A-Z][a-z]* [A-Z][a-z]*;
+    amount := [0,+|$\infty$|];
+    (select (vBalance, account, <name>), name = vName)
+    (select (toBalance, account, <name>), name = toName)
+    if(vBalance - amount) < 0
+        then skip
+    else(
+        (update(account, <balance>, <vBalance - amount>), name = vName);
+        (update(account, <balance>, <toBalance + amount>), name = toName);
+        )
+)
+    \end{minted}
+    \caption{Code for the program example}
+    \label{fig:program-code}
+\end{figure}
