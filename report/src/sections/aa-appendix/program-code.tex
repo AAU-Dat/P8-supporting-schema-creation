@@ -20,9 +20,73 @@ while true do(
     else(
         (update(account, <balance>, <vBalance - amount>), name = vName);
         (update(account, <balance>, <toBalance + amount>), name = toName);
-        )
+    )
 )
     \end{minted}
     \caption{Code for the program example}
     \label{fig:program-code}
 \end{figure}
+
+\begin{align}
+    \begin{split}
+    vName := [A-Z][a-z]* [A-Z][a-z]*;
+    \end{split}
+    & I_1\\
+    \begin{split}
+        vBalance := \top; 
+    \end{split}
+    & I_2\\
+    \begin{split}
+        &(Insert(account, <Name, Balance>, \\
+        &<vName, vBalance>), true)
+    \end{split} 
+    & I_3\\
+    \begin{split}
+        vName := \top;
+    \end{split} 
+    & I_4\\
+    \begin{split}
+        (delete(account), name = vName)
+    \end{split} 
+    & I_5\\
+    \begin{split}
+        vName := [A-Z][a-z]* [A-Z][a-z]*;
+    \end{split} 
+    & I_6\\
+    \begin{split}
+        toName := [A-Z][a-z]* [A-Z][a-z]*;
+    \end{split} 
+    & I_7\\
+    \begin{split}
+        amount := [0,+ \infty];
+    \end{split} 
+    & I_8\\
+    \begin{split}
+        &(select (vBalance, account, <name>), \\
+        &name = vName)
+    \end{split} 
+    & I_9\\
+    \begin{split}
+        &(select (toBalance, account, <name>), \\
+        &name = toName)
+    \end{split} 
+    & I_{10}\\
+    \begin{split}
+        &(update(account, <balance>, \\
+        &<vBalance - amount>), name = vName);
+    \end{split} 
+    & I_{11}\\
+    \begin{split}
+        &(update(account, <balance>, \\
+        &<toBalance + vBalance>), name = toName);
+    \end{split}
+    & I_{12}
+\end{align}
+
+
+% \begin{align}
+%     \begin{split}
+%         vName := [A-Z][a-z]* [A-Z][a-z]*;
+%     \end{split}
+%     & I_1\\
+% \end{align}
