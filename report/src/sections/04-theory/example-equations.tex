@@ -103,40 +103,40 @@ Fixed point:
 \end{align}
 
 \begin{align}
-    A(q_i)=\left\{\begin{matrix}
-                      \left.\begin{matrix*}[l]
+    A(q_d)=\left\{\begin{matrix}
+                      \left.\begin{matrix}
                                 \texttt{vName}\\
                                 \texttt{vBalance}\\
                                 \texttt{toName}\\
                                 \texttt{toBalance}\\
                                 \texttt{amount}\\
                                 \texttt{account}
-                      \end{matrix*}\right|
+                      \end{matrix}\right|
                       \left.\begin{matrix}
-                                NR\\
                                 \top\\
+                                \bot\\
                                 \bot\\
                                 \bot\\
                                 \bot\\
                                 \emptyset
                       \end{matrix}\right|
                       \left.\begin{matrix}
-                                NR\\
+                                \top\\
                                 \top\\
                                 \bot\\
                                 \bot\\
                                 \bot\\
-                                \mathsf{List} \; \{(NR,\top)\}
+                                \mathsf{List} \; \{(NR, \top)\}
                       \end{matrix}\right|
                       \begin{matrix}
-                          NR\\
                           \top\\
+                          \mathsf{List} \; \{\top\}\\
                           NR\\
                           \mathsf{List} \; \{\top\}\\
                           +\\
                           \mathsf{List} \; \{(NR,\top)\}
                       \end{matrix}
-    \end{matrix}\right\}
+    \end{matrix}\right.
 \end{align}
 
 \begin{align}
