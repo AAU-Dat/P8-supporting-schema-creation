@@ -9,23 +9,23 @@ The specific operations $\aaop$ are defined for the respective types later on.\t
 \begin{align}
     \aop &: \mathsf{Val} \; A \rightarrow \mathsf{Val} \; B \rightarrow \mathsf{Val} \; C \label{eq:operation} \\
     \mathsf{Single} \; s_1 \aop \mathsf{Single} \; s_2 &= \mathsf{Single} \; (s_1 \aaop s_2) \label{eq:generalBOP} \\
-    \mathsf{Single} \; s \aop \mathsf{List} \; S &= \mathsf{List} \; \{ s \aaop s' \mid s' \in S \} \\
-    \mathsf{List} \; S \aop \mathsf{Single} \; s &= \mathsf{List} \; \{ s' \aaop s \mid s' \in S \}  \\
-    \mathsf{List} \; S_1 \aop \mathsf{List} \; S_2 &= \mathsf{List} \; \{ s_1 \aaop s_2 \mid s_1 \in S_1, s_2 \in S_2 \} \\
+    \mathsf{Single} \; s \aop \mathsf{Col} \; S &= \mathsf{Col} \; \{ s \aaop s' \mid s' \in S \} \\
+    \mathsf{Col} \; S \aop \mathsf{Single} \; s &= \mathsf{Col} \; \{ s' \aaop s \mid s' \in S \}  \\
+    \mathsf{Col} \; S_1 \aop \mathsf{Col} \; S_2 &= \mathsf{Col} \; \{ s_1 \aaop s_2 \mid s_1 \in S_1, s_2 \in S_2 \} \\
     \aop (\mathsf{Single} \; s) &= \mathsf{Single} \; (\aaop s) \\
-    \aop (\mathsf{List} \; S) &= \mathsf{List} \; \{ \aaop s \mid s \in S \} \label{eq:generalUOP}
+    \aop (\mathsf{Col} \; S) &= \mathsf{Col} \; \{ \aaop s \mid s \in S \} \label{eq:generalUOP}
 \end{align}
 
 Similarly, we define $\app{op}$:
 
 \begin{align}
     \app{op} &: \mathsf{Val} \; A \rightarrow \mathsf{Val} \; B \rightarrow \mathsf{Val} \; C \\
-    \mathsf{Single} \; s_1 \app{op} \mathsf{Single} \; s_2 &= \mathsf{List} \; (\{s_1\} \op \{s_2\}) \\
-    \mathsf{Single} \; s \app{op} \mathsf{List} \; S &= \mathsf{List} \; (\{ s \} \op S) \\
-    \mathsf{List} \; S \app{op} \mathsf{Single} \; s &= \mathsf{List} \; (S \op \{ s \})  \\
-    \mathsf{List} \; S_1 \app{op} \mathsf{List} \; S_2 &= \mathsf{List} \; (S_1 \op S_2) \\
-    \app{op} (\mathsf{Single} \; s) &= \mathsf{List} \; (\op \{ s \}) \\
-    \app{op} (\mathsf{List} \; S) &= \mathsf{List} \; (\op S )
+    \mathsf{Single} \; s_1 \app{op} \mathsf{Single} \; s_2 &= \mathsf{Col} \; (\{s_1\} \op \{s_2\}) \\
+    \mathsf{Single} \; s \app{op} \mathsf{Col} \; S &= \mathsf{Col} \; (\{ s \} \op S) \\
+    \mathsf{Col} \; S \app{op} \mathsf{Single} \; s &= \mathsf{Col} \; (S \op \{ s \})  \\
+    \mathsf{Col} \; S_1 \app{op} \mathsf{Col} \; S_2 &= \mathsf{Col} \; (S_1 \op S_2) \\
+    \app{op} (\mathsf{Single} \; s) &= \mathsf{Col} \; (\op \{ s \}) \\
+    \app{op} (\mathsf{Col} \; S) &= \mathsf{Col} \; (\op S )
 \end{align}
 
 This will also be helpful later, when we define the abstract semantics of SQL commands in \autoref{subsubsec:abstract-semantics-sql-statements}.
@@ -63,7 +63,7 @@ $\ab{\mathfrak{E}}$ describes the set of abstract states.
     \absboolsem{\neg b}(\ab{\environment}) &= \aab{\neg} \absboolsem{b}(\ab{\environment}) \\
     \absboolsem{e_1 \;comp\; e_2}(\ab{\environment}) &=
     \begin{cases}
-        \bigcup B & \text{if } \mathsf{List} \; B = E_1 \;\ab{\comp}\; E_2 \\
+        \bigcup B & \text{if } \mathsf{Col} \; B = E_1 \;\ab{\comp}\; E_2 \\
         b & \text{if } \mathsf{Var} \; b = E_1 \;\ab{\comp}\; E_2
     \end{cases} \label{eq:abstract-bool-semantics-end} \\
     \text{Where }& E_1 = \absexpsem{e_1}(\ab{\environment}) \\
@@ -166,7 +166,7 @@ The justification of abstract binary operations is analogous to the one given fo
     \absexpsem{\mathscr{I}}(\_) &= \mathsf{Single} \; \mathscr{I} \\
     \absexpsem{v_a}(\_, \rho_{\ab{a}}) &=  \rho_{\ab{a}}(v_a) \label{sem:exp3} \\
     \begin{split}
-        \absexpsem{v_t}(\rho_{\ab{d}}, \_) &=  \mathsf{List} \; \pi_{v_t}(\rho_{\ab{d}}(v_d)) \\
+        \absexpsem{v_t}(\rho_{\ab{d}}, \_) &=  \mathsf{Col} \; \pi_{v_t}(\rho_{\ab{d}}(v_d)) \\
         &\text{ such that } v_t \in attr(v_d) \label{sem:exp4}
     \end{split} \\
     \absexpsem{op_u \; e}(\ab{\environment}) &= \ab{op_u} \; (\absexpsem{e}(\ab{\environment}) \label{eq:unary-op} \\
@@ -269,14 +269,14 @@ Each of the analysis functions for SQL statements requires some explanation.
 Therefore, we will present each of them carefully in the sequel.
 
 The abstract \textit{select}, takes all values in the table where we are definitely sure or maybe sure that the predicate evaluates to true for the current state.
-Then it wraps them in a $\mathsf{List}$ label and inserts this in the lattice of the respective variable before assigning the variable to this value.
+Then it wraps them in a $\mathsf{Col}$ label and inserts this in the lattice of the respective variable before assigning the variable to this value.
 
 
 \begin{equation}
 \begin{split}
     \abssqlsem{&\langle select(v_a, v_d, \mathbf{v}_t), b \rangle}\biggl(\rho_{\ab{d}}, \rho_{\ab{a}})
     = (\rho_{\ab{d}}, \rho_{\ab{a}}[v_a \mapsto \\
-    &\mathsf{List} \Bigl( \pi_{\mathbf{v}_t} \bigl(v_d \downarrow_{\true}^{(\env{\ab{d}}, \env{\absvars})} b \cup v_d \downarrow_{\unknown}^{(\env{\ab{d}}, \env{\absvars})} b \bigr) \Bigr) \into \lookupcl(v_a) ]\biggr)
+    &\mathsf{Col} \Bigl( \pi_{\mathbf{v}_t} \bigl(v_d \downarrow_{\true}^{(\env{\ab{d}}, \env{\absvars})} b \cup v_d \downarrow_{\unknown}^{(\env{\ab{d}}, \env{\absvars})} b \bigr) \Bigr) \into \lookupcl(v_a) ]\biggr)
 \end{split}\label{eq:equation123}
 \end{equation}
 
@@ -290,7 +290,7 @@ In particular, we start with a tuple with all entries equal to null $\lambda\_.\
 
 \begin{align}
     \abssqlsem{\langle insert(v_d, \mathbf{v}_t, &\mathbf{e}), \_ \rangle}(\rho_{\ab{d}}, \rho_{\ab{a}}) = (\rho_{\ab{d}}[v_d\mapsto \ab{t}\cup s], \rho_{\ab{a}}) \nonumber \\
-    \text{where } \mathsf{List} \; S &= \app{\bigtimes_{i = 0}^{n}} \absexpsem{e_i}(\rho_{\ab{d}}, \rho_{\ab{a}}) \into \lookupcl(v_i) \nonumber\\
+    \text{where } \mathsf{Col} \; S &= \app{\bigtimes_{i = 0}^{n}} \absexpsem{e_i}(\rho_{\ab{d}}, \rho_{\ab{a}}) \into \lookupcl(v_i) \nonumber\\
     \text{and } s &= \left\{ (\lambda\_.\mnull)[\mathbf{v}_t \mapsto \mathbf{s}] \;\middle|\; \mathbf{s} \in S\right\} \nonumber\\
     \text{and } \ab{t}&=\rho_{\ab{d}}(v_d)
 \end{align}
