@@ -271,14 +271,10 @@ Therefore, we will present each of them carefully in the sequel.
 The abstract \textit{select}, takes all values in the table where we are definitely sure or maybe sure that the predicate evaluates to true for the current state.
 Then it wraps them in a $\mathsf{Col}$ label and inserts this in the lattice of the respective variable before assigning the variable to this value.
 
-
-\begin{equation}
-\begin{split}
-    \abssqlsem{&\langle select(v_a, v_d, \mathbf{v}_t), b \rangle}\biggl(\rho_{\ab{d}}, \rho_{\ab{a}})
-    = (\rho_{\ab{d}}, \rho_{\ab{a}}[v_a \mapsto \\
-    &\mathsf{Col} \Bigl( \pi_{\mathbf{v}_t} \bigl(v_d \downarrow_{\true}^{(\env{\ab{d}}, \env{\absvars})} b \cup v_d \downarrow_{\unknown}^{(\env{\ab{d}}, \env{\absvars})} b \bigr) \Bigr) \into \lookupcl(v_a) ]\biggr)
-\end{split}\label{eq:equation123}
-\end{equation}
+\begin{multline}
+    \abssqlsem{\langle select(v_a, v_d, \mathbf{v}_t), b \rangle}(\rho_{\ab{d}}, \rho_{\ab{a}}) = \left(\rho_{\ab{d}}, \rho_{\ab{a}} [ v_a \mapsto \ab{t} ] \right)\\
+    \text{where } \ab{t} = \left( \mathsf{Col} \; \left( \pi_{\mathbf{v}_t} \left(v_d \downarrow_{\true}^{(\env{\ab{d}}, \env{\absvars})} b \cup v_d \downarrow_{\unknown}^{(\env{\ab{d}}, \env{\absvars})} b \right) \right) \right) \into \lookupcl(v_a)
+\end{multline}\label{eq:equation123}
 
 For \textit{insert}, we evaluate each expression in $\mathbf{e}$, and take the product of them as the set of abstract tuples to be inserted.
 We take the product as each expression might evaluate to a $\mathsf{list}$ type.
