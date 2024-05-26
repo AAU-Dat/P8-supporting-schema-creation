@@ -277,7 +277,7 @@ Then it wraps them in a $\mathsf{Col}$ label and inserts this in the lattice of 
 \end{multline}\label{eq:equation123}
 
 For \textit{insert}, we evaluate each expression in $\mathbf{e}$, and take the product of them as the set of abstract tuples to be inserted.
-We take the product as each expression might evaluate to a $\mathsf{list}$ type.
+We take the product as each expression might evaluate to a $\mathsf{Col}$ type.
 These respective values are inserted into the lattice of the column they correspond to.
 
 At last, we turn the values into actual abstract tuples in the table, here we find it helpful to view a tuple as a function $attr(v_d) \rightarrow \bigcup_{v_t \in attr(v_d)}\lookupcl(v_t)$.
