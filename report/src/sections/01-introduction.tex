@@ -1,29 +1,24 @@
 \section{Introduction}\label{sec:introduction}
-\IEEEPARstart{S}{oftware} analysis is a broad field encompassing various techniques and methodologies, each designed to address specific aspects of software systems.
-Among these techniques, data flow analysis is a fundamental method for systematically analyzing software behaviour.
-Abstract interpretation is a powerful tool for examining software behaviour through static analysis, providing a formal framework for reasoning about program properties and the data flow of a program~\cite{cousot_abstract_1977}.
+\IEEEPARstart{S}{oftware} analysis is a broad field encompassing a wide range of techniques and methodologies, each tailored to address specific aspects of software systems.
+One such technique is static dataflow analysis, which focuses on analyzing and obtaining information that is valid for all executions of a program~\cite{jackson_software_2000}.
+Static dataflow analysis can be approached from various angles, including the consideration of meta-information like information flow or taint analysis.
+While these approaches offer valuable insights into the behavior of a program, they often require detailed knowledge of the program's internal workings and are not always applicable to all types of software systems.
+In this paper, we use static program analysis, specifically abstract interpretation.
 
-Static program analysis, mainly through abstract interpretation, is crucial for finding information that is guaranteed to hold across all executions of a program~\cite{jackson_software_2000}.
+Abstract interpretation, first proposed by Cousot and Cousot in 1977~\cite{cousot_abstract_1977}, has emerged as a fundamental method for static program analysis.
+Over the years, it has evolved into a versatile tool, finding applications across various programming paradigms and system architectures.
+Its utility extends beyond traditional imperative programming to encompass object-oriented designs and concurrent systems~\cite{gustafsson_analyzing_2013, mine_static_2023}.
+Abstract interpretation has played a pivotal role in analyzing a spectrum of program properties, from basic safety and liveness concerns to intricate security considerations~\cite{mastroeni_abstract_2011}.
 
-
-This paper leverages abstract interpretation to analyze software behaviour.
-Abstract interpretation is a mathematical framework that facilitates reasoning about the correctness of static analysis.
-
-Abstract interpretation, first introduced by Cousot and Cousot in 1977~\cite{cousot_abstract_1977}, has become a foundational method for static program analysis.
-Over the years, it has evolved into a versatile tool, applicable across various programming paradigms and system architectures.
-Its utility extends beyond traditional imperative programming, including object-oriented designs and concurrent systems~\cite{gustafsson_analyzing_2013, mine_static_2023}.
-
-Abstract interpretation has been instrumental in analyzing various program properties, from basic safety and liveness concerns to complex security considerations~\cite{mastroeni_abstract_2011}.
-
-Building on this foundation, Halder and Cortesi have extended the application of abstract interpretation to domains such as query languages~\cite{halder_abstract_2012}.
-This paper aims to further explore and expand the capabilities of abstract interpretation within the context of query languages.
+Building upon this, Halder and Cortesi have expanded the application of abstract interpretation to domains like query languages~\cite{halder_abstract_2012}.
+This paper continues in these footsteps, aiming to further explore and extend the capabilities of abstract interpretation within the context of query languages.
 
 
 \subsection{Non-terminating Analysis}\label{subsec:non-terminating-analysis}
 The framework proposed by Halder and Cortesi may encounter non-termination issues.
-While it can used to optimize integrity constraints through static analysis of transactions, it does not specify particular properties to check.
-To illustrate, consider the database schema in \autoref{lst:motivate-sql}, the insert query in \autoref{lst:motivate-sql-insert}, and the program in \autoref{lst:motivate-program}.
-The program inserts a tuple into the account table with the name "name" and a balance of 1 into the account table, and it does so indefinitely.
+While it can be used to optimize integrity constraints through static analysis of transactions, it does not specify particular properties to check.
+To illustrate, consider the database schema in \autoref{lst:motivate-sql} as well as the insert query in the program in \autoref{lst:motivate-program}.
+The program inserts a tuple into the account table with the name, "name", and a balance of 1 into the account table, and it does so indefinitely.
 
 
 \begin{listing}
@@ -39,26 +34,18 @@ The program inserts a tuple into the account table with the name "name" and a ba
 
 
 \begin{listing}
-    \begin{minted}{bash}
+    \begin{minted}[breaklines]{bash}
         while true do
-            insert((name, balance), ("name", 1))
+            (insert(account,(name,balance),("name", 1)), true)
     \end{minted}
     \caption{A tiny program with nonterminating analysis.}
     \label{lst:motivate-program}
 \end{listing}
 
-\begin{listing}
-    \begin{minted}{sql}
-    INSERT INTO account VALUES ("name", 1);
-    \end{minted}
-    \caption{A simple SQL statement inserting a tuple into the account table.}
-    \label{lst:motivate-sql-insert}
-\end{listing}
-
-
-Constantly changing database contexts under Cortesi and Halder's framework may lead to analysis termination issues. \todo{Gabriela, are you sure about this?, wouldn't the definition given on page 145 of (Halder Cortesi), (abstract insert) be used for this and since it is based on set union, then reach a fixed point?}
+Because the database context would continually change under Cortesi and Halder's framework, the analysis would not terminate.
+\todo{Gabriela, are you sure about this?, wouldn't the definition given on page 145 of (Halder Cortesi), (abstract insert) be used for this and since it is based on set union, then reach a fixed point? Anders: Couldn't find anything in Halder and Cortesi paper}
 However, there is a solution.
-By extending the analysis to include abstract tuples, i.e. representing tuples with abstract values and abstracting over the multiplicity in the table, the analysis can terminate even for the program in \autoref{lst:motivate-program}.
+By extending the abstraction of the analysis to also abstract over the multiplicity of abstract tuples in an abstract table, the analysis can terminate even for the program in \autoref{lst:motivate-program}.
 
 
 \todo{\textbf{TODO:Show the contributions through a second example that runs through how we used the updated semantics. Move from method}
