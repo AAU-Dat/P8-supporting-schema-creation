@@ -124,10 +124,10 @@ From the states of the program graph we get the following equations~\autoref{eq:
     A(q_\blackpointerleft)=A(q_\blackpointerleft) \label{eq:example-equation-12}
 \end{align}
     
-When solving the equations seen in~\autoref{eq:example-equation-1} through ~\autoref{eq:example-equation-12} using the semantics in this paper, we get the following fixpoint~\autoref{eq:example-fixed-point-1} through~\autoref{eq:example-fixed-point-7}.
+When solving the equations seen in~\autoref{eq:example-equation-1} through ~\autoref{eq:example-equation-12} using the semantics in this paper, we get the following fixpoint~\autoref{eq:example-fixed-point-1} through~\autoref{eq:example-fixed-point-8}.
 
 \input{sections/04-theory/example-equations}
 
 By using this, it is possible to analyze the program and check for some requested properties.
 In this case one of the properties could be to check if it is possible to have accounts with a negative balance, which in this case would be possible.
-Another case could be checking if it is possible to have accounts with names that are not in the format of the regular expression $[A-Z][a-z]* [A-Z][a-z]*$, which in this case would hold.
+Another case could be checking if it is possible to have accounts with names that are not in the format of the regular expression $[A-Z][a-z]^*\; [A-Z][a-z]^*$, which in this case would hold.
