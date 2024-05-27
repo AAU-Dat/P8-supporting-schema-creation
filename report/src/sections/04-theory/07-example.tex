@@ -1,7 +1,9 @@
-\section{Example}\label{sec:example}
+\section{Examples}\label{sec:example}
+
+\subsection{Big Example}\label{subsec:big-example}
 In this section we will present an example of a program that could be analyzed using the abstract interpretation presented in this paper.
 
-The program in Figure\ref{fig:program-code} is a simple program that simulates a bank system With delete, input, select, and update operations.
+The program in~\autoref{fig:program-code} is a simple program that simulates a bank system With delete, input, select, and update operations.
 \begin{figure}
     \begin{minted}[frame=lines, linenos, escapeinside=||, mathescape=true]{text}
 while true do(
@@ -29,7 +31,7 @@ while true do(
     \label{fig:program-code}
 \end{figure}
 
-The program in Figure\ref{fig:program-code} can be broken up into the following set of instructions.
+The program in~\autoref{fig:program-code} can be broken up into the following set of instructions, seen in~\autoref{eq:example-instructions}.
 
 \begin{align} \label{eq:example-instructions}
     \begin{split}
@@ -87,14 +89,24 @@ The program in Figure\ref{fig:program-code} can be broken up into the following 
     & I_{12}
 \end{align}
 
-A program graph is then made on the basis of the program in Figure\ref{fig:program-code} using the abstract interpretation.
+A program graph is then made from the program in~\autoref{fig:program-code} using the abstract interpretation.
 
-\todo[inline]{insert first program graph}
+\begin{figure}
+    \centering
+    \input{figures/graph_example.tex}
+    \caption[short]{Full program graph example}
+    \label{fig:full-graph-example}
+\end{figure}
 
 
 The program graph can then be simplified to the following program graph.
 
-\todo[inline]{insert second program graph}
+\begin{figure}
+    \centering
+    \input{figures/simple_graph_example.tex}
+    \caption[short]{Simple program graph example}
+    \label{fig:simple-graph-example}
+\end{figure}
 
 From the states of the program graph we get the following equations.
 
