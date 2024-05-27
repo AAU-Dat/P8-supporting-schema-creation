@@ -17,7 +17,7 @@ More specifically, if one where to take $\ab{\mathcal{S}}'\lBrack\cdot\rBrack$ t
 \begin{proof}
     \pfsketch\
     The proof would proceed by structural induction on $\mathbb{E}$.
-    It should be clear that the base, when the expression is a single constant, is true.
+    It should be clear that the base case, when the expression is a single constant, is true.
     The inductive case would rely on the inductive hypothesis, and the fact that each $\aab{op_u}$ and $\aab{op_b}$ are overestimates of their respective operations and the fact that the operation is done between each element in the case where a column of values is suspected.
     When we say overestimates, what we precisely mean is that if $s_i \in \concrete_6(\ab{s_i})$ for $i \in \{1, 2\}$ then $s_1 \op s_2 \in \concrete_6(\ab{s_1} \; \aab{op_b} \; \ab{s_2})$.
     Or if $s \in \concrete_6(\ab{s})$ then $\op s \in \concrete_6(\aab{op_u} \; \ab{s})$.
@@ -67,7 +67,7 @@ More specifically, if one where to take $\ab{\mathcal{S}}'\lBrack\cdot\rBrack$ t
 \begin{proof}
     \pf\
     Assume $\environment \in \concrete_1(\ab{P})$ then in $\sem{v_a \coloneqq e}(\environment)$, $v_a$ is assigned to $\expsem{e}(\environment)$.
-    Because $\expsem{e}(\environment) \subseteq \concrete_{4a}(s) = \concrete_{4a}(\absexpsem{e}(\env{\ab{d}}, \env{\ab{a}}))$ for $(\env{\ab{d}}, \env{\ab{a}}) \in \ab{P}$ where $\environment \in \concrete_2(\env{\ab{d}}, \env{\ab{a}})$ then $\sem{v_a \coloneqq e}(\environment) \subseteq \concrete_2(\env{\ab{d}}, \env{\ab{a}}[v_a \mapsto s])$, therefore also $\sem{v_a \coloneqq e}(\environment) \subseteq \concrete_1(\abssem{v_a \coloneqq e}(\ab{P}))$.
+    Because $\expsem{e}(\environment) \in \concrete_{4a}(s) = \concrete_{4a}(\absexpsem{e}(\env{\ab{d}}, \env{\ab{a}}))$ for $(\env{\ab{d}}, \env{\ab{a}}) \in \ab{P}$ where $\environment \in \concrete_2(\env{\ab{d}}, \env{\ab{a}})$ then $\sem{v_a \coloneqq e}(\environment) \subseteq \concrete_2(\env{\ab{d}}, \env{\ab{a}}[v_a \mapsto s])$, therefore also $\sem{v_a \coloneqq e}(\environment) \subseteq \concrete_1(\abssem{v_a \coloneqq e}(\ab{P}))$.
 \end{proof}
 
 
