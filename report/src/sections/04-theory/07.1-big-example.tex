@@ -87,7 +87,7 @@ The program in~\autoref{fig:program-code} can be broken up into the following se
     & I_{12}
 \end{align}
 
-A program graph is then made from the program in~\autoref{fig:program-code} using the abstract interpretation.
+A program graph, seen in~\autoref{fig:full-graph-example} is then made from the program in~\autoref{fig:program-code} using the abstract interpretation.
 
 \begin{figure}
     \centering
@@ -97,7 +97,7 @@ A program graph is then made from the program in~\autoref{fig:program-code} usin
 \end{figure}
 
 
-The program graph can then be simplified to the following program graph.
+The program graph can then be simplified to the following program graph~\autoref{fig:simple-graph-example}.
 
 \begin{figure}
     \centering
@@ -106,27 +106,32 @@ The program graph can then be simplified to the following program graph.
     \label{fig:simple-graph-example}
 \end{figure}
 
-From the states of the program graph we get the following equations.
+From the states of the program graph we get the following equations~\autoref{eq:example-equation}.
 
-\begin{align}\label{eq:exaple-equation}
-\begin{split}
-    A(q_\whitepointerright)=A(q_\whitepointerright) &\cup \hat E_\whitepointerright \\&\cup \mathcal{\hat S} \lBrack skip \rBrack(A(q_{t4}))\\&\cup \mathcal{\hat S} \lBrack I_{12} \rBrack (A(q_{t6})) \\&\cup \mathcal{\hat S} \lBrack I_3 \rBrack (A(q_i)) \\&\cup \mathcal{\hat S} \lBrack I_5 \rBrack (A(q_d))
-\end{split}\\
-A(q_i)=A(q_i)&\cup \mathcal{\hat S} \lBrack I_1;I_2 \rBrack (A(q_\whitepointerright ))\\
-A(q_d)=A(q_d)&\cup \mathcal{\hat S} \lBrack I_4 \rBrack (A(q_\whitepointerright ))\\
-A(q_{t1})=A(q_{t1})&\cup \mathcal{\hat S} \lBrack I_6;I_7;I_8 \rBrack (A(q_\whitepointerright))\\
-A(q_{t2})=A(q_{t2})&\cup \mathcal{\hat S} \lBrack I_9 \rBrack (A(q_{t1}))\\
-A(q_{t3})=A(q_{t3})&\cup \mathcal{\hat S} \lBrack I_{10} \rBrack (A(q_{t2}))\\
-A(q_{t4})=A(q_{t4})&\cup \mathcal{\hat S} \lBrack b \rBrack (A(q_{t3}))\\
-A(q_{t5})=A(q_{t5})&\cup \mathcal{\hat S} \lBrack \neg b \rBrack (A(q_{t3}))\\
-A(q_{t6})=A(q_{t6})&\cup \mathcal{\hat S} \lBrack I_{11} \rBrack (A(q_{t5}))\\
-A(q_\blackpointerleft)=A(q_\blackpointerleft)
-\end{align}
-
-When solving the equations in\ref{eq:exaple-equation} using the semantics in this paper, we get the following fixpoint.
+\begin{figure}
+    \centering
+    \begin{align}
+        \begin{split}
+            A(q_\whitepointerright)=A(q_\whitepointerright) &\cup \hat E_\whitepointerright \\&\cup \mathcal{\hat S} \lBrack skip \rBrack(A(q_{t4}))\\&\cup \mathcal{\hat S} \lBrack I_{12} \rBrack (A(q_{t6})) \\&\cup \mathcal{\hat S} \lBrack I_3 \rBrack (A(q_i)) \\&\cup \mathcal{\hat S} \lBrack I_5 \rBrack (A(q_d))
+        \end{split}\\
+        A(q_i)=A(q_i)&\cup \mathcal{\hat S} \lBrack I_1;I_2 \rBrack (A(q_\whitepointerright ))\\
+        A(q_d)=A(q_d)&\cup \mathcal{\hat S} \lBrack I_4 \rBrack (A(q_\whitepointerright ))\\
+        A(q_{t1})=A(q_{t1})&\cup \mathcal{\hat S} \lBrack I_6;I_7;I_8 \rBrack (A(q_\whitepointerright))\\
+        A(q_{t2})=A(q_{t2})&\cup \mathcal{\hat S} \lBrack I_9 \rBrack (A(q_{t1}))\\
+        A(q_{t3})=A(q_{t3})&\cup \mathcal{\hat S} \lBrack I_{10} \rBrack (A(q_{t2}))\\
+        A(q_{t4})=A(q_{t4})&\cup \mathcal{\hat S} \lBrack b \rBrack (A(q_{t3}))\\
+        A(q_{t5})=A(q_{t5})&\cup \mathcal{\hat S} \lBrack \neg b \rBrack (A(q_{t3}))\\
+        A(q_{t6})=A(q_{t6})&\cup \mathcal{\hat S} \lBrack I_{11} \rBrack (A(q_{t5}))\\
+        A(q_\blackpointerleft)=A(q_\blackpointerleft)
+    \end{align}
+    \label{eq:example-equation}
+    \caption[short]{Equations for the program example}
+\end{figure}
+    
+    When solving the equations in~\ref{eq:example-equation} using the semantics in this paper, we get the following fixpoint.
 
 \input{sections/04-theory/example-equations}
 
-You would then be able to use the fixpoint\ref{eq:exaple-equation} to analyze the program and check for some requested properties.
+By using the fixpoint\ref{eq:example-equation}, it is possible to analyze the program and check for some requested properties.
 In this case one of the properties could be to check if it is possible to have accounts with a negative balance, which in this case would be possible.
-Or you could check if it is possible to have accounts with names that are not in the format of the regular expression $[A-Z][a-z]* [A-Z][a-z]*$, which in this case would hold.
+Another case could be checking if it is possible to have accounts with names that are not in the format of the regular expression $[A-Z][a-z]* [A-Z][a-z]*$, which in this case would hold.
