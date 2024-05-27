@@ -15,8 +15,7 @@ This paper continues in these footsteps, aiming to further explore and extend th
 
 
 \subsection{Non-terminating Analysis}\label{subsec:non-terminating-analysis}
-The framework proposed by Halder and Cortesi may encounter non-termination issues.
-While it can be used to optimize integrity constraints through static analysis of transactions, it does not specify particular properties to check.
+Halder and Cortesi do not provide a proof of termination and we conjecture\footnote{We only allow ourselves to conjecture this because, in our opinion, their formalization of the abstract insert is ambiguous.}~that it may encounter non-termination issues.
 To illustrate, consider the database schema in \autoref{lst:motivate-sql} as well as the insert query in the program in \autoref{lst:motivate-program}.
 The program inserts a tuple into the account table with the name, "name", and a balance of 1 into the account table, and it does so indefinitely.
 
