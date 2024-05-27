@@ -24,34 +24,32 @@
     \node [circle, draw] (o) at (1,-8.8) {};
     \node [circle, draw] (p) at (3,-8.8) {};
 
-
-
     \node [circle, draw] (end) at (3,0) {$q_\blackpointerleft$};
 
-    \draw[arrow, ->] (start) -- node[right]{true} (a);
-    \draw[arrow, ->] (a) -- node[above, xshift=10, yshift=-4]{skip} (b);
-    \draw[arrow, ->] (a) -- node[left, yshift=5, xshift=6]{skip} (c);
-    \draw[arrow, ->] (c) -- node[right]{1} (d);
-    \draw[arrow, ->] (d) -- node[right]{2} (e);
+    \draw[arrow, ->] (start) -- node[right]{\texttt{true}} (a);
+    \draw[arrow, ->] (a) -- node[above, xshift=10, yshift=-4]{\texttt{skip}} (b);
+    \draw[arrow, ->] (a) -- node[left, yshift=5, xshift=6]{\texttt{skip}} (c);
+    \draw[arrow, ->] (c) -- node[right]{$I_1$} (d);
+    \draw[arrow, ->] (d) -- node[right]{$I_2$} (e);
 
-    \draw[arrow, ->] (b) -- node[right, yshift=-5, xshift=-4]{skip} (f);
-    \draw[arrow, ->] (f) -- node[below]{4} (g);
+    \draw[arrow, ->] (b) -- node[right, yshift=-5, xshift=-4]{\texttt{skip}} (f);
+    \draw[arrow, ->] (f) -- node[below]{$I_4$} (g);
 
-    \draw[arrow, ->] (b) -- node[right, yshift=5, xshift=-4]{skip} (h);
-    \draw[arrow, ->] (h) -- node[left, yshift=5, xshift=4]{6} (i);
-    \draw[arrow, ->] (i) -- node[left, yshift=-5, xshift=3]{7} (j);
-    \draw[arrow, ->] (j) -- node[left, yshift=5, xshift=4]{8} (k);
-    \draw[arrow, ->] (k) -- node[left, yshift=-5, xshift=3]{9} (l);
-    \draw[arrow, ->] (l) -- node[left, yshift=5, xshift=4]{10} (m);
+    \draw[arrow, ->] (b) -- node[right, yshift=5, xshift=-4]{\texttt{skip}} (h);
+    \draw[arrow, ->] (h) -- node[left, yshift=5, xshift=4]{$I_6$} (i);
+    \draw[arrow, ->] (i) -- node[left, yshift=-5, xshift=3]{$I_7$} (j);
+    \draw[arrow, ->] (j) -- node[left, yshift=5, xshift=4]{$I_8$} (k);
+    \draw[arrow, ->] (k) -- node[left, yshift=-5, xshift=3]{$I_9$} (l);
+    \draw[arrow, ->] (l) -- node[left, yshift=5, xshift=4]{$I_{10}$} (m);
 
-    \draw[arrow, ->] (m) -- node[below]{B} (n);
+    \draw[arrow, ->] (m) -- node[below]{b} (n);
 
-    \draw[arrow, ->] (m) -- node[left]{$\neg$B} (o);
-    \draw[arrow, ->] (o) -- node[above]{11} (p);
+    \draw[arrow, ->] (m) -- node[left]{$\neg$b} (o);
+    \draw[arrow, ->] (o) -- node[above]{$I_{11}$} (p);
 
-    \draw[arrow, ->] (start) -- node[above]{$\neg$true} (end);
-    \draw[arrow, ->] (e) edge[bend left=45] node[left, yshift=-4]{3} (start);
-    \draw[arrow, ->] (g) edge[bend left=50] node[left]{5} (start);
-    \draw[arrow, ->] (n) edge[bend right=55] node[left]{skip} (start);
-    \draw[arrow, ->] (p) edge[bend right=50] node[right]{12} (start);
+    \draw[arrow, ->] (start) -- node[above]{$\neg$\texttt{true}} (end);
+    \draw[arrow, ->] (e) edge[bend left=45] node[left, yshift=-4]{$I_3$} (start);
+    \draw[arrow, ->] (g) edge[bend left=50] node[left]{$I_5$} (start);
+    \draw[arrow, ->] (n) edge[bend right=55] node[left]{\texttt{skip}} (start);
+    \draw[arrow, ->] (p) edge[bend right=50] node[right]{$I_{12}$} (start);
 \end{tikzpicture}
