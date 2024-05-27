@@ -54,12 +54,12 @@ This paper builds on the seminal work of abstract interpretation by Cousot and C
 Additionally, we heavily use the work of abstract interpretation of database queries by Cortesi and Halder~\cite{halder_abstract_2012}.
 Concretely, we use their work for analysing a database schema in relation to a program using the syntax they describe.
 
-Jana et al.~\cite{jana_extending_2020} have extended the application of abstract interpretation to the domain of web security.
+Jana et al.~\cite{jana_extending_2020} have extended the application of abstract interpretation to the domain of web security. \todo{have we checked this is correct?}
 Dependency information (data- and/or control-dependencies) among program variables and program statements is playing crucial roles in a wide range of software-engineering activities, e.g., program slicing, information flow security analysis, debugging, code optimization, code reuse, code understanding.
 Most existing dependency analyzers focus on mainstream languages, and they do not support database applications embedding queries and data-manipulation commands.
 This paper extends the Abstract Interpretation framework for static dependency analysis of database applications, providing a semantics-based computation tunable with respect to precision.
 
-Kashyap et al.~\cite{kashyap_integrity_2022} have proposed a new approach to integrity checking of database applications using abstract interpretation.
+Kashyap et al.~\cite{kashyap_integrity_2022} have proposed a new approach to integrity checking of database applications using abstract interpretation. \todo{have we checked this is correct?}
 The approach is based on the use of abstract interpretation to analyze the database application and to check the integrity of the data, i.e., to verify that the data is consistent with the constraints defined in the database management system.
 
 
@@ -82,7 +82,7 @@ We can check if the invariant holds in each node.
 This way, we can systematically verify the program's correctness throughout its execution.
 
 The invariants can be checked with the Boolean syntax which is described in \autoref{fig:abstract-syntax}.
-The current syntax lacks a way to flag such thing, but it should be possible to use the Boolean syntax fot this purpose.
+The current syntax lacks a way to flag such thing, but it should be possible to use the Boolean syntax fot this purpose. \todo{this needs to be claryfied}
 
 To ensure that our work is correct, we informally prove soundness of the static analysis.
 By doing this, we can always be sure that our analysis produces an overestimation of the concrete values and tuples.
@@ -108,7 +108,7 @@ In \autoref{sec:theory} we describe our contribution in detail:
 \end{itemize}
 
 In \autoref{sec:discussion} we discuss the quality of the presented analysis and in \autoref{sec:discussion} we also present new avenues for future work.
-Finally the we conclude the paper in \autoref{sec:conclusion}.
+Finally the we conclude the paper in \autoref{sec:conclusion}. \todo{update with examples}
 
 
 
