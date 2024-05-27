@@ -1,16 +1,59 @@
 \subsection{Cover lattice example}
 
+Converting the program in \autoref{lst:lattices-program} to a program graph, one gets the program graph displayed in \autoref{fig:termination-example-graph}.
 
-\begin{figure}
-    \centering
-    \input{figures/cover_lattice}
-    \caption{Termination example graph}
-    \label{fig:termination-example-graph}
-\end{figure}
+\begin{listing}
+    \begin{minted}{bash}
+        i := 0;
+        while true do i := i + 1
+    \end{minted}
+    \caption{A program where cover lattices are required for termination}
+    \label{lst:lattices-program}
+\end{listing}
 
 \begin{figure}
     \centering
     \input{figures/cover_lattice_graph_example}
-    \caption{Cover lattice of the termination example graph}
+    \caption{Program graph of \autoref{lst:lattices-program}}
+    \label{fig:termination-example-graph}
+\end{figure}
+
+Let $\ab{E}_\whitepointerright = \{ \texttt{account} | \bot \}$ in the fixed point equation arising from the program graph:
+
+\begin{align}
+    A(q_\whitepointerright) &= A(q_\whitepointerright) \cup \ab{E}_\whitepointerright \\
+    A(q_1) &= A(q_1) \cup \ab{E}_\whitepointerright \\
+    A(q_1) &= \begin{aligned}[t]
+        A(q_1) &\cup \abssem{\texttt{i := 0}}(A(q_\whitepointerright)) \\
+        &\cup \abssem{\texttt{i := i + 1}}(A(q_2))
+    \end{aligned} \\
+    A(q_\blackpointerleft) &= A(q_\blackpointerleft) \cup \abssem{\neg\texttt{true}}(A(q_\whitepointerright))
+\end{align}
+
+Assuming $\lookupcl(\texttt{i}) = \uints_{\infty}$, i.e cover lattices are being disregarded, the solution becomes:
+
+\begin{align}
+    A(q_\whitepointerright) &= \{ \texttt{i} | \bot \} \\
+    A(q_1) &= \{ \texttt{i} | \mathsf{Single} \; [1, 1] | \mathsf{Single} \; [2, 2] | \dots \} \\
+    A(q_2) &= \{ \texttt{i} | \mathsf{Single} \; [1, 1] | \mathsf{Single} \; [2, 2] | \dots \} \\
+    A(q_\blackpointerleft) &= \emptyset
+\end{align}
+
+Which is intractable.
+If one instead assumes $\lookupcl(\texttt{i}) = C_\mathcal{I}(\uints)$ where $\mathcal{I} = \{[-\infty, - 1], [0, +\infty]\}$ the solution becomes tractable.
+The lattice induced by $C_\mathcal{I}(\uints)$ is shown in \autoref{fig:termination-example-cover-lattice}, and the solution to the fixed point equation becomes:
+
+\begin{align}
+    A(q_\whitepointerright) &= \{ \texttt{i} | \bot \} \\
+    A(q_1) &= \{ \texttt{i} | \mathsf{Single} \; [0, +\infty] \} \\
+    A(q_2) &= \{ \texttt{i} | \mathsf{Single} \; [0, +\infty] \} \\
+    A(q_\blackpointerleft) &= \emptyset
+\end{align}
+
+\begin{figure}
+    \centering
+    \input{figures/cover_lattice}
+    \caption{Hasse diagram of $C_\mathcal{I}(\uints)$}
     \label{fig:termination-example-cover-lattice}
 \end{figure}
+
