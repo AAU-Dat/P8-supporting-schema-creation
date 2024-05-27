@@ -2,36 +2,36 @@
 This section will describe the abstract semantics of SQAAL.
 
 \autoref{eq:generalBOP} through~\ref{eq:generalUOP}, show the definition of abstract operations on members of $\mathsf{Val} \; A$.
-These operations are denoted by $\aop$, where $\aop$ is defined in \autoref{eq:operation}.
-These equations provide a systematic way to perform abstract operations on values within the lattice $\mathsf{Val} \ A$.
-The specific operations $\aaop$ are defined for the respective types later on.
+These operations are denoted by $\aop$, where $\aop$ is defined in \autoref{eq:operation} through \ref{eq:generalUOP}.
+These equations provide a systematic way to perform abstract operations on values within $\mathsf{Val} \ A$.
+The specific operations $\aaop$ are defined for the respective types later on.\todo{Gabriela: are they abstract? concrete? both? \\ Casper: It doesn't really matter.}
 
 \begin{align}
     \aop &: \mathsf{Val} \; A \rightarrow \mathsf{Val} \; B \rightarrow \mathsf{Val} \; C \label{eq:operation} \\
     \mathsf{Single} \; s_1 \aop \mathsf{Single} \; s_2 &= \mathsf{Single} \; (s_1 \aaop s_2) \label{eq:generalBOP} \\
-    \mathsf{Single} \; s \aop \mathsf{List} \; S &= \mathsf{List} \; \{ s \aaop s' \mid s' \in S \} \\
-    \mathsf{List} \; S \aop \mathsf{Single} \; s &= \mathsf{List} \; \{ s' \aaop s \mid s' \in S \}  \\
-    \mathsf{List} \; S_1 \aop \mathsf{List} \; S_2 &= \mathsf{List} \; \{ s_1 \aaop s_2 \mid s_1 \in S_1, s_2 \in S_2 \} \\
+    \mathsf{Single} \; s \aop \mathsf{Col} \; S &= \mathsf{Col} \; \{ s \aaop s' \mid s' \in S \} \\
+    \mathsf{Col} \; S \aop \mathsf{Single} \; s &= \mathsf{Col} \; \{ s' \aaop s \mid s' \in S \}  \\
+    \mathsf{Col} \; S_1 \aop \mathsf{Col} \; S_2 &= \mathsf{Col} \; \{ s_1 \aaop s_2 \mid s_1 \in S_1, s_2 \in S_2 \} \\
     \aop (\mathsf{Single} \; s) &= \mathsf{Single} \; (\aaop s) \\
-    \aop (\mathsf{List} \; S) &= \mathsf{List} \; \{ \aaop s \mid s \in S \} \label{eq:generalUOP}
+    \aop (\mathsf{Col} \; S) &= \mathsf{Col} \; \{ \aaop s \mid s \in S \} \label{eq:generalUOP}
 \end{align}
 
-Similarly, we define $\app{op}$, which is for operations of sets.
+Similarly, we define $\app{op}$:
 
 \begin{align}
     \app{op} &: \mathsf{Val} \; A \rightarrow \mathsf{Val} \; B \rightarrow \mathsf{Val} \; C \\
-    \mathsf{Single} \; s_1 \app{op} \mathsf{Single} \; s_2 &= \mathsf{List} \; (\{s_1\} \op \{s_2\}) \\
-    \mathsf{Single} \; s \app{op} \mathsf{List} \; S &= \mathsf{List} \; (\{ s \} \op S) \\
-    \mathsf{List} \; S \app{op} \mathsf{Single} \; s &= \mathsf{List} \; (S \op \{ s \})  \\
-    \mathsf{List} \; S_1 \app{op} \mathsf{List} \; S_2 &= \mathsf{List} \; (S_1 \op S_2) \\
-    \app{op} (\mathsf{Single} \; s) &= \mathsf{List} \; (\op \{ s \}) \\
-    \app{op} (\mathsf{List} \; S) &= \mathsf{List} \; (\op S )
+    \mathsf{Single} \; s_1 \app{op} \mathsf{Single} \; s_2 &= \mathsf{Col} \; (\{s_1\} \op \{s_2\}) \\
+    \mathsf{Single} \; s \app{op} \mathsf{Col} \; S &= \mathsf{Col} \; (\{ s \} \op S) \\
+    \mathsf{Col} \; S \app{op} \mathsf{Single} \; s &= \mathsf{Col} \; (S \op \{ s \})  \\
+    \mathsf{Col} \; S_1 \app{op} \mathsf{Col} \; S_2 &= \mathsf{Col} \; (S_1 \op S_2) \\
+    \app{op} (\mathsf{Single} \; s) &= \mathsf{Col} \; (\op \{ s \}) \\
+    \app{op} (\mathsf{Col} \; S) &= \mathsf{Col} \; (\op S )
 \end{align}
 
-This will also be helpful later, when we define the abstract semantics of SQL commands.
+This will also be helpful later, when we define the abstract semantics of SQL commands in \autoref{subsubsec:abstract-semantics-sql-statements}.
 
 \subsubsection{Abstract Semantics of Boolean expressions}
-We define the general abstract semantics of Boolean expressions such that $\aab{bop}$ is a specialized instance of $\aaop$ in the following manner:
+Before we can define the abstract semantics of Boolean expressions, we need to define $\aab{bop}$ as a specialized instance of $\aaop$ in the following manner:
 
 
 \begin{align}
@@ -47,7 +47,7 @@ We define the general abstract semantics of Boolean expressions such that $\aab{
 Where $\aaab{bop}$ is defined for $\land$, $\lor$ and $\neg$ in \autoref{tab:aaabland}, \autoref{tab:aaablor} and \autoref{tab:aaabneg} respectively.
 
 \autoref{eq:abstract-bool-semantics-start} through~\ref{eq:abstract-bool-semantics-end} show the abstract semantics of Boolean expressions $(\absboolsem{\cdot})$ defined in \autoref{eq:bool-operation}, that is logical operators and comparisons between expressions.
-$\ab{\mathfrak{E}}$ describes the set of abstract states. $\absexpsem{exp}$ describes the abstract evaluation of an expression, $(\rho_{\ab{d}}, \rho_{\ab{a}})$ is an abstract state in the database.
+$\ab{\mathfrak{E}}$ describes the set of abstract states.
 
 % In \autoref{eq:abstract-bool-semantics-end}, we check if either of the two expressions are lists; if that is the case, and they are the same type, we add $\{\{\texttt{false}\}\}$ to the result, as we are unsure if the two expressions are equal.
 % Otherwise, we proceed as usual.
@@ -63,13 +63,13 @@ $\ab{\mathfrak{E}}$ describes the set of abstract states. $\absexpsem{exp}$ desc
     \absboolsem{\neg b}(\ab{\environment}) &= \aab{\neg} \absboolsem{b}(\ab{\environment}) \\
     \absboolsem{e_1 \;comp\; e_2}(\ab{\environment}) &=
     \begin{cases}
-        \bigcup B & \text{if } \mathsf{List} \; B = E_1 \;\ab{\comp}\; E_2 \\
+        \bigcup B & \text{if } \mathsf{Col} \; B = E_1 \;\ab{\comp}\; E_2 \\
         b & \text{if } \mathsf{Var} \; b = E_1 \;\ab{\comp}\; E_2
     \end{cases} \label{eq:abstract-bool-semantics-end} \\
     \text{Where }& E_1 = \absexpsem{e_1}(\ab{\environment}) \\
     \text{and }& E_2 = \absexpsem{e_2}(\ab{\environment}) \\
-    \absboolsem{\exists v_n \; b}(\ab{\environment}) &= \{\true\} \cup \underset{s \in \absexpsem{v}}{\aab{\bigvee}} \absboolsem{b[s/v_n]}(\ab{\environment}) \\
-    \absboolsem{\forall v_n \; b}(\ab{\environment}) &= \{\false\} \cup \underset{s \in \absexpsem{v}}{\aab{\bigwedge}} \absboolsem{b[s/v_n]}(\ab{\environment})
+    \absboolsem{\exists v_n \; b}(\ab{\environment}) &= \{\true\} \cup \underset{s \in \absexpsem{v}(\ab{\environment})}{\aab{\bigvee}} \absboolsem{b[s/v_n]}(\ab{\environment}) \\
+    \absboolsem{\forall v_n \; b}(\ab{\environment}) &= \{\false\} \cup \underset{s \in \absexpsem{v}(\ab{\environment})}{\aab{\bigwedge}} \absboolsem{b[s/v_n]}(\ab{\environment})
 \end{align}
 
 
@@ -119,15 +119,13 @@ Otherwise, they overlap; in this case, we are unsure whether the concrete values
 
 \begin{align} \nonumber
     X_1 \;\aab{=}\; X_2 &= \begin{cases}
-        \begin{cases}
-        \{\true\} & \text{if } a\\
-        \{\false\} & \text{if } X_1 \cap X_2 = \emptyset \\
-        \{\true, \false\} & \text{otherwise }
-        \end{cases} & \text{if $b$} \\
-        \text{undefined} & \text{otherwise}
+        \{\true\} & \text{if } \phi_1 \land \phi_2 \\
+        \{\false\} & \text{if } X_1 \cap X_2 = \emptyset \land \phi_2 \\
+        \{\true, \false\} & \phi_2 \\
+        \emptyset & \text{otherwise}
     \end{cases}\\
-    \text{where } a&=|X_1| = |X_2| = 1 \land X_1 = X_2 \nonumber\\
-    \text{and } b&=X_1 \text{ and } X_2 \text{ is of the same type}
+    \text{where } \phi_1&=|X_1| = |X_2| = 1 \land X_1 = X_2 \nonumber\\
+    \text{and } \phi_2&=X_1 \text{ and } X_2 \text{ is of the same type}
     \label{eq:aaabcomp}
 \end{align}
 
@@ -168,7 +166,7 @@ The justification of abstract binary operations is analogous to the one given fo
     \absexpsem{\mathscr{I}}(\_) &= \mathsf{Single} \; \mathscr{I} \\
     \absexpsem{v_a}(\_, \rho_{\ab{a}}) &=  \rho_{\ab{a}}(v_a) \label{sem:exp3} \\
     \begin{split}
-        \absexpsem{v_t}(\rho_{\ab{d}}, \_) &=  \mathsf{List} \; \pi_{v_t}(\rho_d(v_d)) \\
+        \absexpsem{v_t}(\rho_{\ab{d}}, \_) &=  \mathsf{Col} \; \pi_{v_t}(\rho_{\ab{d}}(v_d)) \\
         &\text{ such that } v_t \in attr(v_d) \label{sem:exp4}
     \end{split} \\
     \absexpsem{op_u \; e}(\ab{\environment}) &= \ab{op_u} \; (\absexpsem{e}(\ab{\environment}) \label{eq:unary-op} \\
@@ -187,7 +185,7 @@ We define the length of a regular expression $R$, $\|R\|$ as:
 The former is obviously an over-approximation, the length of the shortest $\|\min(R)\|$ can be found by classical shortest path algorithm on the automata of $R$, $\mathcal{A}(R)$.
 Such algorithms have a time complexity $\Theta(E + V \log V)$, where $E$ is the number of edges in the automata and $V$ is the number of states.
 We deem this acceptable.
-If $R$ does not contain a term $R'^\star$, we are essentially forced to find the longest path, this can be shown to be NP-hard, therefore we always approximate the length to be unbounded in the positive direction.
+The reason that we always take the length of an regular expression to be unbounded in the positive direction is: If $R$ does not contain a term $R'^\star$, we are essentially forced to find the longest path in $\mathcal{R}$, this can be shown to be NP-hard which is not acceptable for a subroutine within a program.
 
 Next, we define $cvt$, which is abstract string conversion over regular expressions, defined by recursing on the operands of union, intersection, concatenation and Kleene star.
 In the base case, a single symbol is converted as defined by $op$.
@@ -203,7 +201,7 @@ This automaton is then converted back to a regular expression by the usual GNFA 
     cvt(op, \sigma) &= op(\sigma)
 \end{align}
 
-\autoref{eq:concat} to~\ref{eq:length} describes a subset of String operators, present in PostgreSQL, abstractly.
+\autoref{eq:concat} to~\ref{eq:length} describes a subset of String operators, present in PostgreSQL, abstractly.\todo{Gabriela: only PostgreSQL? why PostgreSQL? will that choice be discussed somewhere?}
 
 \begin{align}\label{eq:concat}
     &R_1 \;\aab{||}\; R_2 = R_1 R_2 \\
@@ -222,17 +220,22 @@ This automaton is then converted back to a regular expression by the usual GNFA 
     &\aab{length}(R) = \|R\|
 \end{align}
 
-\autoref{eq:abstractBOP} describes how to do binary operations on numbers.
-The arithmetic operations, $\aaab{aop}$, are defined as follows for intervals.
+The arithmetic operations, $\aab{aop}$, are defined as follows for union intervals:
 
 \begin{align}\label{eq:abstractBOP}
     \bigcup \mathcal{I} \;\aab{aop}\; \bigcup \mathcal{I}' &= \bigcup_{\mathscr{I}\in \mathcal{I}, \mathscr{I}'\in \mathcal{I}'}\mathscr{I}\aaab{aop}\mathscr{I}'\nonumber\\
     \text{where } \mathcal{I}&=\{\mathscr{I}_1,\dots,\mathscr{I}_n\}\nonumber\\
-    \text{and } \mathcal{I}'&=\{\mathscr{I}'_1,\dots,\mathscr{I}'_n\}
+    \text{and } \mathcal{I}'&=\{\mathscr{I}'_1,\dots,\mathscr{I}'_m\}
 \end{align}
 
+Where $\aaab{aop}$ is defined in the usually manner:
+\begin{multline}
+    [x_1, x_2] \; \aaab{aop} \; [y_1, y_2] = \\
+    [\min\{x_i \; aop \; y_j | i,j \in \{1, 2\}\}, \\
+    \max\{x_i \; aop \; y_j | i,j \in \{1, 2\}\}]
+\end{multline}
 
-\subsubsection{Abstract Semantics of SQL statements}
+\subsubsection{Abstract Semantics of SQL statements}\label{subsubsec:abstract-semantics-sql-statements}
 
 First we define $var_{v_d}(b)$ to be the vector of column variables in $attr(v_d)$ appearing in $b$, ordered by the way they appear in the schema of $v_d$.
 Next we define $v_d \downarrow_{\true}^{(\rho_{\ab{d}}, \rho_{\ab{a}})} b, v_d \downarrow_{\false}^{(\rho_{\ab{d}}, \rho_{\ab{a}})} b$ and  $v_d \downarrow_{\unknown}^{(\rho_{\ab{d}}, \rho_{\ab{a}})} b$ to be the set of tuples in the evaluation of $v_d$ with respect to $(\rho_{\ab{d}}, \rho_{\ab{a}})$ where $b$ is definitely true, definitely false and where we are unsure respectively, formally:
@@ -266,19 +269,15 @@ Each of the analysis functions for SQL statements requires some explanation.
 Therefore, we will present each of them carefully in the sequel.
 
 The abstract \textit{select}, takes all values in the table where we are definitely sure or maybe sure that the predicate evaluates to true for the current state.
-Then it wraps them in a $\mathsf{List}$ label and inserts this in the lattice of the respective variable before assigning the variable to this value.
+Then it wraps them in a $\mathsf{Col}$ label and inserts this in the lattice of the respective variable before assigning the variable to this value.
 
-
-\begin{equation}
-\begin{split}
-    \abssqlsem{&\langle select(v_a, v_d, \mathbf{v}_t), b \rangle}\biggl(\rho_{\ab{d}}, \rho_{\ab{a}})
-    = (\rho_{\ab{d}}, \rho_{\ab{a}}[v_a \mapsto \\
-    &\mathsf{List} \Bigl( \pi_{\mathbf{v}_t} \bigl(v_d \downarrow_{\true}^{(\env{\ab{d}}, \env{\absvars})} b \cup v_d \downarrow_{\unknown}^{(\env{\ab{d}}, \env{\absvars})} b \bigr) \Bigr) \into \lookupcl(v_a) ]\biggr)
-\end{split}\label{eq:equation123}
-\end{equation}
+\begin{multline}
+    \abssqlsem{\langle select(v_a, v_d, \mathbf{v}_t), b \rangle}(\rho_{\ab{d}}, \rho_{\ab{a}}) = \left(\rho_{\ab{d}}, \rho_{\ab{a}} [ v_a \mapsto \ab{t} ] \right)\\
+    \text{where } \ab{t} = \left( \mathsf{Col} \; \left( \pi_{\mathbf{v}_t} \left(v_d \downarrow_{\true}^{(\env{\ab{d}}, \env{\absvars})} b \cup v_d \downarrow_{\unknown}^{(\env{\ab{d}}, \env{\absvars})} b \right) \right) \right) \into \lookupcl(v_a)
+\end{multline}\label{eq:equation123}
 
 For \textit{insert}, we evaluate each expression in $\mathbf{e}$, and take the product of them as the set of abstract tuples to be inserted.
-We take the product as each expression might evaluate to a $\mathsf{list}$ type.
+We take the product as each expression might evaluate to a $\mathsf{Col}$ type.
 These respective values are inserted into the lattice of the column they correspond to.
 
 At last, we turn the values into actual abstract tuples in the table, here we find it helpful to view a tuple as a function $attr(v_d) \rightarrow \bigcup_{v_t \in attr(v_d)}\lookupcl(v_t)$.
@@ -287,7 +286,7 @@ In particular, we start with a tuple with all entries equal to null $\lambda\_.\
 
 \begin{align}
     \abssqlsem{\langle insert(v_d, \mathbf{v}_t, &\mathbf{e}), \_ \rangle}(\rho_{\ab{d}}, \rho_{\ab{a}}) = (\rho_{\ab{d}}[v_d\mapsto \ab{t}\cup s], \rho_{\ab{a}}) \nonumber \\
-    \text{where } \mathsf{List} \; S &= \app{\bigtimes_{i = 0}^{n}} \absexpsem{e_i}(\rho_{\ab{d}}, \rho_{\ab{a}}) \into \lookupcl(v_i) \nonumber\\
+    \text{where } \mathsf{Col} \; S &= \app{\bigtimes_{i = 0}^{n}} \absexpsem{e_i}(\rho_{\ab{d}}, \rho_{\ab{a}}) \into \lookupcl(v_i) \nonumber\\
     \text{and } s &= \left\{ (\lambda\_.\mnull)[\mathbf{v}_t \mapsto \mathbf{s}] \;\middle|\; \mathbf{s} \in S\right\} \nonumber\\
     \text{and } \ab{t}&=\rho_{\ab{d}}(v_d)
 \end{align}
