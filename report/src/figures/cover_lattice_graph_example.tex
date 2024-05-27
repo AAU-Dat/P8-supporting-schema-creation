@@ -1,0 +1,15 @@
+\begin{tikzpicture}
+    \tikzstyle{arrow} = [thick,->,>=stealth]
+    \node [circle, draw] (start) at (0,0){$q_{\whitepointerright}$};
+    \node [circle, draw] (a) at (0,-1.5) {$q_1$};
+    \node [circle, draw] (b) at (0,-4) {$q_2$};
+    \node [circle, draw] (end) at (0,-5.5) {$q_\blackpointerleft$};
+
+
+    \draw[arrow, ->] (start) to node[right] {$i:=0$} (a);
+    \draw[arrow, ->] (a) to node[left, xshift=2] {$true$} (b);
+
+    \draw[arrow, ->] (b) edge[bend right=50] node[right]{$i:=i+1$} (a);
+
+    \draw[arrow, ->] (a) edge[bend right=70] node[left]{$\neg true$} (end);
+\end{tikzpicture}
