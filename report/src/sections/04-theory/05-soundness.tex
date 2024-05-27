@@ -67,7 +67,7 @@ More specifically, if one where to take $\ab{\mathcal{S}}'\lBrack\cdot\rBrack$ t
 \begin{proof}
     \pf\
     Assume $\environment \in \concrete_1(\ab{P})$ then in $\sem{v_a \coloneqq e}(\environment)$, $v_a$ is assigned to $\expsem{e}(\environment)$.
-    Because $\expsem{e}(\environment) \subset \concrete_{4a}(s) = \concrete_{4a}(\absexpsem{e}(\env{\ab{d}}, \env{\ab{a}}))$ for $(\env{\ab{d}}, \env{\ab{a}}) \in \ab{P}$ where $(\env{d}, \env{a}) \in \concrete_2(\env{\ab{d}}, \env{\ab{a}})$ then $\sem{v_a \coloneqq e}(\env{d}, \env{a}) \subseteq \concrete_2(\env{\ab{d}}, \env{\ab{a}}[v_a \mapsto s])$, therefore also $\sem{v_a \coloneqq e}(\env{d}, \env{a}) \subseteq \concrete_1(\abssem{v_a \coloneqq e}(\ab{P}))$.
+    Because $\expsem{e}(\environment) \subseteq \concrete_{4a}(s) = \concrete_{4a}(\absexpsem{e}(\env{\ab{d}}, \env{\ab{a}}))$ for $(\env{\ab{d}}, \env{\ab{a}}) \in \ab{P}$ where $\environment \in \concrete_2(\env{\ab{d}}, \env{\ab{a}})$ then $\sem{v_a \coloneqq e}(\environment) \subseteq \concrete_2(\env{\ab{d}}, \env{\ab{a}}[v_a \mapsto s])$, therefore also $\sem{v_a \coloneqq e}(\environment) \subseteq \concrete_1(\abssem{v_a \coloneqq e}(\ab{P}))$.
 \end{proof}
 
 
@@ -75,17 +75,17 @@ More specifically, if one where to take $\ab{\mathcal{S}}'\lBrack\cdot\rBrack$ t
     \label{thm:sound-boolsem}
     $\abssem{b}$ is sound, formally
     \begin{equation*}
-    (\rho_d, \rho_a)
-        \in \concrete_1(\ab{P}) \implies \\
-        \sem{b}(\rho_d, \rho_a) \subseteq \concrete_1(\abssem{b}(\ab{P}))
+    \environment \in \concrete_1(\ab{P}) \implies \sem{b}(\environment) \subseteq \concrete_1(\abssem{b}(\ab{P}))
     \end{equation*}
 \end{conjecture}
 
 
 \begin{proof}
     \pf\
-    Assume $(\env{d}, \env{a}) \in \concrete_1(\ab{P})$ and $\true \in \boolsem{b}(\env{d}, \env{a})$ then $\sem{b}(\env{d}, \env{a}) = (\env{d}, \env{a})$.
-    Because $\boolsem{b}(\env{d}, \env{a}) \subseteq \concrete_{4a}(\absboolsem{b}(\env{\ab{d}}, \env{\ab{a}}))$ for $(\env{d}, \env{a}) \in \concrete_2(\env{\ab{d}}, \env{\ab{a}})$ where $(\env{\ab{d}}, \env{\ab{a}}) \in \ab{P}$ then $(\env{\ab{d}}, \env{\ab{a}})$ must be in $\abssem{b}(\ab{P})$ because $\absboolsem{b}(\env{\ab{d}}, \env{\ab{a}})$ must contain $B$ such that $B$ contains $\true$, because of the initial assumption.
+    Assume $\environment \in \concrete_1(\ab{P})$, then $\boolsem{b}(\environment)$ is either equal to $\false$ or $\true$.
+    If $\boolsem{b}(\environment) = \false$ then $\sem{b}(\environment) = \emptyset$ and therefore $\sem{b}(\environment) \subseteq \concrete_1(\abssem{b}(\ab{P}))$
+    If $\boolsem{b}(\environment) = \true$ then $\sem{b}(\environment) = \{ \environment \}$.
+    Because $\boolsem{b}(\environment) \in \concrete_{4a}(\absboolsem{b}(\ab{\environment}))$ for $\environment \in \concrete_2(\ab{\environment})$ where $\ab{\environment} \in \ab{P}$ then $\ab{\environment}$ must be in $\abssem{b}(\ab{P})$, and therefore $\{ \environment \} \subseteq \concrete_1(\abssem{b}(\ab{\environment}))$
 \end{proof}
 
 
@@ -93,29 +93,25 @@ More specifically, if one where to take $\ab{\mathcal{S}}'\lBrack\cdot\rBrack$ t
     \label{thm:sound-select}
     $\abssqlsem{\langle select(v_a, v_d, \mathbf{v}_t), \phi \rangle}$ is sound, formally
     \begin{multline*}
-    (\rho_d, \rho_a)
-        \in \concrete_2(\rho_{\ab{d}}, \rho_{\ab{a}}) \implies \\
-        \sqlsem{\langle select(v_a, v_d, \mathbf{v}_t), \phi \rangle}(\rho_d, \rho_a) \subseteq \\
-        \concrete_2(\abssqlsem{\langle select(v_a, v_d, \mathbf{v}_t), \phi \rangle}(\rho_{\ab{d}}, \rho_{\ab{a}}))
+        \environment \in \concrete_2(\ab{\environment}) \implies \sqlsem{\langle select(v_a, v_d, \mathbf{v}_t), b \rangle}(\environment) \in \\
+        \concrete_2(\abssqlsem{\langle select(v_a, v_d, \mathbf{v}_t), b \rangle}(\ab{\environment}))
     \end{multline*}
 \end{conjecture}
 
 
 \begin{proof}
     \pfsketch\
-    Soundness of $\abssqlsem{\langle select(v_a, \mathbf{v}_d), \phi \rangle}$ relies on the fact that we overestimate and select abstract tuples where we know the predicate $\phi$ is true, and also those where we are unsure.
-    This selection is based on the abstract semantics of $\abspredsem{\phi}$, therefore if $\abspredsem{\phi}$ is sound so is $\abssqlsem{\langle select(v_a, \mathbf{v}_d), \phi \rangle}$.
+    Soundness of $\abssqlsem{\langle select(v_a, \mathbf{v}_d), b \rangle}$ relies on the fact that we overestimate and select abstract tuples where we know the predicate $b$ is true, and also those where we are unsure.
+    This selection is based on the abstract semantics of $\absboolsem{b}$, therefore the soundness of $\abssqlsem{\langle select(v_a, \mathbf{v}_d), b \rangle}$ relies of the soundness of the abstract Boolean semantics.
 \end{proof}
 
 
 \begin{conjecture}
     \label{thm:sound-insert}
-    $\abssqlsem{\langle insert(\mathbf{v}_d, \mathbf{e}), \phi \rangle}$ is sound, formally
+    $\abssqlsem{\langle insert(\mathbf{v}_d, \mathbf{e}), b \rangle}$ is sound, formally
     \begin{multline*}
-    (\rho_d, \rho_a)
-        \in \concrete_2(\rho_{\ab{d}}, \rho_{\ab{a}}) \implies \\
-        \sqlsem{\langle insert(\mathbf{v}_d, \mathbf{e}), \phi \rangle}(\rho_d, \rho_a) \subseteq \\
-        \concrete_2(\abssqlsem{\langle insert(\mathbf{v}_d, \mathbf{e}), \phi \rangle}(\rho_{\ab{d}}, \rho_{\ab{a}}))
+        \environment \in \concrete_2(\ab{\environment}) \implies \sqlsem{\langle insert(\mathbf{v}_d, \mathbf{e}), b \rangle}(\environment) \in \\
+        \concrete_2(\abssqlsem{\langle insert(\mathbf{v}_d, \mathbf{e}), b \rangle}(\ab{\environment}))
     \end{multline*}
 
 \end{conjecture}
@@ -123,51 +119,47 @@ More specifically, if one where to take $\ab{\mathcal{S}}'\lBrack\cdot\rBrack$ t
 
 \begin{proof}
     \pfsketch\
-    Soundness of $\abssqlsem{\langle insert(\mathbf{v}_d, \mathbf{e}), \phi \rangle}$ relies on the fact that we take all possible combinations of the abstract input of the select statement.
-    Therefore, as the evaluation of the input is based on $\absexpsem{\cdot}$ and because $\absexpsem{\cdot}$ is sound, $\abssqlsem{\langle insert(\mathbf{v}_d, \mathbf{e}), \phi \rangle}$ is sound.
+    Soundness of $\abssqlsem{\langle insert(\mathbf{v}_d, \mathbf{e}), b \rangle}$ relies on the fact that we take all possible combinations of the abstract input of the select statement.
+    Therefore, as the evaluation of the input is based on $\absexpsem{\cdot}$ and because $\absexpsem{\cdot}$ is sound, $\abssqlsem{\langle insert(\mathbf{v}_d, \mathbf{e}), b \rangle}$ is sound.
 \end{proof}
 
 
 \begin{conjecture}
     \label{thm:sound-update}
-    $\abssqlsem{\langle update(\absattrs, \absexps), \abspred \rangle}$ is sound, formally
+    $\abssqlsem{\langle update(\absattrs, \absexps), b \rangle}$ is sound, formally
     \begin{multline*}
-    (\rho_d, \rho_a)
-        \in \concrete_2(\rho_{\ab{d}}, \rho_{\ab{a}}) \implies \\
-        \sqlsem{\langle update(\absattrs, \absexps), \abspred \rangle}(\rho_d, \rho_a) \subseteq \\
-        \concrete_2(\abssqlsem{\langle update(\absattrs, \absexps), \abspred \rangle}(\rho_{\ab{d}}, \rho_{\ab{a}}))
+        \environment \in \concrete_2(\ab{\environment}) \implies \sqlsem{\langle update(\absattrs, \absexps), b \rangle}(\environment) \in \\
+        \concrete_2(\abssqlsem{\langle update(\absattrs, \absexps), b \rangle}(\ab{\environment}))
     \end{multline*}
 \end{conjecture}
 
 
 \begin{proof}
     \pfsketch\
-    Essentially $\abssqlsem{\langle update(\absattrs, \absexps), \abspred \rangle}$ is sound because:
+    Essentially $\abssqlsem{\langle update(\absattrs, \absexps), b \rangle}$ is sound because:
     \begin{itemize}
         \item We do not update all the abstract tuples where we are sure the predicate evaluates to false;
         \item for all tuples where we are unsure whether the predicate is true we take the join of the incoming and current values being updated, effectively updating the values to both in an abstract sense;
         \item in the case where we are sure the predicate is true for the tuple is updated.
     \end{itemize}
-    The soundness of the prequel relies on the fact that both that $\absexpsem{\cdot}$ is sound and that $\abspredsem{\cdot}$ is sound, which they are.
+    The soundness of the prequel relies on the fact that both that $\absexpsem{\cdot}$ is sound and that $\absboolsem{\cdot}$ is sound, which they are.
 \end{proof}
 
 
 \begin{conjecture}
     \label{thm:sound-delete}
-    $\abssqlsem{\langle delete(\absattrs), \abspred \rangle}$ is sound, formally
+    $\abssqlsem{\langle delete(\absattrs), b \rangle}$ is sound, formally
     \begin{multline*}
-    (\rho_d, \rho_a)
-        \in \concrete_2(\rho_{\ab{d}}, \rho_{\ab{a}}) \implies \\
-        \sqlsem{\langle delete(\absattrs), \abspred \rangle}(\rho_d, \rho_a) \subseteq \\
-        \concrete_2(\abssqlsem{\langle delete(\absattrs), \abspred \rangle}(\rho_{\ab{d}}, \rho_{\ab{a}}))
+        \environment \in \concrete_2(\ab{\environment}) \implies \sqlsem{\langle delete(\absattrs), b \rangle}(\environment) \in \\
+        \concrete_2(\abssqlsem{\langle delete(\absattrs), b \rangle}(\ab{\environment}))
     \end{multline*}
 \end{conjecture}
 
 
 \begin{proof}
     \pfsketch\
-    The soundness of $\abssqlsem{\langle delete(\absattrs), \abspred \rangle}$ stems from the fact the only remove abstract tuples where we are absolutely sure that the predicate evaluates to true.
-    The soundness of $\abssqlsem{\langle delete(\absattrs), \abspred \rangle}$ thus relies on the fact that $\abspredsem{\cdot}$ is a sound approximation.
+    The soundness of $\abssqlsem{\langle delete(\absattrs), b \rangle}$ stems from the fact the only remove abstract tuples where we are absolutely sure that the predicate evaluates to true.
+    The soundness of $\abssqlsem{\langle delete(\absattrs), b \rangle}$ thus relies on the fact that $\absboolsem{\cdot}$ is a sound approximation.
 \end{proof}
 
 
@@ -175,8 +167,7 @@ More specifically, if one where to take $\ab{\mathcal{S}}'\lBrack\cdot\rBrack$ t
     \label{thm:sound-sql}
     $\abssem{C_{sql}}$ is sound, formally
     \begin{equation*}
-    (\rho_d, \rho_a)
-        \in \concrete_1(\ab{P}) \implies \sem{C_{sql}}(\rho_d, \rho_a) \subseteq \concrete_1(\abssem{C_{sql}}(\ab{P}))
+    \environment \in \concrete_1(\ab{P}) \implies \sem{C_{sql}}(\environment) \subseteq \concrete_1(\abssem{C_{sql}}(\ab{P}))
     \end{equation*}
 \end{conjecture}
 
@@ -190,8 +181,7 @@ More specifically, if one where to take $\ab{\mathcal{S}}'\lBrack\cdot\rBrack$ t
 \begin{conjecture}
     $\abssem{I}$ is sound, formally
     \begin{equation*}
-        (\rho_d, \rho_a)
-            \in \concrete_1(\ab{P}) \implies \sem{I}(\rho_d, \rho_a) \subseteq \concrete_1(\abssem{I}(\ab{P}))
+        \environment \in \concrete_1(\ab{P}) \implies \sem{I}(\environment) \subseteq \concrete_1(\abssem{I}(\ab{P}))
     \end{equation*}
 \end{conjecture}
 

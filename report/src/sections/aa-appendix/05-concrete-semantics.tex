@@ -122,7 +122,7 @@ As a note we only allow $\mathbf{v}_t$ to be of length 1, further $S'$ should ag
     \sem{v_a \coloneqq e}(\environment_d, \environment_a) &= \left\{(\environment_d, \environment_a[v_a \mapsto \expsem{e}(\environment_d, \environment_a)]) \right\} \\
     \sem{v_a \coloneqq \; ?}(\environment_d, \environment_a) &= \left\{(\environment_d, \environment_a[v_a \mapsto s]) \mid s \in \lang(?) \right\} \\
     \sem{b}(\environment) &= \begin{cases}
-        \{\environment\} & \text{if } \true = \absboolsem{b}(\environment) \\
+        \{\environment\} & \text{if } \true = \boolsem{b}(\environment) \\
         \emptyset & \text{otherwise}
     \end{cases} \\
     \abssem{C_{sql}}(\environment) &= \abssqlsem{C_{sql}}(\environment)
