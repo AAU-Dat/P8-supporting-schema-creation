@@ -1,8 +1,8 @@
 \begin{tikzpicture}
-    \node (a)  {$[-\infty, +\infty]$};
-    \node (b1) [shift={($(a.south)+(1cm, -1cm)$)}] {$[0,+\infty]$};
-    \node (b2) [shift={($(a.south)+(-1cm, -1cm)$)}]{$[-\infty, -1]$};
-    \node (c) [shift= {($(a.south) + (0cm, -2.5cm)$)}] {$\emptyset$};
+    \node (a)  at (0,0) {$[-\infty, +\infty]$};
+    \node (b1) at (1,-1.5) {$[0,+\infty]$};
+    \node (b2) at (-1,-1.5) {$[-\infty, -1]$};
+    \node (c) at (0,-3) {$\emptyset$};
     \draw (a) to (b1);
     \draw (a) to (b2);
     \draw (b1) to (c);

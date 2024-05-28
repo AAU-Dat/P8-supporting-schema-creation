@@ -1,10 +1,10 @@
 \begin{tikzpicture}
 \tikzstyle{arrow} = [thick,->,>=stealth]
 
-    \node (a) {$R \cup \overline{R} = \top = \Sigma^*$};
-    \node (b1) [shift={($(a.south)+(1cm, -1cm)$)}] { $R$};
-    \node (b2) [shift={($(a.south)+(-1cm, -1cm)$)}]{ $\overline{R}$};
-    \node (c) [shift= {($(a.south) + (0cm, -2.5cm)$)}] { $R \cap \overline{R} = \bot = \emptyset$};
+    \node (a) at (0,0) {$R \cup \overline{R} = \top = \Sigma^*$};
+    \node (b1) at (1,-1.5) {$R$};
+    \node (b2) at (-1,-1.5) {$\overline{R}$};
+    \node (c) at (0,-3) {$R \cap \overline{R} = \bot = \emptyset$};
     \draw (a) to (b1);
     \draw (a) to (b2);
     \draw (b1) to (c);

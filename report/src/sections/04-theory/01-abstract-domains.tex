@@ -1,22 +1,24 @@
 \subsection{Abstract Domains}\label{subsec:abstract-domains}
-
-In the following section we will describe the abstract domains of our static data flow analysis.
+In the following section we will describe the abstract domains of our analysis.
 
 \subsubsection{Abstract strings as regular expressions}\label{subsubsec:abstract_domains_strings}
 We have chosen regular expressions/languages to represent the abstract domain of the family of SQL string data types.
-Regular expressions/languages are used instead of more powerful representations because of the decidable nature of inclusion and equality between them.
+Regular expressions/languages are used instead of more powerful representations because of the decidable nature of inclusion and equality between regular languages.
 
 Let $\regexs$ denote the set of regular expressions; for elements of $\regex \in \regexs$, we denote the language of $\regex$ as $\lang(\regex)$.
 In general, we will not distinguish between $R$ and $\lang(\regex)$ when it simplifies matters.
+
 The lattice of $(\regexs, \subseteq, \cup, \cap)$ is a lattice but not a finite one; this is a problem: Essentially, we want the state-space of our analysis to be finite, such that we can employ the Kleene fixed-point theorem (see \autoref{thm:kleene_finite}) to prove the termination of our analysis.
-If the state-space is built from infinite parts, the state-space itself will be infinite.
+If the state space is built from infinite parts, the state space itself will be infinite.
 We will correct this problem later in \autoref{subsubsec:cover-lattice}.
 
 \subsubsection{Abstract integers as union intervals}\label{subsubsec:abstract_domains_numbers}
 We have chosen a finite union and intersection of intervals to represent the abstract domain of the family of SQL number data types.
-We limit ourselves to finite union and intersection to ensure that operations such as union, intersection, and membership checking remain tractable.
-We call them a union intervals as all such objects can be written as a union of intervals.
-We only consider integers, but the domain can be easily extended to the reals.
+We limit ourselves to finite union and intersection to ensure that operations such as inclusion and membership checking remain tractable.
+
+We call them union intervals, as all such objects can be written as a union of intervals.
+We only consider integers, but we imagine the domain can be easily extended to the reals.
+
 Let $\mathbf{INT}$ be the set of union intervals, with members denoted $\mathscr{I}$, that is inductively defined as:
 
 
@@ -42,14 +44,14 @@ We define the language of union intervals as follows:
 \end{align*}
 
 
-As for the abstract domain of strings, we generally don't distinguish between a union interval $\uint$ and its language $\mathcal{L}(\uint)$ when it simplifies matters.
+Similarly to the abstract domain of strings, we generally don't distinguish between a union interval $\uint$ and its language $\mathcal{L}(\uint)$ when it simplifies matters.
 Furthermore, this abstract representation of numbers $(\uints, \subseteq, \cup, \cap)$ has the same issue as regular expressions: It is not finite.
 
 This abstract domain is most likely not a new development, the title of~\cite{li2010abstract} suggest a similar construct, but we have been unable to get a hold of their paper.
 
 \subsubsection{Cover lattices}\label{subsubsec:cover-lattice}
-To resolve the issues presented above, we introduce the notion of a cover lattice.
-As above the idea presented here is probably not novel.
+To resolve the issue of non-finite lattices presented above, we introduce the notion of a cover lattice.
+As mentioned above, the idea presented here is probably not novel.
 
 Before we can define a cover lattice, we need to define the notion of a top-cover.
 
@@ -69,7 +71,7 @@ A cover lattice of $S$ in respect to $X$ denoted $\clattice{X}{S}$ is the set in
 \end{definition}
 
 As a note when we use the notation $C_X(S)$ we always assume that $X$ is a top-cover of $S$.
-The notion of a cover lattices gives rise to the following theorem:
+The notion of a cover lattice gives rise to the following theorem:
 
 \begin{restatable}{theorem}{partition}\label{thm:partition}
 For a non-complete lattice $(S, \subseteq, \cup, \cap)$ and top-cover $X$ of $S$, the cover lattice $(\clattice{X}{S}, \subseteq, \cup, \cap)$ is a finite and complete lattice.
@@ -122,8 +124,10 @@ Now we are able to express the concretization for regular expressions and union 
 
 \begin{align}
     &\concrete^v_6 : \lookupcl(v) \rightarrow \powerset{\cc(\lookupcl(v))} \\
-    &\concrete^v_6(X) = \mathcal{L}(X)
+    &\concrete^v_6(Y) = \mathcal{L}(Y)
 \end{align}
+
+Where $Y$ is a regular expression or union interval.
 
 % \begin{definition}
 %     We define $\cdot \into C_X(S):S\rightarrow C_X(S)$ to be the function mapping $s\in S$ to the least element in $C_X(S)$ containing it, that is $s \into C_X(S)=\bigsqcap\{s'\in C_X(S)|s\sqsubseteq s'\}$
@@ -141,7 +145,7 @@ Now we are able to express the concretization for regular expressions and union 
 
 \autoref{fig:tikz-reg-partition} illustrates a simple top-cover of the regular languages.
 The regular language $R$ is represented by the gray circle and its complement $\overline{R}$ is represented by the white circle.
-The union of the two regular language is the universal language $\Sigma^\star$.
+The union of the two regular languages is the universal language $\Sigma^*$.
 
 \autoref{fig:tikz-reg-partition-lattice} illustrates the cover lattice induced by the cover-lattice.
 The top element $\top$ is the entire regular language $\Sigma^*$ and the bottom element $\bot$ is the empty set $\emptyset$.
@@ -151,20 +155,19 @@ The top element $\top$ is the entire regular language $\Sigma^*$ and the bottom 
 \begin{figure}
     \center
     \input{figures/reg_partition}
-    \caption{Regular language partition}
+    \caption{Regular language top-cover}
     \label{fig:tikz-reg-partition}
 \end{figure}
 
 \begin{figure}[!htb]
     \center
     \input{figures/reg_partition_lattice}
-    \caption{Regular language partition as a lattice}
+    \caption{Cover lattice induced by regular expressions}
     \label{fig:tikz-reg-partition-lattice}
 \end{figure}
 
 \subsubsection{Abstract tuples}\label{subsubsec:abstract-tuples}
-
-We define abstract tuples as the product cover-lattices of $\regexs$ and $\uints$ intertwined depending on the schema of the table.
+We define abstract tuples as the product cover lattices of $\regexs$ and $\uints$ intertwined depending on the schema of the table.
 The concretization function is defined as follows:
 
 
@@ -176,10 +179,10 @@ The concretization function is defined as follows:
     \end{split}
 \end{gather}
 
-Considering the schema in \autoref{lst:motivate-sql}, a possible abstract tuple could be $x = ([\texttt{A}-\texttt{Z}][\texttt{a}-\texttt{z}]^\star \_ \; [\texttt{A}-\texttt{Z}][\texttt{a}-\texttt{z}]^\star, [0, 100])$ where $[\texttt{A}-\texttt{Z}] = \{\texttt{A}, \texttt{B}, \dots, \texttt{Z}\}$, $[\texttt{a}-\texttt{z}] = \{\texttt{a}, \texttt{b}, \dots, \texttt{z}\}$ and $\_$ is the blank space character.
+Considering the schema in \autoref{lst:motivate-sql}, a possible abstract tuple could be $x = ([\texttt{A}-\texttt{Z}][\texttt{a}-\texttt{z}]^* \_ \; [\texttt{A}-\texttt{Z}][\texttt{a}-\texttt{z}]^*, [0, 100])$ where $[\texttt{A}-\texttt{Z}] = \{\texttt{A}, \texttt{B}, \dots, \texttt{Z}\}$, $[\texttt{a}-\texttt{z}] = \{\texttt{a}, \texttt{b}, \dots, \texttt{z}\}$ and $\_$ is the blank space character.
 As an example $(\texttt{Casper Ståhl}, 99) \in \concrete_5^{\texttt{name},\texttt{balance}}(x)$.
 
-\subsubsection{Abstract tables}\label{subsubsec:abstract_domain_of_tables}\todo{Gabriela: consider adding some examples}
+\subsubsection{Abstract tables}\label{subsubsec:abstract_domain_of_tables}
 We consider a concrete table $t$ as function from the domain of possible tuples in the table $\mathbf{TUP}$ to the codomain of natural numbers including $0$, $\mathbf{NAT}$:
 
 
@@ -211,18 +214,19 @@ In \autoref{tab:taxonomy_of_abstract_domain_of_tables}, $\ab{\mathbf{TUP}}$ deno
 
 One would classify the work in~\cite{halder_abstract_2012} as using bags of abstract tuples, and in this work, as previously mentioned, we will use abstract bags of abstract tuples.
 In this work in particular we consider $\ab{\mathbf{TUP}}$ as given by the map $\lookupcl$, to be more precise:
-If $attr(v_d) = (v_{t_1}, \dots, v_{t_n})$ then $\ab{\mathbf{TUP}} = \bigtimes_{i = 1}^n \lookupcl(v_{t_i})$, where $attr : \mathbb{V}_d \rightarrow \mathbb{V}_t^\star$ is given by the schema of the database.
-The abstract codomain is give by $\ab{\mathbf{NAT}} = \{0, 0 \leq\}$.
+If $attr(v_d) = (v_{t_1}, \dots, v_{t_n})$ then $\ab{\mathbf{TUP}} = \bigtimes_{i = 1}^n \lookupcl(v_{t_i})$, where $attr : \mathbb{V}_d \rightarrow \mathbb{V}_t^*r$ is given by the schema of the database.
+The abstract codomain is given by $\ab{\mathbf{NAT}} = \{0, 0 \leq\}$.
 
-Simplifying the prequel for our own sanity, we consider $\ab{t} : \ab{\mathbf{TUP}} \rightarrow \ab{\mathbf{NAT}}$ to be represented as a single set $\ab{t'}$ instead, that is $\ab{t}({e}) = 0 \iff e \notin \ab{t'}$ and  $\ab{t}({e}) = (0 \leq) \iff e \in \ab{t'}$.
+Simplifying the above for our own sanity, we consider $\ab{t} : \ab{\mathbf{TUP}} \rightarrow \ab{\mathbf{NAT}}$ to be represented as a single set $\ab{t'}$ instead, that is $\ab{t}({e}) = 0 \iff e \notin \ab{t'}$ and  $\ab{t}({e}) = (0 \leq) \iff e \in \ab{t'}$.
 
 Further, as the form of an abstract table is given by the schema and the mapping $\lookupcl$ the final formalization for some table with name $v_d$ is then $\ab{t} \in \mathcal{P}\left(\bigtimes_{i = 1}^{n}\lookupcl(v_{t_i})\right)$ for $attr(v_d) = (v_{t_1}, v_{t_2}, \dots, v_{t_n})$.
 
-As the concretization of an abstract table is a bag we need to define a map from the underlying set $S$ to the set of all bags over that underlying set before we can define the concretization itself, we denote that set $\mathcal{M}(S)$ and define it formally as:
+As the concretization of an abstract table is a bag we need to define a map from the underlying set $S$ to the set of all bags over that underlying set before we can define the concretization itself.
 
+We denote that set $\mathcal{M}(S)$ and define it formally as:
 
 \begin{equation}
-    \mathcal{M}(S) = \{t | t : S \rightarrow \mathbf{NAT}\}\label{eq:equation-nums}
+    \mathcal{M}(S) = S \rightarrow \mathbf{NAT}\label{eq:equation-nums}
 \end{equation}
 
 Further we define the following notation for bags:
@@ -230,7 +234,7 @@ Further we define the following notation for bags:
     s \in t \iff 0 < t(s)
 \end{align}
 
-And thus we can define the concretization of a table, for $attr(v_d) = (v_1, v_2, \dots, v_n)$:
+And thus we can define the concretization of a table, for $attr(v_d) = (v_{t_1}, v_{t_2}, \dots, v_{t_n})$:
 
 
 \begin{gather}
@@ -243,12 +247,14 @@ And thus we can define the concretization of a table, for $attr(v_d) = (v_1, v_2
 
 To solidify the relation, see that: $\rho_{\ab{d}}(v_d) = \ab{t}$ and $t \in \gamma_{4d}^{v_d}(\ab{t})$, where $\rho_{\ab{d}}$ is the abstract environment mapping table names to abstract tables as later defined in \autoref{subsubsec:absenv}.
 
-\subsubsection{Abstract application variable values}\todo{Gabriela: some examples would be helpful}
-In the concrete semantics of instructions that may appear on edges\footnote{A draft of the concrete semantics can be found in \autoref{sec:concrete-semantics}} we allow application variables to be assigned to both singleton values, but also single columns of values.
-Such an assignment, when an application variable is assigned to a column of values, occurs either from the effect of a select statement, or in the case that the expression part of an assignment contains a variable that maps to a column in the current environment.
-Therefore, as much as we can, we would like to distinguish between the two cases in the abstract semantics.
-Thus for some set $S$, we introduce the set $\mathsf{Val} \; S$ of column and singleton values arising form $S$.
-Here we differ from~\cite{halder_abstract_2012}, we do not impose an order on column values, neither in the concrete semantic nor in the abstract semantics.
+\subsubsection{Abstract application variable values}
+In the concrete semantics of instructions that may appear on edges (A draft of the concrete semantics can be found in \autoref{sec:concrete-semantics}), we allow application variables to be assigned to singleton values or single columns of values.
+
+When an application variable is assigned to a column of values, such an assignment occurs either as a result of a select statement or when the expression part of an assignment contains a variable that maps to a column in the current environment.
+Therefore, we would like to distinguish between the two cases as much as possible in abstract semantics.
+Thus for some set $S$, we introduce the set $\mathsf{Val} \; S$ of column and singleton values arising from $S$.
+
+Here, we differ from~\cite{halder_abstract_2012}; we do not impose an order on column values in the concrete or abstract semantics.
 We inductively define $\mathsf{Val} \; S$ as follows:
 
 \begin{gather*}
@@ -300,11 +306,11 @@ We define the concretization of application variable values as:
 
 \begin{gather}
     \concrete^v_{4a} : \mathsf{Val} \; \lookupcl(v) \rightarrow \powerset{\cc(\lookupcl(v))} \cup \powerbag{\cc(\lookupcl(v))} \\
-    \concrete^v_{4a}(\mathsf{Single} \; \ab{s}) = \concrete_6(\ab{s})
+    \concrete^v_{4a}(\mathsf{Single} \; \ab{s}) = \concrete^v_6(\ab{s})
 \end{gather}
 \begin{multline}
-    \concrete^v_{4a}(\mathsf{List} \; \ab{S}) = \left( \bigcup_{\ab{s} \in \ab{S}} \concrete_6(\ab{s}) \right) \cup \\
-    \left\{ t \in \powerbag{\cc(\lookupcl(v))}\middle| \forall e \in t : \exists \ab{s} \in \ab{S} : e \in \concrete_6(\ab{s}) \right\}
+    \concrete^v_{4a}(\mathsf{Col} \; \ab{S}) = \left( \bigcup_{\ab{s} \in \ab{S}} \concrete^v_6(\ab{s}) \right) \cup \\
+    \left\{ t \in \powerbag{\cc(\lookupcl(v))}\middle| \forall e \in t : \exists \ab{s} \in \ab{S} : e \in \concrete^v_6(\ab{s}) \right\}
 \end{multline}
 
 
@@ -324,7 +330,7 @@ With the same \emph{implementation} as above, and:
 
 
 
-\subsubsection{Abstract environments}\label{subsubsec:absenv}\todo{Gabriela says: some examples would be helpful}
+\subsubsection{Abstract environments}\label{subsubsec:absenv}
 We define an abstract environment $\rho_{\ab{a}} \in \ab{\mathfrak{E}_a}$ mapping application variable names $v_a \in \mathbb{V}_a$ to abstract values, and $\rho_{\ab{d}} \in \ab{\mathfrak{E}_d}$ mapping table names $v_d \in \mathbb{V}_d$ to abstract tables.
 Given the previously mentioned map $\lookupcl$ in \autoref{eq:lookupcl} we define:
 
@@ -368,14 +374,15 @@ And we define the concretization functions for environments as:
 \end{gather}
 
 
-And in the same vain we define a concretization function for sets of environments as:
+And in the same vein we define a concretization function for sets of environments as:
 
 
 \begin{gather}
     \concrete_1 : \mathcal{P}(\ab{\mathfrak{E}}) \rightarrow \mathcal{P}(\mathfrak{E})\\
     \begin{split}
-        \concrete_1(\ab{P}) = \biggl\{ &(\rho_{d}, \rho_{a}) \in \mathfrak{E} \\
-        &\Big| \exists (\rho_{\ab{d}}, \rho_{\ab{a}}) \in \ab{P} : (\rho_{d}, \rho_{a}) \in \concrete_2(\rho_{\ab{d}}, \rho_{\ab{a}})\biggr\}
+         \concrete_1(\ab{P})& = \\
+        & \biggl\{ (\rho_{d}, \rho_{a}) \in \mathfrak{E}
+        \Big| \exists (\rho_{\ab{d}}, \rho_{\ab{a}}) \in \ab{P} : (\rho_{d}, \rho_{a}) \in \concrete_2(\rho_{\ab{d}}, \rho_{\ab{a}})\biggr\}
     \end{split}
 \end{gather}
 

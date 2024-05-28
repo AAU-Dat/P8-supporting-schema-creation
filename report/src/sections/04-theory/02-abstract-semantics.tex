@@ -184,7 +184,7 @@ We define the length of a regular expression $R$, $\|R\|$ as:
 The former is obviously an over-approximation, the length of the shortest $\|\min(R)\|$ can be found by classical shortest path algorithm on the automata of $R$, $\mathcal{A}(R)$.
 Such algorithms have a time complexity $\Theta(E + V \log V)$, where $E$ is the number of edges in the automata and $V$ is the number of states.
 We deem this acceptable.
-The reason that we always take the length of an regular expression to be unbounded in the positive direction is: If $R$ does not contain a term $R'^\star$, we are essentially forced to find the longest path in $\mathcal{R}$, this can be shown to be NP-hard which is not acceptable for a subroutine within a program.
+The reason that we always take the length of an regular expression to be unbounded in the positive direction is: If $R$ does not contain a term $R'^*$, we are essentially forced to find the longest path in $\mathcal{R}$, this can be shown to be NP-hard which is not acceptable for a subroutine within a program.
 
 Next, we define $cvt$, which is abstract string conversion over regular expressions, defined by recursing on the operands of union, intersection, concatenation and Kleene star.
 In the base case, a single symbol is converted as defined by $op$.
@@ -195,7 +195,7 @@ This automaton is then converted back to a regular expression by the usual GNFA 
     cvt(op, R_1 \cup R_2) &= cvt(op, R_1) \cup cvt(op, R_2) \\
     cvt(op, R_1 \cap R_2) &= cvt(op, R_1) \cap cvt(op, R_2) \\
     cvt(op, R_1 R_2) &= cvt(op, R_1) \; cvt(op, R_2) \\
-    cvt(op, R^\star) &= (cvt(op, R))^\star \\
+    cvt(op, R^*) &= (cvt(op, R))^* \\
     cvt(op, \overline{R}) &= cvt(op, (\mathcal{R} \circ \mathcal{A}) (\overline{R})) \label{eq:complement} \\
     cvt(op, \sigma) &= op(\sigma)
 \end{align}
