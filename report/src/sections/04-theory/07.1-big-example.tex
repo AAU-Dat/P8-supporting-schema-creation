@@ -33,60 +33,33 @@ while true do(
 The program in~\autoref{fig:program-code} can be broken up into the following set of instructions, seen in~\autoref{eq:example-instructions-1} through~\autoref{eq:example-instructions-12}.
 
 \begin{align} \label{eq:example-instructions-1}
-    \begin{split}
-    vName := [A-Z][a-z]* [A-Z][a-z]*;
-    \end{split}
-    & I_1\\
-    \begin{split}
-        vBalance := \top; 
-    \end{split}
-    & I_2\\
-    \begin{split}
-        &(Insert(account, <Name, Balance>, \\
-        &<vName, vBalance>), true)
-    \end{split} 
-    & I_3\\
-    \begin{split}
-        vName := \top;
-    \end{split} 
-    & I_4\\
-    \begin{split}
-        (delete(account), name = vName)
-    \end{split} 
-    & I_5\\
-    \begin{split}
-        vName := [A-Z][a-z]* [A-Z][a-z]*;
-    \end{split} 
-    & I_6\\
-    \begin{split}
-        toName := [A-Z][a-z]* [A-Z][a-z]*;
-    \end{split} 
-    & I_7\\
-    \begin{split}
-        amount := [0,+ \infty];
-    \end{split} 
-    & I_8\\
-    \begin{split}
-        &(select (vBalance, account, <name>), \\
-        &name = vName)
-    \end{split} 
-    & I_9\\
-    \begin{split}
-        &(select (toBalance, account, <name>), \\
-        &name = toName)
-    \end{split} 
-    & I_{10}\\
-    \begin{split}
-        &(update(account, <balance>, \\
-        &<vBalance - amount>), name = vName);
-    \end{split} 
-    & I_{11}\\
-    \begin{split}
-        \label{eq:example-instructions-12}
-        &(update(account, <balance>, \\
-        &<toBalance + vBalance>), name = toName);
-    \end{split}
-    & I_{12}
+    I_1 &= vName := [A-Z][a-z]* [A-Z][a-z]* \\
+    I_2 &= vBalance := \top \\
+    I_3 &= \begin{gathered}[t]
+        \langle Insert(account, (Name, Balance), \\
+        (vName, vBalance) ), true \rangle
+    \end{gathered} \\
+    I_4 &=  vName := \top \\
+    I_5 &= \langle delete(account), name = vName) \rangle \\
+    I_6 &= vName := [A-Z][a-z]* [A-Z][a-z]* \\
+    I_7 &= toName := [A-Z][a-z]* [A-Z][a-z]* \\
+    I_8 &= amount := [0,+ \infty] \\
+    I_9 &= \begin{gathered}[t]
+        \langle select (vBalance, account, (name)), \\
+        name = vName \rangle
+    \end{gathered} \\
+    I_{10} &= \begin{gathered}[t]
+        \langle select (toBalance, account, (name)), \\
+        name = toName \rangle
+    \end{gathered} \\
+    I_{11} &= \begin{gathered}[t]
+        \langle update(account, (balance), (vBalance - amount)), \\
+        name = vName \rangle
+    \end{gathered} \\
+    I_{12} &= \begin{gathered}[t]
+        \langle update(account, (balance), (toBalance + vBalance), \\
+        name = toName \rangle
+    \end{gathered}
 \end{align}
 
 The program graph, seen in~\autoref{fig:full-graph-example} is then made from the program in~\autoref{fig:program-code} using the rules presented in \autoref{subsec:abstract-syntax}.
@@ -112,21 +85,27 @@ This conversion is not done by the analysis, but is done here for sake of the re
 We assume $\ab E_\whitepointerright=\{\lambda \_ .\bot\}$.
 From the states of the program graph we get \autoref{eq:example-equation-1} through~\autoref{eq:example-equation-12}, which is the fixed point equations for the program in~\autoref{fig:program-code}, as described in \autoref{sec:preliminaries}.
 
+
+
 \begin{align}
-    \begin{split} \label{eq:example-equation-1}
-        A(q_\whitepointerright)=A(q_\whitepointerright) &\cup \hat E_\whitepointerright \\&\cup \mathcal{\hat S} \lBrack skip \rBrack(A(q_{t4}))\\&\cup \mathcal{\hat S} \lBrack I_{12} \rBrack (A(q_{t6})) \\&\cup \mathcal{\hat S} \lBrack I_3 \rBrack (A(q_i)) \\&\cup \mathcal{\hat S} \lBrack I_5 \rBrack (A(q_d))
-    \end{split}\\
-    A(q_i)=A(q_i)&\cup \mathcal{\hat S} \lBrack I_1;I_2 \rBrack (A(q_\whitepointerright ))\\
-    A(q_d)=A(q_d)&\cup \mathcal{\hat S} \lBrack I_4 \rBrack (A(q_\whitepointerright ))\\
-    A(q_{t1})=A(q_{t1})&\cup \mathcal{\hat S} \lBrack I_6;I_7;I_8 \rBrack (A(q_\whitepointerright))\\
-    A(q_{t2})=A(q_{t2})&\cup \mathcal{\hat S} \lBrack I_9 \rBrack (A(q_{t1}))\\
-    A(q_{t3})=A(q_{t3})&\cup \mathcal{\hat S} \lBrack I_{10} \rBrack (A(q_{t2}))\\
-    A(q_{t4})=A(q_{t4})&\cup \mathcal{\hat S} \lBrack b \rBrack (A(q_{t3}))\\
-    A(q_{t5})=A(q_{t5})&\cup \mathcal{\hat S} \lBrack \neg b \rBrack (A(q_{t3}))\\
-    A(q_{t6})=A(q_{t6})&\cup \mathcal{\hat S} \lBrack I_{11} \rBrack (A(q_{t5}))\\
-    A(q_\blackpointerleft)=A(q_\blackpointerleft) \label{eq:example-equation-12}
+    A(q_\whitepointerright) &= \begin{aligned}[t]
+    A(q_\whitepointerright) &\cup \hat E_\whitepointerright \\
+                            &\cup \mathcal{\hat S} \lBrack skip \rBrack(A(q_{t4})) \\
+                            &\cup \mathcal{\hat S} \lBrack I_{12} \rBrack (A(q_{t6})) \\
+                            &\cup \mathcal{\hat S} \lBrack I_3 \rBrack (A(q_i)) \\
+                            &\cup \mathcal{\hat S} \lBrack I_5 \rBrack (A(q_d))
+    \end{aligned} \label{eq:example-equation-1} \\
+    A(q_i) &= A(q_i) \cup \mathcal{\hat S} \lBrack I_1;I_2 \rBrack (A(q_\whitepointerright )) \\
+    A(q_d) &= A(q_d) \cup \mathcal{\hat S} \lBrack I_4 \rBrack (A(q_\whitepointerright )) \\
+    A(q_{t1}) &= A(q_{t1}) \cup \mathcal{\hat S} \lBrack I_6;I_7;I_8 \rBrack (A(q_\whitepointerright)) \\
+    A(q_{t2}) &= A(q_{t2}) \cup \mathcal{\hat S} \lBrack I_9 \rBrack (A(q_{t1}))\\
+    A(q_{t3}) &= A(q_{t3}) \cup \mathcal{\hat S} \lBrack I_{10} \rBrack (A(q_{t2}))\\
+    A(q_{t4}) &= A(q_{t4}) \cup \mathcal{\hat S} \lBrack b \rBrack (A(q_{t3}))\\
+    A(q_{t5}) &= A(q_{t5}) \cup \mathcal{\hat S} \lBrack \neg b \rBrack (A(q_{t3}))\\
+    A(q_{t6}) &= A(q_{t6}) \cup \mathcal{\hat S} \lBrack I_{11} \rBrack (A(q_{t5}))\\
+    A(q_\blackpointerleft) &= A(q_\blackpointerleft) \label{eq:example-equation-12}
 \end{align}
-    
+
 When solving \autoref{eq:example-equation-1} through ~\autoref{eq:example-equation-12} using the semantics in this paper, we get the solutions to the fixed point equations seen in \autoref{eq:example-fixed-point-1} through~\ref{eq:example-fixed-point-8}.
 In the solutions we omit $\mathsf{Single}$, thus $\mathsf{Single} \ s$ is denoted $s$, and $NR =  [A-Z][a-z]^*\_[A-Z][a-z]^*$.
 
@@ -145,7 +124,7 @@ These properties are described in \autoref{eq:equation15} and \autoref{eq:equati
 \end{align}
 
 \autoref{eq:example-fixed-point-1} shows that the property in \autoref{eq:equation15} might not hold.
-Observe in the second environment in the assignment of $q_{\whitepointerright$, \autoref{eq:equation15} would evaluate to $\{\true, \false\}$ and therefore you would suspect that the property might not hold.
+Observe in the second environment in the assignment of $q_{\whitepointerright}$, \autoref{eq:equation15} would evaluate to $\{\true, \false\}$ and therefore you would suspect that the property might not hold.
 
 Note that the property does actually not hold, as accounts with negative balances might be created.
 As for the second property see that the account table would always evaluate to $\{\true\}$, in all assignment of $q_{\whitepointerright}$, and therefore the property holds.
