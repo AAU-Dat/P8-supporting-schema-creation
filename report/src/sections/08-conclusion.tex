@@ -1,18 +1,14 @@
 \section{Conclusion} \label{sec:conclusion}
-With the language for the abstract interpretation of databases from~\cite{halder_abstract_2012} as a starting point, we have further developed the language to try and improve some of the areas where the original language was lacking.
+With the framework for the abstract interpretation of databases from~\cite{halder_abstract_2012} as a starting point, we have further developed their work to try and improve some of the areas where the original framework was lacking.
+
 Our semantics is based on the abstract interpretation of the paper though the size of both the syntax and semantics has been reduced.
-the original language would run indefinitely in some cases, which is not desirable.
-We have improved the language to what we believe ensures termination.
+The original framework would run indefinitely in some cases, which is not desirable.
+We have modified their framework for use in our analysis to ensure termination.
 
-When discussing the soundness of the language, we believe the language is sound.
-but we have not been able to prove it formally.
-we believe that such a proof would be possible, but the process of doing so would be very time-consuming.
+When discussing the soundness of our analysis, we have provided a proof sketch, to back up our claim that the analysis is sound.
+We have not proved it rigorously, but we believe that such a proof is possible.
 
-When it comes to the representation of some of the datatype in the language, we have made some changes.
-Those changes being the string representation in the form of regular expression.
-As well as the use of ranges to represent integers.
-
-This is why we think that the language is a good starting point for further development and research to see if it can be used to verify properties of databases in the future.
+For the above reasons wgit e think that our analysis is a good starting point for further development and research, to see if it can be used to verify properties of databases in the future.
 Or to see if this can be implemented in a tool that can be used to verify properties of databases.
 
 
