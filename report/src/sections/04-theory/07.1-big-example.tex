@@ -1,33 +1,34 @@
-\subsection{Big Example}\label{subsec:big-example}
-This section will present an example of a program that can be analyzed using the abstract interpretation presented in this paper.
+\subsection{Banking example}\label{subsec:banking-example}
+This section will present an example of a program that can be analyzed using the data flow analysis presented in this paper.
 
-The program in~\autoref{fig:program-code} is a simple program that simulates a bank system With delete, input, select, and update operations.
-\begin{figure}
+The program in~\autoref{fig:program-code} is a simple program that simulates a banking system with delete, input, select, and update operations.
+
+\begin{listing}
     \begin{minted}[frame=lines, linenos, escapeinside=||, mathescape=true]{text}
 while true do(
     vName := [A-Z][a-z]* [A-Z][a-z]*;
     vBalance := |$\top$|;
-    (Insert(account, <Name, Balance>, <vName, vBalance>), true)
+    <Insert(account, (Name, Balance), (vName, vBalance)), true>
 )[](
     vName := |$\top$|;
-    (delete(account), name = vName)
+    <delete(account), name = vName>
 )[](
     vName := [A-Z][a-z]* [A-Z][a-z]*;
     toName := [A-Z][a-z]* [A-Z][a-z]*;
     amount := [0,+|$\infty$|];
-    (select (vBalance, account, <name>), name = vName)
-    (select (toBalance, account, <name>), name = toName)
+    <select (vBalance, account, (name)), name = vName>;
+    <select (toBalance, account, (name)), name = toName>;
     if(vBalance - amount) < 0
-        then skip
+    then skip
     else(
-        (update(account, <balance>, <vBalance - amount>), name = vName);
-        (update(account, <balance>, <toBalance + amount>), name = toName);
+        <update(account, (balance), (vBalance - amount)), name = vName>;
+        <update(account, (balance), (toBalance + amount)), name = toName>
     )
 )
     \end{minted}
-    \caption{Code for the program example}
+    \caption{Banking system program example.}
     \label{fig:program-code}
-\end{figure}
+\end{listing}
 
 The program in~\autoref{fig:program-code} can be broken up into the following set of instructions, seen in~\autoref{eq:example-instructions-1} through~\autoref{eq:example-instructions-12}.
 
@@ -88,26 +89,28 @@ The program in~\autoref{fig:program-code} can be broken up into the following se
     & I_{12}
 \end{align}
 
-A program graph, seen in~\autoref{fig:full-graph-example} is then made from the program in~\autoref{fig:program-code} using the abstract interpretation.
+The program graph, seen in~\autoref{fig:full-graph-example} is then made from the program in~\autoref{fig:program-code} using the rules presented in \autoref{subsec:abstract-syntax}.
 
 \begin{figure}
     \centering
     \input{figures/graph_example.tex}
-    \caption[short]{Full program graph example}
+    \caption{Program graph for \autoref{fig:program-code}.}
     \label{fig:full-graph-example}
 \end{figure}
 
 
-The program graph can then be simplified to the following program graph~\autoref{fig:simple-graph-example}.
+The program graph can then be simplified to the program graph, seen in \autoref{fig:simple-graph-example}.
+This conversion is not done by the analysis, but is done here for sake of the reader.
 
 \begin{figure}
     \centering
     \input{figures/simple_graph_example.tex}
-    \caption[short]{Simple program graph example}
+    \caption{Simplified program graph for \autoref{fig:full-graph-example}.}
     \label{fig:simple-graph-example}
 \end{figure}
 
-From the states of the program graph we get the following equations~\autoref{eq:example-equation-1} through~\autoref{eq:example-equation-12}.
+We assume $\ab E_\whitepointerright=\{\lambda \_ .\bot\}$.
+From the states of the program graph we get \autoref{eq:example-equation-1} through~\autoref{eq:example-equation-12}, which is the fixed point equations for the program in~\autoref{fig:program-code}, as described in \autoref{sec:preliminaries}.
 
 \begin{align}
     \begin{split} \label{eq:example-equation-1}
@@ -124,10 +127,25 @@ From the states of the program graph we get the following equations~\autoref{eq:
     A(q_\blackpointerleft)=A(q_\blackpointerleft) \label{eq:example-equation-12}
 \end{align}
     
-When solving the equations seen in~\autoref{eq:example-equation-1} through ~\autoref{eq:example-equation-12} using the semantics in this paper, we get the following fixpoint~\autoref{eq:example-fixed-point-1} through~\autoref{eq:example-fixed-point-8}.
+When solving \autoref{eq:example-equation-1} through ~\autoref{eq:example-equation-12} using the semantics in this paper, we get the solutions to the fixed point equations seen in \autoref{eq:example-fixed-point-1} through~\ref{eq:example-fixed-point-8}.
+In the solutions we omit $\mathsf{Single}$, thus $\mathsf{Single} \ s$ is denoted $s$, and $NR =  [A-Z][a-z]^*\_[A-Z][a-z]^*$.
 
 \input{sections/04-theory/example-equations}
 
-By using this, it is possible to analyze the program and check for some requested properties.
-In this case one of the properties could be to check if it is possible to have accounts with a negative balance, which in this case would be possible.
-Another case could be checking if it is possible to have accounts with names that are not in the format of the regular expression $[A-Z][a-z]^*\; [A-Z][a-z]^*$, which in this case would hold.
+The analysis result can be used to analyze the program and check for some requested properties.
+In this case, one of the properties could be to check if it is possible in the initial program point, to have accounts with a negative balance, which would be possible.
+
+Another case could be checking if it is possible in the initial program point, to have accounts with names that are not in the format of the regular expression $[A-Z][a-z]^*\_ [A-Z][a-z]^*$, which would hold in this case.
+
+These properties are described in \autoref{eq:equation15} and \autoref{eq:equation16}.
+
+\begin{align}
+     q_{\whitepointerright}&:\neg(\exists balance_1(balance_1<0))\label{eq:equation15}  \\
+     q_{\whitepointerright}&:\forall name_1(name_1 = NR) \label{eq:equation16}
+\end{align}
+
+\autoref{eq:example-fixed-point-1} shows that the property in \autoref{eq:equation15} might not hold.
+Observe in the second environment in the assignment of $q_{\whitepointerright$, \autoref{eq:equation15} would evaluate to $\{\true, \false\}$ and therefore you would suspect that the property might not hold.
+
+Note that the property does actually not hold, as accounts with negative balances might be created.
+As for the second property see that the account table would always evaluate to $\{\true\}$, in all assignment of $q_{\whitepointerright}$, and therefore the property holds.

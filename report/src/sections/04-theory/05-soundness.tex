@@ -1,11 +1,10 @@
 \subsection{Soundness}\label{subsec:soundness}
-
 In this subsection we give an informal argument of soundness for the specification of our analysis.
-A formal proof would be far too long and should ideally be verified with a formal proof management system.
+A formal proof would be too long and we would want to verify it with a formal proof management system.
 A draft of the concrete semantics is given in \autoref{sec:concrete-semantics}.
 
-For the proofs and proof-sketches in this section we allow ourselves to substitute terms $s \into \lookupcl(v)$ with $s$, the justification is that $s \into \lookupcl(v)$ will only ever overestimate $s$, that is $s \subseteq s \into \lookupcl(v)$.
-More specifically, if one where to take $\ab{\mathcal{S}}'\lBrack\cdot\rBrack$ to be $\abssem{\cdot}$ where such a substitution had taken place, we conjecture that you would find that $\concrete_1 \left( \ab{\mathcal{S}}'\lBrack I \rBrack (\ab{\environment})\right) \subseteq \concrete_1 \left( \abssem{I}(\ab{\environment}) \right)$ for all $I$ and $\ab{\environment}$, and therefore if $\ab{\mathcal{S}}'\lBrack \cdot \rBrack$ was shown to be sound then $\abssem{\cdot}$ would also be sound .
+For the proofs and proof sketches in this section, we allow ourselves to substitute terms $s \into \lookupcl(v)$ with $s$, the justification is that $s \into \lookupcl(v)$ will only ever overestimate $s$, that is $s \subseteq s \into \lookupcl(v)$.
+More specifically, if one where to take $\ab{\mathcal{S}}'\lBrack\cdot\rBrack$ to be $\abssem{\cdot}$ where such a substitution had taken place, we conjecture that you would find that $\concrete_1 \left( \ab{\mathcal{S}}'\lBrack I \rBrack (\ab{\environment})\right) \subseteq \concrete_1 \left( \abssem{I}(\ab{\environment}) \right)$ for all $I$ and $\ab{\environment}$, and therefore if $\ab{\mathcal{S}}'\lBrack \cdot \rBrack$ was shown to be sound then $\abssem{\cdot}$ would also be sound.
 
 \begin{conjecture}\label{thm:sound-exp}
     $\absexpsem{\cdot}$ is sound, formally
@@ -34,11 +33,12 @@ More specifically, if one where to take $\ab{\mathcal{S}}'\lBrack\cdot\rBrack$ t
 
 \begin{proof}
     \pfsketch\
-    As above the proof would proceed by structural induction on $\mathbb{B}$
-    In the base case, $\absboolsem{\texttt{true}}$ and $\absboolsem{\texttt{false}}$ would clearly be sound, further soundness of compare operations would follow an argument similar to the one above about operations.
-    As a note, in the concrete semantics, compare operations between columns of tables is not allowed, we allow it in the abstract semantics in the case that a column would turn out to actually just be a singleton values in which case it would be allowed in the concrete semantics.
+    As above the proof would proceed by structural induction on $\mathbb{B}$.
+    In the base case, $\absboolsem{\texttt{true}}$ and $\absboolsem{\texttt{false}}$ would clearly be sound, further soundness of compare operations would follow an argument similar to the proof for \autoref{thm:sound-exp}.
+    As a note, in the concrete semantics, compare operations between columns of tables is not allowed, we allow it in the abstract semantics in the case that a column would turn out to actually just be a singleton value, in which case it would be allowed in the concrete semantics.
     In the inductive case, ignoring quantifiers for now, soundness would follow from the inductive hypothesis and a case analysis of each abstract Boolean operation.
-    In the case of the quantifier statements, soundness follows from the inductive hypothesis, and the fact that we take the abstract and/or of all possible abstract values being quantified over, further we take care to add either $\true$ or $\false$ (for for all and exists respectively) to the result in the case that a value is \emph{missing} in the concrete counterpart.
+    In the case of the quantifier statements, soundness follows from the inductive hypothesis, and the fact that we take the abstract and/or of all possible abstract values being quantified over.
+    Further we take care to add either $\true$ (for all) or $\false$ (exists) to the result in the case that a value is \emph{missing} in the concrete counterpart.
 \end{proof}
 
 
@@ -83,7 +83,7 @@ More specifically, if one where to take $\ab{\mathcal{S}}'\lBrack\cdot\rBrack$ t
 \begin{proof}
     \pf\
     Assume $\environment \in \concrete_1(\ab{P})$, then $\boolsem{b}(\environment)$ is either equal to $\false$ or $\true$.
-    If $\boolsem{b}(\environment) = \false$ then $\sem{b}(\environment) = \emptyset$ and therefore $\sem{b}(\environment) \subseteq \concrete_1(\abssem{b}(\ab{P}))$
+    If $\boolsem{b}(\environment) = \false$ then $\sem{b}(\environment) = \emptyset$ and therefore $\sem{b}(\environment) \subseteq \concrete_1(\abssem{b}(\ab{P}))$.
     If $\boolsem{b}(\environment) = \true$ then $\sem{b}(\environment) = \{ \environment \}$.
     Because $\boolsem{b}(\environment) \in \concrete_{4a}(\absboolsem{b}(\ab{\environment}))$ for $\environment \in \concrete_2(\ab{\environment})$ where $\ab{\environment} \in \ab{P}$ then $\ab{\environment}$ must be in $\abssem{b}(\ab{P})$, and therefore $\{ \environment \} \subseteq \concrete_1(\abssem{b}(\ab{\environment}))$
 \end{proof}
@@ -91,7 +91,7 @@ More specifically, if one where to take $\ab{\mathcal{S}}'\lBrack\cdot\rBrack$ t
 
 \begin{conjecture}
     \label{thm:sound-select}
-    $\abssqlsem{\langle select(v_a, v_d, \mathbf{v}_t), \phi \rangle}$ is sound, formally
+    $\abssqlsem{\langle select(v_a, v_d, \mathbf{v}_t), b \rangle}$ is sound, formally
     \begin{multline*}
         \environment \in \concrete_2(\ab{\environment}) \implies \sqlsem{\langle select(v_a, v_d, \mathbf{v}_t), b \rangle}(\environment) \in \\
         \concrete_2(\abssqlsem{\langle select(v_a, v_d, \mathbf{v}_t), b \rangle}(\ab{\environment}))
@@ -119,7 +119,7 @@ More specifically, if one where to take $\ab{\mathcal{S}}'\lBrack\cdot\rBrack$ t
 
 \begin{proof}
     \pfsketch\
-    Soundness of $\abssqlsem{\langle insert(\mathbf{v}_d, \mathbf{e}), b \rangle}$ relies on the fact that we take all possible combinations of the abstract input of the select statement.
+    Soundness of $\abssqlsem{\langle insert(\mathbf{v}_d, \mathbf{e}), b \rangle}$ relies on the fact that we take all possible combinations of the abstract input of the insert statement.
     Therefore, as the evaluation of the input is based on $\absexpsem{\cdot}$ and because $\absexpsem{\cdot}$ is sound, $\abssqlsem{\langle insert(\mathbf{v}_d, \mathbf{e}), b \rangle}$ is sound.
 \end{proof}
 
@@ -138,9 +138,9 @@ More specifically, if one where to take $\ab{\mathcal{S}}'\lBrack\cdot\rBrack$ t
     \pfsketch\
     Essentially $\abssqlsem{\langle update(\absattrs, \absexps), b \rangle}$ is sound because:
     \begin{itemize}
-        \item We do not update all the abstract tuples where we are sure the predicate evaluates to false;
-        \item for all tuples where we are unsure whether the predicate is true we take the join of the incoming and current values being updated, effectively updating the values to both in an abstract sense;
-        \item in the case where we are sure the predicate is true for the tuple is updated.
+        \item We do not update all the abstract tuples where we are sure the predicate evaluates to false.
+        \item For all tuples where we are unsure whether the predicate is true we take the join of the incoming and current values being updated, effectively updating the values to both in an abstract sense.
+        \item In the case where we are sure the predicate is true, the tuple is updated.
     \end{itemize}
     The soundness of the prequel relies on the fact that both that $\absexpsem{\cdot}$ is sound and that $\absboolsem{\cdot}$ is sound, which they are.
 \end{proof}
@@ -158,7 +158,7 @@ More specifically, if one where to take $\ab{\mathcal{S}}'\lBrack\cdot\rBrack$ t
 
 \begin{proof}
     \pfsketch\
-    The soundness of $\abssqlsem{\langle delete(\absattrs), b \rangle}$ stems from the fact the only remove abstract tuples where we are absolutely sure that the predicate evaluates to true.
+    The soundness of $\abssqlsem{\langle delete(\absattrs), b \rangle}$ stems from the fact that we only remove abstract tuples where we are absolutely sure that the predicate evaluates to true.
     The soundness of $\abssqlsem{\langle delete(\absattrs), b \rangle}$ thus relies on the fact that $\absboolsem{\cdot}$ is a sound approximation.
 \end{proof}
 

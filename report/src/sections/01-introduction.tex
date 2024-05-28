@@ -1,24 +1,22 @@
 \section{Introduction}\label{sec:introduction}
-\IEEEPARstart{S}{oftware} analysis is a broad field encompassing a wide range of techniques and methodologies, each tailored to address specific aspects of software systems.
-One such technique is static dataflow analysis, which focuses on analyzing and obtaining information that is valid for all executions of a program~\cite{moller_statitc_nodate}.
-Static dataflow analysis can be approached from various angles, including the consideration of meta-information like information flow or taint analysis.
-% While these approaches offer valuable insights into the behavior of a program, they often require detailed knowledge of the program's internal workings and are not always applicable to all types of software systems.
-In this paper, we specifically develop our analysis in the abstract interpretation framework.
+\IEEEPARstart{S}{oftware} analysis is a broad field encompassing various techniques and methodologies, each tailored to address specific aspects of software systems.
+One such technique is static dataflow analysis, which focuses on analyzing and obtaining information that is valid for all executions of a program~\cite{moller_statitc_nodate, jackson_software_2000}.
+Static dataflow analysis can be approached from various angles, including meta-information like information flow or taint analysis.
+This paper specifically develops an analysis using the abstract interpretation framework.
 
 Abstract interpretation, first proposed by Cousot and Cousot in 1977~\cite{cousot_abstract_1977}, has emerged as a fundamental method for static program analysis.
 Over the years, it has evolved into a versatile tool, finding applications across various programming paradigms and system architectures.
 Its utility extends beyond traditional imperative programming to encompass object-oriented designs and concurrent systems~\cite{gustafsson_analyzing_2013, mine_static_2023}.
-Abstract interpretation has played a pivotal role in analyzing a spectrum of program properties, from basic safety and liveness concerns to intricate security considerations~\cite{mastroeni_abstract_2011}.
+Abstract interpretation has played a pivotal role in analyzing program properties, from basic safety and liveness concerns to intricate security considerations~\cite{mastroeni_abstract_2011}.
 
 Building upon this, Halder and Cortesi have expanded the application of abstract interpretation to the domain of query languages~\cite{halder_abstract_2012}.
 This paper continues in these footsteps, aiming to further explore and extend the capabilities of abstract interpretation within the context of query languages.
 
-
 \subsection{Non-terminating Analysis}\label{subsec:non-terminating-analysis}
-Halder and Cortesi do not provide a proof of termination and we conjecture\footnote{We only allow ourselves to conjecture this because, in our opinion, their formalization of the abstract insert is ambiguous.}~that it may encounter non-termination issues.
-To illustrate, consider the database schema in \autoref{lst:motivate-sql} as well as the insert query in the program in \autoref{lst:motivate-program}.
-The program inserts a tuple into the account table with the name, "name", and a balance of 1 into the account table, and it does so indefinitely.
+Halder and Cortesi do not provide any proof of termination, and we conjecture~\footnote{We only allow ourselves to conjecture this because, in our opinion, their formalization of the abstract insert is ambiguous.} that the analysis of certain programs may be non-terminating.
+To illustrate, consider the database schema in \autoref{lst:motivate-sql} and the program in \autoref{lst:motivate-program}.
 
+The program inserts a tuple into the account table with a name and balance, and it does so indefinitely.
 
 \begin{listing}
     \begin{minted}{sql}
@@ -35,62 +33,54 @@ The program inserts a tuple into the account table with the name, "name", and a 
 \begin{listing}
     \begin{minted}[breaklines]{bash}
         while true do
-            (insert(account,(name,balance),("name", 1)), true)
+            <insert(account,(name,balance),("name", 1)), true>
     \end{minted}
     \caption{A tiny program with nonterminating analysis.}
     \label{lst:motivate-program}
 \end{listing}
 
-Because the database context would continually change under Cortesi and Halder's framework, the analysis would not terminate.
-\todo{Gabriela, are you sure about this?, wouldn't the definition given on page 145 of (Halder Cortesi), (abstract insert) be used for this and since it is based on set union, then reach a fixed point? Anders: Couldn't find anything in Halder and Cortesi paper}
+Because the database context would continually change under Cortesi and Halder's framework, which uses bag semantics, the analysis would not terminate.
 However, there is a solution.
 By extending the abstraction of the analysis to also abstract over the multiplicity of abstract tuples in an abstract table, the analysis can terminate even for the program in \autoref{lst:motivate-program}.
 
-
-\todo{\textbf{TODO:Show the contributions through a second example that runs through how we used the updated semantics. Move from method}
-}
-
 \subsection{Related Work}\label{subsec:related-work}
-This paper builds on the seminal work of abstract interpretation by Cousot and Cousot~\cite{cousot_abstract_1977}, and in particular we consider the follow-up paper~\cite{cousot_abstract_1996} from which we take the idea of using intervals and regular expressions as the abstract domains in our analysis.
+This paper builds on the seminal work of abstract interpretation by Cousot and Cousot~\cite{cousot_abstract_1977}.
+In particular, we consider the follow-up paper~\cite{cousot_abstract_1996} from which we take the idea of using intervals and regular expressions as the abstract domains in our analysis.
 
-%Additionally, we heavily use the work of abstract interpretation of database queries by Cortesi and Halder~\cite{halder_abstract_2012}.
-%Concretely, we use their work for analysing a database schema in relation to a program using the syntax they describe.
+Additionally, our work is inspired by~\citetitle{halder_abstract_2012}~\cite{halder_abstract_2012}.
+Our work originally started as an attempt to synthesize an analysis based on their work but ended up being our attempt to improve the shortcomings that we felt were present in the work.
 
-Additionally our work is inspired by \emph{Abstract Interpretation of database queries} by Cortesi and Halder~\cite{halder_abstract_2012}.
-Our work originally started as an attempt to synthesize an analysis based on their work, but ended up being our attempt to improve the shortcomings that we felt were present in the work.
 
-Jana et al.~\cite{jana_extending_2020} have extended the application of abstract interpretation to the domain of web security. \todo{have we checked this is correct?}
-Dependency information (data- and/or control-dependencies) among program variables and program statements is playing crucial roles in a wide range of software-engineering activities, e.g., program slicing, information flow security analysis, debugging, code optimization, code reuse, code understanding.
-Most existing dependency analyzers focus on mainstream languages, and they do not support database applications embedding queries and data-manipulation commands.
-This paper extends the Abstract Interpretation framework for static dependency analysis of database applications, providing a semantics-based computation tunable with respect to precision.
+Jana et al.~\cite{jana_extending_2020} have likewise extended the application of abstract interpretation in the context of database applications - specifically the analysis of dependency information, which they call dependency analysis.
+Their paper applies Cortesi and Halder's previous work and similarly works with embedded database languages.
+They provide a semantic-based computation that is tunable; that is, the level of abstraction can be modified.
 
-Kashyap et al.~\cite{kashyap_integrity_2022} have proposed a new approach to integrity checking of database applications using abstract interpretation. \todo{have we checked this is correct?}
-The approach is based on the use of abstract interpretation to analyze the database application and to check the integrity of the data, i.e., to verify that the data is consistent with the constraints defined in the database management system.
+Kashyap et al.~\cite{kashyap_integrity_2022} proposed a new approach to integrity-checking database applications.
+The approach is based on abstract interpretation, which is used to analyze the database application and check the integrity of the data, i.e., to verify that the data is consistent with the constraints defined in the database management system.
 
 
 \subsection{Contributions}\label{subsec:contributions}
-As described in \autoref{subsec:related-work}, one of our main contributions is describing a static analysis that should serves as an alternative to the work made by Cortesi and Halder~\cite{halder_abstract_2012}.
+As described in \autoref{subsec:related-work}, one of our main contributions is describing a static analysis that should serve as an alternative to the work of Cortesi and Halder~\cite{halder_abstract_2012}.
 
 Included in this, we extend the level of abstraction used in the analysis.
 Where~\cite{halder_abstract_2012} only abstract over the tuples in a database, we abstract over both the tuples and their multiplicity, ultimately guaranteeing a finite analysis.
-This is thoroughly covered in \autoref{sec:theory}.
 
-Also included in the contribution is a description of a static analysis used to check properties when given a program and its associated database.
+The contribution also includes a description of a static analysis used to check properties when given a program and its associated database.
 While we have not provided a specific method for checking general properties, we have outlined a systematic approach for verifying invariants.
-Invariants are a particular type of property that should always be held during the program's execution.
+Invariants are a particular type of property that should always be holding during the program's execution.
 
-This way, we can analysis the program and afterward check if for states suspected to be reachable by the analysis the invariant holds.
+This way, we can analyze the program and then check whether the invariant holds for states suspected to be reachable by the analysis.
 We can check for invariants in every state of the program.
 We do this in a program graph, where each node represents a state of the program.
 We can check if the invariant holds in each node.
 This way, we can systematically verify the program's correctness throughout its execution.
 
-The invariants can be checked with the Boolean syntax which is described in \autoref{fig:abstract-syntax}.
-The current syntax lacks a way to flag such thing, but it should be possible to use the Boolean syntax fot this purpose. \todo{this needs to be claryfied}
+The invariants can be checked using the Boolean syntax described in \autoref{fig:abstract-syntax}.
+The current syntax lacks a way to flag such a thing, but it should be possible to use the Boolean syntax for this purpose.
 
-To ensure that our work is correct, we informally prove soundness of the static analysis.
-By doing this, we can always be sure that our analysis produces an overestimation of the concrete values and tuples.
-The soundness proof can be found in \autoref{subsec:soundness}.
+To ensure that our work is correct, we informally prove the soundness of the static analysis.
+This ensures that our analysis always overestimates the concrete values and tuples.
+The proof of soundness can be found in \autoref{subsec:soundness}.
 
 \subsection{Article Overview}\label{subsec:article-overview}
 The rest of the article is structured as follows:
@@ -99,20 +89,24 @@ In \autoref{sec:theory} we describe our contribution in detail:
 
 \begin{itemize}
     \item In \autoref{subsec:abstract-syntax} we describe the syntax of the language used for the analysis, further we define the conversion of programs in this language to program graphs;
-    \item in \autoref{subsec:abstract-domains} we describe the abstract domains of our analysis and how they related to the concrete domains, notably we describe:
+    \item In \autoref{subsec:abstract-domains} we describe the abstract domains of our analysis and how they related to the concrete domains, notably we describe:
     \begin{itemize}
         \item Regular expressions as an abstract domain for strings,
-        \item union intervals as an abstract domain for numbers,
-        \item cover-lattices as a technique to deal with infinite lattices in a finite manner,
+        \item Union intervals as an abstract domain for numbers,
+        \item Cover-lattices as a technique to deal with infinite lattices in a finite manner,
         \item Abstract bags of abstract tuples as an abstract domain of bags.
     \end{itemize}
-    \item In \autoref{subsec:abstract-semantics} we give the abstract semantics for the instructions pertaining to the edges of program graphs, of note we define the abstract semantics for the SQL select-, insert-, update- and delete statement;
+    \item In \autoref{subsec:abstract-semantics} we give the abstract semantics for the instructions pertaining to the edges of program graphs.
+    Of note we define the abstract semantics for the SQL select-, insert-, update- and delete statement;
     \item In \autoref{subsec:soundness} we argue that our analysis is sound;
-    \item and finally in \autoref{subsec:termination} we show that our analysis will terminate.
+    \item Finally in \autoref{subsec:termination} we show that our analysis will terminate.
 \end{itemize}
 
-In \autoref{sec:discussion} we discuss the quality of the presented analysis and in \autoref{sec:discussion} we also present new avenues for future work.
-Finally the we conclude the paper in \autoref{sec:conclusion}. \todo{update with examples}
+In \autoref{sec:example}, we provide three analysis examples: a comprehensive one illustrating queries and the process, a second showing the example from the introduction and a third where the cover lattice is necessary for termination.
+
+In \autoref{sec:discussion} we discuss the quality of the presented analysis and also present new avenues for future work.
+
+Finally, we conclude the paper in \autoref{sec:conclusion}.
 
 
 
