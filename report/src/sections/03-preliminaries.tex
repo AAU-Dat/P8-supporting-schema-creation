@@ -1,14 +1,14 @@
 
-\section{preliminaries}\label{sec:preliminaries}
-This section contains the definitions and theorems of lattices, complete lattices, and partial orders.
-These definitions will be used later in the paper and are foundational to abstract interpretation.
+\section{Preliminaries}\label{sec:preliminaries}
+This section will cover the theoretical underpinnings of the particular version of abstract interpretation that is being used in this paper, namely lattices and program graphs.
+Naturally we also give an introduction to abstract interpretation.
 
 \subsection{Lattices}\label{subsec:lattices}
-All definitions and notation in this subsection come from~\cite{nielson_formal_2019}.
+All definitions and notation in this subsection come from~\cite{moller_statitc_nodate}.
 
 
 \begin{definition}
-    A \emph{partial order} $(S, \sqsubseteq)$ is set $S$ equipped with a binary relation $\sqsubseteq$ that is reflexive, transitive and antisymmetric.
+    A \emph{partial order} $(S, \sqsubseteq)$ is a set $S$ equipped with a binary relation $\sqsubseteq$ that is reflexive, transitive and antisymmetric.
 \end{definition}
 
 
@@ -58,7 +58,7 @@ In a complete lattice $L$ with finite height, every monotone function $f : L \ri
 \end{theorem}
 
 
-\begin{theorem}
+\begin{theorem}\label{thm:product-lattice}
     If $L_1, L_2, \dots, L_n$ are complete lattices, then so is the product:
     \begin{equation}
         L_1 \times L_2 \times \dots L_n = \{(x_1, x_2, \dots x_n) \mid x_i \in L_i\}\label{eq:equation7}
@@ -76,7 +76,7 @@ In a complete lattice $L$ with finite height, every monotone function $f : L \ri
 \end{theorem}
 
 \begin{theorem}
-    If $A$ is a set and $L$ a complete lattice, then $A \rightarrow L$ is a complete lattice when
+    If $A$\todo{Gabriela says: any connection between A and L? \\ Casper says: No.} is a set and $L$ a complete lattice, then the set of functions with domain $A$ and codomain $L$, denoted $A \rightarrow L$, is a complete lattice when
     \begin{equation}
         \begin{split}
             f \sqsubseteq g \iff \forall a \in A : f(a) \sqsubseteq g(a) \\ \text{ where } f,g \in A \rightarrow L\label{eq:equation-complete-lattice-theorem}
@@ -84,13 +84,14 @@ In a complete lattice $L$ with finite height, every monotone function $f : L \ri
     \end{equation}
 \end{theorem}
 
-\begin{theorem}
+\begin{theorem}\label{thm:powerset}
     If $A$ is a set then $(\mathcal{P}(A), \subseteq, \cup, \cap)$ is a complete lattice, called the \emph{powerset lattice}.
 \end{theorem}
 
 \subsection{Program Graphs}\label{subsec:program-graphs}
 
-Because of the particular flavor of abstract interpretation we use uses program graphs instead of control flow graphs we justify the conversion here, to be more precise we justify the conversion of control flow construct defined in~\cite{halder_abstract_2012} to program graphs.
+The particular flavor of abstract interpretation we utilize in this paper uses program graphs instead of control flow graphs\todo{Gabriela says: Do you highlight your choice as a contribution? \\ Casper says: No, should we?}, therefore the concept is introduced here.
+We will justify the conversion from program to program graph later in \autoref{subsec:abstract-syntax}.
 This particular flavor of abstract interpretation was chosen because it allowed us to encode the control flow in the graph, allowing us to \emph{abstract} away details of control flow in our analysis specification.
 
 \begin{definition}
@@ -106,20 +107,20 @@ This particular flavor of abstract interpretation was chosen because it allowed 
     Finally, $q_\whitepointerright, q_\blackpointerleft \in Q$ are distinct, and no edges are to have source $q_\blackpointerleft$.
 \end{definition}
 
-Given a \emph{semantic function} $\sem{\cdot} : \mathbb{I} \rightarrow \mathfrak{E} \rightarrow \mathcal{P}(\mathfrak{E})$ over some non-empty set of memories $\mathfrak{E}$, if $q_\circ \xrightarrow{I} q_\bullet \in E$ and $\sem{I}(\rho) = P$ such that $P$ is non-empty then for all $\rho' \in P$ we have an execution steps $\langle q_\circ; \rho \rangle \xRightarrow{I} \langle q_\bullet; \rho' \rangle$.
-The reflexive and transitive closure of all such relations of an accompanying program graph is denoted $\langle q_\circ; \rho \rangle \xRightarrow{\omega^\star} \langle q_\bullet; \rho' \rangle$.
+Given a \emph{semantic function} $\sem{\cdot} : \mathbb{I} \rightarrow \mathfrak{E} \rightarrow \mathcal{P}(\mathfrak{E})$ over some non-empty set of memories $\mathfrak{E}$, if $q_\circ \xrightarrow{I} q_\bullet \in E$ and $\sem{I}(\rho) = P$ such that $P$ is non-empty then for all $\rho' \in P$ we have an execution step $\langle q_\circ; \rho \rangle \xRightarrow{I} \langle q_\bullet; \rho' \rangle$.\todo{Gabriela says: what is the connection between this syntax and what was stated before? \\ Casper says: I don't understand, it should be clear, no?}
+The reflexive and transitive closure of the execution step relation of an accompanying program graph is denoted $\langle q_\circ; \rho \rangle \xRightarrow{\omega^\star} \langle q_\bullet; \rho' \rangle$.
 
 \subsection{Abstract Interpretation}\label{subsec:abstract-interpretation}
 
-Here we give a quick presentation abstract interpretation.
+Here we give a quick presentation of abstract interpretation.
 The presentation is heavily based on~\cite{nielson_formal_2019} with some additions from~\cite{moller_statitc_nodate}.
 As the presentation is rudimentary we encourage the reader to review~\cite{noauthor_abstract_nodate} or~\cite{cousot_abstract_1996} for an informal introduction of the subject, and the respective chapters in~\cite{nielson_formal_2019} and~\cite{moller_statitc_nodate} for a more complete explanation or~\cite{cousot_abstract_1977} for the seminal work.
 
 First we define two central notions, namely soundness and valid analysis assignments.
 
 \begin{definition}
-    Given a set $\rho \in \mathfrak{E}$ of possible concrete program memories, and a set $\ab{\rho} \in \ab{\mathfrak{E}}$ of possible abstract program memories, related by a concretization function $\gamma : \mathcal{P}(\ab{\mathfrak{E}}) \rightarrow \mathcal{P}(\mathfrak{E})$.
-    A concrete semantic over program instructions $I \in \mathbb{I}$, $\sem{\cdot} : \mathbb{I} \rightarrow \mathfrak{E} \rightarrow \mathcal{P}(\mathfrak{E})$ and an abstract semantic $\abssem{\cdot} : \mathbb{I} \rightarrow \mathcal{P}(\ab{\mathfrak{E}}) \rightarrow \mathcal{P}(\ab{\mathfrak{E}})$, $\abssem{\cdot}$ is said to be \emph{sound} whenever:
+    Given a set $\mathfrak{E}$, with element $\rho$ of possible concrete program memories, and a set $\ab{\mathfrak{E}}$, with members $\ab{\rho}$ of possible abstract program memories, related by a concretization function $\gamma : \mathcal{P}(\ab{\mathfrak{E}}) \rightarrow \mathcal{P}(\mathfrak{E})$.
+    A concrete semantic over program instructions $I \in \mathbb{I}$\todo{Gabriela says: concrete or abstract? is it intentional that both semantics use the same set of instructions? // Casper says: Yes it is intentional... When we refer to abstract syntax, it is abstract in the sense that we defer details that would make the syntax parseable and unambiguous.}, $\sem{\cdot} : \mathbb{I} \rightarrow \mathfrak{E} \rightarrow \mathcal{P}(\mathfrak{E})$ and an abstract semantic $\abssem{\cdot} : \mathbb{I} \rightarrow \mathcal{P}(\ab{\mathfrak{E}}) \rightarrow \mathcal{P}(\ab{\mathfrak{E}})$, $\abssem{\cdot}$ is said to be \emph{sound} whenever:
     \begin{equation}
         \rho \in \concrete(\ab{P}) \implies \sem{I}(\rho) \subseteq \concrete(\abssem{I}(\ab{P}))\label{eq:equation12}
     \end{equation}
@@ -127,7 +128,7 @@ First we define two central notions, namely soundness and valid analysis assignm
 
 \begin{definition}
     \label{def:valid}
-    Given a program graph with vertices $Q$ and edges $E$, an assignment $A : Q \rightarrow \mathcal{P}(\ab{\mathfrak{E}})$, that assignment is said to be \emph{valid} if it is the case that:
+    Given a program graph with vertices $Q$ and edges $E$, and an \emph{analysis assignment}, which is a function $A : Q \rightarrow \mathcal{P}(\ab{\mathfrak{E}})$; the assignment $A$ is said to be \emph{valid} if it is the case that:
     \begin{itemize}
         \item If $q_\circ \xrightarrow{I} q_\bullet \in E$ then $\abssem{I}(A(q_\circ)) \subseteq A(q_\bullet)$,
         \item and $\ab{E}_\whitepointerright \subseteq A(q_\whitepointerright)$, where $q_\whitepointerright$ is the initial program point in the program graph and $\ab{E}_\whitepointerright$ is a set of abstract memories that hold initially in the initial state.
@@ -138,12 +139,22 @@ Given the previous two definitions, if the initial abstract memories for the ini
 
 What that intuitively means is that the analysis assignment is a safe over approximation of the actual state-space of the program.
 Valid analysis assignment can then readily be computed as explained in~\cite{nielson_formal_2019}.
-In essence valid analysis assignment are computed by iterative application of $f$ when the constraint given in \autoref{def:valid} are converted to a fix point equation $x = f(x)$.
+In essence we can convert the constraints given in \autoref{def:valid} to a fixed point equation $\mathbf{x} = f(\mathbf{x})$ as follows (Note that we use bold characters to denote vectors of values $\mathbf{x} = (x_1, \dots, x_n)$ for any $n$, and we will do so for the rest of the paper.):
+For each node $q_i \in Q$ for $|Q| = n$ construct the equation:
+\begin{align} \label{eq:q}
+    A(q_i) &= A(q_i) \cup \left(\bigcup_{q \in pred(q_i)} \abssem{I}(A(q))\right) \\
+    A(q_i) &= f_i(A(q_1), \dots A(q_n))
+\end{align}
+In the special case of the initial state the equation is:
+\begin{align}
+    A(q_\whitepointerright) &= A(q_\whitepointerright) \cup \ab{E}_\whitepointerright \cup  \left(\bigcup_{q \in pred(q)} \abssem{I}(A(q))\right) \\
+    A(q_\whitepointerright) &= f_\whitepointerright(A(q_1), A(q_2), \dots A(q_n))
+\end{align}
+These equations can then be converted to one equation $\mathbf{x} = f(\mathbf{x})$ with $f : \bigtimes_{i = 1}^n \powerset{\ab{\environments}} \rightarrow \bigtimes_{i = 1}^n \powerset{\ab{\environments}}$, yielding:
+\begin{multline}\label{eq:constraint}
+    (A(q_1), \dots, A(q_n)) = \\
+    (f_1(A(q_1), \dots, A(q_n)), \dots, f_n(A(q_1), \dots, A(q_n)))
+\end{multline}
 
-This is essentially made possible by \autoref{thm:kleene_finite} and the fact that we construct our analysis in such a way that $f$ is over a finite and complete lattice.
-Further given \autoref{thm:kleene_finite} it is easy to see that the analysis will reach a fixed point in a finite number of steps, if $f$ is defined over a finite and complete lattice.
-
-The abstract syntax for SQAAL encompasses the various elements and constructs that constitute the language's grammar. These syntactic sets define the valid combinations of symbols and keywords that form syntactically correct statements in SQAAL. They include components such as keywords, identifiers, operators, literals, and punctuation marks, each serving a specific role in expressing queries and analytical operations.
-% \begin{theorem}\label{thm:galoispre}
-%     For $\gamma : L_1 \rightarrow L_2$ where $L_1$ and $L_2$ are complete lattices there exist a function $\alpha : L_2 \rightarrow L_1$ such that $\alpha$ and $\gamma$ forms a Galois connection if $\gamma\left(\bigsqcap B\right) = \bigsqcap_{b \in B}\gamma(b)$ for every $B \subseteq L_1$.
-% \end{theorem}
+Assuming that $\powerset{\ab{\environments}}$ is finite and complete lattice and therefore by \autoref{thm:product-lattice} $\bigtimes_{i = 1}^n \powerset{\ab{\environments}}$ is a finite and complete lattice, then by \autoref{thm:kleene_finite} we can find a solution to the equation $\mathbf{x} = f(\mathbf{x})$ by iterative application of $f$ on the least element $\emptyset$ until a fixed point is reached.
+Further the solution can be reached in a finite number of steps.

@@ -1,0 +1,29 @@
+\begin{tikzpicture}
+\tikzstyle{arrow} = [thick,->,>=stealth]
+    \node [circle, draw] (q0) at (0,0){$q_{\whitepointerright}$};
+    \node [circle, draw] (qi) at (-2,0) {$q_i$};
+    \node [circle, draw] (qd) at (2,0) {$q_d$};
+
+    \node [circle, draw] (qt1) at (0,-2.7) {$q_{t1}$};
+    \node [circle, draw] (qt2) at (0,-4.2) {$q_{t2}$};
+    \node [circle, draw] (qt3) at (0,-5.7) {$q_{t3}$};
+    \node [circle, draw] (qt4) at (-1.5,-6.5) {$q_{t4}$};
+    \node [circle, draw] (qt5) at (1.5,-6.5) {$q_{t5}$};
+    \node [circle, draw] (qt6) at (1.7,-8.4) {$q_{t6}$};
+    \node [circle, draw] (end) at (-1.7,-8.4) {$q_\blackpointerleft$};
+
+    \draw[arrow, ->] (qd) edge[bend left] node[above]{$I_5$} (q0);
+    \draw[arrow, ->] (q0) edge[bend left] node[above]{$I_4$} (qd);
+    \draw[arrow, ->] (qi) edge[bend left] node[above]{$I_1;I_2$} (q0);
+    \draw[arrow, ->] (q0) edge[bend left] node[above]{$I_3$} (qi);
+
+    \draw[arrow, ->] (q0) -- node[right, yshift=-18]{$I_6;I_7;I_8$} (qt1);
+    \draw[arrow, ->] (qt1) -- node[right]{$I_9$} (qt2);
+    \draw[arrow, ->] (qt2) -- node[right]{$I_{10}$} (qt3);
+    \draw[arrow, ->] (qt3) -- node[left, xshift=2, yshift=5]{b} (qt4);
+    \draw[arrow, ->] (qt3) -- node[right, xshift=-5, yshift=5]{$\neg$b} (qt5);
+    \draw[arrow, ->] (qt5) -- node[left]{$I_{11}$} (qt6);
+
+    \draw[arrow, ->]  (qt4) edge[bend left] node[right]{\texttt{skip}} (q0);
+    \draw[arrow, ->]  (qt6) edge[bend right] node[right]{$I_{12}$} (q0);
+\end{tikzpicture}

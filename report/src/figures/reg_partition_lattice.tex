@@ -1,12 +1,10 @@
 \begin{tikzpicture}
-\tikzstyle{state} = [rectangle, minimum width=1cm, minimum height=1cm, text centered, draw=black, fill=white!30]
-\tikzstyle{circle} = [ellipse, minimum width=1cm, minimum height=0.5cm, text centered, draw=black, fill=white!30]
 \tikzstyle{arrow} = [thick,->,>=stealth]
 
-    \node (a) [state] {$R \cup \overline{R} = \top = \Sigma^*$};
-    \node (b1) [state, shift={($(a.south)+(1cm, -1cm)$)}] { $R$};
-    \node (b2) [state, shift={($(a.south)+(-1cm, -1cm)$)}]{ $\overline{R}$};
-    \node (c) [state, shift= {($(a.south) + (0cm, -2.5cm)$)}] { $R \cap \overline{R} = \bot = \emptyset$};
+    \node (a) {$R \cup \overline{R} = \top = \Sigma^*$};
+    \node (b1) [shift={($(a.south)+(1cm, -1cm)$)}] { $R$};
+    \node (b2) [shift={($(a.south)+(-1cm, -1cm)$)}]{ $\overline{R}$};
+    \node (c) [shift= {($(a.south) + (0cm, -2.5cm)$)}] { $R \cap \overline{R} = \bot = \emptyset$};
     \draw (a) to (b1);
     \draw (a) to (b2);
     \draw (b1) to (c);

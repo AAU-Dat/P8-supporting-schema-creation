@@ -1,17 +1,20 @@
-\section{Concrete semantics of edge instructions}
-
+\section{Concrete semantics of edge instructions}\label{sec:concrete-semantics}
 For an unary operator $\unaryoperator : A \rightarrow B$ we extend/overload it to $\unaryoperator : \powerbag{A} \rightarrow \powerbag{B}$ as follows:
+
 \begin{align}
     \unaryoperator t &= t' \\
     \text{where } t'(b) &= \sum_{a' \in \{a \in A | \unaryoperator a = b\}} t(a')
 \end{align}
 
 For a binary operator $\binaryoperator : A \rightarrow B \rightarrow C$ we extend/overload it to $\binaryoperator : \powerbag{A} \rightarrow \powerbag{B} \rightarrow \powerbag{C}$ as follows:
+
 \begin{align}
     t_A \binaryoperator t_B &= t_C \\
     \text{where } t_C(c) &= \sum_{(a', b') \in \{(a,b) \in (A \times B) | a \binaryoperator b = c\}} t_A(a') t_B(b')
 \end{align}
+
 And we define:
+
 \begin{align}
     m &: A \rightarrow \powerbag{A} \\
     m(a) &= \lambda a'. \begin{cases}
@@ -21,6 +24,7 @@ And we define:
 \end{align}
 
 Then for the binary operator $\binaryoperator : A \rightarrow B \rightarrow C$ we extend/overload it to $\binaryoperator : A \rightarrow \powerbag{B} \rightarrow \powerbag{C}$ and $\binaryoperator : \powerbag{A} \rightarrow B \rightarrow \powerbag{C}$ as follows:
+
 \begin{align}
     a \binaryoperator t_B &= m(a) \binaryoperator t_B \\
     t_A \binaryoperator b &= t_A \binaryoperator m(b)
@@ -55,13 +59,25 @@ Then for the binary operator $\binaryoperator : A \rightarrow B \rightarrow C$ w
     \text{Where }& S_1 = \expsem{e_1}(\environment) \\
     \text{and }& S_2 = \expsem{e_2}(\environment) \\
     \boolsem{\exists v_n \; b}(\environment) &= \begin{cases}
-        \false & \text{if $S$ is an empty bag} \\
-        \underset{s \in S}{\bigvee}\boolsem{b[s/v_n]}(\environment) & \text{if $S$ is a non-empty bag} \\
+        \false  \begin{split}
+                    & \text{if $S$ is an} \\
+                    & \text{empty bag}
+        \end{split} \\
+        \underset{s \in S}{\bigvee}\boolsem{b[s/v_n]}(\environment) \begin{split}
+                                                                        & \text{if $S$ is a non-} \\
+                                                                        & \text{empty bag}
+        \end{split} \\
         \boolsem{b[S/v_n]}(\environment) & \text{otherwise} \\
     \end{cases} \\
     \boolsem{\forall v_n \; b}(\environment) &= \begin{cases}
-        \true & \text{if $S$ is an empty bag} \\
-        \underset{s \in S}{\bigwedge}\boolsem{b[s/v_n]}(\environment) & \text{if $S$ is a non-empty bag} \\
+        \true \begin{split}
+                  & \text{if $S$ is an} \\
+                  & \text{empty bag}
+        \end{split} \\
+        \underset{s \in S}{\bigwedge}\boolsem{b[s/v_n]}(\environment) \begin{split}
+                                                                          & \text{if $S$ is a non-} \\
+                                                                          & \text{empty bag}
+        \end{split} \\
         \boolsem{b[S/v_n]}(\environment) & \text{otherwise} \\
     \end{cases} \\
 \end{align}
@@ -80,22 +96,35 @@ Then for the binary operator $\binaryoperator : A \rightarrow B \rightarrow C$ w
 \end{align}
 
 \begin{equation}
-    \sqlsem{\cdot} : \mathbb{C}_{sql} \rightarrow \environments \rightarrow \environments
+    \sqlsem{\cdot} : \mathbb{C}_{sql} \rightarrow \environments \rightarrow \environments\label{eq:equation14}
 \end{equation}
 
-\begin{align}
-    \sqlsem{\langle select(v_a, v_d, \mathbf{v}_t), b \rangle}(\rho_d, \rho_a) &= (\rho_d, \rho_a[v_a \mapsto S]) \\
-    \text{where } S &= \begin{cases}
-        S' \text{ as a single value} & \text{if $S'$ only contains one element} \\
-        S' & \text{otherwise}
-    \end{cases}\\
-    \text{and } S' &= \pi_{\mathbf{v}_t} \left( v_d \downarrow_{\true}^{(\rho_d, \rho_a)} b \right)
-\end{align}
+%\begin{align}
+%    \sqlsem{\langle select(v_a, v_d, \mathbf{v}_t), b \rangle}(\rho_d, \rho_a) &= (\rho_d, \rho_a[v_a \mapsto S]) \\
+%    \text{where } S &= \begin{cases}
+%        S' \text{ as a single value } \text{if $S'$ only contains one element} \\
+%        S' \text{ otherwise}
+%    \end{cases}\\
+%    \text{and } S' &= \pi_{\mathbf{v}_t} \left( v_d \downarrow_{\true}^{(\rho_d, \rho_a)} b \right)
+%\end{align}
+
+\begin{gather}
+        \sqlsem{\langle select(v_a, v_d, \mathbf{v}_t), b \rangle}(\rho_d, \rho_a) = (\rho_d, \rho_a[v_a \mapsto S]) \\
+        \text{where } S = \begin{cases}
+                               S' \begin{split}
+                                      & \text{ as a single value } \\
+                                      & \text{ if $S'$ only contains one element}
+                               \end{split} \\
+                               S' \text{ otherwise}
+        \end{cases}\\
+        \text{and } S' = \pi_{\mathbf{v}_t} \left( v_d \downarrow_{\true}^{(\rho_d, \rho_a)} b \right)
+\end{gather}
 
 As a note we only allow $\mathbf{v}_t$ to be of length 1, further $S'$ should agree with the type of $v_a$.
 
 \begin{align}
-    \sqlsem{\langle insert(v_d, \mathbf{v}_t, &\mathbf{e}), \_ \rangle}(\rho_d, \rho_a) = (\rho_d[v_d\mapsto t \text{ with $s$ added}], \rho_a) \\
+    \sqlsem{\langle insert(v_d, \mathbf{v}_t, &\mathbf{e}), \_ \rangle}(\rho_d, \rho_a) \\
+     &= (\rho_d[v_d\mapsto t \text{ with $s$ added}], \rho_a) \\
     \text{where } S &= \bigtimes_{i = 0}^{n} \absexpsem{\mathbf{e}}(\rho_d, \rho_a) \\
     \text{and } s &= \left\{ (\lambda\_.\mnull)[\mathbf{v}_t \mapsto \mathbf{s}] \;\middle|\; \mathbf{s} \in S\right\} \nonumber\\
     \text{and } t &= \rho_d(v_d)
@@ -122,7 +151,7 @@ As a note we only allow $\mathbf{v}_t$ to be of length 1, further $S'$ should ag
     \sem{v_a \coloneqq e}(\environment_d, \environment_a) &= \left\{(\environment_d, \environment_a[v_a \mapsto \expsem{e}(\environment_d, \environment_a)]) \right\} \\
     \sem{v_a \coloneqq \; ?}(\environment_d, \environment_a) &= \left\{(\environment_d, \environment_a[v_a \mapsto s]) \mid s \in \lang(?) \right\} \\
     \sem{b}(\environment) &= \begin{cases}
-        \{\environment\} & \text{if } \true = \absboolsem{b}(\environment) \\
+        \{\environment\} & \text{if } \true = \boolsem{b}(\environment) \\
         \emptyset & \text{otherwise}
     \end{cases} \\
     \abssem{C_{sql}}(\environment) &= \abssqlsem{C_{sql}}(\environment)

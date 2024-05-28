@@ -45,7 +45,7 @@ Specifically, in \autoref{tab:table-halder}, we clearly see how their semantics 
 
 
 This means that a situation can happen, where adding more of the same tuples could end up enlarging the analysis indefinitely.
-Specifically, it happens during \textit{infinite} programs with no end state, such as the one shown in \autoref{fig:programgraph}.\todo{Figure does not exist.}
+Specifically, it happens during \textit{infinite} programs with no end state, such as the one shown in \autoref{fig:programgraph}.\todo{Figure in in method - deprecated}
 
 This is exactly what this paper tries to escape.
 As mentioned in \autoref{subsubsec:abstract_domain_of_tables}, using abstract bags of abstract tuples eliminates the possibility of having duplicate tuples.
@@ -81,7 +81,7 @@ One such way would require the user to tag each variable and database attribute 
 This method would be easy to implement but would be very cumbersome for the user, even in the case where top-covers could be shared between variables.
 We think it could be interesting the refine the notion and explore mechanism that would make this method less cumbersome for the user.
 
-For future work we propose:
+For future work we propose:\todo{maybe it should be a subsection}
 If the tagging of a variables with a top-cover was viewed as type one could make use of methods from type systems.
 As an example: Type inference could be used to infer the top-covers of certain variables, and maybe the top-covers could be inferred from the properties that were being tested.
 Ideally this notion should be explored in a simple language without the weirdness introduced in the language of this paper.

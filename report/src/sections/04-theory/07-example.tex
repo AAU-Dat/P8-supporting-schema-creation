@@ -1,0 +1,14 @@
+\section{Examples}\label{sec:example}
+In this section we will give three examples of our analysis on three different programs.
+First we provide a large example showing some possible queries that could be answered by the analysis and how the analysis would be carried out.
+Thereafter we provide the analysis of the program discussed in the introduction, as expected the analysis terminates.
+As it turns out, the cover lattices are superfluous in the first two example.
+More specifically if we let $\lookupcl(v) = \regexs_{\infty}$ or $\lookupcl(v) = \uints_{\infty}$ depending on the type of $v$, where $\regexs_{\infty}$ and $\uints_{\infty}$ is $\regexs$ and $\uints$ where transfinite union and intersection is allowed, respectively, the first two examples terminate.
+For the sake of simplicity we assume the prequel in those respective examples.
+Therefore the last examples is one where the cover lattice is needed.
+In this is example we first show that the analysis does not terminate without the cover lattice, and then we show that it terminates with the cover lattice.
+
+
+\input{sections/04-theory/07.1-big-example}
+\input{sections/04-theory/07.2-termination-example}
+\input{sections/04-theory/07.3-clattice-example}

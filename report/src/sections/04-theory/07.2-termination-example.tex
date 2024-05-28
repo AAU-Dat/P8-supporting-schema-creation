@@ -1,0 +1,26 @@
+\subsection{Termination example}
+
+Converting the program in \autoref{lst:motivate-program} to a program graph, one gets the program graph displayed in \autoref{fig:termination-example}.
+
+\begin{figure}
+    \centering
+    \input{figures/termination_example.tex}
+    \caption{Termination example}
+    \label{fig:termination-example}
+\end{figure}
+
+Let $\ab{E}_\whitepointerright = \{ \texttt{account} | \emptyset \}$ in the fixed point equation arising from the program graph:
+
+\begin{align}
+    A(q_\whitepointerright) &= A(q_\whitepointerright) \cup \ab{E}_\whitepointerright \cup \abssem{(insert(\dots}(A(q_1)) \\
+    A(q_1) &= A(q_1) \cup \abssem{\texttt{true}}(A(q_\whitepointerright)) \\
+    A(q_\blackpointerleft) &= A(q_\blackpointerleft) \cup \abssem{\neg\texttt{true}}(A(q_\whitepointerright))
+\end{align}
+
+With the solution:
+
+\begin{align}
+    A(q_\whitepointerright) &= \{ \texttt{account} | \emptyset | \{(name, [1, 1])\}\} \\
+    A(q_1) &= \{ \texttt{account} | \emptyset | \{(name, [1, 1])\}\} \\
+    A(q_\blackpointerleft) &= \emptyset
+\end{align}

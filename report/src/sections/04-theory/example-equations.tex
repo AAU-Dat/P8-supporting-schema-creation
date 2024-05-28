@@ -1,0 +1,304 @@
+\begin{align}
+    \label{eq:example-fixed-point-1}
+    A(q_{\whitepointerright})=
+    \begin{split}
+        &\left\{\begin{matrix}
+                   \left.\begin{matrix*}[l]
+                             \texttt{vName}\\
+                             \texttt{vBalance}\\
+                             \texttt{toName}\\
+                             \texttt{toBalance}\\
+                             \texttt{amount}\\
+                             \texttt{account}
+                   \end{matrix*}\right|
+                   \left.\begin{matrix}
+                             \bot\\
+                             \bot\\
+                             \bot\\
+                             \bot\\
+                             \bot\\
+                             \emptyset
+                   \end{matrix}\right|
+                   \left.\begin{matrix}
+                             NR\\
+                             \top\\
+                             \bot\\
+                             \bot\\
+                             \bot\\
+                             \mathsf{List} \; \{(NR,\top)\}
+                   \end{matrix}\right|
+                   \left.\begin{matrix}
+                             \top\\
+                             \bot\\
+                             \bot\\
+                             \bot\\
+                             \bot\\
+                             \emptyset
+                   \end{matrix}\right|
+        \end{matrix}\right.\\
+        &\left.\begin{matrix}
+                  \left.\begin{matrix}
+                            NR\\
+                            \mathsf{List} \; \{\top\}\\
+                            NR\\
+                            \mathsf{List} \; \{\top\}\\
+                            +\\
+                            \mathsf{List} \{(NR,\top)\}
+                  \end{matrix}\right|
+                  \left.\begin{matrix}
+                            NR\\
+                            \top\\
+                            NR\\
+                            \mathsf{List} \; \{\top\}\\
+                            +\\
+                            \mathsf{List} \{(NR,\top)\}
+                  \end{matrix}\right|
+                  \begin{matrix}
+                      \top\\
+                      \mathsf{List} \; \{\top\}\\
+                      NR\\
+                      \mathsf{List} \; \{\top\}\\
+                      +\\
+                      \mathsf{List} \; \{(NR,\top)\}
+                  \end{matrix}
+        \end{matrix}\right\}
+    \end{split}
+\end{align}
+
+\begin{align}
+    A(q_i)=\left\{\begin{matrix}
+                      \left.\begin{matrix*}[l]
+                                \texttt{vName}\\
+                                \texttt{vBalance}\\
+                                \texttt{toName}\\
+                                \texttt{toBalance}\\
+                                \texttt{amount}\\
+                                \texttt{account}
+                      \end{matrix*}\right|
+                      \left.\begin{matrix}
+                                NR\\
+                                \top\\
+                                \bot\\
+                                \bot\\
+                                \bot\\
+                                \emptyset
+                      \end{matrix}\right|
+                      \left.\begin{matrix}
+                                NR\\
+                                \top\\
+                                \bot\\
+                                \bot\\
+                                \bot\\
+                                \mathsf{List} \; \{(NR,\top)\}
+                      \end{matrix}\right|
+                      \begin{matrix}
+                          NR\\
+                          \top\\
+                          NR\\
+                          \mathsf{List} \; \{\top\}\\
+                          +\\
+                          \mathsf{List} \; \{(NR,\top)\}
+                      \end{matrix}
+    \end{matrix}\right\}
+\end{align}
+
+\begin{align}
+    A(q_d)=\left\{\begin{matrix}
+                      \left.\begin{matrix}
+                                \texttt{vName}\\
+                                \texttt{vBalance}\\
+                                \texttt{toName}\\
+                                \texttt{toBalance}\\
+                                \texttt{amount}\\
+                                \texttt{account}
+                      \end{matrix}\right|
+                      \left.\begin{matrix}
+                                \top\\
+                                \bot\\
+                                \bot\\
+                                \bot\\
+                                \bot\\
+                                \emptyset
+                      \end{matrix}\right|
+                      \left.\begin{matrix}
+                                \top\\
+                                \top\\
+                                \bot\\
+                                \bot\\
+                                \bot\\
+                                \mathsf{List} \; \{(NR, \top)\}
+                      \end{matrix}\right|
+                      \begin{matrix}
+                          \top\\
+                          \mathsf{List} \; \{\top\}\\
+                          NR\\
+                          \mathsf{List} \; \{\top\}\\
+                          +\\
+                          \mathsf{List} \; \{(NR,\top)\}
+                      \end{matrix}
+    \end{matrix}\right.
+\end{align}
+
+\begin{align}
+    A(q_{t_1})=
+    \begin{split}
+        &\left\{\begin{matrix}
+                   \left.\begin{matrix*}[l]
+                             \texttt{vName}\\
+                             \texttt{vBalance}\\
+                             \texttt{toName}\\
+                             \texttt{toBalance}\\
+                             \texttt{amount}\\
+                             \texttt{account}
+                   \end{matrix*}\right|
+                   \left.\begin{matrix}
+                             NR\\
+                             \bot\\
+                             NR\\
+                             \bot\\
+                             +\\
+                             \emptyset
+                   \end{matrix}\right|
+                   \left.\begin{matrix}
+                             NR\\
+                             \top\\
+                             NR\\
+                             \bot\\
+                             +\\
+                             \mathsf{List} \; \{(NR, \top)\}
+                   \end{matrix}\right|
+        \end{matrix}\right. \\
+        &\left.\begin{matrix}
+                  \left.\begin{matrix}
+                            NR\\
+                            \mathsf{List} \; \{\top\}\\
+                            NR\\
+                            \mathsf{List} \; \{\top\}\\
+                            +\\
+                            \mathsf{List} \; \{(NR, \top)\}
+                  \end{matrix}\right|
+                  \begin{matrix}
+                      NR\\
+                      \top\\
+                      NR\\
+                      \mathsf{List} \; \{\top\}\\
+                      +\\
+                      \mathsf{List} \; \{(NR, \top)\}
+                  \end{matrix}
+        \end{matrix}\right\}
+    \end{split}
+\end{align}
+
+\begin{align}
+    A(q_{t_2})=\left\{\begin{matrix}
+                          \left.\begin{matrix*}[l]
+                                    \texttt{vName}\\
+                                    \texttt{vBalance}\\
+                                    \texttt{toName}\\
+                                    \texttt{toBalance}\\
+                                    \texttt{amount}\\
+                                    \texttt{account}
+                          \end{matrix*}\right|
+                          \left.\begin{matrix}
+                                    NR\\
+                                    \emptyset\\
+                                    NR\\
+                                    \bot\\
+                                    +\\
+                                    \emptyset
+                          \end{matrix}\right|
+                          \left.\begin{matrix}
+                                    NR\\
+                                    \mathsf{List} \{\top\}\\
+                                    NR\\
+                                    \bot\\
+                                    +\\
+                                    \mathsf{List} \; \{(NR, \top)\}
+                          \end{matrix}\right|
+                          \begin{matrix}
+                              NR\\
+                              \mathsf{List} \{\top\}\\
+                              NR\\
+                              \mathsf{List} \{\top\}\\
+                              +\\
+                              \mathsf{List} \; \{(NR, \top)\}
+                          \end{matrix}
+    \end{matrix}\right\}
+\end{align}
+
+\begin{align}
+    A(q_{t_3})=\left\{\begin{matrix}
+                          \left.\begin{matrix*}[l]
+                                    \texttt{vName}\\
+                                    \texttt{vBalance}\\
+                                    \texttt{toName}\\
+                                    \texttt{toBalance}\\
+                                    \texttt{amount}\\
+                                    \texttt{account}
+                          \end{matrix*}\right|
+                          \left.\begin{matrix}
+                                    NR\\
+                                    \emptyset\\
+                                    NR\\
+                                    \emptyset\\
+                                    +\\
+                                    \emptyset
+                          \end{matrix}\right|
+                          \begin{matrix}
+                              NR\\
+                              \mathsf{List} \{\top\}\\
+                              NR\\
+                              \mathsf{List} \{\top\}\\
+                              +\\
+                              \mathsf{List} \; \{(NR, \top)\}
+                          \end{matrix}
+    \end{matrix}\right\}
+\end{align}
+
+\begin{align}
+    A(q_{t_4})=\left\{\begin{matrix}
+                          \left.\begin{matrix*}[l]
+                                    \texttt{vName}\\
+                                    \texttt{vBalance}\\
+                                    \texttt{toName}\\
+                                    \texttt{toBalance}\\
+                                    \texttt{amount}\\
+                                    \texttt{account}
+                          \end{matrix*}\right|
+                          \begin{matrix}
+                              NR\\
+                              \mathsf{List} \{\top\}\\
+                              NR\\
+                              \mathsf{List} \{\top\}\\
+                              +\\
+                              \mathsf{List} \; \{(NR, \top)\}
+                          \end{matrix}
+    \end{matrix}\right\}
+\end{align}
+
+\begin{align}
+    \label{eq:example-fixed-point-7}
+    A(q_{t_5})=\left\{\begin{matrix}
+                          \left.\begin{matrix*}[l]
+                                    \texttt{vName}\\
+                                    \texttt{vBalance}\\
+                                    \texttt{toName}\\
+                                    \texttt{toBalance}\\
+                                    \texttt{amount}\\
+                                    \texttt{account}
+                          \end{matrix*}\right|
+                          \begin{matrix}
+                              NR\\
+                              \mathsf{List} \{\top\}\\
+                              NR\\
+                              \mathsf{List} \{\top\}\\
+                              +\\
+                              \mathsf{List} \; \{(NR, \top)\}
+                          \end{matrix}
+    \end{matrix}\right\}
+\end{align}
+
+\begin{align} 
+\label{eq:example-fixed-point-8}
+    A(q_{\blackpointerleft})=\emptyset
+\end{align}
