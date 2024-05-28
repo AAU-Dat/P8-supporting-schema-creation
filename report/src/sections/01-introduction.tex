@@ -2,15 +2,15 @@
 \IEEEPARstart{S}{oftware} analysis is a broad field encompassing a wide range of techniques and methodologies, each tailored to address specific aspects of software systems.
 One such technique is static dataflow analysis, which focuses on analyzing and obtaining information that is valid for all executions of a program~\cite{moller_statitc_nodate}.
 Static dataflow analysis can be approached from various angles, including the consideration of meta-information like information flow or taint analysis.
-While these approaches offer valuable insights into the behavior of a program, they often require detailed knowledge of the program's internal workings and are not always applicable to all types of software systems.
-In this paper, we use static program analysis, specifically abstract interpretation.
+% While these approaches offer valuable insights into the behavior of a program, they often require detailed knowledge of the program's internal workings and are not always applicable to all types of software systems.
+In this paper, we specifically develop our analysis in the abstract interpretation framework.
 
 Abstract interpretation, first proposed by Cousot and Cousot in 1977~\cite{cousot_abstract_1977}, has emerged as a fundamental method for static program analysis.
 Over the years, it has evolved into a versatile tool, finding applications across various programming paradigms and system architectures.
 Its utility extends beyond traditional imperative programming to encompass object-oriented designs and concurrent systems~\cite{gustafsson_analyzing_2013, mine_static_2023}.
 Abstract interpretation has played a pivotal role in analyzing a spectrum of program properties, from basic safety and liveness concerns to intricate security considerations~\cite{mastroeni_abstract_2011}.
 
-Building upon this, Halder and Cortesi have expanded the application of abstract interpretation to domains like query languages~\cite{halder_abstract_2012}.
+Building upon this, Halder and Cortesi have expanded the application of abstract interpretation to the domain of query languages~\cite{halder_abstract_2012}.
 This paper continues in these footsteps, aiming to further explore and extend the capabilities of abstract interpretation within the context of query languages.
 
 
@@ -53,8 +53,11 @@ By extending the abstraction of the analysis to also abstract over the multiplic
 \subsection{Related Work}\label{subsec:related-work}
 This paper builds on the seminal work of abstract interpretation by Cousot and Cousot~\cite{cousot_abstract_1977}, and in particular we consider the follow-up paper~\cite{cousot_abstract_1996} from which we take the idea of using intervals and regular expressions as the abstract domains in our analysis.
 
-Additionally, we heavily use the work of abstract interpretation of database queries by Cortesi and Halder~\cite{halder_abstract_2012}.
-Concretely, we use their work for analysing a database schema in relation to a program using the syntax they describe.
+%Additionally, we heavily use the work of abstract interpretation of database queries by Cortesi and Halder~\cite{halder_abstract_2012}.
+%Concretely, we use their work for analysing a database schema in relation to a program using the syntax they describe.
+
+Additionally our work is inspired by \emph{Abstract Interpretation of database queries} by Cortesi and Halder~\cite{halder_abstract_2012}.
+Our work originally started as an attempt to synthesize an analysis based on their work, but ended up being our attempt to improve the shortcomings that we felt were present in the work.
 
 Jana et al.~\cite{jana_extending_2020} have extended the application of abstract interpretation to the domain of web security.
 Dependency information (data- and/or control-dependencies) among program variables and program statements is playing crucial roles in a wide range of software-engineering activities, e.g., program slicing, information flow security analysis, debugging, code optimization, code reuse, code understanding.
@@ -66,10 +69,10 @@ The approach is based on the use of abstract interpretation to analyze the datab
 
 
 \subsection{Contributions}\label{subsec:contributions}
-As described in \autoref{subsec:related-work}, one of our main contributions is describing a static analysis made by extending the work made by Cortesi and Halder~\cite{halder_abstract_2012}.
+As described in \autoref{subsec:related-work}, one of our main contributions is describing a static analysis that should serves as an alternative to the work made by Cortesi and Halder~\cite{halder_abstract_2012}.
 
 Included in this, we extend the level of abstraction used in the analysis.
-Where~\cite{halder_abstract_2012} only abstract over values, we abstract over both the tuples and values, and the multiplicity of the tuples and values in the database, ultimately guaranteeing a finite analysis.
+Where~\cite{halder_abstract_2012} only abstract over the tuples in a database, we abstract over both the tuples and their multiplicity, ultimately guaranteeing a finite analysis.
 This is thoroughly covered in \autoref{sec:theory}.
 
 Also included in the contribution is a description of a static analysis used to check properties when given a program and its associated database.
@@ -77,7 +80,6 @@ While we have not provided a specific method for checking general properties, we
 Invariants are a particular type of property that should always be held during the program's execution.
 
 This way, we can analysis the program and afterward check if for states suspected to be reachable by the analysis the invariant holds.
-If it does not, we can stop the analysis and report that the program is incorrect.
 We can check for invariants in every state of the program.
 We do this in a program graph, where each node represents a state of the program.
 We can check if the invariant holds in each node.

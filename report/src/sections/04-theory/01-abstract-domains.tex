@@ -1,6 +1,6 @@
 \subsection{Abstract Domains}\label{subsec:abstract-domains}
 
-In the following section we will describe the abstract domains of our value analysis.
+In the following section we will describe the abstract domains of our static data flow analysis.
 
 \subsubsection{Abstract strings as regular expressions}\label{subsubsec:abstract_domains_strings}
 We have chosen regular expressions/languages to represent the abstract domain of the family of SQL string data types.
@@ -14,8 +14,8 @@ We will correct this problem later in \autoref{subsubsec:cover-lattice}.
 
 \subsubsection{Abstract integers as union intervals}\label{subsubsec:abstract_domains_numbers}
 We have chosen a finite union and intersection of intervals to represent the abstract domain of the family of SQL number data types.
-Using a finite union ensures that operations such as union, intersection, and membership checking remain computable and efficient, which would not be feasible with infinite unions due to their inherent computational complexity.
-We call them a union of intervals as all such objects can be written as a union of intervals.
+We limit ourselves to finite union and intersection to ensure that operations such as union, intersection, and membership checking remain tractable.
+We call them a union intervals as all such objects can be written as a union of intervals.
 We only consider integers, but the domain can be easily extended to the reals.
 Let $\mathbf{INT}$ be the set of union intervals, with members denoted $\mathscr{I}$, that is inductively defined as:
 
@@ -143,7 +143,7 @@ Now we are able to express the concretization for regular expressions and union 
 The regular language $R$ is represented by the gray circle and its complement $\overline{R}$ is represented by the white circle.
 The union of the two regular language is the universal language $\Sigma^\star$.
 
-\autoref{fig:tikz-reg-partition-lattice} illustrates the cover lattice induced by the lattice cover.
+\autoref{fig:tikz-reg-partition-lattice} illustrates the cover lattice induced by the cover-lattice.
 The top element $\top$ is the entire regular language $\Sigma^*$ and the bottom element $\bot$ is the empty set $\emptyset$.
 
 
@@ -218,14 +218,14 @@ Simplifying the prequel for our own sanity, we consider $\ab{t} : \ab{\mathbf{TU
 
 Further, as the form of an abstract table is given by the schema and the mapping $\lookupcl$ the final formalization for some table with name $v_d$ is then $\ab{t} \in \mathcal{P}\left(\bigtimes_{i = 1}^{n}\lookupcl(v_{t_i})\right)$ for $attr(v_d) = (v_{t_1}, v_{t_2}, \dots, v_{t_n})$.
 
-As the concretization of an abstract table is a multi-set we need to define a map from the underlying set $S$ to the set of all multi-sets over that underlying set before we can define the concretization itself, we denote that set $\mathcal{M}(S)$ and define it formally as:
+As the concretization of an abstract table is a bag we need to define a map from the underlying set $S$ to the set of all bags over that underlying set before we can define the concretization itself, we denote that set $\mathcal{M}(S)$ and define it formally as:
 
 
 \begin{equation}
-    \mathcal{M}(S) = \{t | t : S \rightarrow \nums\}\label{eq:equation-nums}
+    \mathcal{M}(S) = \{t | t : S \rightarrow \mathbf{NAT}\}\label{eq:equation-nums}
 \end{equation}
 
-Further we define the following notation for multi-sets:
+Further we define the following notation for bags:
 \begin{align}
     s \in t \iff 0 < t(s)
 \end{align}
@@ -244,7 +244,7 @@ And thus we can define the concretization of a table, for $attr(v_d) = (v_1, v_2
 To solidify the relation, see that: $\rho_{\ab{d}}(v_d) = \ab{t}$ and $t \in \gamma_{4d}^{v_d}(\ab{t})$, where $\rho_{\ab{d}}$ is the abstract environment mapping table names to abstract tables as later defined in \autoref{subsubsec:absenv}.
 
 \subsubsection{Abstract application variable values}\todo{Gabriela: some examples would be helpful}
-In the concrete semantics instructions that may appear on edges (\ref{sec:concrete-semantics}) we allow application variables to be assigned to both singleton values, but also single columns of values.
+In the concrete semantics of instructions that may appear on edges\footnote{A draft of the concrete semantics can be found in \autoref{sec:concrete-semantics}} we allow application variables to be assigned to both singleton values, but also single columns of values.
 Such an assignment, when an application variable is assigned to a column of values, occurs either from the effect of a select statement, or in the case that the expression part of an assignment contains a variable that maps to a column in the current environment.
 Therefore, as much as we can, we would like to distinguish between the two cases in the abstract semantics.
 Thus for some set $S$, we introduce the set $\mathsf{Val} \; S$ of column and singleton values arising form $S$.
@@ -252,8 +252,7 @@ Here we differ from~\cite{halder_abstract_2012}, we do not impose an order on co
 We inductively define $\mathsf{Val} \; S$ as follows:
 
 \begin{gather*}
-    \inference{}{\bot \in \mathsf{Val} \; S} \quad
-    \inference{s \in S}{\mathsf{Single} \; s \in \mathsf{Val} \; S}\\
+    \inference{s \in S}{\mathsf{Single} \; s \in \mathsf{Val} \; S} \quad
     \inference{S' \subseteq S}{\mathsf{Col} \; S' \in \mathsf{Val} \; S}
 \end{gather*}
 
@@ -341,11 +340,12 @@ And the concrete counterparts:
 
 
 \begin{align}
-    \mathfrak{E}_a &= \mathbb{V}_a \rightarrow \nums \cup \powerbag{\nums} \cup \strs \cup \powerbag{\strs} \\
+    \mathfrak{E}_a &= \mathbb{V}_a \rightharpoonup \nums \cup \powerbag{\nums} \cup \strs \cup \powerbag{\strs} \\
     \mathfrak{E}_d &= \mathbb{V}_d \rightarrow \bigcup_{v_d \in \mathbb{V}_d} \mathcal{M}\left(\bigtimes_{v_t \in attr(v_d)}\cc(\lookupcl(v_t))\right) \\
     \mathfrak{E} &= \mathfrak{E}_a \times \mathfrak{E}_d
 \end{align}
 
+Note that members of $\mathfrak{E}_a$ are partial functions.
 
 And we define the concretization functions for environments as:
 

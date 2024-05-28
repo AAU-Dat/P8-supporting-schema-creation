@@ -1,10 +1,10 @@
 
-\section{preliminaries}\label{sec:preliminaries}
+\section{Preliminaries}\label{sec:preliminaries}
 This section will cover the theoretical underpinnings of the particular version of abstract interpretation that is being used in this paper, namely lattices and program graphs.
 Naturally we also give an introduction to abstract interpretation.
 
 \subsection{Lattices}\label{subsec:lattices}
-All definitions and notation in this subsection come from~\cite{nielson_formal_2019}.
+All definitions and notation in this subsection come from~\cite{moller_statitc_nodate}.
 
 
 \begin{definition}
@@ -139,7 +139,7 @@ Given the previous two definitions, if the initial abstract memories for the ini
 
 What that intuitively means is that the analysis assignment is a safe over approximation of the actual state-space of the program.
 Valid analysis assignment can then readily be computed as explained in~\cite{nielson_formal_2019}.
-In essence we can convert the constraints given in \autoref{def:valid} to a fixed point equation $\mathbf{x} = f(\mathbf{x})$ as follows (Note that we use bold characters to denote vectors of values $\mathbf{x} = (x_1, \dots x_n)$ for any $n$, and we will do so for the rest of the paper.):
+In essence we can convert the constraints given in \autoref{def:valid} to a fixed point equation $\mathbf{x} = f(\mathbf{x})$ as follows (Note that we use bold characters to denote vectors of values $\mathbf{x} = (x_1, \dots, x_n)$ for any $n$, and we will do so for the rest of the paper.):
 For each node $q_i \in Q$ for $|Q| = n$ construct the equation:
 \begin{align} \label{eq:q}
     A(q_i) &= A(q_i) \cup \left(\bigcup_{q \in pred(q_i)} \abssem{I}(A(q))\right) \\

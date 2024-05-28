@@ -3,10 +3,11 @@
 
 \IEEEtitleabstractindextext{%
     \begin{abstract}
-        This paper presents an extension of abstract interpretation applied to SQL, aiming to overcome the non-termination problem in Halder and Cortesi's work.
-        Our method resolves this non-termination issue by introducing additional abstractions for both tuples and values.
-        Additionally, we introduce new abstractions of the values using regular expressions for strings and intervals for integers, which we have seen mentioned by Cousot but have yet to find any papers on or implementations for.
-        Our framework is informally proven to be sound and terminate reliably, providing a solid foundation for future research.
+        This paper presents an alternative of the framework presented in abstract interpretation applied to SQL, aiming to overcome a possible non-termination problem in Halder and Cortesi's work.
+        Our alternative is presented as a complete static dataflow analysis, developed in the abstract interpertation framework.
+        Our method resolves this non-termination issue by extending the abstract of tables to the multiplicitiy of tuples.
+        Additionally, we introduce new abstractions of the values using regular expressions for strings and union intervals for integers, which we have seen mentioned by Cousot but have yet to find any papers on or implementations for.
+        Our analysis is informally proven to be sound and terminate reliably, providing a solid foundation for future research.
     \end{abstract}
     \begin{IEEEkeywords}
         Abstract Interpretation, Databases, Formal Verification, Program Analysis
