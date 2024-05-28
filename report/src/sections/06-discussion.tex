@@ -1,16 +1,20 @@
 \section{Discussion}\label{sec:discussion}
-Throughout the development of this paper, a working system with the analysis tool was initially planned.
-However, due to time constraints and the complexity of the research, it was deemed necessary to move the system to future work.
-Due to this, there are no empirical results to discuss. Still, we want to discuss the proposed solution's viability and future work.
+Throughout the development of this paper, a working software system using the described analysis  was initially planned.
+However, due to time constraints, it was deemed necessary to move the implementation to future work.
+Due to this, there are no empirical results to discuss.
+Still, we want to discuss the proposed solution's viability and future work.
 
 
-Providing a framework for analyzing a database system proved harder than first expected.
+Providing an analysis for database systems proved harder than first expected.
 This became clear in working with~\cite{halder_abstract_2012} as a foundation for our work.
-Although~\cite{halder_abstract_2012} provided extensive syntax and semantics, it could not be used as an analysis tool due to its non-termination. Therefore, we deemed it not viable.
+Although~\cite{halder_abstract_2012} provided extensive syntax and semantics, it could not be used as an analysis tool due to its non-termination.
+Therefore, we deemed it not viable as is.
+
 The non-termination can be seen in the way that they represent abstract tables.
 Specifically, in~\autoref{tab:table-halder}, it can be seen that their semantics introduce duplicate entries in a table, where $({[}25,59{]},2,{[}1500,2499{]})$ appears twice.
-
-
+This means that adding more of the same tuples could enlarge the analysis indefinitely.
+Specifically, it happens during \textit{infinite} programs with a while true structure, such as the one shown in~\autoref{fig:program-code}.
+This is precisely what this paper tries to escape.
 
 
 \begin{table}
@@ -29,16 +33,17 @@ Specifically, in~\autoref{tab:table-halder}, it can be seen that their semantics
         $[12,24]$    & 2            & $[2500,10000]$ \\ \bottomrule
     \end{tabular}\label{tab:table-halder}
 \end{table}
-This means that adding more of the same tuples could enlarge the analysis indefinitely.
-Specifically, it happens during \textit{infinite} programs with a while true structure, such as the one shown in~\autoref{fig:program-code}.
 
 
-This is precisely what this paper tries to escape.
 As mentioned in~\autoref{subsubsec:abstract_domain_of_tables}, using abstract bags of abstract tuples eliminates the possibility of having duplicate tuples.
-So, in the paper~\cite{halder_abstract_2012}, an \textit{infinite} program could add duplicate tuples, indefinitely increasing the state space.
+
+In the paper~\cite{halder_abstract_2012}, an \textit{infinite} program could add duplicate tuples, indefinitely increasing the state space.
 However, because of our choice of abstraction, we will never have duplicate tuples in a database table.
 Instead, we will keep the existing tuple, conclude that we now potentially see the same state space, and stop exploring that branch, as we have already explored from that state in the state space.
 This is the crucial difference that ensures that our implementation is finite.
+
+It should be noted that there is a reading~\cite{halder_abstract_2012} where the problem described above is not the case.
+It may be the case that the ambiguity in set and bag notation in~\cite{halder_abstract_2012} is slightly ambiguous in reading.
 
 Changing the way abstractions are represented means that the semantics need to be changed quite a bit.
 So even though this paper provides a model that can be used for actual analysis, it also has compromises - it has not been possible to cover as much SQL as~\cite{halder_abstract_2012} does.
@@ -46,50 +51,53 @@ So even though this paper provides a model that can be used for actual analysis,
 
 Therefore, due to the time constraints leading to discarding some semantics, programs using these missing commands/actions can not be analyzed.
 This limitation restricts the programs and schemas that can implement this paper's model.
+
 However, programs that only use semantics covered by this paper can be analyzed, even if they are infinite.
-This means that while this paper can handle non-terminating programs, there are many programs this paper can not handle that Halder's implementation can manage.
+This means that while this paper can handle non-terminating programs, there are many programs this paper can not handle that Halder's framework can analyze.
 
 An example is the SELECT SQL action: our analysis cannot handle additional methods such as DISTINCT and GROUP BY, whereas the implementation in~\cite{halder_abstract_2012} can.
-
-
-
 This limits the amount of use cases the tool could be used for, naturally leaving an expansion of the tool to future work.
 
-As mentioned, a plan was also established to implement a system that used the tool developed in this paper.
-Unfortunately, such a system was not possible, given the amount of work required to ensure a terminating analysis.
-Considering the complicated nature of the analysis, which quickly becomes cumbersome if carried out manually, a system would be required to provide meaningful use in the future.
-
-Moreover, the choice of SQL as the language for the implementation added more complications than necessary.
-This is because the language has many implementation features that differ from dialect to dialect.
-Therefore, it might have been better to implement the system using a more abstract language, such as relational algebra.
-This is especially true since this paper's contribution only defined a subset of the operations of the chosen SQL dialect, PostgreSQL.
-The SQL dialect was not chosen for a noteworthy reason, though.
-
-The current way that the top covers and cover lattices are supposed to be derived is also vague. We simply state that they are given by the user through some mechanism.
+The current way that the top covers and cover lattices are supposed to be derived is also vague.
+We simply state that they are given by the user through some mechanism.
 One such way would require the user to tag each variable and database attribute with a top cover to derive the respective cover lattices.
+
 This method would be easy to implement but very cumbersome for the user, even in the case where top covers could be shared between variables.
-We think refining the notion and exploring mechanisms that would make this method less cumbersome for the user could be interesting.
+We think refining the notion and exploring mechanisms that would make this method less cumbersome for the user is an interesting direction for future research.
 
 
 \subsection{Discussion of Examples}\label{subsec:example-discussion}
-To show the need for a more abstract language,~\autoref{sec:example} was introduced. This section showed three examples that each displayed a different analysis aspect.~\autoref{subsec:big-example} showed a general example that represented a banking system. A banking system was used because of the context in which such an analysis would make sense. Since a banking system is a system that is used to handle money, the system must be correct. Therefore, an analysis tool that can check the correctness of such a system would be valuable. As such, an in-depth analysis would be overkill for a simple system, where mistakes or oversights would not significantly impact.
+To show the need for a more abstract language,~\autoref{sec:example} was introduced.
+This section showed three examples that each displayed a different analysis aspect. \autoref{subsec:banking-example} showed a general example that represented a banking system.
+A banking system was used because of the context in which such an analysis would make sense.
 
-~\autoref{subsec:termination-example} was used to show that the implementation of this paper can terminate, even on infinite programs. This is due to using a fixed point, which detects when the analysis has reached a fixed point and, therefore, can terminate.
+Since a banking system is a system that is used to handle money, the system must be correct.
+Therefore, an analysis tool that can check the correctness of such a system would be valuable.
+As such, an in-depth analysis would be overkill for a simple system, where mistakes or oversights would not significantly impact it.
+
+~\autoref{subsec:termination-example} was used to show that the implementation of this paper can terminate, even on infinite programs.
+This is due to using a fixed point, which detects when the analysis has reached a fixed point and, therefore, can terminate.
 Because there will be a large but limited number of possible combinations, the analysis will eventually reach a fixed point, and the analysis will terminate.
 
-~\autoref{subsec:cover-lattice-example} was the final example used to show that the implementation of cover lattices, was necessary to always guarantee termination. In some cases, where the system's lattice representation would grow indefinitely, the cover lattice was introduced to cover a lattice with infinite values in a finite lattice and, therefore, guarantee termination.
+~\autoref{subsec:cover-lattice-example} was the final example used to show that the implementation of cover lattices, was necessary to always guarantee termination.
+In some cases, where the system's lattice representation would grow indefinitely, the cover lattice was introduced to guarantee termination.
 
 
 \subsection{Future Work}\label{subsec:future-work}
-One area that could be further developed is the rigorousness of the soundness proof. In its current state, it is more of a sketch of a proof rather than a full proof.
+One area that could be further developed is the rigorousness of the soundness proof.
+In its current state, it is more of a sketch of a proof rather than a full proof.
 This would be one of the first steps in future work, as it would prove and convince readers of the soundness of the analysis.
 
-The next step in future work would be to develop a proper system that can use the analysis tool. This system would be able to take a program and a database schema and, given some properties to check, check the properties of the program.
-Perhaps this system could also be used to display some of the weaknesses of~\cite{halder_abstract_2012}, such as the analysis's non-termination. This would strengthen the argument for using the analysis tool developed in this paper.
+The next step in future work would be to develop a proper system that can use the analysis.
+This system would be able to take a program, a database schema and some properties to check.
 
-Additionally, in the current implementation, the abstract interpretation is limited to integers. Therefore, one of the improvements that could be made is to extend the abstract interpretation to support floating point numbers.
-The extension of the abstract interpretation to support floating point numbers would allow for more programs to be analyzed, greatly expanding the tool's use cases.
-One obstacle to this extension is that floating point operations are handled differently in different programming languages, which makes it difficult to create a general abstraction.
+Perhaps this system could also be used to display some of the weaknesses of~\cite{halder_abstract_2012}, such as the analysis's non-termination.
+This would strengthen the argument for using the analysis developed in this paper.
+
+Additionally, in the current analysis, the abstract interpretation is limited to strings and integers.
+Therefore, one of the improvements that could be made is to extend the abstract interpretation to additional data types.
+
+The extension of the abstract interpretation to support additional types would allow for more programs to be analyzed, greatly expanding the analysis's use cases.
 
 
 %Ideally the implementation of the analysis and the concrete semantics should have been developed in a proof assistant, such that the soundness could have been proven formally.
