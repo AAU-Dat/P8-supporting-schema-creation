@@ -1,12 +1,11 @@
 \subsection{Termination}\label{subsec:termination}
+In this subsection we will argue that our analysis terminates.
 
-In this subsection we will argument that our analysis terminates.
-
-Our analysis takes base in the constraint function $f$ defined in \autoref{eq:constraint}.
+Our analysis relies on the constraint function $f$ defined in \autoref{eq:constraint}.
 Hence, to prove that our analysis terminates, we would need to show that this function $f$ always reaches a fixed point.
 Therefore, from \autoref{thm:kleene_finite} we need to show that the function is monotone and defined over a complete and finite lattice.
 
-Now, looking at the type of $f$, we see that it maps from and to tuples over the powerset of abstract environments.
+Looking at the type of $f$, we see that it maps to and from tuples over the powerset of abstract environments.
 So from \autoref{thm:kleene_finite}, we see that, in order for the analysis to reach a fixed point in a finite number of steps, $\bigtimes_{i = 1}^n \mathcal{P}(\ab{\mathfrak{E}})$ has to be a finite and complete lattice.
 
 To show that $\bigtimes_{i = 1}^n \mathcal{P}(\ab{\mathfrak{E}})$ is finite and complete, we must first show that $\ab{\mathfrak{E}}$ is finite.
@@ -16,7 +15,7 @@ To show that $\ab{\mathfrak{E}}$ is finite, we prove the following lemma:
 $\ab{\mathfrak{E}}$ is finite.
 \end{restatable}
 
-Now, from \autoref{thm:absenv} and \autoref{thm:powerset} we can conclude that the powerset $\mathcal{P}(\ab{\mathfrak{E}})$ is a finite and complete lattice.
+From \autoref{thm:absenv} and \autoref{thm:powerset} we can conclude that the powerset $\mathcal{P}(\ab{\mathfrak{E}})$ is a finite and complete lattice.
 Following this, from \autoref{thm:product-lattice} it also holds that $\bigtimes_{i = 1}^n \mathcal{P}(\ab{\mathfrak{E}})$ is a finite and complete lattice.
 
 If $\abssem{I}$ is monotone, then $f$ is monotone, thus we prove the following lemma:
